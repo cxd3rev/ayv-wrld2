@@ -16,14 +16,15 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1 className="display text-4xl sm:text-5xl">
+      <p className="kicker">Overview</p>
+      <h1 className="display mt-4 text-4xl tracking-tight sm:text-6xl">
         Have a great day{firstName ? `, ${firstName}` : ""}.
       </h1>
-      <p className="mt-3 max-w-xl text-sm text-muted">
+      <p className="mt-4 max-w-xl text-lg text-muted">
         {organization.name} is ready. This overview is shared across every AYV WRLD product.
       </p>
 
-      <div className="mt-10 grid gap-3 sm:grid-cols-3">
+      <div className="mt-12 grid gap-0 border-t border-foreground/10 sm:grid-cols-3 sm:gap-10">
         <DashboardCard title="Workspace" value={organization.name} hint={organization.industry ?? "Business"} />
         <DashboardCard
           title="Subscription"
@@ -37,43 +38,48 @@ export default async function DashboardPage() {
         />
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-2">
+      <div className="mt-4 grid gap-0 border-t border-foreground/10 lg:grid-cols-2">
         <Link
           href="/dashboard/product"
-          className="flex min-h-44 flex-col justify-between rounded-[28px] border border-white/8 bg-white/[0.03] p-6 hover:bg-white/[0.05]"
+          className="group flex min-h-44 flex-col justify-between border-b border-foreground/10 py-8 pr-6 lg:border-r lg:border-b-0 lg:pr-10"
         >
-          <p className="text-sm text-muted">Start here</p>
+          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Start here</p>
           <div>
-            <h2 className="display text-3xl">Open Avyro</h2>
+            <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
+              Open Avyro
+            </h2>
             <p className="mt-2 text-sm text-muted">The first product workspace is waiting.</p>
           </div>
         </Link>
         <Link
           href="/dashboard/settings/team"
-          className="flex min-h-44 flex-col justify-between rounded-[28px] border border-white/8 bg-white/[0.03] p-6 hover:bg-white/[0.05]"
+          className="group flex min-h-44 flex-col justify-between py-8 lg:pl-10"
         >
-          <p className="text-sm text-muted">Team</p>
+          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Team</p>
           <div>
-            <h2 className="display text-3xl">Invite a teammate</h2>
+            <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
+              Invite a teammate
+            </h2>
             <p className="mt-2 text-sm text-muted">Share this workspace when you are ready.</p>
           </div>
         </Link>
       </div>
 
-      <section className="mt-6 rounded-[28px] border border-white/8 bg-white/[0.03] p-6">
-        <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-base font-medium">Get the most out of AYV WRLD</h2>
-          <p className="text-xs text-muted">Foundation setup</p>
+      <section className="mt-4 border-t border-foreground/10 py-8">
+        <div className="mb-6 flex items-end justify-between gap-4">
+          <h2 className="display text-3xl tracking-tight">Get the most out of AYV WRLD</h2>
+          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Foundation setup</p>
         </div>
-        <ol className="divide-y divide-white/8">
+        <ol className="divide-y divide-foreground/10 border-y border-foreground/10">
           {[
             { href: "/dashboard/settings", label: "Complete business profile", done: Boolean(organization.industry) },
             { href: "/dashboard/product", label: "Open the Avyro workspace", done: false },
             { href: "/dashboard/settings/team", label: "Invite teammates", done: false },
             { href: "/dashboard/billing", label: "Review billing", done: Boolean(subscription) },
-          ].map((item) => (
+          ].map((item, index) => (
             <li key={item.label}>
-              <Link href={item.href} className="flex items-center gap-3 py-4 text-sm hover:text-accent">
+              <Link href={item.href} className="flex items-center gap-4 py-5 text-sm hover:text-accent">
+                <span className="font-mono text-xs text-muted">{String(index + 1).padStart(2, "0")}</span>
                 <CheckCircle2 className={item.done ? "h-4 w-4 text-accent" : "h-4 w-4 text-muted/40"} />
                 {item.label}
               </Link>
@@ -82,12 +88,9 @@ export default async function DashboardPage() {
         </ol>
       </section>
 
-      <div className="mt-8 flex flex-wrap gap-2">
+      <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
         {products.map((product) => (
-          <span
-            key={product.id}
-            className="rounded-full border border-white/8 px-3 py-1 text-xs text-muted"
-          >
+          <span key={product.id} className="font-mono text-xs tracking-[0.14em] text-muted uppercase">
             {product.name}
           </span>
         ))}

@@ -1,3 +1,5 @@
+import { productBrand, type BrandAssets } from "@/config/brands";
+
 /**
  * Central product catalog for every AYV WRLD product.
  *
@@ -35,7 +37,7 @@ export type ProductConfig = {
   longDescription: string;
   status: ProductStatus;
   marketingStatus: "In development" | "Coming soon";
-  icon: "zap" | "calendar" | "file-text" | "credit-card" | "refresh" | "star";
+  assets: BrandAssets;
   accent: string;
   route: string;
   pricing: {
@@ -61,8 +63,8 @@ export const products: ProductConfig[] = [
       "Avyro helps businesses follow up with new leads quickly so more conversations turn into customers.",
     status: "active",
     marketingStatus: "In development",
-    icon: "zap",
-    accent: "#F0A202",
+    assets: productBrand("avyro"),
+    accent: "#A3A3A3",
     route: "/dashboard/product",
     pricing: { monthly: null, label: "Pricing coming soon" },
     navigation: [{ label: "Overview", href: "/dashboard/product" }],
@@ -85,8 +87,8 @@ export const products: ProductConfig[] = [
       "Velto helps businesses take bookings and send reminders so fewer appointments are missed.",
     status: "coming_soon",
     marketingStatus: "Coming soon",
-    icon: "calendar",
-    accent: "#F97316",
+    assets: productBrand("velto", true),
+    accent: "#7C3AED",
     route: "/dashboard/product",
     pricing: { monthly: null, label: "Pricing coming soon" },
     navigation: [],
@@ -106,8 +108,8 @@ export const products: ProductConfig[] = [
       "Rovyn follows up on sent quotes so businesses close more work without chasing every lead by hand.",
     status: "coming_soon",
     marketingStatus: "Coming soon",
-    icon: "file-text",
-    accent: "#E8A317",
+    assets: productBrand("rovyn"),
+    accent: "#00C853",
     route: "/dashboard/product",
     pricing: { monthly: null, label: "Pricing coming soon" },
     navigation: [],
@@ -127,8 +129,8 @@ export const products: ProductConfig[] = [
       "Orvyn reminds customers about unpaid invoices so money comes in faster and fewer bills are forgotten.",
     status: "coming_soon",
     marketingStatus: "Coming soon",
-    icon: "credit-card",
-    accent: "#FB923C",
+    assets: productBrand("orvyn", true),
+    accent: "#E10600",
     route: "/dashboard/product",
     pricing: { monthly: null, label: "Pricing coming soon" },
     navigation: [],
@@ -148,8 +150,8 @@ export const products: ProductConfig[] = [
       "Nexro helps businesses bring past customers back and turn happy clients into referrals.",
     status: "coming_soon",
     marketingStatus: "Coming soon",
-    icon: "refresh",
-    accent: "#F59E0B",
+    assets: productBrand("nexro"),
+    accent: "#1E40AF",
     route: "/dashboard/product",
     pricing: { monthly: null, label: "Pricing coming soon" },
     navigation: [],
@@ -169,8 +171,8 @@ export const products: ProductConfig[] = [
       "Ravelo asks happy customers for reviews at the right time so businesses build trust without awkward follow-up.",
     status: "coming_soon",
     marketingStatus: "Coming soon",
-    icon: "star",
-    accent: "#FBBF24",
+    assets: productBrand("ravelo"),
+    accent: "#1D4ED8",
     route: "/dashboard/product",
     pricing: { monthly: null, label: "Pricing coming soon" },
     navigation: [],

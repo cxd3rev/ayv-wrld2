@@ -35,7 +35,7 @@ export function Dropdown({
       {open ? (
         <div
           className={cn(
-            "absolute z-40 mt-2 min-w-56 rounded-xl border border-border bg-card p-1 shadow-xl",
+            "absolute z-40 mt-2 min-w-56 rounded-md border border-foreground/10 bg-card p-1 shadow-2xl",
             align === "right" ? "right-0" : "left-0",
             className,
           )}
@@ -62,7 +62,7 @@ export function DropdownItem({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm hover:bg-white/5",
+        "flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm hover:bg-foreground/5",
         className,
       )}
     >

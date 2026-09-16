@@ -18,11 +18,11 @@ export function TopNav({
   notifications: Notification[];
 }) {
   return (
-    <header className="flex h-16 items-center justify-between gap-3 border-b border-white/8 px-4 pl-14 lg:px-8 lg:pl-8">
-      <div className="flex min-w-0 items-center gap-3">
+    <header className="flex h-20 items-center justify-between gap-3 border-b border-foreground/10 px-4 pl-14 lg:px-12 lg:pl-12">
+      <div className="flex min-w-0 items-center gap-4">
         <div className="hidden min-w-0 sm:block">
           <p className="truncate text-sm font-medium">{organization.name}</p>
-          <p className="text-xs text-muted">Workspace</p>
+          <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">Workspace</p>
         </div>
         <ProductSwitcher activeProductId={productId} />
       </div>

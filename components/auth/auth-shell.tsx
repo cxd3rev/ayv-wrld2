@@ -15,16 +15,24 @@ export function AuthShell({
     <Atmosphere>
       <Link
         href="/"
-        className="absolute top-6 left-6 z-20 text-sm text-white/55 hover:text-foreground"
+        className="absolute top-8 left-6 z-20 text-sm text-foreground/55 hover:text-foreground lg:left-12"
       >
         ← Home
       </Link>
-      <div className="flex min-h-screen flex-col items-center justify-center px-4 py-20">
+      <div className="arch-grid opacity-40" />
+      <div className="flex min-h-screen flex-col items-center justify-center px-4 py-24">
         <div className="w-full max-w-[420px] text-center">
-          <Logo className="justify-center" />
-          {title ? <h1 className="display mt-8 text-4xl">{title}</h1> : null}
-          {description ? <p className="mt-3 text-sm text-muted">{description}</p> : null}
-          <div className="mt-8">{children}</div>
+          <div className="flex justify-center">
+            <Logo />
+          </div>
+          {title ? (
+            <>
+              <p className="kicker mx-auto mt-12">Account</p>
+              <h1 className="display mt-4 text-5xl leading-tight tracking-tight lg:text-6xl">{title}</h1>
+            </>
+          ) : null}
+          {description ? <p className="mt-4 text-sm leading-6 text-muted">{description}</p> : null}
+          <div className="mt-10 border-t border-foreground/10 pt-8 text-left">{children}</div>
         </div>
       </div>
     </Atmosphere>
@@ -42,14 +50,9 @@ export function AuthMessage({
 }) {
   return (
     <div className="text-center">
-      <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10">
-        <svg viewBox="0 0 24 24" className="h-6 w-6 text-muted" fill="none" aria-hidden="true">
-          <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M4 7l8 6 8-6" stroke="currentColor" strokeWidth="1.5" />
-        </svg>
-      </div>
-      <h1 className="display text-4xl">{title}</h1>
-      <p className="mt-3 text-sm leading-6 text-muted">{description}</p>
+      <p className="kicker mx-auto">Check your inbox</p>
+      <h1 className="display mt-4 text-4xl tracking-tight lg:text-5xl">{title}</h1>
+      <p className="mt-4 text-sm leading-6 text-muted">{description}</p>
       {action ? <div className="mt-8">{action}</div> : null}
     </div>
   );

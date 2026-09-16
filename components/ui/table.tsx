@@ -8,7 +8,7 @@ export function Table({
   className?: string;
 }) {
   return (
-    <div className={cn("overflow-x-auto rounded-2xl border border-border", className)}>
+    <div className={cn("overflow-x-auto border border-foreground/10", className)}>
       <table className="w-full min-w-[640px] text-left text-sm">{children}</table>
     </div>
   );
@@ -16,7 +16,7 @@ export function Table({
 
 export function THead({ children }: { children: React.ReactNode }) {
   return (
-    <thead className="bg-white/3 text-xs uppercase tracking-wide text-muted">
+    <thead className="bg-foreground/[0.03] font-mono text-[11px] tracking-[0.16em] text-muted uppercase">
       {children}
     </thead>
   );

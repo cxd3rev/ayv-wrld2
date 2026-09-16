@@ -14,13 +14,17 @@ export default async function OnboardingPage() {
 
   return (
     <Atmosphere>
-      <Link href="/" className="absolute top-6 left-6 text-sm text-white/55 hover:text-foreground">
+      <Link href="/" className="absolute top-8 left-6 z-20 text-sm text-foreground/55 hover:text-foreground lg:left-12">
         ← Home
       </Link>
-      <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-20">
-        <Logo className="justify-center" />
-        <h1 className="display mt-8 text-center text-4xl">Set up your workspace</h1>
-        <p className="mt-3 mb-8 text-center text-sm text-muted">
+      <div className="arch-grid opacity-40" />
+      <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-24">
+        <div className="flex justify-center">
+          <Logo />
+        </div>
+        <p className="kicker mx-auto mt-12">Workspace</p>
+        <h1 className="display mt-4 text-center text-4xl tracking-tight lg:text-5xl">Set up your workspace</h1>
+        <p className="mt-4 mb-10 text-center text-sm leading-6 text-muted">
           This creates your organization. You will be the owner. Future AYV WRLD products
           will use this same business profile.
         </p>

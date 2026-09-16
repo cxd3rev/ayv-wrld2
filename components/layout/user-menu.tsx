@@ -17,7 +17,7 @@ export function UserMenu({
       trigger={
         <button
           type="button"
-          className="flex items-center gap-2 rounded-xl border border-border px-2 py-1.5 hover:bg-white/5"
+          className="flex items-center gap-2 rounded-full border border-foreground/15 px-2 py-1.5 hover:bg-foreground/5"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-soft text-xs font-semibold text-accent">
             {getInitials(name || email)}

@@ -43,7 +43,7 @@ export function TeamSettings({
   return (
     <div className="space-y-8">
       {canInvite ? (
-        <form action={onInvite} className="grid gap-4 rounded-2xl border border-border p-4 sm:grid-cols-[1fr_160px_auto]">
+        <form action={onInvite} className="grid gap-4 border border-foreground/10 p-4 sm:grid-cols-[1fr_160px_auto]">
           <div>
             <Label htmlFor="email">Invite member</Label>
             <Input id="email" name="email" type="email" placeholder="teammate@business.com" required />

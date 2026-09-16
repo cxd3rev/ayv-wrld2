@@ -20,15 +20,14 @@ export default async function ProductDashboardPage() {
 
       {product.status === "coming_soon" ? (
         <EmptyState
+          icon={<ProductIcon product={product} size={64} className="h-16 w-16" />}
           title={`${product.name} is coming soon`}
           description="This product is configured in the foundation, but its features are not built yet. Switch back to Avyro to continue."
         />
       ) : (
-        <Card className="flex min-h-64 flex-col items-center justify-center py-16 text-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5">
-            <ProductIcon product={product} className="h-7 w-7" />
-          </span>
-          <h2 className="display mt-6 text-4xl">{product.name} is ready to build on</h2>
+        <Card className="flex min-h-64 flex-col items-center justify-center border-foreground/10 py-20 text-center">
+          <ProductIcon product={product} size={72} className="h-[72px] w-[72px]" />
+          <h2 className="display mt-8 text-4xl tracking-tight lg:text-5xl">{product.name} is ready to build on</h2>
           <p className="mt-3 max-w-lg text-sm leading-6 text-muted">
             The shared AYV WRLD foundation is in place: auth, organizations, billing, email, and
             settings. Avyro-specific tools will be added in the next product build — not here.

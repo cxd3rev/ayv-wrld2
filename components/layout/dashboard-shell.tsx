@@ -19,7 +19,7 @@ export function DashboardShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="noise-overlay flex min-h-screen bg-background">
       <Sidebar organization={organization} product={product} />
       <div className="flex min-w-0 flex-1 flex-col">
         <TopNav
@@ -29,7 +29,7 @@ export function DashboardShell({
           productId={product.id}
           notifications={notifications}
         />
-        <main className="flex-1 px-4 py-8 lg:px-10">{children}</main>
+        <main className="flex-1 px-4 py-10 lg:px-12">{children}</main>
       </div>
     </div>
   );

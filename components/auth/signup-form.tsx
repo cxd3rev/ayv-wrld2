@@ -76,7 +76,7 @@ export function SignupForm() {
         action={
           <Link
             href="/login"
-            className="inline-flex h-11 items-center rounded-full border border-white/15 px-5 text-sm hover:bg-white/5"
+            className="inline-flex h-14 items-center rounded-full border border-foreground/20 px-6 text-sm hover:bg-foreground/5"
           >
             Go to login →
           </Link>
@@ -88,7 +88,7 @@ export function SignupForm() {
   return (
     <form action={onSubmit} className="space-y-4">
       <div className="mb-2 text-center">
-        <h1 className="display text-4xl">Create an AYV WRLD account</h1>
+        <h1 className="display text-5xl tracking-tight">Create an AYV WRLD account</h1>
         <p className="mt-3 text-sm text-muted">Start with a workspace. Avyro will plug in later.</p>
       </div>
       <div>

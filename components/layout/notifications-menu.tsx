@@ -17,7 +17,7 @@ export function NotificationsMenu({ notifications }: { notifications: Notificati
       trigger={
         <button
           type="button"
-          className="relative rounded-xl border border-border p-2 hover:bg-white/5"
+          className="relative rounded-full border border-foreground/15 p-2 hover:bg-foreground/5"
           aria-label="Notifications"
         >
           <Bell className="h-4 w-4" />

@@ -1,8 +1,9 @@
 import { Atmosphere } from "@/components/atmosphere";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/header";
 import { Badge } from "@/components/ui/badge";
-import { ProductIcon } from "@/components/product-icon";
+import { ProductLogo, ProductWordmark } from "@/components/product-icon";
 import { getProduct, products } from "@/config/products";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -22,38 +23,49 @@ export default async function ProductPage({
   return (
     <Atmosphere>
       <MarketingHeader />
-      <main className="mx-auto max-w-2xl px-4 py-20">
-        <Link href="/#products" className="text-sm text-white/50 hover:text-foreground">
+      <main className="relative mx-auto max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
+        <div className="arch-grid opacity-30" />
+        <Link href="/#products" className="relative text-sm text-foreground/50 hover:text-foreground">
           ← All products
         </Link>
-        <div className="mt-10 flex items-center gap-4">
-          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5">
-            <ProductIcon product={product} className="h-7 w-7" />
-          </span>
-          <div>
-            <h1 className="display text-5xl">{product.name}</h1>
-            <p className="text-muted">{product.tagline}</p>
+        <div className="relative mt-16 max-w-2xl">
+          <p className="kicker">{product.tagline}</p>
+          <div className="mt-8">
+            <ProductLogo product={product} size={160} className="h-40 w-40" />
+            <div className="mt-8">
+              <h1 className="display text-5xl tracking-tight lg:text-7xl">
+                {product.assets.hasWordmark ? (
+                  <>
+                    <span className="sr-only">{product.name}</span>
+                    <ProductWordmark product={product} className="h-14" />
+                  </>
+                ) : (
+                  product.name
+                )}
+              </h1>
+            </div>
           </div>
+          <div className="mt-8">
+            <Badge tone={product.status === "active" ? "accent" : "neutral"}>
+              {product.marketingStatus}
+            </Badge>
+          </div>
+          <p className="mt-10 text-xl leading-relaxed text-muted lg:text-2xl">{product.longDescription}</p>
+          <p className="mt-4 font-mono text-xs tracking-[0.16em] text-muted uppercase">{product.pricing.label}</p>
+          {product.status === "active" ? (
+            <Link
+              href="/signup"
+              className="group mt-12 inline-flex h-14 items-center rounded-full bg-foreground px-8 text-base font-medium text-background hover:bg-foreground/90"
+            >
+              Join the foundation
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          ) : (
+            <p className="mt-12 text-sm text-muted">
+              This product is not available yet. Create an AYV WRLD account to be ready when it launches.
+            </p>
+          )}
         </div>
-        <div className="mt-6">
-          <Badge tone={product.status === "active" ? "accent" : "neutral"}>
-            {product.marketingStatus}
-          </Badge>
-        </div>
-        <p className="mt-8 text-lg leading-8 text-muted">{product.longDescription}</p>
-        <p className="mt-4 text-sm text-muted">{product.pricing.label}</p>
-        {product.status === "active" ? (
-          <Link
-            href="/signup"
-            className="mt-10 inline-flex h-12 items-center rounded-full bg-accent px-6 font-medium text-accent-foreground"
-          >
-            Join the foundation
-          </Link>
-        ) : (
-          <p className="mt-10 text-sm text-muted">
-            This product is not available yet. Create an AYV WRLD account to be ready when it launches.
-          </p>
-        )}
       </main>
       <MarketingFooter />
     </Atmosphere>

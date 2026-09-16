@@ -1,14 +1,17 @@
+import Image from "next/image";
+import { ayvBrand } from "@/config/brands";
+
 export function HeroSculpture() {
   return (
-    <div className="flex h-[320px] w-full items-center justify-center sm:h-[420px]" aria-hidden="true">
-      <div className="hero-cube relative">
-        <span className="face-front" />
-        <span className="face-back" />
-        <span className="face-right" />
-        <span className="face-left" />
-        <span className="face-top" />
-        <span className="face-bottom" />
-      </div>
+    <div className="hero-frame mx-auto flex h-[320px] w-full max-w-[420px] items-center justify-center sm:h-[460px]">
+      <Image
+        src={ayvBrand.icon}
+        alt={ayvBrand.name}
+        width={320}
+        height={320}
+        className="h-56 w-56 object-contain sm:h-72 sm:w-72"
+        priority
+      />
     </div>
   );
 }

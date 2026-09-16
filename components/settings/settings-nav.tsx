@@ -20,10 +20,10 @@ export function SettingsNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "rounded-full border px-4 py-2 text-sm",
+              "rounded-full border px-4 py-2 text-sm transition-colors",
               active
-                ? "border-accent/30 bg-accent-soft text-accent"
-                : "border-border text-muted hover:text-foreground",
+                ? "border-foreground bg-foreground text-background"
+                : "border-foreground/15 text-muted hover:text-foreground",
             )}
           >
             {item.label}

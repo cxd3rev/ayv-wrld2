@@ -147,12 +147,16 @@ What should work after Supabase is configured:
 
 ## 10. Deploy to Vercel
 
+Do **not** use GitHub Pages. GitHub Pages only hosts static `index.html` files. AYV WRLD is a Next.js app with login, a dashboard, and APIs, so it needs Vercel.
+
 1. Push this project to GitHub.
-2. Import the repo in [Vercel](https://vercel.com).
-3. Add the same environment variables in the Vercel project settings.
-4. Set `NEXT_PUBLIC_APP_URL` to your live domain, for example `https://ayvwrld.com`.
-5. In Supabase, add that domain to Site URL and Redirect URLs.
-6. In Stripe, add a live webhook pointing at `https://your-domain/api/stripe/webhook`.
+2. Open [vercel.com/new](https://vercel.com/new) and sign in with GitHub.
+3. Import the `ayv-wrld2` repo.
+4. Add the same environment variables from `.env.example`.
+5. Click Deploy.
+6. Set `NEXT_PUBLIC_APP_URL` to your Vercel URL, for example `https://ayv-wrld2.vercel.app`.
+7. In Supabase, add that domain to Site URL and Redirect URLs.
+8. In Stripe, add a webhook pointing at `https://your-domain/api/stripe/webhook`.
 
 ## 11. How future products should connect
 

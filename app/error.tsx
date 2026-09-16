@@ -1,5 +1,6 @@
 "use client";
 
+import { Atmosphere } from "@/components/atmosphere";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -10,17 +11,25 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
-      <h1 className="display text-3xl font-semibold">Something went wrong</h1>
-      <p className="mt-3 max-w-md text-sm text-muted">
-        Please try again. If this keeps happening, check your environment variables and Supabase setup.
-      </p>
-      <div className="mt-6 flex gap-3">
-        <Button onClick={reset}>Try again</Button>
-        <Link href="/" className="inline-flex h-10 items-center rounded-xl border border-border px-4 text-sm">
-          Home
-        </Link>
+    <Atmosphere>
+      <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
+        <p className="kicker">Error</p>
+        <h1 className="display mt-4 text-5xl tracking-tight">Something went wrong</h1>
+        <p className="mt-4 max-w-md text-sm leading-6 text-muted">
+          Please try again. If this keeps happening, check your environment variables and Supabase setup.
+        </p>
+        <div className="mt-10 flex gap-3">
+          <Button onClick={reset} size="lg">
+            Try again
+          </Button>
+          <Link
+            href="/"
+            className="inline-flex h-14 items-center rounded-full border border-foreground/20 px-8 text-base hover:bg-foreground/5"
+          >
+            Home
+          </Link>
+        </div>
       </div>
-    </div>
+    </Atmosphere>
   );
 }

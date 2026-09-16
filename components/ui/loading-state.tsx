@@ -16,5 +16,5 @@ export function LoadingState({
 }
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div className={cn("animate-pulse rounded-xl bg-white/6", className)} />;
+  return <div className={cn("animate-pulse rounded-md bg-foreground/6", className)} />;
 }

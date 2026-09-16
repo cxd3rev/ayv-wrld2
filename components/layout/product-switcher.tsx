@@ -20,9 +20,9 @@ export function ProductSwitcher({ activeProductId }: { activeProductId: ProductI
       trigger={
         <button
           type="button"
-          className="inline-flex items-center gap-2 rounded-xl border border-border bg-white/3 px-3 py-2 text-sm hover:bg-white/5"
+          className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-3 py-2 text-sm hover:bg-foreground/5"
         >
-          <ProductIcon product={active} className="h-4 w-4" />
+          <ProductIcon product={active} size={24} className="h-6 w-6" />
           <span>{active.name}</span>
           <ChevronDown className="h-4 w-4 text-muted" />
         </button>
@@ -40,7 +40,7 @@ export function ProductSwitcher({ activeProductId }: { activeProductId: ProductI
             });
           }}
         >
-          <ProductIcon product={product} className="h-4 w-4" />
+          <ProductIcon product={product} size={24} className="h-6 w-6" />
           <span className="flex-1">{product.name}</span>
           {product.status === "coming_soon" ? (
             <Badge>Coming soon</Badge>

@@ -44,11 +44,11 @@ export function Modal({
         aria-modal="true"
         aria-labelledby="modal-title"
         className={cn(
-          "relative z-10 w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl",
+          "relative z-10 w-full max-w-lg rounded-md border border-foreground/10 bg-card p-6 shadow-2xl",
           className,
         )}
       >
-        <h2 id="modal-title" className="text-lg font-semibold">
+        <h2 id="modal-title" className="display text-2xl tracking-tight">
           {title}
         </h2>
         {description ? (

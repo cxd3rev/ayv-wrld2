@@ -3,24 +3,33 @@ import { ProductIcon } from "@/components/product-icon";
 import type { ProductConfig } from "@/config/products";
 import Link from "next/link";
 
-export function ProductCard({ product }: { product: ProductConfig }) {
+export function ProductCard({
+  product,
+  index,
+}: {
+  product: ProductConfig;
+  index: number;
+}) {
   return (
-    <article className="flex h-full flex-col rounded-[28px] border border-white/8 bg-white/[0.03] p-6 transition-colors hover:bg-white/[0.05]">
-      <div className="mb-8 flex items-center justify-between">
-        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/5">
-          <ProductIcon product={product} className="h-5 w-5" />
-        </span>
+    <article className="group border-b border-foreground/10">
+      <Link
+        href={`/products/${product.slug}`}
+        className="flex flex-col gap-6 py-10 lg:flex-row lg:items-center lg:gap-16 lg:py-16"
+      >
+        <span className="font-mono text-sm text-muted">{String(index + 1).padStart(2, "0")}</span>
+        <ProductIcon product={product} size={48} className="h-12 w-12" />
+        <div className="flex-1">
+          <h3 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
+            {product.name}
+          </h3>
+          <p className="mt-2 text-lg leading-relaxed text-muted">{product.tagline}</p>
+        </div>
         <Badge tone={product.status === "active" ? "accent" : "neutral"}>
           {product.marketingStatus}
         </Badge>
-      </div>
-      <h3 className="display text-3xl">{product.name}</h3>
-      <p className="mt-2 flex-1 text-sm text-muted">{product.tagline}</p>
-      <Link
-        href={`/products/${product.slug}`}
-        className="mt-8 inline-flex h-11 items-center justify-center rounded-full border border-white/10 text-sm hover:bg-white/5"
-      >
-        Product page
+        <span className="text-sm text-foreground/70 transition-colors group-hover:text-foreground">
+          Product page →
+        </span>
       </Link>
     </article>
   );
