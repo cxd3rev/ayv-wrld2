@@ -36,7 +36,7 @@ export function Modal({
       <button
         type="button"
         aria-label="Close dialog"
-        className="absolute inset-0 bg-black/70"
+        className="absolute inset-0 bg-foreground/40"
         onClick={onClose}
       />
       <div
@@ -44,7 +44,7 @@ export function Modal({
         aria-modal="true"
         aria-labelledby="modal-title"
         className={cn(
-          "relative z-10 w-full max-w-lg rounded-md border border-foreground/10 bg-card p-6 shadow-2xl",
+          "relative z-10 w-full max-w-lg rounded-md border border-foreground/10 bg-card p-6 shadow-[0_16px_40px_rgba(8,5,3,0.08)]",
           className,
         )}
       >

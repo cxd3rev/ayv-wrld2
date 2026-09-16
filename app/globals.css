@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #080503;
-  --foreground: #fafaf9;
-  --muted: #8a8178;
-  --card: #100e0c;
-  --card-hover: #171410;
-  --border: rgba(250, 250, 249, 0.1);
-  --accent: #f0a202;
-  --accent-hover: #ffb830;
-  --accent-foreground: #1a1203;
-  --accent-soft: rgba(240, 162, 2, 0.14);
-  --danger: #f87171;
-  --success: #4ade80;
-  --warning: #fbbf24;
-  --inverted: #fafaf9;
-  --inverted-foreground: #080503;
+  --background: #fafaf9;
+  --foreground: #080503;
+  --muted: #5e534a;
+  --card: #ffffff;
+  --card-hover: #f3f2ee;
+  --border: #dad7d0;
+  --accent: #9a7428;
+  --accent-hover: #7c5c1e;
+  --accent-foreground: #fafaf9;
+  --accent-soft: rgba(154, 116, 40, 0.12);
+  --danger: #e40014;
+  --success: #00a544;
+  --warning: #b45309;
+  --inverted: #080503;
+  --inverted-foreground: #fafaf9;
 }
 
 @theme inline {
@@ -47,7 +47,7 @@
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
@@ -57,8 +57,8 @@ body {
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  color: var(--foreground);
 }
 
 .display {
@@ -82,14 +82,14 @@ body {
   content: "";
   width: 2rem;
   height: 1px;
-  background: color-mix(in srgb, var(--accent) 75%, transparent);
+  background: color-mix(in srgb, var(--foreground) 30%, transparent);
 }
 
 .atmosphere {
   background-color: var(--background);
   background-image:
-    radial-gradient(70% 55% at 88% 18%, rgba(240, 162, 2, 0.14), transparent 58%),
-    radial-gradient(50% 40% at 0% 80%, rgba(250, 250, 249, 0.04), transparent 60%);
+    radial-gradient(70% 55% at 88% 12%, rgba(8, 5, 3, 0.03), transparent 58%),
+    linear-gradient(180deg, #fafaf9 0%, #f3f2ee 100%);
 }
 
 .noise-overlay {
@@ -102,7 +102,7 @@ body {
   position: absolute;
   inset: 0;
   z-index: 20;
-  opacity: 0.045;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
@@ -110,10 +110,10 @@ body {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  opacity: 0.28;
+  opacity: 0.3;
   background-image:
-    linear-gradient(to right, rgba(250, 250, 249, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(250, 250, 249, 0.08) 1px, transparent 1px);
+    linear-gradient(to right, rgba(8, 5, 3, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(8, 5, 3, 0.1) 1px, transparent 1px);
   background-size: 8.33% 12.5%;
   mask-image: radial-gradient(70% 70% at 70% 45%, black, transparent 78%);
 }
@@ -149,7 +149,15 @@ body {
   right: 0;
   bottom: 0.08em;
   height: 0.18em;
-  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+.logo-surface {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.25rem;
+  background: var(--foreground);
 }
 
 .marquee-wrap {
@@ -203,7 +211,7 @@ body {
   position: absolute;
   width: 2.5rem;
   height: 2.5rem;
-  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  border-color: color-mix(in srgb, var(--foreground) 20%, transparent);
   pointer-events: none;
 }
 

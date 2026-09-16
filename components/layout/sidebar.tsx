@@ -42,7 +42,7 @@ export function Sidebar({
       {open ? (
         <button
           type="button"
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-40 bg-foreground/40 lg:hidden"
           aria-label="Close menu"
           onClick={() => setOpen(false)}
         />

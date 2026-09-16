@@ -27,7 +27,7 @@ export function TBody({ children }: { children: React.ReactNode }) {
 }
 
 export function TR({ children }: { children: React.ReactNode }) {
-  return <tr className="hover:bg-white/2">{children}</tr>;
+  return <tr className="hover:bg-foreground/[0.03]">{children}</tr>;
 }
 
 export function TH({ children, className }: { children: React.ReactNode; className?: string }) {

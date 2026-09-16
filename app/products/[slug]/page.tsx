@@ -1,7 +1,7 @@
 import { Atmosphere } from "@/components/atmosphere";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/header";
 import { Badge } from "@/components/ui/badge";
-import { ProductLogo, ProductWordmark } from "@/components/product-icon";
+import { ProductLogo } from "@/components/product-icon";
 import { getProduct, products } from "@/config/products";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -30,21 +30,10 @@ export default async function ProductPage({
         </Link>
         <div className="relative mt-16 max-w-2xl">
           <p className="kicker">{product.tagline}</p>
-          <div className="mt-8">
-            <ProductLogo product={product} size={160} className="h-40 w-40" />
-            <div className="mt-8">
-              <h1 className="display text-5xl tracking-tight lg:text-7xl">
-                {product.assets.hasWordmark ? (
-                  <>
-                    <span className="sr-only">{product.name}</span>
-                    <ProductWordmark product={product} className="h-14" />
-                  </>
-                ) : (
-                  product.name
-                )}
-              </h1>
-            </div>
+          <div className="logo-surface mt-8 p-6">
+            <ProductLogo product={product} size={160} className="h-36 w-36 sm:h-40 sm:w-40" />
           </div>
+          <h1 className="display mt-8 text-5xl tracking-tight lg:text-7xl">{product.name}</h1>
           <div className="mt-8">
             <Badge tone={product.status === "active" ? "accent" : "neutral"}>
               {product.marketingStatus}

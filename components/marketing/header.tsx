@@ -11,7 +11,7 @@ export function MarketingHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-transparent bg-background/70 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-20 w-full max-w-[1400px] items-center justify-between px-6 lg:px-12">
         <Link href="/" aria-label="AYV WRLD home">
           <Logo />

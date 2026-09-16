@@ -19,7 +19,7 @@ export function UserMenu({
           type="button"
           className="flex items-center gap-2 rounded-full border border-foreground/15 px-2 py-1.5 hover:bg-foreground/5"
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-soft text-xs font-semibold text-accent">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-xs font-semibold text-background">
             {getInitials(name || email)}
           </span>
           <span className="hidden max-w-32 truncate text-sm sm:block">{name || email}</span>
