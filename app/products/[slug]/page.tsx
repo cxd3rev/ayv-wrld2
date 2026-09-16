@@ -30,9 +30,7 @@ export default async function ProductPage({
         </Link>
         <div className="relative mt-16 max-w-2xl">
           <p className="kicker">{product.tagline}</p>
-          <div className="logo-surface mt-8 p-6">
-            <ProductLogo product={product} size={160} className="h-36 w-36 sm:h-40 sm:w-40" />
-          </div>
+          <ProductLogo product={product} size={160} className="mt-8 h-36 w-36 sm:h-40 sm:w-40" />
           <h1 className="display mt-8 text-5xl tracking-tight lg:text-7xl">{product.name}</h1>
           <div className="mt-8">
             <Badge tone={product.status === "active" ? "accent" : "neutral"}>
