@@ -9,13 +9,22 @@ import { listLeads } from "@/products/avyro/actions";
 import { VeltoBookingsWorkspace } from "@/products/velto/bookings-workspace";
 import { listBookings } from "@/products/velto/actions";
 
-export default async function ProductDashboardPage() {
+function firstParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function ProductDashboardPage({
+  searchParams,
+}: PageProps<"/dashboard/product">) {
   const productId = await getActiveProductId();
   const product = getProduct(productId)!;
+  const params = await searchParams;
   const showAvyro = product.id === "avyro" && Boolean(product.featureFlags.leadCapture);
   const showVelto = product.id === "velto" && Boolean(product.featureFlags.bookings);
-  const leads = showAvyro ? await listLeads() : [];
-  const bookings = showVelto ? await listBookings() : [];
+  const [leads, bookings] =
+    showAvyro || showVelto
+      ? await Promise.all([listLeads(), listBookings()])
+      : [[], []];
 
   return (
     <div>
@@ -36,9 +45,18 @@ export default async function ProductDashboardPage() {
           description="This product is configured in the foundation, but its features are not built yet. Switch back to Avyro or Velto to continue."
         />
       ) : showAvyro ? (
-        <AvyroLeadsWorkspace leads={leads} />
+        <AvyroLeadsWorkspace
+          leads={leads}
+          bookings={bookings}
+          focusLeadId={firstParam(params.lead)}
+        />
       ) : showVelto ? (
-        <VeltoBookingsWorkspace bookings={bookings} />
+        <VeltoBookingsWorkspace
+          bookings={bookings}
+          leads={leads}
+          fromLeadId={firstParam(params.fromLead)}
+          focusBookingId={firstParam(params.booking)}
+        />
       ) : (
         <EmptyState
           icon={<ProductIcon product={product} size={64} className="h-16 w-16" />}

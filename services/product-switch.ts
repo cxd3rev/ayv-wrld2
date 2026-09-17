@@ -17,3 +17,22 @@ export async function openProductWorkspace(formData: FormData) {
   await setActiveProductId(product.id);
   redirect("/dashboard/product");
 }
+
+/** Switch the product cookie, then open that workspace, optionally focused on a linked record. */
+export async function openLinkedWorkspace(
+  productId: ProductId,
+  query: Record<string, string> = {},
+) {
+  const product = getProduct(productId);
+  if (!product || product.status !== "active") {
+    redirect("/dashboard");
+  }
+
+  await setActiveProductId(product.id);
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (value) params.set(key, value);
+  }
+  const search = params.toString();
+  redirect(search ? `/dashboard/product?${search}` : "/dashboard/product");
+}

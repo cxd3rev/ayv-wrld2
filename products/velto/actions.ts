@@ -7,12 +7,32 @@ import {
   bookingStatusSchema,
   createBookingSchema,
   firstZodError,
+  updateBookingLeadSchema,
   updateBookingReminderSchema,
 } from "@/lib/validations";
 import type { Booking } from "@/types/database";
 
 const bookingColumns =
-  "id, organization_id, customer_name, email, phone, service, starts_on, start_time, status, reminder_on, notes, created_at, updated_at";
+  "id, organization_id, lead_id, customer_name, email, phone, service, starts_on, start_time, status, reminder_on, notes, created_at, updated_at";
+
+async function assertLeadInOrg(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  organizationId: string,
+  leadId: string | null,
+) {
+  if (!leadId) return { ok: true as const };
+  const { data } = await supabase
+    .from("leads")
+    .select("id")
+    .eq("id", leadId)
+    .eq("organization_id", organizationId)
+    .maybeSingle();
+
+  if (!data) {
+    return { ok: false as const, error: "That lead is not in this workspace." };
+  }
+  return { ok: true as const };
+}
 
 export async function listBookings(): Promise<Booking[]> {
   const { organization } = await requireWorkspace();
@@ -42,6 +62,7 @@ export async function createBooking(formData: FormData) {
     startTime: formData.get("startTime"),
     reminderOn: formData.get("reminderOn"),
     notes: formData.get("notes"),
+    leadId: formData.get("leadId"),
   });
 
   if (!parsed.success) {
@@ -49,8 +70,15 @@ export async function createBooking(formData: FormData) {
   }
 
   const supabase = await createClient();
+  const leadId = parsed.data.leadId || null;
+  const leadCheck = await assertLeadInOrg(supabase, organization.id, leadId);
+  if (!leadCheck.ok) {
+    return leadCheck;
+  }
+
   const { error } = await supabase.from("bookings").insert({
     organization_id: organization.id,
+    lead_id: leadId,
     customer_name: parsed.data.customerName,
     email: parsed.data.email || null,
     phone: parsed.data.phone || null,
@@ -112,6 +140,34 @@ export async function updateBookingReminder(bookingId: string, reminderOn: strin
 
   revalidatePath("/dashboard/product");
   return { ok: true, message: "Reminder date saved." };
+}
+
+export async function updateBookingLead(bookingId: string, leadId: string) {
+  const parsed = updateBookingLeadSchema.safeParse({ bookingId, leadId });
+  if (!parsed.success) {
+    return { ok: false, error: firstZodError(parsed.error) };
+  }
+
+  const { organization } = await requireWorkspace();
+  const supabase = await createClient();
+  const nextLeadId = parsed.data.leadId || null;
+  const leadCheck = await assertLeadInOrg(supabase, organization.id, nextLeadId);
+  if (!leadCheck.ok) {
+    return leadCheck;
+  }
+
+  const { error } = await supabase
+    .from("bookings")
+    .update({ lead_id: nextLeadId })
+    .eq("id", parsed.data.bookingId)
+    .eq("organization_id", organization.id);
+
+  if (error) {
+    return { ok: false, error: "Could not link that lead." };
+  }
+
+  revalidatePath("/dashboard/product");
+  return { ok: true, message: nextLeadId ? "Lead linked." : "Lead unlinked." };
 }
 
 export async function deleteBooking(bookingId: string) {

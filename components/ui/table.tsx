@@ -26,8 +26,20 @@ export function TBody({ children }: { children: React.ReactNode }) {
   return <tbody className="divide-y divide-border">{children}</tbody>;
 }
 
-export function TR({ children }: { children: React.ReactNode }) {
-  return <tr className="hover:bg-foreground/[0.03]">{children}</tr>;
+export function TR({
+  children,
+  className,
+  id,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
+}) {
+  return (
+    <tr id={id} className={cn("hover:bg-foreground/[0.03]", className)}>
+      {children}
+    </tr>
+  );
 }
 
 export function TH({ children, className }: { children: React.ReactNode; className?: string }) {

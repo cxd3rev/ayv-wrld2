@@ -127,6 +127,21 @@ const optionalDateField = (message: string) =>
     .transform((value) => value || "")
     .refine((value) => value === "" || /^\d{4}-\d{2}-\d{2}$/.test(value), message);
 
+const optionalUuidField = (message: string) =>
+  z
+    .string()
+    .trim()
+    .optional()
+    .transform((value) => value || "")
+    .refine(
+      (value) =>
+        value === "" ||
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+          value,
+        ),
+      message,
+    );
+
 export const createBookingSchema = z.object({
   customerName: z.string().trim().min(2, "Please enter the customer's name."),
   email: optionalEmailField,
@@ -142,6 +157,21 @@ export const createBookingSchema = z.object({
     .regex(/^\d{2}:\d{2}(?::\d{2})?$/, "Please choose a booking time."),
   reminderOn: optionalDateField("Please enter a valid reminder date."),
   notes: z.string().trim().optional().transform((value) => value || ""),
+  leadId: optionalUuidField("That lead is not valid."),
+});
+
+export const updateBookingLeadSchema = z.object({
+  bookingId: z
+    .string()
+    .trim()
+    .refine(
+      (value) =>
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+          value,
+        ),
+      "That booking is not valid.",
+    ),
+  leadId: optionalUuidField("That lead is not valid."),
 });
 
 export const updateBookingReminderSchema = z.object({
