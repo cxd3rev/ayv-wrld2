@@ -1,7 +1,7 @@
 import { Atmosphere } from "@/components/atmosphere";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/header";
 import { ProductCard } from "@/components/marketing/product-card";
-import { Features, FinalCta, HowItWorks } from "@/components/marketing/sections";
+import { BundleOffer, Features, FinalCta, HowItWorks } from "@/components/marketing/sections";
 import { products } from "@/config/products";
 import { siteConfig } from "@/config/site";
 import { ArrowRight } from "lucide-react";
@@ -83,6 +83,7 @@ export default function HomePage() {
             <ProductCard key={product.id} product={product} index={index} />
           ))}
         </div>
+        <BundleOffer />
       </section>
 
       <FinalCta />

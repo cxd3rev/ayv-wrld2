@@ -1,5 +1,7 @@
 import { ArrowRight, LayoutGrid, Repeat, ShieldCheck, Users, Wallet, Zap } from "lucide-react";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { bundleFullMonthly, bundleMonthly, formatPrice } from "@/config/products";
 
 const features = [
   {
@@ -30,7 +32,7 @@ const features = [
   {
     icon: Wallet,
     title: "Fair, simple pricing",
-    body: "Pay for the tools you actually use. Clear pricing lands with each product as it becomes available.",
+    body: "Each tool has one clear monthly price — or take the full bundle and pay 50% less than buying them separately.",
   },
 ];
 
@@ -155,6 +157,40 @@ export function HowItWorks() {
         </div>
       </div>
     </section>
+  );
+}
+
+export function BundleOffer() {
+  return (
+    <div className="relative mt-8 overflow-hidden rounded-2xl border border-border bg-card p-8 lg:p-12">
+      <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
+        <div className="max-w-md">
+          <div className="flex items-center gap-3">
+            <p className="kicker">The bundle</p>
+            <Badge tone="accent">Save 50%</Badge>
+          </div>
+          <h3 className="display mt-5 text-3xl tracking-tight lg:text-4xl">All six tools, one price.</h3>
+          <p className="mt-3 text-base leading-relaxed text-muted text-pretty">
+            Get every AYV WRLD product in a single subscription and pay half of what they cost
+            on their own.
+          </p>
+        </div>
+        <div className="flex flex-col items-start gap-5 lg:items-end">
+          <div className="flex items-baseline gap-3">
+            <span className="font-mono text-lg text-muted line-through">{formatPrice(bundleFullMonthly)}</span>
+            <span className="display text-4xl tracking-tight lg:text-5xl">{formatPrice(bundleMonthly)}</span>
+            <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">/ month</span>
+          </div>
+          <Link
+            href="/signup"
+            className="group inline-flex h-14 items-center justify-center rounded-full bg-accent px-8 text-base font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
+          >
+            Get the bundle
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
 

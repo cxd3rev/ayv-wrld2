@@ -66,7 +66,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("avyro"),
     accent: "#A3A3A3",
     route: "/dashboard/product",
-    pricing: { monthly: null, label: "Pricing coming soon" },
+    pricing: { monthly: 49.99, label: "€49,99 / month" },
     navigation: [{ label: "Overview", href: "/dashboard/product" }],
     featureFlags: {
       leadCapture: false,
@@ -90,7 +90,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("velto", true),
     accent: "#7C3AED",
     route: "/dashboard/product",
-    pricing: { monthly: null, label: "Pricing coming soon" },
+    pricing: { monthly: 49.99, label: "€49,99 / month" },
     navigation: [],
     featureFlags: {},
     dashboard: {
@@ -111,7 +111,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("rovyn"),
     accent: "#00C853",
     route: "/dashboard/product",
-    pricing: { monthly: null, label: "Pricing coming soon" },
+    pricing: { monthly: 89.99, label: "€89,99 / month" },
     navigation: [],
     featureFlags: {},
     dashboard: {
@@ -132,7 +132,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("orvyn", true),
     accent: "#E10600",
     route: "/dashboard/product",
-    pricing: { monthly: null, label: "Pricing coming soon" },
+    pricing: { monthly: 89.99, label: "€89,99 / month" },
     navigation: [],
     featureFlags: {},
     dashboard: {
@@ -153,7 +153,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("nexro"),
     accent: "#1E40AF",
     route: "/dashboard/product",
-    pricing: { monthly: null, label: "Pricing coming soon" },
+    pricing: { monthly: 129.99, label: "€129,99 / month" },
     navigation: [],
     featureFlags: {},
     dashboard: {
@@ -174,7 +174,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("ravelo"),
     accent: "#1D4ED8",
     route: "/dashboard/product",
-    pricing: { monthly: null, label: "Pricing coming soon" },
+    pricing: { monthly: 129.99, label: "€129,99 / month" },
     navigation: [],
     featureFlags: {},
     dashboard: {
@@ -185,6 +185,26 @@ export const products: ProductConfig[] = [
 ];
 
 export const defaultProductId: ProductId = "avyro";
+
+/** Fraction off the combined price when all products are bought as a bundle. */
+export const BUNDLE_DISCOUNT = 0.5;
+
+/** Combined monthly price of every product at its individual price. */
+export const bundleFullMonthly = Number(
+  products
+    .reduce((total, product) => total + (product.pricing.monthly ?? 0), 0)
+    .toFixed(2),
+);
+
+/** Discounted monthly price when the full bundle is purchased. */
+export const bundleMonthly = Number(
+  (bundleFullMonthly * (1 - BUNDLE_DISCOUNT)).toFixed(2),
+);
+
+/** Format a numeric amount as a euro price string (e.g. 49.99 -> "€49,99"). */
+export function formatPrice(amount: number) {
+  return `€${amount.toFixed(2).replace(".", ",")}`;
+}
 
 export function getProduct(slugOrId: string) {
   return products.find(
