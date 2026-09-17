@@ -2,9 +2,10 @@
 
 import { Logo } from "@/components/logo";
 import { products } from "@/config/products";
+import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const links = [
   { href: "/#products", label: "Products" },
@@ -14,27 +15,42 @@ const links = [
 
 export function MarketingHeader() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/70 backdrop-blur-xl">
-      <nav className="mx-auto flex h-20 w-full max-w-[1400px] items-center justify-between px-6 lg:px-12">
+    <header className="sticky top-0 z-50 px-3 pt-3">
+      <nav
+        className={cn(
+          "mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between px-4 transition-all duration-300 sm:px-6",
+          scrolled
+            ? "max-w-[1120px] rounded-full border border-border bg-card/85 shadow-sm backdrop-blur-xl"
+            : "border border-transparent",
+        )}
+      >
         <Link href="/" aria-label="AYV WRLD home">
           <Logo />
         </Link>
-        <div className="hidden items-center gap-10 md:flex">
+        <div className="hidden items-center gap-9 md:flex">
           {links.map((link) => (
             <Link key={link.href} href={link.href} className="nav-link text-sm text-muted hover:text-foreground">
               {link.label}
             </Link>
           ))}
         </div>
-        <div className="hidden items-center gap-6 md:flex">
+        <div className="hidden items-center gap-5 md:flex">
           <Link href="/login" className="text-sm text-muted transition-colors hover:text-foreground">
             Log in
           </Link>
           <Link
             href="/signup"
-            className="inline-flex h-10 items-center rounded-lg bg-accent px-5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
+            className="inline-flex h-10 items-center rounded-full bg-accent px-5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
           >
             Get started
           </Link>
@@ -50,7 +66,7 @@ export function MarketingHeader() {
       </nav>
 
       {open ? (
-        <div className="fixed inset-0 top-20 z-40 bg-background px-8 pt-16 pb-8 md:hidden">
+        <div className="fixed inset-0 top-0 z-40 bg-background px-8 pt-24 pb-8 md:hidden">
           <div className="flex flex-col gap-8">
             {links.map((link) => (
               <Link
