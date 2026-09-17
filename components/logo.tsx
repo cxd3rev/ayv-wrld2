@@ -16,7 +16,7 @@ export function Logo({
         alt={markOnly ? ayvBrand.name : ""}
         width={32}
         height={32}
-        className="h-8 w-8 object-contain"
+        className="mark-invert h-8 w-8 object-contain"
         priority
       />
       {markOnly ? null : (
