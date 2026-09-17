@@ -2,8 +2,15 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { mapStripeStatus, isUsableSecret } from "@/lib/billing-status";
+import {
+  type BillableProductId,
+  productFromStripeMetadata,
+  productFromStripePriceId,
+} from "@/lib/stripe-catalog";
 
 export const runtime = "nodejs";
+
+const PAID_STATUSES = new Set(["active", "trialing", "past_due"]);
 
 function periodFromSubscription(subscription: Stripe.Subscription) {
   const item = subscription.items.data[0];
@@ -26,11 +33,62 @@ function periodFromSubscription(subscription: Stripe.Subscription) {
   };
 }
 
+function stripePriceIdFromSubscription(subscription: Stripe.Subscription) {
+  const price = subscription.items.data[0]?.price;
+  if (!price) return null;
+  return typeof price === "string" ? price : price.id;
+}
+
+function productSlugFromSubscription(subscription: Stripe.Subscription, priceId: string | null) {
+  return (
+    productFromStripePriceId(priceId) ||
+    productFromStripeMetadata(subscription.metadata?.product_slug) ||
+    productFromStripeMetadata(subscription.metadata?.ayv_product)
+  );
+}
+
+async function catalogIds(slug: BillableProductId | null, stripePriceId: string | null) {
+  if (!slug) return { productId: null as string | null, priceId: null as string | null };
+  const admin = createAdminClient();
+  const { data: product } = await admin.from("products").select("id").eq("slug", slug).maybeSingle();
+  let priceId: string | null = null;
+  if (stripePriceId) {
+    const { data: price } = await admin
+      .from("prices")
+      .select("id")
+      .eq("stripe_price_id", stripePriceId)
+      .maybeSingle();
+    priceId = price?.id ?? null;
+  }
+  return { productId: product?.id ?? null, priceId };
+}
+
+async function syncEntitlement(
+  organizationId: string,
+  productId: string | null,
+  status: string,
+) {
+  if (!productId) return;
+  const admin = createAdminClient();
+  await admin.from("organization_products").upsert(
+    {
+      organization_id: organizationId,
+      product_id: productId,
+      enabled: PAID_STATUSES.has(status),
+    },
+    { onConflict: "organization_id,product_id" },
+  );
+}
+
 async function upsertSubscription(subscription: Stripe.Subscription, organizationId: string) {
   const admin = createAdminClient();
   const period = periodFromSubscription(subscription);
   const customerId =
     typeof subscription.customer === "string" ? subscription.customer : subscription.customer.id;
+  const stripePriceId = stripePriceIdFromSubscription(subscription);
+  const productSlug = productSlugFromSubscription(subscription, stripePriceId);
+  const catalog = await catalogIds(productSlug, stripePriceId);
+  const status = mapStripeStatus(subscription.status);
 
   const { data: customer } = await admin
     .from("billing_customers")
@@ -42,15 +100,20 @@ async function upsertSubscription(subscription: Stripe.Subscription, organizatio
     {
       organization_id: organizationId,
       billing_customer_id: customer?.id ?? null,
+      product_id: catalog.productId,
+      price_id: catalog.priceId,
       stripe_subscription_id: subscription.id,
       stripe_customer_id: customerId,
-      status: mapStripeStatus(subscription.status),
+      stripe_price_id: stripePriceId,
+      status,
       current_period_start: period.start,
       current_period_end: period.end,
       cancel_at_period_end: subscription.cancel_at_period_end,
     },
     { onConflict: "stripe_subscription_id" },
   );
+
+  await syncEntitlement(organizationId, catalog.productId, status);
 }
 
 export async function POST(request: Request) {
@@ -93,6 +156,20 @@ export async function POST(request: Request) {
           { onConflict: "organization_id" },
         );
         const subscription = await stripe.subscriptions.retrieve(String(session.subscription));
+        if (session.metadata?.product_slug && !subscription.metadata?.product_slug) {
+          await stripe.subscriptions.update(subscription.id, {
+            metadata: {
+              ...subscription.metadata,
+              organization_id: organizationId,
+              product_slug: session.metadata.product_slug,
+            },
+          });
+          subscription.metadata = {
+            ...subscription.metadata,
+            organization_id: organizationId,
+            product_slug: session.metadata.product_slug,
+          };
+        }
         await upsertSubscription(subscription, organizationId);
       }
     }

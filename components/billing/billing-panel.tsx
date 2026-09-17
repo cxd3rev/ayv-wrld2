@@ -5,6 +5,8 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { FormError } from "@/components/ui/form-error";
 import { formatDate } from "@/lib/utils";
 import { openBillingPortal, startCheckout } from "@/services/billing-actions";
+import { isPaidStatus } from "@/lib/billing-status";
+import type { BillableProductId } from "@/lib/stripe-catalog";
 import type { Subscription } from "@/types/database";
 import { useState } from "react";
 
@@ -16,65 +18,83 @@ const statusLabel: Record<string, string> = {
   incomplete: "Incomplete",
 };
 
+export type BillableCatalogItem = {
+  id: BillableProductId;
+  name: string;
+  priceLabel: string;
+  configured: boolean;
+};
+
 export function BillingPanel({
-  subscription,
+  subscriptions,
+  catalog,
   stripeReady,
 }: {
-  subscription: Subscription | null;
+  subscriptions: Subscription[];
+  catalog: BillableCatalogItem[];
   stripeReady: boolean;
 }) {
   const [error, setError] = useState("");
-  const [pending, setPending] = useState(false);
+  const [pending, setPending] = useState<"portal" | BillableProductId | null>(null);
 
-  async function checkout() {
+  async function checkout(product: BillableProductId) {
     setError("");
-    setPending(true);
-    const result = await startCheckout();
+    setPending(product);
+    const result = await startCheckout(product);
     if (result?.error) setError(result.error);
-    setPending(false);
+    setPending(null);
   }
 
   async function portal() {
     setError("");
-    setPending(true);
+    setPending("portal");
     const result = await openBillingPortal();
     if (result?.error) setError(result.error);
-    setPending(false);
+    setPending(null);
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-3">
-      <Card>
-        <CardHeader>
-          <CardDescription>Current plan</CardDescription>
-          <CardTitle>{subscription ? "AYV WRLD subscription" : "No plan yet"}</CardTitle>
-        </CardHeader>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardDescription>Subscription status</CardDescription>
-          <CardTitle>
-            {subscription ? statusLabel[subscription.status] ?? subscription.status : "None"}
-          </CardTitle>
-        </CardHeader>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardDescription>Next billing date</CardDescription>
-          <CardTitle>{formatDate(subscription?.current_period_end)}</CardTitle>
-        </CardHeader>
-      </Card>
+    <div className="grid gap-4 lg:grid-cols-2">
+      {catalog.map((product) => {
+        const subscription =
+          subscriptions.find((item) => item.product_slug === product.id && isPaidStatus(item.status)) ??
+          subscriptions.find((item) => item.product_slug === product.id) ??
+          null;
+        const entitled = Boolean(subscription && isPaidStatus(subscription.status));
 
-      <div className="flex flex-wrap gap-3 lg:col-span-3">
-        <Button onClick={checkout} disabled={pending || !stripeReady}>
-          {subscription ? "Change plan" : "Start subscription"}
-        </Button>
-        <Button variant="secondary" onClick={portal} disabled={pending || !stripeReady}>
-          Manage subscription
+        return (
+          <Card key={product.id}>
+            <CardHeader>
+              <CardDescription>{product.priceLabel}</CardDescription>
+              <CardTitle>{product.name}</CardTitle>
+              <p className="pt-2 text-sm text-muted">
+                {subscription
+                  ? `${statusLabel[subscription.status] ?? subscription.status}${
+                      subscription.current_period_end
+                        ? ` · next bill ${formatDate(subscription.current_period_end)}`
+                        : ""
+                    }`
+                  : "Not subscribed"}
+              </p>
+            </CardHeader>
+            <Button
+              onClick={() => checkout(product.id)}
+              disabled={pending !== null || !product.configured || entitled}
+            >
+              {entitled ? `${product.name} active` : `Start ${product.name} subscription`}
+            </Button>
+          </Card>
+        );
+      })}
+
+      <div className="flex flex-wrap items-center gap-3 lg:col-span-2">
+        <Button variant="secondary" onClick={portal} disabled={pending !== null || !stripeReady}>
+          Manage subscriptions
         </Button>
         {!stripeReady ? (
           <p className="text-sm text-muted">
-            Add Stripe keys to enable checkout and the customer portal.
+            Add Stripe keys to enable checkout. The customer portal is optional and does not block Start
+            subscription.
           </p>
         ) : null}
       </div>

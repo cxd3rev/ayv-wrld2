@@ -16,3 +16,7 @@ export function mapStripeStatus(status: string): SubscriptionStatus {
   }
   return "incomplete";
 }
+
+export function isPaidStatus(status: string | null | undefined) {
+  return status === "active" || status === "trialing" || status === "past_due";
+}

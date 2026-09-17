@@ -3,10 +3,18 @@ import "server-only";
 import Stripe from "stripe";
 import { getAppUrl } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
-import { isUsableSecret } from "@/lib/billing-status";
+import { isPaidStatus, isUsableSecret } from "@/lib/billing-status";
+import {
+  type BillableProductId,
+  getStripePriceId,
+  isProductCheckoutReady,
+  isStripeSecretConfigured,
+  productFromStripePriceId,
+} from "@/lib/stripe-catalog";
 import type { Organization, Subscription } from "@/types/database";
 
-export { mapStripeStatus, isUsableSecret } from "@/lib/billing-status";
+export { mapStripeStatus, isUsableSecret, isPaidStatus } from "@/lib/billing-status";
+export { isStripeConfigured, isProductCheckoutReady } from "@/lib/stripe-catalog";
 
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -14,36 +22,72 @@ function getStripe() {
   return new Stripe(key as string);
 }
 
-export function isStripeConfigured() {
-  return (
-    isUsableSecret(process.env.STRIPE_SECRET_KEY, ["sk_test_", "sk_live_", "rk_test_", "rk_live_"]) &&
-    isUsableSecret(process.env.STRIPE_PRICE_ID, ["price_"])
-  );
+type SubscriptionRow = Subscription & {
+  products?: { slug: string | null } | { slug: string | null }[] | null;
+};
+
+function withProductSlug(row: SubscriptionRow): Subscription {
+  const related = Array.isArray(row.products) ? row.products[0] : row.products;
+  const slug = related?.slug === "avyro" || related?.slug === "velto" ? related.slug : null;
+  const { products: _products, ...subscription } = row;
+  return {
+    ...subscription,
+    product_slug: slug ?? productFromStripePriceId(subscription.stripe_price_id ?? null),
+  };
 }
 
-export async function getOrganizationSubscription(organizationId: string) {
+export async function getOrganizationSubscriptions(organizationId: string) {
   const supabase = await createClient();
   const { data } = await supabase
     .from("subscriptions")
-    .select("*")
+    .select("*, products(slug)")
     .eq("organization_id", organizationId)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+    .order("created_at", { ascending: false });
 
-  return (data as Subscription | null) ?? null;
+  return ((data as SubscriptionRow[] | null) ?? []).map(withProductSlug);
+}
+
+export async function getOrganizationSubscription(organizationId: string) {
+  const subscriptions = await getOrganizationSubscriptions(organizationId);
+  return subscriptions[0] ?? null;
+}
+
+export function subscriptionForProduct(subscriptions: Subscription[], product: BillableProductId) {
+  return (
+    subscriptions.find((item) => item.product_slug === product && isPaidStatus(item.status)) ??
+    subscriptions.find((item) => item.product_slug === product) ??
+    null
+  );
+}
+
+export function paidProductSlugs(subscriptions: Subscription[]) {
+  const paid = new Set<BillableProductId>();
+  for (const item of subscriptions) {
+    if (item.product_slug && isPaidStatus(item.status)) {
+      paid.add(item.product_slug);
+    }
+  }
+  return [...paid];
 }
 
 /**
- * Create a Stripe Checkout session for the current organization.
- * The secret key stays on the server.
+ * Create a Stripe Checkout session for one AYV WRLD product.
+ * Price ids stay on the server; the client only passes avyro or velto.
  */
-export async function createCheckoutSession(organization: Organization, priceId?: string) {
+export async function createCheckoutSession(organization: Organization, product: BillableProductId) {
   const stripe = getStripe();
-  const resolvedPrice = priceId || process.env.STRIPE_PRICE_ID;
+  const resolvedPrice = getStripePriceId(product);
 
-  if (!stripe || !resolvedPrice) {
+  if (!isStripeSecretConfigured() || !stripe || !resolvedPrice) {
     return { ok: false as const, error: "Billing is not configured yet." };
+  }
+
+  const existing = subscriptionForProduct(await getOrganizationSubscriptions(organization.id), product);
+  if (existing && isPaidStatus(existing.status)) {
+    return {
+      ok: false as const,
+      error: `This workspace already has an active ${product === "avyro" ? "Avyro" : "Velto"} subscription.`,
+    };
   }
 
   try {
@@ -53,14 +97,16 @@ export async function createCheckoutSession(organization: Organization, priceId?
       mode: "subscription",
       customer: customerId,
       line_items: [{ price: resolvedPrice, quantity: 1 }],
-      success_url: `${getAppUrl()}/dashboard/billing?checkout=success`,
-      cancel_url: `${getAppUrl()}/dashboard/billing?checkout=cancelled`,
+      success_url: `${getAppUrl()}/dashboard/billing?checkout=success&product=${product}`,
+      cancel_url: `${getAppUrl()}/dashboard/billing?checkout=cancelled&product=${product}`,
       metadata: {
         organization_id: organization.id,
+        product_slug: product,
       },
       subscription_data: {
         metadata: {
           organization_id: organization.id,
+          product_slug: product,
         },
       },
     });
@@ -132,4 +178,21 @@ async function getOrCreateStripeCustomer(stripe: Stripe, organization: Organizat
   });
 
   return customer.id;
+}
+
+export function getBillableCatalog() {
+  return [
+    {
+      id: "avyro" as const,
+      name: "Avyro",
+      priceLabel: "€49,99 / month",
+      configured: isProductCheckoutReady("avyro"),
+    },
+    {
+      id: "velto" as const,
+      name: "Velto",
+      priceLabel: "€49,99 / month",
+      configured: isProductCheckoutReady("velto"),
+    },
+  ];
 }

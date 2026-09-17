@@ -74,6 +74,10 @@ export type Subscription = {
   product_id: string | null;
   price_id: string | null;
   stripe_subscription_id: string | null;
+  stripe_customer_id?: string | null;
+  stripe_price_id?: string | null;
+  /** Catalog slug (avyro / velto) joined from products, not a DB column. */
+  product_slug?: "avyro" | "velto" | null;
   status: SubscriptionStatus;
   current_period_start: string | null;
   current_period_end: string | null;

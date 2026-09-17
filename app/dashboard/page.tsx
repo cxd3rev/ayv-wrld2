@@ -1,7 +1,7 @@
 import { DashboardCard } from "@/components/ui/dashboard-card";
 import { products } from "@/config/products";
 import { requireWorkspace } from "@/lib/auth/session";
-import { getOrganizationSubscription } from "@/services/billing";
+import { getOrganizationSubscriptions, paidProductSlugs } from "@/services/billing";
 import { listNotifications } from "@/services/notifications";
 import { openProductWorkspace } from "@/services/product-switch";
 import Link from "next/link";
@@ -9,10 +9,11 @@ import { CheckCircle2 } from "lucide-react";
 
 export default async function DashboardPage() {
   const { organization, profile } = await requireWorkspace();
-  const [subscription, notifications] = await Promise.all([
-    getOrganizationSubscription(organization.id),
+  const [subscriptions, notifications] = await Promise.all([
+    getOrganizationSubscriptions(organization.id),
     listNotifications(),
   ]);
+  const paid = paidProductSlugs(subscriptions);
   const firstName = profile?.full_name?.split(" ")[0];
 
   return (
@@ -29,7 +30,7 @@ export default async function DashboardPage() {
         <DashboardCard title="Workspace" value={organization.name} hint={organization.industry ?? "Business"} />
         <DashboardCard
           title="Subscription"
-          value={subscription?.status ?? "None"}
+          value={paid.length ? paid.map((slug) => (slug === "avyro" ? "Avyro" : "Velto")).join(" + ") : "None"}
           hint="Billed per organization"
         />
         <DashboardCard
@@ -84,7 +85,7 @@ export default async function DashboardPage() {
           {[
             { href: "/dashboard/settings", label: "Complete business profile", done: Boolean(organization.industry) },
             { href: "/dashboard/settings/team", label: "Invite teammates", done: false },
-            { href: "/dashboard/billing", label: "Review billing", done: Boolean(subscription) },
+            { href: "/dashboard/billing", label: "Review billing", done: paid.length > 0 },
           ].map((item, index) => (
             <li key={item.label}>
               <Link href={item.href} className="flex items-center gap-4 py-5 text-sm hover:text-accent">
