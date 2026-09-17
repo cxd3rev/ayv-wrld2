@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, CreditCard, LayoutDashboard, Menu, Settings, X } from "lucide-react";
+import { Box, CalendarDays, CreditCard, LayoutDashboard, Menu, Settings, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,13 +14,18 @@ import type { ProductConfig } from "@/config/products";
 
 const icons = {
   layout: LayoutDashboard,
+  calendar: CalendarDays,
   box: Box,
   settings: Settings,
   card: CreditCard,
 };
 
-const navKeys: Record<string, "navOverview" | "navProduct" | "navSettings" | "navBilling"> = {
+const navKeys: Record<
+  string,
+  "navOverview" | "navCalendar" | "navProduct" | "navSettings" | "navBilling"
+> = {
   "/dashboard": "navOverview",
+  "/dashboard/calendar": "navCalendar",
   "/dashboard/product": "navProduct",
   "/dashboard/settings": "navSettings",
   "/dashboard/billing": "navBilling",

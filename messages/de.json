@@ -264,6 +264,7 @@
     "notReadyTitle": "{name} ist noch nicht bereit",
     "notReadyBody": "Wechseln Sie zurück zu Avyro, Velto oder Rovyn, um weiterzuarbeiten.",
     "navOverview": "Überblick",
+    "navCalendar": "Kalender",
     "navProduct": "Produkt",
     "navSettings": "Einstellungen",
     "navBilling": "Abrechnung",
@@ -327,6 +328,35 @@
       "reason_progressing": "Reise schreitet voran",
       "clientsEmpty": "Fügen Sie einen Avyro-Lead hinzu, um den verbundenen Fortschritt zu verfolgen.",
       "productActivity": "Produktaktivität"
+    }
+  },
+  "calendar": {
+    "kicker": "Gemeinsamer Zeitplan",
+    "title": "Kalender",
+    "subtitle": "Alle Lead- und Angebotsnachfassungen, Termine und Erinnerungen an einem Ort.",
+    "eventCount": "{count, plural, one {Termin} other {Termine}}",
+    "filterProducts": "Produkte",
+    "filterTypes": "Ereignistypen",
+    "previousMonth": "Vorheriger Monat",
+    "today": "Heute",
+    "nextMonth": "Nächster Monat",
+    "selectedDay": "Ausgewählter Tag",
+    "allDay": "Ganztägig",
+    "more": "+{count} weitere",
+    "selectDay": "{date} auswählen, {count, plural, one {# Termin} other {# Termine}}",
+    "openEvent": "{type} für {title} in {product} öffnen",
+    "emptyDay": "Nichts geplant",
+    "emptyDayBody": "Wählen Sie einen anderen Tag oder ändern Sie die Filter.",
+    "timezoneNote": "Daten und Terminzeiten werden in der lokalen Zeit dieses Browsers angezeigt. Nachfassungen und Erinnerungen sind ganztägig.",
+    "previewKicker": "Nächste 30 Tage",
+    "previewTitle": "Demnächst",
+    "openCalendar": "Kalender öffnen",
+    "previewEmpty": "Keine Kalendertermine in den nächsten 30 Tagen.",
+    "types": {
+      "lead_follow_up": "Lead-Nachfassung",
+      "appointment": "Termin",
+      "booking_reminder": "Buchungserinnerung",
+      "quote_follow_up": "Angebotsnachfassung"
     }
   },
   "billing": {

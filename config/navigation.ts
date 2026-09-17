@@ -1,5 +1,6 @@
 export const dashboardNav = [
   { label: "Overview", href: "/dashboard", icon: "layout" as const },
+  { label: "Calendar", href: "/dashboard/calendar", icon: "calendar" as const },
   { label: "Product", href: "/dashboard/product", icon: "box" as const },
   { label: "Settings", href: "/dashboard/settings", icon: "settings" as const },
   { label: "Billing", href: "/dashboard/billing", icon: "card" as const },

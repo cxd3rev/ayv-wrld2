@@ -1,6 +1,8 @@
 import { DashboardRecordButton } from "@/components/dashboard-record-button";
+import { CalendarPreview } from "@/components/calendar/calendar";
 import { Badge } from "@/components/ui/badge";
 import { requireWorkspace } from "@/lib/auth/session";
+import { buildCalendarEvents } from "@/lib/calendar";
 import {
   calculateDashboardMetrics,
   type ClientHealth,
@@ -21,6 +23,7 @@ export default async function DashboardPage() {
   const locale = await getLocale();
   const records = await getDashboardRecords(organization.id);
   const today = new Date().toISOString().slice(0, 10);
+  const calendarEvents = buildCalendarEvents(records);
   const metrics = calculateDashboardMetrics(
     records.leads,
     records.bookings,
@@ -84,6 +87,8 @@ export default async function DashboardPage() {
           <p className="mt-2 max-w-xl text-muted">{t("command.emptyBody")}</p>
         </section>
       ) : null}
+
+      <CalendarPreview events={calendarEvents} serverToday={today} />
 
       <section className="mt-10 border-t border-foreground/10 pt-8">
         <div className="flex flex-wrap items-end justify-between gap-3">

@@ -264,6 +264,7 @@
     "notReadyTitle": "{name} is not ready yet",
     "notReadyBody": "Switch back to Avyro, Velto, or Rovyn to keep working.",
     "navOverview": "Overview",
+    "navCalendar": "Calendar",
     "navProduct": "Product",
     "navSettings": "Settings",
     "navBilling": "Billing",
@@ -327,6 +328,35 @@
       "reason_progressing": "Journey progressing",
       "clientsEmpty": "Add an Avyro lead to track connected client progress.",
       "productActivity": "Product activity"
+    }
+  },
+  "calendar": {
+    "kicker": "Shared schedule",
+    "title": "Calendar",
+    "subtitle": "Every lead follow-up, appointment, reminder, and quote follow-up in one place.",
+    "eventCount": "{count, plural, one {event} other {events}}",
+    "filterProducts": "Products",
+    "filterTypes": "Event types",
+    "previousMonth": "Previous month",
+    "today": "Today",
+    "nextMonth": "Next month",
+    "selectedDay": "Selected day",
+    "allDay": "All day",
+    "more": "+{count} more",
+    "selectDay": "Select {date}, {count, plural, one {# event} other {# events}}",
+    "openEvent": "Open {type} for {title} in {product}",
+    "emptyDay": "Nothing scheduled",
+    "emptyDayBody": "Choose another day or adjust the filters.",
+    "timezoneNote": "Dates and appointment times are shown in this browser's local time. Follow-ups and reminders are all-day items.",
+    "previewKicker": "Next 30 days",
+    "previewTitle": "Coming up",
+    "openCalendar": "Open calendar",
+    "previewEmpty": "No calendar events in the next 30 days.",
+    "types": {
+      "lead_follow_up": "Lead follow-up",
+      "appointment": "Appointment",
+      "booking_reminder": "Booking reminder",
+      "quote_follow_up": "Quote follow-up"
     }
   },
   "billing": {

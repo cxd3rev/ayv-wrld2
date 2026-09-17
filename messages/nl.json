@@ -264,6 +264,7 @@
     "notReadyTitle": "{name} is nog niet klaar",
     "notReadyBody": "Schakel terug naar Avyro, Velto of Rovyn om door te werken.",
     "navOverview": "Overzicht",
+    "navCalendar": "Agenda",
     "navProduct": "Product",
     "navSettings": "Instellingen",
     "navBilling": "Facturatie",
@@ -327,6 +328,35 @@
       "reason_progressing": "Klantreis gaat vooruit",
       "clientsEmpty": "Voeg een Avyro-lead toe om verbonden klantvoortgang te volgen.",
       "productActivity": "Productactiviteit"
+    }
+  },
+  "calendar": {
+    "kicker": "Gedeelde planning",
+    "title": "Agenda",
+    "subtitle": "Alle opvolgingen van leads en offertes, afspraken en herinneringen op één plek.",
+    "eventCount": "{count, plural, one {gebeurtenis} other {gebeurtenissen}}",
+    "filterProducts": "Producten",
+    "filterTypes": "Soorten gebeurtenissen",
+    "previousMonth": "Vorige maand",
+    "today": "Vandaag",
+    "nextMonth": "Volgende maand",
+    "selectedDay": "Geselecteerde dag",
+    "allDay": "Hele dag",
+    "more": "+{count} meer",
+    "selectDay": "Selecteer {date}, {count, plural, one {# gebeurtenis} other {# gebeurtenissen}}",
+    "openEvent": "Open {type} voor {title} in {product}",
+    "emptyDay": "Niets gepland",
+    "emptyDayBody": "Kies een andere dag of pas de filters aan.",
+    "timezoneNote": "Datums en afspraaktijden worden in de lokale tijd van deze browser getoond. Opvolgingen en herinneringen duren de hele dag.",
+    "previewKicker": "Komende 30 dagen",
+    "previewTitle": "Binnenkort",
+    "openCalendar": "Agenda openen",
+    "previewEmpty": "Geen agendagebeurtenissen in de komende 30 dagen.",
+    "types": {
+      "lead_follow_up": "Leadopvolging",
+      "appointment": "Afspraak",
+      "booking_reminder": "Boekingsherinnering",
+      "quote_follow_up": "Offerteopvolging"
     }
   },
   "billing": {
