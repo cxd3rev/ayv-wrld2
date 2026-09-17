@@ -178,6 +178,34 @@ export const updateBookingReminderSchema = z.object({
   reminderOn: optionalDateField("Please enter a valid reminder date."),
 });
 
+export const quoteStatuses = ["sent", "followed_up", "won", "lost"] as const;
+
+export const quoteStatusSchema = z.enum(quoteStatuses);
+
+const optionalAmountField = z
+  .string()
+  .trim()
+  .optional()
+  .transform((value) => (value || "").replace(",", "."))
+  .refine(
+    (value) => value === "" || /^\d+(\.\d{1,2})?$/.test(value),
+    "Please enter a valid amount.",
+  );
+
+export const createQuoteSchema = z.object({
+  customerName: z.string().trim().min(2, "Please enter the customer's name."),
+  email: optionalEmailField,
+  phone: z.string().trim().optional().transform((value) => value || ""),
+  title: z.string().trim().min(2, "Please enter what this quote is for."),
+  amount: optionalAmountField,
+  notes: z.string().trim().optional().transform((value) => value || ""),
+  followUpOn: optionalDateField("Please enter a valid follow-up date."),
+});
+
+export const updateQuoteFollowUpSchema = z.object({
+  followUpOn: optionalDateField("Please enter a valid follow-up date."),
+});
+
 export function firstZodError(error: z.ZodError) {
   return error.issues[0]?.message ?? "Please check the form and try again.";
 }

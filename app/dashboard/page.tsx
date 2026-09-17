@@ -1,5 +1,5 @@
 import { DashboardCard } from "@/components/ui/dashboard-card";
-import { products } from "@/config/products";
+import { getProduct, products } from "@/config/products";
 import { requireWorkspace } from "@/lib/auth/session";
 import { getOrganizationSubscriptions, paidProductSlugs } from "@/services/billing";
 import { listNotifications } from "@/services/notifications";
@@ -30,7 +30,11 @@ export default async function DashboardPage() {
         <DashboardCard title="Workspace" value={organization.name} hint={organization.industry ?? "Business"} />
         <DashboardCard
           title="Subscription"
-          value={paid.length ? paid.map((slug) => (slug === "avyro" ? "Avyro" : "Velto")).join(" + ") : "None"}
+          value={
+            paid.length
+              ? paid.map((slug) => getProduct(slug)?.name ?? slug).join(" + ")
+              : "None"
+          }
           hint="Billed per organization"
         />
         <DashboardCard
@@ -40,7 +44,7 @@ export default async function DashboardPage() {
         />
       </div>
 
-      <div className="mt-4 grid gap-0 border-t border-foreground/10 lg:grid-cols-2">
+      <div className="mt-4 grid gap-0 border-t border-foreground/10 lg:grid-cols-3">
         <form
           action={openProductWorkspace}
           className="border-b border-foreground/10 lg:border-r lg:border-b-0"
@@ -48,7 +52,7 @@ export default async function DashboardPage() {
           <input type="hidden" name="productId" value="avyro" />
           <button
             type="submit"
-            className="group flex min-h-44 w-full flex-col justify-between py-8 pr-6 text-left lg:pr-10"
+            className="group flex min-h-44 w-full flex-col justify-between py-8 pr-6 text-left lg:pr-8"
           >
             <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Start here</p>
             <div>
@@ -59,11 +63,14 @@ export default async function DashboardPage() {
             </div>
           </button>
         </form>
-        <form action={openProductWorkspace}>
+        <form
+          action={openProductWorkspace}
+          className="border-b border-foreground/10 lg:border-r lg:border-b-0"
+        >
           <input type="hidden" name="productId" value="velto" />
           <button
             type="submit"
-            className="group flex min-h-44 w-full flex-col justify-between py-8 text-left lg:pl-10"
+            className="group flex min-h-44 w-full flex-col justify-between py-8 text-left lg:px-8"
           >
             <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Bookings</p>
             <div>
@@ -71,6 +78,21 @@ export default async function DashboardPage() {
                 Open Velto
               </h2>
               <p className="mt-2 text-sm text-muted">Take bookings and send reminders so fewer appointments are missed.</p>
+            </div>
+          </button>
+        </form>
+        <form action={openProductWorkspace}>
+          <input type="hidden" name="productId" value="rovyn" />
+          <button
+            type="submit"
+            className="group flex min-h-44 w-full flex-col justify-between py-8 text-left lg:pl-8"
+          >
+            <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Quotes</p>
+            <div>
+              <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
+                Open Rovyn
+              </h2>
+              <p className="mt-2 text-sm text-muted">Follow up on sent quotes so more proposals become booked work.</p>
             </div>
           </button>
         </form>

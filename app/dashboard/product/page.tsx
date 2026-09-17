@@ -6,6 +6,8 @@ import { getProduct } from "@/config/products";
 import { getActiveProductId } from "@/lib/product-cookie";
 import { AvyroLeadsWorkspace } from "@/products/avyro/leads-workspace";
 import { listLeads } from "@/products/avyro/actions";
+import { RovynQuotesWorkspace } from "@/products/rovyn/quotes-workspace";
+import { listQuotes } from "@/products/rovyn/actions";
 import { VeltoBookingsWorkspace } from "@/products/velto/bookings-workspace";
 import { listBookings } from "@/products/velto/actions";
 
@@ -21,10 +23,12 @@ export default async function ProductDashboardPage({
   const params = await searchParams;
   const showAvyro = product.id === "avyro" && Boolean(product.featureFlags.leadCapture);
   const showVelto = product.id === "velto" && Boolean(product.featureFlags.bookings);
-  const [leads, bookings] =
-    showAvyro || showVelto
-      ? await Promise.all([listLeads(), listBookings()])
-      : [[], []];
+  const showRovyn = product.id === "rovyn" && Boolean(product.featureFlags.quotes);
+  const [leads, bookings, quotes] = await Promise.all([
+    showAvyro || showVelto ? listLeads() : Promise.resolve([]),
+    showAvyro || showVelto ? listBookings() : Promise.resolve([]),
+    showRovyn ? listQuotes() : Promise.resolve([]),
+  ]);
 
   return (
     <div>
@@ -42,7 +46,7 @@ export default async function ProductDashboardPage({
         <EmptyState
           icon={<ProductIcon product={product} size={64} className="h-16 w-16" />}
           title={`${product.name} is coming soon`}
-          description="This product is configured in the foundation, but its features are not built yet. Switch back to Avyro or Velto to continue."
+          description="This product is configured in the foundation, but its features are not built yet. Switch back to Avyro, Velto, or Rovyn to continue."
         />
       ) : showAvyro ? (
         <AvyroLeadsWorkspace
@@ -57,11 +61,13 @@ export default async function ProductDashboardPage({
           fromLeadId={firstParam(params.fromLead)}
           focusBookingId={firstParam(params.booking)}
         />
+      ) : showRovyn ? (
+        <RovynQuotesWorkspace quotes={quotes} />
       ) : (
         <EmptyState
           icon={<ProductIcon product={product} size={64} className="h-16 w-16" />}
           title={`${product.name} is not ready yet`}
-          description="Switch back to Avyro or Velto to keep working."
+          description="Switch back to Avyro, Velto, or Rovyn to keep working."
         />
       )}
     </div>

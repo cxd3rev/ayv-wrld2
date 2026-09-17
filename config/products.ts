@@ -11,6 +11,7 @@ import { productBrand, type BrandAssets } from "@/config/brands";
  *
  * Avyro is the first live product: a small lead-conversion workspace.
  * Velto is the second: org-scoped bookings with reminder dates.
+ * Rovyn is the third: org-scoped quote follow-up.
  * Other products stay coming_soon until they have their own tools.
  */
 
@@ -126,17 +127,20 @@ export const products: ProductConfig[] = [
       "Nudge undecided prospects at the right moment",
       "Close more work without chasing by hand",
     ],
-    status: "coming_soon",
-    marketingStatus: "Coming soon",
+    status: "active",
+    marketingStatus: "In development",
     assets: productBrand("rovyn"),
     accent: "#00C853",
     route: "/dashboard/product",
     pricing: { monthly: 89.99, label: "€89,99 / month" },
-    navigation: [],
-    featureFlags: {},
+    navigation: [{ label: "Quotes", href: "/dashboard/product" }],
+    featureFlags: {
+      quotes: true,
+      followUp: true,
+    },
     dashboard: {
       title: "Rovyn",
-      description: "Quote follow-up automation is coming soon.",
+      description: "Follow up on sent quotes so more proposals turn into booked work.",
     },
   },
   {

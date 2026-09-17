@@ -76,8 +76,8 @@ export type Subscription = {
   stripe_subscription_id: string | null;
   stripe_customer_id?: string | null;
   stripe_price_id?: string | null;
-  /** Catalog slug (avyro / velto) joined from products, not a DB column. */
-  product_slug?: "avyro" | "velto" | null;
+  /** Catalog slug (avyro / velto / rovyn) joined from products, not a DB column. */
+  product_slug?: "avyro" | "velto" | "rovyn" | null;
   status: SubscriptionStatus;
   current_period_start: string | null;
   current_period_end: string | null;
@@ -152,6 +152,23 @@ export type Booking = {
   start_time: string;
   status: BookingStatus;
   reminder_on: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type QuoteStatus = "sent" | "followed_up" | "won" | "lost";
+
+export type Quote = {
+  id: string;
+  organization_id: string;
+  customer_name: string;
+  email: string | null;
+  phone: string | null;
+  title: string;
+  amount: number | string | null;
+  status: QuoteStatus;
+  follow_up_on: string | null;
   notes: string | null;
   created_at: string;
   updated_at: string;
