@@ -14,16 +14,15 @@ export default function HomePage() {
       <MarketingHeader />
 
       <section className="relative flex min-h-[calc(100vh-5rem)] flex-col justify-center overflow-hidden">
-        <div className="arch-grid" />
+        <div className="dot-field" />
         <div className="relative z-10 mx-auto grid w-full max-w-[1400px] items-center gap-12 px-6 pt-16 pb-28 lg:grid-cols-[1.15fr_0.85fr] lg:px-12 lg:pt-20">
           <div>
             <p className="kicker rise-in">Software for modern businesses</p>
-            <h1 className="display mt-8 text-[clamp(2.75rem,8vw,7.5rem)] leading-[0.9] tracking-tight rise-in-2 text-balance">
+            <h1 className="display mt-6 text-[clamp(2.75rem,8vw,7rem)] leading-[0.92] tracking-tight rise-in-2 text-balance">
               <span className="block">Turn everyday</span>
-              <span className="block">work into</span>
-              <span className="headline-mark">revenue.</span>
+              <span className="block">work into revenue.</span>
             </h1>
-            <div className="mt-12 max-w-xl rise-in-3">
+            <div className="mt-10 max-w-xl rise-in-3">
               <p className="text-xl leading-relaxed text-muted lg:text-2xl text-pretty">
                 {siteConfig.description}
               </p>

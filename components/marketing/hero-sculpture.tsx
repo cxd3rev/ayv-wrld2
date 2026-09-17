@@ -3,7 +3,7 @@ import { ayvBrand } from "@/config/brands";
 
 export function HeroSculpture() {
   return (
-    <div className="hero-frame mx-auto flex h-[320px] w-full max-w-[420px] items-center justify-center sm:h-[460px]">
+    <div className="mx-auto flex h-[320px] w-full max-w-[420px] items-center justify-center sm:h-[460px]">
       <div className="mark-glow flex items-center justify-center">
         <Image
           src={ayvBrand.logo}

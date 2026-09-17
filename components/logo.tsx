@@ -20,7 +20,9 @@ export function Logo({
         priority
       />
       {markOnly ? null : (
-        <span className="text-sm font-medium tracking-[0.14em]">{ayvBrand.name}</span>
+        <span className="font-mono text-sm uppercase tracking-[0.2em] text-foreground">
+          {ayvBrand.name}
+        </span>
       )}
     </span>
   );

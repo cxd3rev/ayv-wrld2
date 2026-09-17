@@ -44,12 +44,15 @@ export function Features() {
       </h2>
       <div className="mt-16 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
         {features.map((feature) => (
-          <div key={feature.title} className="bg-card p-8 transition-colors duration-300 hover:bg-card-hover">
-            <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-background">
-              <feature.icon className="h-5 w-5 text-accent" strokeWidth={1.5} />
+          <div
+            key={feature.title}
+            className="flex flex-col items-center bg-card px-8 py-12 text-center transition-colors duration-300 hover:bg-card-hover"
+          >
+            <div className="crosshair flex h-11 w-11 items-center justify-center">
+              <feature.icon className="h-5 w-5 text-foreground" strokeWidth={1.5} />
             </div>
-            <h3 className="mt-6 text-lg font-medium tracking-tight">{feature.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted">{feature.body}</p>
+            <h3 className="mt-8 text-lg font-medium tracking-tight">{feature.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">{feature.body}</p>
           </div>
         ))}
       </div>
@@ -83,10 +86,12 @@ export function HowItWorks() {
         </h2>
         <div className="mt-16 grid gap-12 md:grid-cols-3">
           {steps.map((step, index) => (
-            <div key={step.title} className="border-t border-border pt-6">
-              <span className="display text-5xl text-accent">{String(index + 1).padStart(2, "0")}</span>
+            <div key={step.title} className="border-t border-dashed border-border pt-6">
+              <span className="font-mono text-sm text-muted">
+                {String(index + 1).padStart(2, "0")}
+              </span>
               <h3 className="mt-6 text-xl font-medium tracking-tight">{step.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{step.body}</p>
+              <p className="mt-3 text-sm leading-relaxed text-muted text-pretty">{step.body}</p>
             </div>
           ))}
         </div>
@@ -104,7 +109,7 @@ export function FinalCta() {
           className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              "radial-gradient(60% 80% at 50% 0%, rgba(216,173,85,0.12), transparent 65%)",
+              "radial-gradient(60% 80% at 50% 0%, rgba(255,255,255,0.07), transparent 65%)",
           }}
         />
         <div className="relative">

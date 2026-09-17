@@ -36,7 +36,7 @@
   --color-inverted-foreground: var(--inverted-foreground);
   --color-warning: var(--warning);
   --font-sans: var(--font-instrument-sans);
-  --font-display: var(--font-serif);
+  --font-display: var(--font-instrument-sans);
   --font-mono: var(--font-jetbrains-mono);
   --radius-md: 0.25rem;
   --radius-lg: 0.5rem;
@@ -70,52 +70,79 @@ body {
  * which does not use .atmosphere, keeps the light tokens above.
  */
 .atmosphere {
-  --background: #08080a;
-  --foreground: #f7f6f4;
-  --muted: #b9b9c0;
-  --card: #131315;
-  --card-hover: #1b1b1f;
-  --border: #2c2c31;
-  --accent: #e6bd64;
-  --accent-hover: #f2cd7c;
-  --accent-foreground: #0a0a0a;
-  --accent-soft: rgba(230, 189, 100, 0.14);
-  --inverted: #f7f6f4;
-  --inverted-foreground: #08080a;
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --muted: #a0a0aa;
+  --card: #0f0f12;
+  --card-hover: #16161a;
+  --border: #26262b;
+  --accent: #f4f4f5;
+  --accent-hover: #ffffff;
+  --accent-foreground: #09090b;
+  --accent-soft: rgba(244, 244, 245, 0.08);
+  --inverted: #f4f4f5;
+  --inverted-foreground: #09090b;
   color-scheme: dark;
 }
 
 .display {
-  font-family: var(--font-serif), ui-serif, Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.04em;
+  font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.035em;
 }
 
 .kicker {
-  display: flex;
+  display: block;
   width: fit-content;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
-  font-size: 0.8125rem;
-  letter-spacing: 0.02em;
+  font-size: 0.9375rem;
+  letter-spacing: 0;
   color: var(--muted);
-  text-transform: uppercase;
-}
-
-.kicker::before {
-  content: "";
-  width: 2rem;
-  height: 1px;
-  background: color-mix(in srgb, var(--accent) 60%, transparent);
 }
 
 .atmosphere {
   background-color: var(--background);
   background-image:
-    radial-gradient(60% 45% at 85% -5%, rgba(216, 173, 85, 0.1), transparent 60%),
-    radial-gradient(45% 40% at 12% 8%, rgba(245, 244, 242, 0.04), transparent 60%),
-    linear-gradient(180deg, #0a0a0c 0%, #08080a 60%, #060608 100%);
+    radial-gradient(70% 55% at 82% -12%, rgba(255, 255, 255, 0.06), transparent 62%),
+    linear-gradient(180deg, #0b0b0d 0%, #09090b 55%, #070709 100%);
+}
+
+/* Dotted field evoking the reference world-map backdrop, fading toward the top-right. */
+.dot-field {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  color: rgba(255, 255, 255, 0.14);
+  background-image: radial-gradient(currentColor 1px, transparent 1.5px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(115% 95% at 100% 0%, black, transparent 68%);
+}
+
+/* Crosshair backing for feature icons, matching the reference cards. */
+.crosshair {
+  position: relative;
+}
+
+.crosshair::before,
+.crosshair::after {
+  content: "";
+  position: absolute;
+  background: color-mix(in srgb, var(--foreground) 22%, transparent);
+}
+
+.crosshair::before {
+  left: 50%;
+  top: -0.6rem;
+  bottom: -0.6rem;
+  width: 1px;
+  transform: translateX(-50%);
+}
+
+.crosshair::after {
+  top: 50%;
+  left: -0.6rem;
+  right: -0.6rem;
+  height: 1px;
+  transform: translateY(-50%);
 }
 
 .noise-overlay {
@@ -159,8 +186,8 @@ body {
   inset: -18%;
   z-index: 0;
   border-radius: 9999px;
-  background: radial-gradient(circle, rgba(216, 173, 85, 0.28), transparent 68%);
-  filter: blur(28px);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 68%);
+  filter: blur(30px);
 }
 
 .nav-link {
