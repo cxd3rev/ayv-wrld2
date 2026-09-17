@@ -71,16 +71,16 @@ body {
  */
 .atmosphere {
   --background: #08080a;
-  --foreground: #f5f4f2;
-  --muted: #8b8b90;
-  --card: #101012;
-  --card-hover: #17171b;
-  --border: #232327;
-  --accent: #d8ad55;
-  --accent-hover: #e7bf6c;
+  --foreground: #f7f6f4;
+  --muted: #b9b9c0;
+  --card: #131315;
+  --card-hover: #1b1b1f;
+  --border: #2c2c31;
+  --accent: #e6bd64;
+  --accent-hover: #f2cd7c;
   --accent-foreground: #0a0a0a;
-  --accent-soft: rgba(216, 173, 85, 0.12);
-  --inverted: #f5f4f2;
+  --accent-soft: rgba(230, 189, 100, 0.14);
+  --inverted: #f7f6f4;
   --inverted-foreground: #08080a;
   color-scheme: dark;
 }
