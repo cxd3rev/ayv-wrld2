@@ -57,10 +57,10 @@ export async function POST(request: Request) {
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
   const stripeKey = process.env.STRIPE_SECRET_KEY;
 
-  if (
-    !isUsableSecret(secret, ["whsec_"]) ||
-    !isUsableSecret(stripeKey, ["sk_test_", "sk_live_", "rk_test_", "rk_live_"])
-  ) {
+  if (!isUsableSecret(secret, ["whsec_"])) {
+    return NextResponse.json({ error: "Stripe is not configured." }, { status: 501 });
+  }
+  if (!isUsableSecret(stripeKey, ["sk_test_", "sk_live_", "rk_test_", "rk_live_"])) {
     return NextResponse.json({ error: "Stripe is not configured." }, { status: 501 });
   }
 

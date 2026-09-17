@@ -1,6 +1,6 @@
 import type { SubscriptionStatus } from "@/types/database";
 
-export function isUsableSecret(value: string | undefined, prefixes: string[]) {
+export function isUsableSecret(value: string | undefined, prefixes: string[]): value is string {
   if (!value) return false;
   const trimmed = value.trim();
   if (!trimmed || trimmed.includes("...")) return false;
