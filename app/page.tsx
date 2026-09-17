@@ -1,11 +1,12 @@
 import { Atmosphere } from "@/components/atmosphere";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/header";
-import { HeroSculpture } from "@/components/marketing/hero-sculpture";
 import { ProductCard } from "@/components/marketing/product-card";
 import { Features, FinalCta, HowItWorks } from "@/components/marketing/sections";
+import { ayvBrand } from "@/config/brands";
 import { products } from "@/config/products";
 import { siteConfig } from "@/config/site";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -14,36 +15,40 @@ export default function HomePage() {
       <MarketingHeader />
 
       <section className="relative flex min-h-[calc(100vh-5rem)] flex-col justify-center overflow-hidden">
-        <div className="dot-field" />
-        <div className="relative z-10 mx-auto grid w-full max-w-[1400px] items-center gap-12 px-6 pt-16 pb-28 lg:grid-cols-[1.15fr_0.85fr] lg:px-12 lg:pt-20">
-          <div>
-            <p className="kicker rise-in">Software for modern businesses</p>
-            <h1 className="display mt-6 text-[clamp(2.75rem,8vw,7rem)] leading-[0.92] tracking-tight rise-in-2 text-balance">
-              <span className="block">Turn everyday</span>
-              <span className="block">work into revenue.</span>
-            </h1>
-            <div className="mt-10 max-w-xl rise-in-3">
-              <p className="text-xl leading-relaxed text-muted lg:text-2xl text-pretty">
-                {siteConfig.description}
-              </p>
-              <div className="mt-10 flex flex-col items-start gap-3 sm:flex-row">
-                <Link
-                  href="/signup"
-                  className="group inline-flex h-14 items-center justify-center rounded-full bg-foreground px-8 text-base font-medium text-background transition-colors hover:bg-foreground/90"
-                >
-                  Get started
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-                <Link
-                  href="#products"
-                  className="inline-flex h-14 items-center justify-center rounded-full border border-border px-8 text-base font-medium hover:bg-card-hover"
-                >
-                  See products
-                </Link>
-              </div>
-            </div>
+        <div className="hero-burst" />
+        <div className="relative z-10 mx-auto flex w-full max-w-[1100px] flex-col items-center px-6 pt-16 pb-24 text-center lg:pt-20">
+          <div className="mark-glow rise-in mb-10 flex items-center justify-center">
+            <Image
+              src={ayvBrand.logo}
+              alt={ayvBrand.name}
+              width={200}
+              height={200}
+              className="mark-invert relative z-10 h-20 w-20 object-contain sm:h-24 sm:w-24"
+              priority
+            />
           </div>
-          <HeroSculpture />
+          <p className="kicker rise-in">Software for modern businesses</p>
+          <h1 className="display mt-7 text-[clamp(2.75rem,8vw,7rem)] leading-[0.95] tracking-tight rise-in-2 text-balance">
+            Turn everyday work into revenue.
+          </h1>
+          <p className="mt-8 max-w-2xl text-xl leading-relaxed text-muted lg:text-2xl text-pretty rise-in-3">
+            {siteConfig.description}
+          </p>
+          <div className="mt-10 flex flex-col items-center gap-3 rise-in-3 sm:flex-row">
+            <Link
+              href="/signup"
+              className="group inline-flex h-14 items-center justify-center rounded-full bg-accent px-8 text-base font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
+            >
+              Get started
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <Link
+              href="#products"
+              className="inline-flex h-14 items-center justify-center rounded-full border border-border px-8 text-base font-medium hover:bg-card-hover"
+            >
+              See products
+            </Link>
+          </div>
         </div>
 
         <div className="relative z-10 pb-10">

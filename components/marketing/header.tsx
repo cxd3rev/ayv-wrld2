@@ -34,7 +34,7 @@ export function MarketingHeader() {
           </Link>
           <Link
             href="/signup"
-            className="inline-flex h-10 items-center rounded-lg bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
+            className="inline-flex h-10 items-center rounded-lg bg-accent px-5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
           >
             Get started
           </Link>
@@ -73,7 +73,7 @@ export function MarketingHeader() {
             </Link>
             <Link
               href="/signup"
-              className="inline-flex h-14 flex-1 items-center justify-center rounded-full bg-foreground text-base font-medium text-background"
+              className="inline-flex h-14 flex-1 items-center justify-center rounded-full bg-accent text-base font-medium text-accent-foreground"
               onClick={() => setOpen(false)}
             >
               Get started

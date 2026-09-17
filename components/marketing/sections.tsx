@@ -38,21 +38,24 @@ export function Features() {
   return (
     <section id="features" className="relative mx-auto w-full max-w-[1400px] px-6 py-24 lg:px-12 lg:py-32">
       <p className="kicker">The platform</p>
-      <h2 className="display mt-6 max-w-3xl text-4xl leading-[1.05] tracking-tight lg:text-6xl text-balance">
-        Everything you need.
-        <span className="mt-1 block text-muted">Nothing you don&apos;t.</span>
+      <h2 className="display mt-7 max-w-3xl text-4xl leading-[1.05] tracking-tight lg:text-6xl text-balance">
+        Everything you need. <span className="text-muted">Nothing you don&apos;t.</span>
       </h2>
-      <div className="mt-16 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-14 flex flex-col">
         {features.map((feature) => (
           <div
             key={feature.title}
-            className="flex flex-col items-center bg-card px-8 py-12 text-center transition-colors duration-300 hover:bg-card-hover"
+            className="group flex items-center gap-6 border-t border-dashed border-border py-7 last:border-b"
           >
-            <div className="crosshair flex h-11 w-11 items-center justify-center">
-              <feature.icon className="h-5 w-5 text-foreground" strokeWidth={1.5} />
+            <div className="flex-1">
+              <h3 className="display text-2xl tracking-tight lg:text-3xl">{feature.title}</h3>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted text-pretty lg:text-base">
+                {feature.body}
+              </p>
             </div>
-            <h3 className="mt-8 text-lg font-medium tracking-tight">{feature.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">{feature.body}</p>
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-105">
+              <feature.icon className="h-5 w-5" strokeWidth={1.75} />
+            </div>
           </div>
         ))}
       </div>
@@ -87,7 +90,7 @@ export function HowItWorks() {
         <div className="mt-16 grid gap-12 md:grid-cols-3">
           {steps.map((step, index) => (
             <div key={step.title} className="border-t border-dashed border-border pt-6">
-              <span className="font-mono text-sm text-muted">
+              <span className="font-mono text-sm text-accent">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <h3 className="mt-6 text-xl font-medium tracking-tight">{step.title}</h3>
@@ -109,7 +112,7 @@ export function FinalCta() {
           className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              "radial-gradient(60% 80% at 50% 0%, rgba(255,255,255,0.07), transparent 65%)",
+              "radial-gradient(60% 80% at 50% 0%, rgba(77,162,255,0.12), transparent 65%)",
           }}
         />
         <div className="relative">
@@ -122,7 +125,7 @@ export function FinalCta() {
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/signup"
-              className="group inline-flex h-14 items-center justify-center rounded-full bg-foreground px-8 text-base font-medium text-background transition-colors hover:bg-foreground/90"
+              className="group inline-flex h-14 items-center justify-center rounded-full bg-accent px-8 text-base font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
             >
               Get started
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

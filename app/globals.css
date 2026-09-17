@@ -76,10 +76,10 @@ body {
   --card: #101014;
   --card-hover: #17171c;
   --border: #303036;
-  --accent: #f4f4f5;
-  --accent-hover: #ffffff;
-  --accent-foreground: #09090b;
-  --accent-soft: rgba(244, 244, 245, 0.08);
+  --accent: #4da2ff;
+  --accent-hover: #6fb5ff;
+  --accent-foreground: #ffffff;
+  --accent-soft: rgba(77, 162, 255, 0.14);
   --inverted: #f4f4f5;
   --inverted-foreground: #09090b;
   color-scheme: dark;
@@ -89,16 +89,23 @@ body {
 
 .display {
   font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.035em;
+  font-weight: 500;
+  letter-spacing: -0.03em;
 }
 
 .kicker {
-  display: block;
+  display: inline-flex;
+  align-items: center;
   width: fit-content;
-  font-size: 0.9375rem;
-  letter-spacing: 0;
-  color: color-mix(in srgb, var(--foreground) 82%, transparent);
+  padding: 0.32rem 0.72rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
 }
 
 .atmosphere {
@@ -117,6 +124,44 @@ body {
   background-image: radial-gradient(currentColor 1px, transparent 1.5px);
   background-size: 22px 22px;
   mask-image: radial-gradient(115% 95% at 100% 0%, black, transparent 68%);
+}
+
+/* Radial light-burst backdrop inspired by the Sui hero. */
+.hero-burst {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-burst::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 170vmax;
+  height: 170vmax;
+  transform: translate(-50%, -50%);
+  background:
+    repeating-conic-gradient(
+      from 0deg at 50% 50%,
+      rgba(255, 255, 255, 0.1) 0deg 0.5deg,
+      transparent 0.5deg 2.6deg
+    ),
+    repeating-conic-gradient(
+      from 1.3deg at 50% 50%,
+      rgba(77, 162, 255, 0.2) 0deg 0.4deg,
+      transparent 0.4deg 5.2deg
+    );
+  -webkit-mask-image: radial-gradient(closest-side at 50% 50%, transparent 7%, #000 26%, #000 52%, transparent 76%);
+  mask-image: radial-gradient(closest-side at 50% 50%, transparent 7%, #000 26%, #000 52%, transparent 76%);
+  animation: burst-spin 140s linear infinite;
+}
+
+@keyframes burst-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 /* Crosshair backing for feature icons, matching the reference cards. */
@@ -188,7 +233,7 @@ body {
   inset: -18%;
   z-index: 0;
   border-radius: 9999px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 68%);
+  background: radial-gradient(circle, rgba(77, 162, 255, 0.28), transparent 68%);
   filter: blur(30px);
 }
 
@@ -298,6 +343,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track,
+  .hero-burst::before,
   .rise-in,
   .rise-in-2,
   .rise-in-3 {
