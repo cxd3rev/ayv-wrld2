@@ -15,7 +15,7 @@ export default async function BillingPage() {
     <div>
       <PageHeader
         title="Billing"
-        description="Each product is its own monthly subscription. Buy Avyro, Velto, or both."
+        description="Each product is its own monthly subscription. Buy Avyro, Velto, Rovyn, or any combination."
       />
       <BillingPanel
         subscriptions={subscriptions}

@@ -54,7 +54,7 @@ export function BillingPanel({
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
+    <div className="grid gap-4 lg:grid-cols-3">
       {catalog.map((product) => {
         const subscription =
           subscriptions.find((item) => item.product_slug === product.id && isPaidStatus(item.status)) ??
@@ -87,7 +87,7 @@ export function BillingPanel({
         );
       })}
 
-      <div className="flex flex-wrap items-center gap-3 lg:col-span-2">
+      <div className="flex flex-wrap items-center gap-3 lg:col-span-3">
         <Button variant="secondary" onClick={portal} disabled={pending !== null || !stripeReady}>
           Manage subscriptions
         </Button>

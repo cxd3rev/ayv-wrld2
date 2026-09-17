@@ -12,7 +12,7 @@ export default async function SettingsBillingPage() {
   const subscriptions = await getOrganizationSubscriptions(organization.id);
 
   return (
-    <SettingsPage title="Billing" description="Start Avyro or Velto, or manage both in the Stripe portal.">
+    <SettingsPage title="Billing" description="Start Avyro, Velto, or Rovyn, or manage them in the Stripe portal.">
       <BillingPanel
         subscriptions={subscriptions}
         catalog={getBillableCatalog()}

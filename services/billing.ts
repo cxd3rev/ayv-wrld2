@@ -6,11 +6,15 @@ import { createClient } from "@/lib/supabase/server";
 import { isPaidStatus, isUsableSecret } from "@/lib/billing-status";
 import {
   type BillableProductId,
+  BILLABLE_PRODUCTS,
+  billableProductName,
   getStripePriceId,
+  isBillableProductId,
   isProductCheckoutReady,
   isStripeSecretConfigured,
   productFromStripePriceId,
 } from "@/lib/stripe-catalog";
+import { getProduct } from "@/config/products";
 import type { Organization, Subscription } from "@/types/database";
 
 export { mapStripeStatus, isUsableSecret, isPaidStatus } from "@/lib/billing-status";
@@ -28,7 +32,7 @@ type SubscriptionRow = Subscription & {
 
 function withProductSlug(row: SubscriptionRow): Subscription {
   const related = Array.isArray(row.products) ? row.products[0] : row.products;
-  const slug = related?.slug === "avyro" || related?.slug === "velto" ? related.slug : null;
+  const slug = related?.slug && isBillableProductId(related.slug) ? related.slug : null;
   const { products: _products, ...subscription } = row;
   return {
     ...subscription,
@@ -72,7 +76,7 @@ export function paidProductSlugs(subscriptions: Subscription[]) {
 
 /**
  * Create a Stripe Checkout session for one AYV WRLD product.
- * Price ids stay on the server; the client only passes avyro or velto.
+ * Price ids stay on the server; the client only passes a billable product slug.
  */
 export async function createCheckoutSession(organization: Organization, product: BillableProductId) {
   const stripe = getStripe();
@@ -86,7 +90,7 @@ export async function createCheckoutSession(organization: Organization, product:
   if (existing && isPaidStatus(existing.status)) {
     return {
       ok: false as const,
-      error: `This workspace already has an active ${product === "avyro" ? "Avyro" : "Velto"} subscription.`,
+      error: `This workspace already has an active ${billableProductName(product)} subscription.`,
     };
   }
 
@@ -181,18 +185,13 @@ async function getOrCreateStripeCustomer(stripe: Stripe, organization: Organizat
 }
 
 export function getBillableCatalog() {
-  return [
-    {
-      id: "avyro" as const,
-      name: "Avyro",
-      priceLabel: "€49,99 / month",
-      configured: isProductCheckoutReady("avyro"),
-    },
-    {
-      id: "velto" as const,
-      name: "Velto",
-      priceLabel: "€49,99 / month",
-      configured: isProductCheckoutReady("velto"),
-    },
-  ];
+  return BILLABLE_PRODUCTS.map((id) => {
+    const product = getProduct(id);
+    return {
+      id,
+      name: product?.name ?? id,
+      priceLabel: product?.pricing.label ?? "",
+      configured: isProductCheckoutReady(id),
+    };
+  });
 }
