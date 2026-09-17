@@ -36,7 +36,7 @@ export function ProductCard({
       </div>
       <div className="relative mt-8">
         <div className="flex items-center gap-3">
-          <h3 className="display text-2xl tracking-tight">{product.name}</h3>
+          <h3 className="display text-2xl tracking-tight text-foreground">{product.name}</h3>
           <Badge tone={product.status === "active" ? "accent" : "neutral"}>
             {product.marketingStatus}
           </Badge>
