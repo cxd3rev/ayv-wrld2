@@ -12,6 +12,7 @@ import { listQuotes } from "@/products/rovyn/actions";
 import { VeltoBookingsWorkspace } from "@/products/velto/bookings-workspace";
 import { listBookings } from "@/products/velto/actions";
 import { listRecordLinks } from "@/services/record-links";
+import { getTranslations } from "next-intl/server";
 
 function firstParam(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
@@ -22,6 +23,7 @@ export default async function ProductDashboardPage({
 }: PageProps<"/dashboard/product">) {
   const productId = await getActiveProductId();
   const product = getProduct(productId)!;
+  const t = await getTranslations();
   const params = await searchParams;
   const showAvyro = product.id === "avyro" && Boolean(product.featureFlags.leadCapture);
   const showVelto = product.id === "velto" && Boolean(product.featureFlags.bookings);
@@ -46,10 +48,12 @@ export default async function ProductDashboardPage({
     <div>
       <PageHeader
         title={product.dashboard.title}
-        description={product.dashboard.description}
+        description={t(`catalog.${product.id}.dashboardDescription`)}
         action={
           <Badge tone={product.status === "active" ? "accent" : "neutral"}>
-            {product.status === "active" ? product.tagline : product.marketingStatus}
+            {product.status === "active"
+              ? t(`catalog.${product.id}.tagline`)
+              : t("common.comingSoon")}
           </Badge>
         }
       />
@@ -57,8 +61,8 @@ export default async function ProductDashboardPage({
       {product.status === "coming_soon" ? (
         <EmptyState
           icon={<ProductIcon product={product} size={64} className="h-16 w-16" />}
-          title={`${product.name} is coming soon`}
-          description="This product is configured in the foundation, but its features are not built yet. Switch back to Avyro, Velto, or Rovyn to continue."
+          title={t("dashboard.comingSoonTitle", { name: product.name })}
+          description={t("dashboard.comingSoonBody")}
         />
       ) : showAvyro ? (
         <AvyroLeadsWorkspace
@@ -90,8 +94,8 @@ export default async function ProductDashboardPage({
       ) : (
         <EmptyState
           icon={<ProductIcon product={product} size={64} className="h-16 w-16" />}
-          title={`${product.name} is not ready yet`}
-          description="Switch back to Avyro, Velto, or Rovyn to keep working."
+          title={t("dashboard.notReadyTitle", { name: product.name })}
+          description={t("dashboard.notReadyBody")}
         />
       )}
     </div>

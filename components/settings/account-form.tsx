@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { signOut, updateAccount, updatePassword } from "@/services/account";
 import type { Profile } from "@/types/database";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export function AccountSettingsForm({
@@ -17,6 +18,8 @@ export function AccountSettingsForm({
   profile: Profile | null;
   email: string | null;
 }) {
+  const t = useTranslations("settings");
+  const tCommon = useTranslations("common");
   const { toast } = useToast();
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -46,43 +49,44 @@ export function AccountSettingsForm({
     <div className="max-w-xl space-y-10">
       <form action={onAccount} className="space-y-4">
         <div>
-          <Label htmlFor="fullName">Name</Label>
+          <Label htmlFor="fullName">{t("name")}</Label>
           <Input id="fullName" name="fullName" defaultValue={profile?.full_name ?? ""} required />
         </div>
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("email")}</Label>
           <Input id="email" name="email" type="email" defaultValue={email ?? ""} required />
         </div>
         <FormError message={error} />
-        <Button type="submit">Save account</Button>
+        <Button type="submit">{t("saveAccount")}</Button>
       </form>
 
       <form action={onPassword} className="space-y-4">
         <div>
-          <Label htmlFor="password">New password</Label>
+          <Label htmlFor="password">{t("newPassword")}</Label>
           <Input id="password" name="password" type="password" required />
         </div>
         <div>
-          <Label htmlFor="confirmPassword">Confirm password</Label>
+          <Label htmlFor="confirmPassword">{t("confirmPassword")}</Label>
           <Input id="confirmPassword" name="confirmPassword" type="password" required />
         </div>
         <FormError message={passwordError} />
         <Button type="submit" variant="secondary">
-          Update password
+          {t("updatePassword")}
         </Button>
       </form>
 
       <div>
         <Button variant="danger" onClick={() => setConfirmLogout(true)}>
-          Log out
+          {t("logOut")}
         </Button>
       </div>
 
       <ConfirmationDialog
         open={confirmLogout}
-        title="Log out?"
-        description="You will need to sign in again to access your workspace."
-        confirmLabel="Log out"
+        title={t("logOutTitle")}
+        description={t("logOutBody")}
+        confirmLabel={t("logOut")}
+        cancelLabel={tCommon("cancel")}
         danger
         onClose={() => setConfirmLogout(false)}
         onConfirm={() => signOut()}

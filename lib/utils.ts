@@ -15,9 +15,9 @@ export function slugify(value: string) {
     .slice(0, 48);
 }
 
-export function formatDate(value: string | null | undefined) {
+export function formatDate(value: string | null | undefined, locale = "en") {
   if (!value) return "—";
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",

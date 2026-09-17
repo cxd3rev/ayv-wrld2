@@ -8,15 +8,8 @@ import { openBillingPortal, startCheckout } from "@/services/billing-actions";
 import { isPaidStatus } from "@/lib/billing-status";
 import type { BillableProductId } from "@/lib/stripe-catalog";
 import type { Subscription } from "@/types/database";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
-
-const statusLabel: Record<string, string> = {
-  active: "Active",
-  trialing: "Trialing",
-  past_due: "Past due",
-  cancelled: "Cancelled",
-  incomplete: "Incomplete",
-};
 
 export type BillableCatalogItem = {
   id: BillableProductId;
@@ -34,6 +27,15 @@ export function BillingPanel({
   catalog: BillableCatalogItem[];
   stripeReady: boolean;
 }) {
+  const t = useTranslations("billing");
+  const locale = useLocale();
+  const statusLabel: Record<string, string> = {
+    active: t("statusActive"),
+    trialing: t("statusTrialing"),
+    past_due: t("statusPastDue"),
+    cancelled: t("statusCancelled"),
+    incomplete: t("statusIncomplete"),
+  };
   const [error, setError] = useState("");
   const [pending, setPending] = useState<"portal" | BillableProductId | null>(null);
 
@@ -69,19 +71,20 @@ export function BillingPanel({
               <CardTitle>{product.name}</CardTitle>
               <p className="pt-2 text-sm text-muted">
                 {subscription
-                  ? `${statusLabel[subscription.status] ?? subscription.status}${
-                      subscription.current_period_end
-                        ? ` · next bill ${formatDate(subscription.current_period_end)}`
-                        : ""
-                    }`
-                  : "Not subscribed"}
+                  ? subscription.current_period_end
+                    ? t("nextBill", {
+                        status: statusLabel[subscription.status] ?? subscription.status,
+                        date: formatDate(subscription.current_period_end, locale),
+                      })
+                    : (statusLabel[subscription.status] ?? subscription.status)
+                  : t("notSubscribed")}
               </p>
             </CardHeader>
             <Button
               onClick={() => checkout(product.id)}
               disabled={pending !== null || !product.configured || entitled}
             >
-              {entitled ? `${product.name} active` : `Start ${product.name} subscription`}
+              {entitled ? t("active", { name: product.name }) : t("start", { name: product.name })}
             </Button>
           </Card>
         );
@@ -89,14 +92,9 @@ export function BillingPanel({
 
       <div className="flex flex-wrap items-center gap-3 lg:col-span-3">
         <Button variant="secondary" onClick={portal} disabled={pending !== null || !stripeReady}>
-          Manage subscriptions
+          {t("manage")}
         </Button>
-        {!stripeReady ? (
-          <p className="text-sm text-muted">
-            Add Stripe keys to enable checkout. The customer portal is optional and does not block Start
-            subscription.
-          </p>
-        ) : null}
+        {!stripeReady ? <p className="text-sm text-muted">{t("stripeHint")}</p> : null}
       </div>
       <FormError message={error} />
     </div>

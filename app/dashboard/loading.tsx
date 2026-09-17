@@ -1,5 +1,7 @@
 import { LoadingState } from "@/components/ui/loading-state";
+import { getTranslations } from "next-intl/server";
 
-export default function DashboardLoading() {
-  return <LoadingState label="Loading workspace..." />;
+export default async function DashboardLoading() {
+  const t = await getTranslations("common");
+  return <LoadingState label={t("loadingWorkspace")} />;
 }

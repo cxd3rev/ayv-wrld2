@@ -1,9 +1,11 @@
 import { AuthShell } from "@/components/auth/auth-shell";
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
+import { getTranslations } from "next-intl/server";
 
-export default function ForgotPasswordPage() {
+export default async function ForgotPasswordPage() {
+  const t = await getTranslations("auth");
   return (
-    <AuthShell title="Reset password" description="We'll email you a link to choose a new password.">
+    <AuthShell title={t("forgotTitle")} description={t("forgotDescription")}>
       <ForgotPasswordForm />
     </AuthShell>
   );

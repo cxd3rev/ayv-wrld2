@@ -4,11 +4,15 @@ import { requireWorkspace } from "@/lib/auth/session";
 import { getOrganizationSubscriptions, paidProductSlugs } from "@/services/billing";
 import { listNotifications } from "@/services/notifications";
 import { openProductWorkspace } from "@/services/product-switch";
-import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 export default async function DashboardPage() {
   const { organization, profile } = await requireWorkspace();
+  const t = await getTranslations("dashboard");
+  const tCommon = await getTranslations("common");
+  const tIndustries = await getTranslations("industries");
   const [subscriptions, notifications] = await Promise.all([
     getOrganizationSubscriptions(organization.id),
     listNotifications(),
@@ -18,29 +22,35 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <p className="kicker">Overview</p>
+      <p className="kicker">{t("overview")}</p>
       <h1 className="display mt-4 text-4xl tracking-tight sm:text-6xl">
-        Have a great day{firstName ? `, ${firstName}` : ""}.
+        {firstName ? t("greetingNamed", { name: firstName }) : t("greeting")}
       </h1>
-      <p className="mt-4 max-w-xl text-lg text-muted">
-        {organization.name} is ready. This overview is shared across every AYV WRLD product.
-      </p>
+      <p className="mt-4 max-w-xl text-lg text-muted">{t("ready", { name: organization.name })}</p>
 
       <div className="mt-12 grid gap-0 border-t border-foreground/10 sm:grid-cols-3 sm:gap-10">
-        <DashboardCard title="Workspace" value={organization.name} hint={organization.industry ?? "Business"} />
         <DashboardCard
-          title="Subscription"
+          title={t("workspace")}
+          value={organization.name}
+          hint={
+            organization.industry
+              ? tIndustries(organization.industry as Parameters<typeof tIndustries>[0])
+              : t("workspace")
+          }
+        />
+        <DashboardCard
+          title={t("subscription")}
           value={
             paid.length
               ? paid.map((slug) => getProduct(slug)?.name ?? slug).join(" + ")
-              : "None"
+              : tCommon("none")
           }
-          hint="Billed per organization"
+          hint={t("billedPerOrg")}
         />
         <DashboardCard
-          title="Unread"
+          title={t("unread")}
           value={String(notifications.filter((item) => !item.read).length)}
-          hint="Notifications"
+          hint={t("notifications")}
         />
       </div>
 
@@ -54,12 +64,12 @@ export default async function DashboardPage() {
             type="submit"
             className="group flex min-h-44 w-full flex-col justify-between py-8 pr-6 text-left lg:pr-8"
           >
-            <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Start here</p>
+            <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("startHere")}</p>
             <div>
               <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
-                Open Avyro
+                {t("openAvyro")}
               </h2>
-              <p className="mt-2 text-sm text-muted">Follow up with new leads so conversations become customers.</p>
+              <p className="mt-2 text-sm text-muted">{t("openAvyroBody")}</p>
             </div>
           </button>
         </form>
@@ -72,12 +82,12 @@ export default async function DashboardPage() {
             type="submit"
             className="group flex min-h-44 w-full flex-col justify-between py-8 text-left lg:px-8"
           >
-            <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Bookings</p>
+            <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("bookings")}</p>
             <div>
               <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
-                Open Velto
+                {t("openVelto")}
               </h2>
-              <p className="mt-2 text-sm text-muted">Take bookings and send reminders so fewer appointments are missed.</p>
+              <p className="mt-2 text-sm text-muted">{t("openVeltoBody")}</p>
             </div>
           </button>
         </form>
@@ -87,12 +97,12 @@ export default async function DashboardPage() {
             type="submit"
             className="group flex min-h-44 w-full flex-col justify-between py-8 text-left lg:pl-8"
           >
-            <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Quotes</p>
+            <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("quotes")}</p>
             <div>
               <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
-                Open Rovyn
+                {t("openRovyn")}
               </h2>
-              <p className="mt-2 text-sm text-muted">Follow up on sent quotes so more proposals become booked work.</p>
+              <p className="mt-2 text-sm text-muted">{t("openRovynBody")}</p>
             </div>
           </button>
         </form>
@@ -100,14 +110,14 @@ export default async function DashboardPage() {
 
       <section className="mt-4 border-t border-foreground/10 py-8">
         <div className="mb-6 flex items-end justify-between gap-4">
-          <h2 className="display text-3xl tracking-tight">Get the most out of AYV WRLD</h2>
-          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Foundation setup</p>
+          <h2 className="display text-3xl tracking-tight">{t("getMost")}</h2>
+          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("foundationSetup")}</p>
         </div>
         <ol className="divide-y divide-foreground/10 border-y border-foreground/10">
           {[
-            { href: "/dashboard/settings", label: "Complete business profile", done: Boolean(organization.industry) },
-            { href: "/dashboard/settings/team", label: "Invite teammates", done: false },
-            { href: "/dashboard/billing", label: "Review billing", done: paid.length > 0 },
+            { href: "/dashboard/settings", label: t("completeProfile"), done: Boolean(organization.industry) },
+            { href: "/dashboard/settings/team", label: t("inviteTeammates"), done: false },
+            { href: "/dashboard/billing", label: t("reviewBilling"), done: paid.length > 0 },
           ].map((item, index) => (
             <li key={item.label}>
               <Link href={item.href} className="flex items-center gap-4 py-5 text-sm hover:text-accent">

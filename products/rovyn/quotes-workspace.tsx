@@ -25,6 +25,7 @@ import {
   updateQuoteStatus,
 } from "@/products/rovyn/actions";
 import type { Booking, Lead, Quote, QuoteStatus, RecordLink } from "@/types/database";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -35,11 +36,11 @@ const statusTone: Record<QuoteStatus, "accent" | "warning" | "success" | "danger
   lost: "danger",
 };
 
-const statusLabel: Record<QuoteStatus, string> = {
-  sent: "Sent",
-  followed_up: "Followed up",
-  won: "Won",
-  lost: "Lost",
+const statusKeys: Record<QuoteStatus, "statusSent" | "statusFollowedUp" | "statusWon" | "statusLost"> = {
+  sent: "statusSent",
+  followed_up: "statusFollowedUp",
+  won: "statusWon",
+  lost: "statusLost",
 };
 
 function todayIsoDate() {
@@ -49,11 +50,11 @@ function todayIsoDate() {
   return `${now.getFullYear()}-${month}-${day}`;
 }
 
-function formatFollowUp(value: string | null) {
+function formatFollowUp(value: string | null, locale: string) {
   if (!value) return "—";
   const [year, month, day] = value.split("-").map(Number);
   if (!year || !month || !day) return value;
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
   }).format(new Date(year, month - 1, day));
@@ -95,6 +96,9 @@ export function RovynQuotesWorkspace({
   prefill?: RecordPrefill;
   focusQuoteId?: string;
 }) {
+  const t = useTranslations("rovyn");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
   const { toast } = useToast();
   const router = useRouter();
   const [error, setError] = useState("");
@@ -126,7 +130,7 @@ export function RovynQuotesWorkspace({
       setError(result.error ?? "Could not add this quote.");
       return;
     }
-    toast({ title: "Quote added", tone: "success" });
+    toast({ title: t("added"), tone: "success" });
     (document.getElementById("rovyn-add-quote") as HTMLFormElement | null)?.reset();
     router.refresh();
   }
@@ -134,10 +138,10 @@ export function RovynQuotesWorkspace({
   return (
     <div>
       <div className="grid gap-0 border-t border-foreground/10 sm:grid-cols-4">
-        <DashboardCard title="Sent" value={String(counts.sent)} hint="Waiting on a reply" />
-        <DashboardCard title="Followed up" value={String(counts.followedUp)} hint="Nudged already" />
-        <DashboardCard title="Won" value={String(counts.won)} hint="Became booked work" />
-        <DashboardCard title="Due" value={String(counts.due)} hint="Follow-up date reached" />
+        <DashboardCard title={t("sent")} value={String(counts.sent)} hint={t("sentHint")} />
+        <DashboardCard title={t("followedUp")} value={String(counts.followedUp)} hint={t("followedUpHint")} />
+        <DashboardCard title={t("won")} value={String(counts.won)} hint={t("wonHint")} />
+        <DashboardCard title={t("due")} value={String(counts.due)} hint={t("dueHint")} />
       </div>
 
       <form
@@ -147,16 +151,15 @@ export function RovynQuotesWorkspace({
       >
         <div className="md:col-span-2 lg:col-span-4">
           <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
-          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Add a quote</p>
+          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("addQuote")}</p>
           {prefill ? (
             <p className="mt-2 text-sm text-muted">
-              Prefilling {prefill.name} from {recordProductName(prefill.product)}. You can still add a
-              quote without connecting one.
+              {t("prefill", { name: prefill.name, product: recordProductName(prefill.product) })}
             </p>
           ) : null}
         </div>
         <div>
-          <Label htmlFor="customerName">Customer</Label>
+          <Label htmlFor="customerName">{t("customer")}</Label>
           <Input
             id="customerName"
             name="customerName"
@@ -166,7 +169,7 @@ export function RovynQuotesWorkspace({
           />
         </div>
         <div>
-          <Label htmlFor="title">Quote for</Label>
+          <Label htmlFor="title">{t("quoteFor")}</Label>
           <Input
             id="title"
             name="title"
@@ -176,15 +179,15 @@ export function RovynQuotesWorkspace({
           />
         </div>
         <div>
-          <Label htmlFor="amount">Amount (€)</Label>
+          <Label htmlFor="amount">{t("amount")}</Label>
           <Input id="amount" name="amount" inputMode="decimal" placeholder="2400" />
         </div>
         <div>
-          <Label htmlFor="followUpOn">Follow up on</Label>
+          <Label htmlFor="followUpOn">{t("followUpOn")}</Label>
           <Input id="followUpOn" name="followUpOn" type="date" />
         </div>
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("email")}</Label>
           <Input
             id="email"
             name="email"
@@ -194,22 +197,22 @@ export function RovynQuotesWorkspace({
           />
         </div>
         <div>
-          <Label htmlFor="phone">Phone</Label>
+          <Label htmlFor="phone">{t("phone")}</Label>
           <Input
             id="phone"
             name="phone"
             type="tel"
-            placeholder="Optional"
+            placeholder={tCommon("optional")}
             defaultValue={prefill?.phone ?? ""}
           />
         </div>
         <div className="md:col-span-2 lg:col-span-3">
-          <Label htmlFor="notes">Notes</Label>
-          <Input id="notes" name="notes" placeholder="What you quoted, anything to remember" />
+          <Label htmlFor="notes">{t("notes")}</Label>
+          <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
         </div>
         <div className="flex items-end">
           <Button type="submit" disabled={pending} className="w-full">
-            {pending ? "Adding..." : "Add quote"}
+            {pending ? t("adding") : t("add")}
           </Button>
         </div>
         <div className="md:col-span-2 lg:col-span-4">
@@ -220,19 +223,19 @@ export function RovynQuotesWorkspace({
       <div className="mt-8">
         {quotes.length === 0 ? (
           <EmptyState
-            title="No quotes yet"
-            description="Add a quote you just sent. Rovyn keeps the follow-up in this workspace so proposals do not go cold."
+            title={t("emptyTitle")}
+            description={t("emptyBody")}
           />
         ) : (
           <Table>
             <THead>
               <TR>
-                <TH>Customer</TH>
-                <TH>Quote</TH>
-                <TH>Status</TH>
-                <TH>Follow up</TH>
-                <TH>Connected</TH>
-                <TH>Notes</TH>
+                <TH>{t("colCustomer")}</TH>
+                <TH>{t("colQuote")}</TH>
+                <TH>{t("colStatus")}</TH>
+                <TH>{t("colFollowUp")}</TH>
+                <TH>{t("colConnected")}</TH>
+                <TH>{t("colNotes")}</TH>
                 <TH className="text-right"> </TH>
               </TR>
             </THead>
@@ -251,7 +254,7 @@ export function RovynQuotesWorkspace({
                       {quote.phone ? <p className="mt-1 text-xs text-muted">{quote.phone}</p> : null}
                       {isFollowUpDue(quote) ? (
                         <p className="mt-1 font-mono text-[11px] tracking-[0.12em] text-warning uppercase">
-                          Follow up today
+                          {t("followUpToday")}
                         </p>
                       ) : null}
                     </TD>
@@ -261,9 +264,9 @@ export function RovynQuotesWorkspace({
                     </TD>
                     <TD>
                       <div className="flex items-center gap-2">
-                        <Badge tone={statusTone[quote.status]}>{statusLabel[quote.status]}</Badge>
+                        <Badge tone={statusTone[quote.status]}>{t(statusKeys[quote.status])}</Badge>
                         <select
-                          aria-label={`Status for ${quote.customer_name}`}
+                          aria-label={t("statusFor", { name: quote.customer_name })}
                           className="h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm"
                           defaultValue={quote.status}
                           onChange={async (event) => {
@@ -272,13 +275,13 @@ export function RovynQuotesWorkspace({
                               toast({ title: result.error ?? "Could not update status", tone: "error" });
                               return;
                             }
-                            toast({ title: "Status updated", tone: "success" });
+                            toast({ title: t("statusUpdated"), tone: "success" });
                             router.refresh();
                           }}
                         >
                           {quoteStatuses.map((status) => (
                             <option key={status} value={status}>
-                              {statusLabel[status]}
+                              {t(statusKeys[status])}
                             </option>
                           ))}
                         </select>
@@ -287,7 +290,7 @@ export function RovynQuotesWorkspace({
                     <TD>
                       <input
                         type="date"
-                        aria-label={`Follow-up date for ${quote.customer_name}`}
+                        aria-label={t("followUpFor", { name: quote.customer_name })}
                         defaultValue={quote.follow_up_on ?? ""}
                         className={cn(
                           "h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm",
@@ -299,12 +302,12 @@ export function RovynQuotesWorkspace({
                             toast({ title: result.error ?? "Could not save follow-up", tone: "error" });
                             return;
                           }
-                          toast({ title: "Follow-up saved", tone: "success" });
+                          toast({ title: t("followUpSaved"), tone: "success" });
                           router.refresh();
                         }}
                       />
                       {quote.follow_up_on ? (
-                        <p className="mt-1 text-xs text-muted">{formatFollowUp(quote.follow_up_on)}</p>
+                        <p className="mt-1 text-xs text-muted">{formatFollowUp(quote.follow_up_on, locale)}</p>
                       ) : null}
                     </TD>
                     <TD>
@@ -328,11 +331,11 @@ export function RovynQuotesWorkspace({
                             toast({ title: result.error ?? "Could not remove quote", tone: "error" });
                             return;
                           }
-                          toast({ title: "Quote removed", tone: "success" });
+                          toast({ title: t("removed"), tone: "success" });
                           router.refresh();
                         }}
                       >
-                        Remove
+                        {t("remove")}
                       </Button>
                     </TD>
                   </TR>

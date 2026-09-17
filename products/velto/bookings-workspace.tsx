@@ -25,6 +25,7 @@ import {
   updateBookingStatus,
 } from "@/products/velto/actions";
 import type { Booking, BookingStatus, Lead, Quote, RecordLink } from "@/types/database";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -36,12 +37,15 @@ const statusTone: Record<BookingStatus, "accent" | "warning" | "success" | "dang
   no_show: "danger",
 };
 
-const statusLabel: Record<BookingStatus, string> = {
-  scheduled: "Scheduled",
-  confirmed: "Confirmed",
-  completed: "Completed",
-  cancelled: "Cancelled",
-  no_show: "No-show",
+const statusKeys: Record<
+  BookingStatus,
+  "statusScheduled" | "statusConfirmed" | "statusCompleted" | "statusCancelled" | "statusNoShow"
+> = {
+  scheduled: "statusScheduled",
+  confirmed: "statusConfirmed",
+  completed: "statusCompleted",
+  cancelled: "statusCancelled",
+  no_show: "statusNoShow",
 };
 
 function todayIsoDate() {
@@ -51,21 +55,21 @@ function todayIsoDate() {
   return `${now.getFullYear()}-${month}-${day}`;
 }
 
-function formatDay(value: string | null) {
+function formatDay(value: string | null, locale: string) {
   if (!value) return "—";
   const [year, month, day] = value.split("-").map(Number);
   if (!year || !month || !day) return value;
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(locale, {
     weekday: "short",
     month: "short",
     day: "numeric",
   }).format(new Date(year, month - 1, day));
 }
 
-function formatTime(value: string) {
+function formatTime(value: string, locale: string) {
   const [hour, minute] = value.split(":").map(Number);
   if (Number.isNaN(hour) || Number.isNaN(minute)) return value.slice(0, 5);
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(locale, {
     hour: "numeric",
     minute: "2-digit",
   }).format(new Date(2000, 0, 1, hour, minute));
@@ -110,6 +114,9 @@ export function VeltoBookingsWorkspace({
   prefill?: RecordPrefill;
   focusBookingId?: string;
 }) {
+  const t = useTranslations("velto");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
   const { toast } = useToast();
   const router = useRouter();
   const [error, setError] = useState("");
@@ -146,7 +153,7 @@ export function VeltoBookingsWorkspace({
       setError(result.error ?? "Could not add this booking.");
       return;
     }
-    toast({ title: "Booking added", tone: "success" });
+    toast({ title: t("added"), tone: "success" });
     (document.getElementById("velto-add-booking") as HTMLFormElement | null)?.reset();
     router.refresh();
   }
@@ -154,10 +161,10 @@ export function VeltoBookingsWorkspace({
   return (
     <div>
       <div className="grid gap-0 border-t border-foreground/10 sm:grid-cols-4">
-        <DashboardCard title="Upcoming" value={String(counts.upcoming)} hint="Still on the calendar" />
-        <DashboardCard title="Reminders" value={String(counts.reminders)} hint="Reach out today" />
-        <DashboardCard title="Completed" value={String(counts.completed)} hint="Showed up" />
-        <DashboardCard title="Missed" value={String(counts.missed)} hint="No-shows" />
+        <DashboardCard title={t("upcoming")} value={String(counts.upcoming)} hint={t("upcomingHint")} />
+        <DashboardCard title={t("reminders")} value={String(counts.reminders)} hint={t("remindersHint")} />
+        <DashboardCard title={t("completed")} value={String(counts.completed)} hint={t("completedHint")} />
+        <DashboardCard title={t("missed")} value={String(counts.missed)} hint={t("missedHint")} />
       </div>
 
       <form
@@ -170,16 +177,15 @@ export function VeltoBookingsWorkspace({
             prefillProduct={prefill?.product === "avyro" ? undefined : prefill?.product}
             prefillId={prefill?.product === "avyro" ? undefined : prefill?.id}
           />
-          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Add a booking</p>
+          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("addBooking")}</p>
           {prefill ? (
             <p className="mt-2 text-sm text-muted">
-              Prefilling {prefill.name} from {recordProductName(prefill.product)}. A connection is
-              optional — you can still book without one.
+              {t("prefill", { name: prefill.name, product: recordProductName(prefill.product) })}
             </p>
           ) : null}
         </div>
         <div>
-          <Label htmlFor="customerName">Customer</Label>
+          <Label htmlFor="customerName">{t("customer")}</Label>
           <Input
             id="customerName"
             name="customerName"
@@ -189,7 +195,7 @@ export function VeltoBookingsWorkspace({
           />
         </div>
         <div>
-          <Label htmlFor="service">Service</Label>
+          <Label htmlFor="service">{t("service")}</Label>
           <Input
             id="service"
             name="service"
@@ -199,15 +205,15 @@ export function VeltoBookingsWorkspace({
           />
         </div>
         <div>
-          <Label htmlFor="startsOn">Date</Label>
+          <Label htmlFor="startsOn">{t("date")}</Label>
           <Input id="startsOn" name="startsOn" type="date" required />
         </div>
         <div>
-          <Label htmlFor="startTime">Time</Label>
+          <Label htmlFor="startTime">{t("time")}</Label>
           <Input id="startTime" name="startTime" type="time" required />
         </div>
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("email")}</Label>
           <Input
             id="email"
             name="email"
@@ -217,21 +223,21 @@ export function VeltoBookingsWorkspace({
           />
         </div>
         <div>
-          <Label htmlFor="phone">Phone</Label>
+          <Label htmlFor="phone">{t("phone")}</Label>
           <Input
             id="phone"
             name="phone"
             type="tel"
-            placeholder="Optional"
+            placeholder={tCommon("optional")}
             defaultValue={prefill?.phone ?? ""}
           />
         </div>
         <div>
-          <Label htmlFor="reminderOn">Remind on</Label>
+          <Label htmlFor="reminderOn">{t("remindOn")}</Label>
           <Input id="reminderOn" name="reminderOn" type="date" />
         </div>
         <div>
-          <Label htmlFor="leadId">Avyro lead</Label>
+          <Label htmlFor="leadId">{t("avyroLead")}</Label>
           <Select
             id="leadId"
             name="leadId"
@@ -243,7 +249,7 @@ export function VeltoBookingsWorkspace({
               fillLeadFields(form, lead);
             }}
           >
-            <option value="">No linked lead</option>
+            <option value="">{t("noLinkedLead")}</option>
             {leads.map((lead) => (
               <option key={lead.id} value={lead.id}>
                 {lead.name}
@@ -252,12 +258,12 @@ export function VeltoBookingsWorkspace({
           </Select>
         </div>
         <div className="md:col-span-2 lg:col-span-3">
-          <Label htmlFor="notes">Notes</Label>
-          <Input id="notes" name="notes" placeholder="What they booked, anything to remember" />
+          <Label htmlFor="notes">{t("notes")}</Label>
+          <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
         </div>
         <div className="flex items-end">
           <Button type="submit" disabled={pending} className="w-full">
-            {pending ? "Adding..." : "Add booking"}
+            {pending ? t("adding") : t("add")}
           </Button>
         </div>
         <div className="md:col-span-2 lg:col-span-4">
@@ -268,19 +274,19 @@ export function VeltoBookingsWorkspace({
       <div className="mt-8">
         {bookings.length === 0 ? (
           <EmptyState
-            title="No bookings yet"
-            description="Add the next appointment. Velto keeps the date, time, and reminder in this workspace so fewer visits are missed."
+            title={t("emptyTitle")}
+            description={t("emptyBody")}
           />
         ) : (
           <Table>
             <THead>
               <TR>
-                <TH>Customer</TH>
-                <TH>When</TH>
-                <TH>Status</TH>
-                <TH>Reminder</TH>
-                <TH>Connected</TH>
-                <TH>Notes</TH>
+                <TH>{t("colCustomer")}</TH>
+                <TH>{t("colWhen")}</TH>
+                <TH>{t("colStatus")}</TH>
+                <TH>{t("colReminder")}</TH>
+                <TH>{t("colConnected")}</TH>
+                <TH>{t("colNotes")}</TH>
                 <TH className="text-right"> </TH>
               </TR>
             </THead>
@@ -300,19 +306,19 @@ export function VeltoBookingsWorkspace({
                       {booking.phone ? <p className="mt-1 text-xs text-muted">{booking.phone}</p> : null}
                       {isReminderDue(booking) ? (
                         <p className="mt-1 font-mono text-[11px] tracking-[0.12em] text-warning uppercase">
-                          Reminder due
+                          {t("reminderDue")}
                         </p>
                       ) : null}
                     </TD>
                     <TD>
-                      <p>{formatDay(booking.starts_on)}</p>
-                      <p className="mt-1 text-muted">{formatTime(booking.start_time)}</p>
+                      <p>{formatDay(booking.starts_on, locale)}</p>
+                      <p className="mt-1 text-muted">{formatTime(booking.start_time, locale)}</p>
                     </TD>
                     <TD>
                       <div className="flex items-center gap-2">
-                        <Badge tone={statusTone[booking.status]}>{statusLabel[booking.status]}</Badge>
+                        <Badge tone={statusTone[booking.status]}>{t(statusKeys[booking.status])}</Badge>
                         <select
-                          aria-label={`Status for ${booking.customer_name}`}
+                          aria-label={t("statusFor", { name: booking.customer_name })}
                           className="h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm"
                           defaultValue={booking.status}
                           onChange={async (event) => {
@@ -321,13 +327,13 @@ export function VeltoBookingsWorkspace({
                               toast({ title: result.error ?? "Could not update status", tone: "error" });
                               return;
                             }
-                            toast({ title: "Status updated", tone: "success" });
+                            toast({ title: t("statusUpdated"), tone: "success" });
                             router.refresh();
                           }}
                         >
                           {bookingStatuses.map((status) => (
                             <option key={status} value={status}>
-                              {statusLabel[status]}
+                              {t(statusKeys[status])}
                             </option>
                           ))}
                         </select>
@@ -336,7 +342,7 @@ export function VeltoBookingsWorkspace({
                     <TD>
                       <input
                         type="date"
-                        aria-label={`Reminder date for ${booking.customer_name}`}
+                        aria-label={t("reminderFor", { name: booking.customer_name })}
                         defaultValue={booking.reminder_on ?? ""}
                         className={cn(
                           "h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm",
@@ -348,12 +354,12 @@ export function VeltoBookingsWorkspace({
                             toast({ title: result.error ?? "Could not save reminder", tone: "error" });
                             return;
                           }
-                          toast({ title: "Reminder saved", tone: "success" });
+                          toast({ title: t("reminderSaved"), tone: "success" });
                           router.refresh();
                         }}
                       />
                       {booking.reminder_on ? (
-                        <p className="mt-1 text-xs text-muted">{formatDay(booking.reminder_on)}</p>
+                        <p className="mt-1 text-xs text-muted">{formatDay(booking.reminder_on, locale)}</p>
                       ) : null}
                     </TD>
                     <TD>
@@ -377,11 +383,11 @@ export function VeltoBookingsWorkspace({
                             toast({ title: result.error ?? "Could not remove booking", tone: "error" });
                             return;
                           }
-                          toast({ title: "Booking removed", tone: "success" });
+                          toast({ title: t("removed"), tone: "success" });
                           router.refresh();
                         }}
                       >
-                        Remove
+                        {t("remove")}
                       </Button>
                     </TD>
                   </TR>

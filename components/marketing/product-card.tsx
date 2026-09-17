@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProductLogo } from "@/components/product-icon";
 import { formatPrice, type ProductConfig } from "@/config/products";
 import { ArrowUpRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 export function ProductCard({
@@ -11,6 +12,8 @@ export function ProductCard({
   product: ProductConfig;
   index: number;
 }) {
+  const t = useTranslations();
+
   return (
     <Link
       href={`/products/${product.slug}`}
@@ -26,20 +29,24 @@ export function ProductCard({
         <div className="flex items-center gap-3">
           <h3 className="display text-2xl tracking-tight text-foreground">{product.name}</h3>
           <Badge tone={product.status === "active" ? "accent" : "neutral"}>
-            {product.marketingStatus}
+            {product.marketingStatus === "Coming soon"
+              ? t("common.comingSoon")
+              : t("common.inDevelopment")}
           </Badge>
         </div>
-        <p className="mt-2 text-sm leading-relaxed text-muted">{product.description}</p>
+        <p className="mt-2 text-sm leading-relaxed text-muted">{t(`catalog.${product.id}.description`)}</p>
         {product.pricing.monthly != null && (
           <p className="mt-5 flex items-baseline gap-1.5">
             <span className="display text-xl tracking-tight text-foreground">
               {formatPrice(product.pricing.monthly)}
             </span>
-            <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">/ mo</span>
+            <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
+              {t("common.perMonthShort")}
+            </span>
           </p>
         )}
         <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-foreground/80 transition-colors group-hover:text-accent">
-          View product
+          {t("common.viewProduct")}
           <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </span>
       </div>

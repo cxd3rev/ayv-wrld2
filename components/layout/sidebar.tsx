@@ -1,6 +1,7 @@
 "use client";
 
 import { Box, CreditCard, LayoutDashboard, Menu, Settings, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -18,6 +19,13 @@ const icons = {
   card: CreditCard,
 };
 
+const navKeys: Record<string, "navOverview" | "navProduct" | "navSettings" | "navBilling"> = {
+  "/dashboard": "navOverview",
+  "/dashboard/product": "navProduct",
+  "/dashboard/settings": "navSettings",
+  "/dashboard/billing": "navBilling",
+};
+
 export function Sidebar({
   organization,
   product,
@@ -26,6 +34,7 @@ export function Sidebar({
   product: ProductConfig;
 }) {
   const pathname = usePathname();
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
 
   return (
@@ -34,7 +43,7 @@ export function Sidebar({
         type="button"
         className="fixed top-4 left-4 z-40 border border-foreground/10 bg-background p-2 lg:hidden"
         onClick={() => setOpen(true)}
-        aria-label="Open menu"
+        aria-label={t("common.openMenu")}
       >
         <Menu className="h-5 w-5" />
       </button>
@@ -43,7 +52,7 @@ export function Sidebar({
         <button
           type="button"
           className="fixed inset-0 z-40 bg-foreground/40 lg:hidden"
-          aria-label="Close menu"
+          aria-label={t("common.closeMenu")}
           onClick={() => setOpen(false)}
         />
       ) : null}
@@ -60,7 +69,7 @@ export function Sidebar({
             type="button"
             className="p-1 lg:hidden"
             onClick={() => setOpen(false)}
-            aria-label="Close menu"
+            aria-label={t("common.closeMenu")}
           >
             <X className="h-4 w-4" />
           </button>
@@ -71,9 +80,8 @@ export function Sidebar({
         <nav className="flex flex-1 flex-col gap-1">
           {dashboardNav.map((item) => {
             const Icon = icons[item.icon];
-            const productLabel = product.navigation.find((nav) => nav.href === item.href)?.label;
-            const label =
-              item.href === "/dashboard/product" ? (productLabel ?? product.name) : item.label;
+            const productLabel =
+              item.href === "/dashboard/product" ? t(`catalog.${product.id}.nav`) : t(`dashboard.${navKeys[item.href]}`);
             const active =
               item.href === "/dashboard"
                 ? pathname === "/dashboard"
@@ -92,7 +100,7 @@ export function Sidebar({
                 )}
               >
                 <Icon className="h-4 w-4" />
-                {label}
+                {productLabel}
               </Link>
             );
           })}
@@ -101,7 +109,7 @@ export function Sidebar({
         <div className="flex items-center gap-3 border-t border-foreground/10 pt-5">
           <ProductIcon product={product} size={32} className="h-8 w-8" />
           <div>
-            <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">Current product</p>
+            <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">{t("common.currentProduct")}</p>
             <p className="mt-1 text-sm font-medium" style={{ color: product.accent }}>
               {product.name}
             </p>

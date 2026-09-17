@@ -6,13 +6,15 @@ import {
   getOrganizationSubscriptions,
   isStripeConfigured,
 } from "@/services/billing";
+import { getTranslations } from "next-intl/server";
 
 export default async function SettingsBillingPage() {
   const { organization } = await requireWorkspace();
+  const t = await getTranslations("billing");
   const subscriptions = await getOrganizationSubscriptions(organization.id);
 
   return (
-    <SettingsPage title="Billing" description="Start Avyro, Velto, or Rovyn, or manage them in the Stripe portal.">
+    <SettingsPage title={t("title")} description={t("settingsDescription")}>
       <BillingPanel
         subscriptions={subscriptions}
         catalog={getBillableCatalog()}

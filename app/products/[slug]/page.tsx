@@ -5,6 +5,7 @@ import { ProductLogo } from "@/components/product-icon";
 import { bundleMonthly, formatPrice, getProduct, products } from "@/config/products";
 import { openProductWorkspace } from "@/services/product-switch";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -21,15 +22,20 @@ export default async function ProductPage({
   const product = getProduct(slug);
   if (!product) notFound();
 
+  const t = await getTranslations();
   const isActive = product.status === "active";
   const productNumber = String(products.findIndex((p) => p.id === product.id) + 1).padStart(2, "0");
   const others = products.filter((p) => p.id !== product.id).slice(0, 3);
+  const highlights = [
+    t(`catalog.${product.id}.highlight1`),
+    t(`catalog.${product.id}.highlight2`),
+    t(`catalog.${product.id}.highlight3`),
+  ];
 
   return (
     <Atmosphere>
       <MarketingHeader />
       <main className="relative">
-        {/* Hero */}
         <section className="relative overflow-hidden border-b border-border">
           <div className="dot-field" />
           <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pt-10 pb-20 lg:px-12 lg:pt-14 lg:pb-28">
@@ -38,26 +44,31 @@ export default async function ProductPage({
               className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-muted transition-colors hover:text-foreground"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
-              All products
+              {t("productPage.allProducts")}
             </Link>
 
             <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
-              {/* Left: info */}
               <div>
                 <div className="flex items-center gap-3">
-                  <p className="kicker">{product.tagline}</p>
-                  <Badge tone={isActive ? "accent" : "neutral"}>{product.marketingStatus}</Badge>
+                  <p className="kicker">{t(`catalog.${product.id}.tagline`)}</p>
+                  <Badge tone={isActive ? "accent" : "neutral"}>
+                    {product.marketingStatus === "Coming soon"
+                      ? t("common.comingSoon")
+                      : t("common.inDevelopment")}
+                  </Badge>
                 </div>
                 <h1 className="display mt-7 text-6xl tracking-tight lg:text-8xl">{product.name}</h1>
                 <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted text-pretty lg:text-xl">
-                  {product.longDescription}
+                  {t(`catalog.${product.id}.longDescription`)}
                 </p>
 
                 <div className="mt-10 flex flex-wrap items-end gap-x-8 gap-y-4">
                   {product.pricing.monthly != null ? (
                     <p className="flex items-baseline gap-2">
                       <span className="display text-5xl tracking-tight">{formatPrice(product.pricing.monthly)}</span>
-                      <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">/ month</span>
+                      <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
+                        {t("common.perMonth")}
+                      </span>
                     </p>
                   ) : (
                     <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">{product.pricing.label}</p>
@@ -72,7 +83,7 @@ export default async function ProductPage({
                         type="submit"
                         className="group inline-flex h-14 items-center rounded-full bg-accent px-8 text-base font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
                       >
-                        Open {product.name}
+                        {t("productPage.openProduct", { name: product.name })}
                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </button>
                     </form>
@@ -81,7 +92,7 @@ export default async function ProductPage({
                       href="/signup"
                       className="group inline-flex h-14 items-center rounded-full bg-accent px-8 text-base font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
                     >
-                      Get notified at launch
+                      {t("productPage.getNotified")}
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
                   )}
@@ -89,12 +100,11 @@ export default async function ProductPage({
                     href="/signup"
                     className="inline-flex h-14 items-center rounded-full border border-border bg-card px-8 text-base font-medium transition-colors hover:bg-card-hover"
                   >
-                    Create account
+                    {t("productPage.createAccount")}
                   </Link>
                 </div>
               </div>
 
-              {/* Right: visual panel */}
               <div className="relative">
                 <div
                   className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-3xl border border-border bg-card"
@@ -111,7 +121,7 @@ export default async function ProductPage({
                   />
                   <ProductLogo product={product} size={220} className="mark-invert h-40 w-40 lg:h-52 lg:w-52" />
                   <span className="absolute bottom-6 left-6 right-6 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted">
-                    {product.description}
+                    {t(`catalog.${product.id}.description`)}
                   </span>
                 </div>
               </div>
@@ -119,17 +129,16 @@ export default async function ProductPage({
           </div>
         </section>
 
-        {/* What it does */}
         <section className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
             <div>
-              <p className="kicker">What it does</p>
+              <p className="kicker">{t("productPage.whatItDoes")}</p>
               <h2 className="display mt-6 max-w-md text-3xl leading-tight tracking-tight lg:text-5xl text-balance">
-                Built to do one job exceptionally well.
+                {t("productPage.builtForOneJob")}
               </h2>
             </div>
             <ul className="flex flex-col">
-              {product.highlights.map((highlight) => (
+              {highlights.map((highlight) => (
                 <li
                   key={highlight}
                   className="flex items-start gap-5 border-t border-border py-6 last:border-b"
@@ -147,17 +156,18 @@ export default async function ProductPage({
           </div>
         </section>
 
-        {/* Pricing / bundle */}
         <section className="mx-auto w-full max-w-[1400px] px-6 pb-20 lg:px-12 lg:pb-28">
           <div className="grid gap-5 lg:grid-cols-2">
             <div className="flex flex-col justify-between rounded-2xl border border-border bg-card p-8 lg:p-10">
               <div>
-                <p className="kicker">{product.name} plan</p>
+                <p className="kicker">{t("productPage.plan", { name: product.name })}</p>
                 <p className="mt-6 flex items-baseline gap-2">
                   {product.pricing.monthly != null ? (
                     <>
                       <span className="display text-5xl tracking-tight">{formatPrice(product.pricing.monthly)}</span>
-                      <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">/ month</span>
+                      <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
+                        {t("common.perMonth")}
+                      </span>
                     </>
                   ) : (
                     <span className="font-mono text-sm uppercase tracking-[0.14em] text-muted">
@@ -165,15 +175,13 @@ export default async function ProductPage({
                     </span>
                   )}
                 </p>
-                <p className="mt-4 text-sm leading-relaxed text-muted">
-                  One clear monthly price. No setup fees, cancel anytime.
-                </p>
+                <p className="mt-4 text-sm leading-relaxed text-muted">{t("productPage.planBody")}</p>
               </div>
               <Link
                 href="/signup"
                 className="group mt-8 inline-flex h-12 w-fit items-center rounded-full border border-border bg-background px-7 text-sm font-medium transition-colors hover:bg-card-hover"
               >
-                Start with {product.name}
+                {t("productPage.startWith", { name: product.name })}
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
@@ -181,42 +189,42 @@ export default async function ProductPage({
             <div className="flex flex-col justify-between rounded-2xl border border-accent/30 bg-accent-soft p-8 lg:p-10">
               <div>
                 <div className="flex items-center gap-3">
-                  <p className="kicker">The bundle</p>
-                  <Badge tone="accent">Save 50%</Badge>
+                  <p className="kicker">{t("bundle.kicker")}</p>
+                  <Badge tone="accent">{t("common.save50")}</Badge>
                 </div>
                 <p className="mt-6 flex items-baseline gap-2">
                   <span className="display text-5xl tracking-tight">{formatPrice(bundleMonthly)}</span>
-                  <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">/ month</span>
+                  <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
+                    {t("common.perMonth")}
+                  </span>
                 </p>
                 <p className="mt-4 text-sm leading-relaxed text-muted">
-                  Get {product.name} and all five other tools in one subscription for half the price
-                  of buying them separately.
+                  {t("bundle.productBody", { name: product.name })}
                 </p>
               </div>
               <Link
                 href="/signup"
                 className="group mt-8 inline-flex h-12 w-fit items-center rounded-full bg-accent px-7 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
               >
-                Get the bundle
+                {t("bundle.cta")}
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </div>
         </section>
 
-        {/* Other products */}
         <section className="border-t border-border">
           <div className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-24">
             <div className="flex items-end justify-between gap-6">
               <div>
-                <p className="kicker">Keep exploring</p>
-                <h2 className="display mt-6 text-3xl tracking-tight lg:text-4xl">Other tools in AYV WRLD</h2>
+                <p className="kicker">{t("productPage.keepExploring")}</p>
+                <h2 className="display mt-6 text-3xl tracking-tight lg:text-4xl">{t("productPage.otherTools")}</h2>
               </div>
               <Link
                 href="/#products"
                 className="hidden shrink-0 items-center gap-1.5 text-sm text-muted transition-colors hover:text-foreground sm:inline-flex"
               >
-                View all
+                {t("common.viewAll")}
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
@@ -231,13 +239,17 @@ export default async function ProductPage({
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-background">
                       <ProductLogo product={other} size={28} className="mark-invert h-7 w-7" />
                     </div>
-                    <Badge tone={other.status === "active" ? "accent" : "neutral"}>{other.marketingStatus}</Badge>
+                    <Badge tone={other.status === "active" ? "accent" : "neutral"}>
+                      {other.marketingStatus === "Coming soon"
+                        ? t("common.comingSoon")
+                        : t("common.inDevelopment")}
+                    </Badge>
                   </div>
                   <div className="mt-8">
                     <h3 className="display text-xl tracking-tight">{other.name}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted">{other.description}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-muted">{t(`catalog.${other.id}.description`)}</p>
                     <span className="mt-5 inline-flex items-center gap-1.5 text-sm text-foreground/80 transition-colors group-hover:text-accent">
-                      View product
+                      {t("common.viewProduct")}
                       <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </span>
                   </div>

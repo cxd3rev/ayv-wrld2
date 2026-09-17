@@ -6,17 +6,16 @@ import {
   getOrganizationSubscriptions,
   isStripeConfigured,
 } from "@/services/billing";
+import { getTranslations } from "next-intl/server";
 
 export default async function BillingPage() {
   const { organization } = await requireWorkspace();
+  const t = await getTranslations("billing");
   const subscriptions = await getOrganizationSubscriptions(organization.id);
 
   return (
     <div>
-      <PageHeader
-        title="Billing"
-        description="Each product is its own monthly subscription. Buy Avyro, Velto, Rovyn, or any combination."
-      />
+      <PageHeader title={t("title")} description={t("description")} />
       <BillingPanel
         subscriptions={subscriptions}
         catalog={getBillableCatalog()}

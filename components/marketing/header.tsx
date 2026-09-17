@@ -1,21 +1,24 @@
 "use client";
 
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { products } from "@/config/products";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const links = [
-  { href: "/#products", label: "Products" },
-  { href: "/#features", label: "Platform" },
-  { href: "/#how", label: "How it works" },
-];
-
 export function MarketingHeader() {
+  const t = useTranslations("nav");
+  const tCommon = useTranslations("common");
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const links = [
+    { href: "/#products", label: t("products") },
+    { href: "/#features", label: t("platform") },
+    { href: "/#how", label: t("how") },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -44,25 +47,29 @@ export function MarketingHeader() {
             </Link>
           ))}
         </div>
-        <div className="hidden items-center gap-5 md:flex">
+        <div className="hidden items-center gap-4 md:flex">
+          <LanguageSwitcher />
           <Link href="/login" className="text-sm text-muted transition-colors hover:text-foreground">
-            Log in
+            {t("login")}
           </Link>
           <Link
             href="/signup"
             className="inline-flex h-10 items-center rounded-full bg-accent px-5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
           >
-            Get started
+            {t("signup")}
           </Link>
         </div>
-        <button
-          type="button"
-          className="p-2 md:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((value) => !value)}
-        >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <LanguageSwitcher />
+          <button
+            type="button"
+            className="p-2"
+            aria-label={open ? tCommon("closeMenu") : tCommon("openMenu")}
+            onClick={() => setOpen((value) => !value)}
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </nav>
 
       {open ? (
@@ -85,14 +92,14 @@ export function MarketingHeader() {
               className="inline-flex h-14 flex-1 items-center justify-center rounded-full border border-border text-base font-medium"
               onClick={() => setOpen(false)}
             >
-              Log in
+              {t("login")}
             </Link>
             <Link
               href="/signup"
               className="inline-flex h-14 flex-1 items-center justify-center rounded-full bg-accent text-base font-medium text-accent-foreground"
               onClick={() => setOpen(false)}
             >
-              Get started
+              {t("signup")}
             </Link>
           </div>
         </div>
@@ -102,18 +109,19 @@ export function MarketingHeader() {
 }
 
 export function MarketingFooter() {
+  const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
+
   return (
     <footer className="relative z-10 border-t border-border px-6 py-16 lg:px-12">
       <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-12 md:flex-row md:items-start md:justify-between">
         <div className="max-w-xs">
           <Logo />
-          <p className="mt-5 text-sm leading-relaxed text-muted">
-            Focused software tools that turn everyday business tasks into automated revenue.
-          </p>
+          <p className="mt-5 text-sm leading-relaxed text-muted">{t("blurb")}</p>
         </div>
         <div className="grid grid-cols-2 gap-12 sm:grid-cols-3">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">Products</p>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">{t("products")}</p>
             <ul className="mt-4 flex flex-col gap-3">
               {products.map((product) => (
                 <li key={product.id}>
@@ -128,27 +136,37 @@ export function MarketingFooter() {
             </ul>
           </div>
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">Platform</p>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">{t("platform")}</p>
             <ul className="mt-4 flex flex-col gap-3 text-sm text-foreground/80">
               <li>
-                <Link href="/#features" className="transition-colors hover:text-accent">Features</Link>
+                <Link href="/#features" className="transition-colors hover:text-accent">
+                  {tNav("features")}
+                </Link>
               </li>
               <li>
-                <Link href="/#how" className="transition-colors hover:text-accent">How it works</Link>
+                <Link href="/#how" className="transition-colors hover:text-accent">
+                  {tNav("how")}
+                </Link>
               </li>
               <li>
-                <Link href="/signup" className="transition-colors hover:text-accent">Get started</Link>
+                <Link href="/signup" className="transition-colors hover:text-accent">
+                  {tNav("signup")}
+                </Link>
               </li>
             </ul>
           </div>
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">Account</p>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">{t("account")}</p>
             <ul className="mt-4 flex flex-col gap-3 text-sm text-foreground/80">
               <li>
-                <Link href="/login" className="transition-colors hover:text-accent">Log in</Link>
+                <Link href="/login" className="transition-colors hover:text-accent">
+                  {tNav("login")}
+                </Link>
               </li>
               <li>
-                <Link href="/signup" className="transition-colors hover:text-accent">Sign up</Link>
+                <Link href="/signup" className="transition-colors hover:text-accent">
+                  {t("signup")}
+                </Link>
               </li>
             </ul>
           </div>
@@ -156,7 +174,7 @@ export function MarketingFooter() {
       </div>
       <div className="mx-auto mt-14 flex w-full max-w-[1400px] flex-col gap-3 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">AYV WRLD</p>
-        <p className="text-xs text-muted">© {new Date().getFullYear()} AYV WRLD. All rights reserved.</p>
+        <p className="text-xs text-muted">{t("rights", { year: new Date().getFullYear() })}</p>
       </div>
     </footer>
   );

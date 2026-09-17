@@ -3,6 +3,7 @@
 import { Dropdown, DropdownItem } from "@/components/ui/dropdown";
 import { getInitials } from "@/lib/utils";
 import { signOut } from "@/services/account";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 export function UserMenu({
@@ -12,6 +13,7 @@ export function UserMenu({
   name: string | null;
   email: string | null;
 }) {
+  const t = useTranslations();
   return (
     <Dropdown
       trigger={
@@ -27,14 +29,14 @@ export function UserMenu({
       }
     >
       <div className="px-3 py-2">
-        <p className="truncate text-sm font-medium">{name || "Account"}</p>
+        <p className="truncate text-sm font-medium">{name || t("common.account")}</p>
         <p className="truncate text-xs text-muted">{email}</p>
       </div>
       <Link href="/dashboard/settings/account" className="block">
-        <DropdownItem>Account settings</DropdownItem>
+        <DropdownItem>{t("dashboard.accountSettings")}</DropdownItem>
       </Link>
       <DropdownItem className="text-danger" onClick={() => signOut()}>
-        Log out
+        {t("dashboard.logOut")}
       </DropdownItem>
     </Dropdown>
   );

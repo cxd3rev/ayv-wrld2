@@ -8,14 +8,16 @@ import { toUserError } from "@/lib/errors";
 import { createClient } from "@/lib/supabase/client";
 import { firstZodError, loginSchema } from "@/lib/validations";
 import { isSupabaseConfigured } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export function LoginForm() {
+  const t = useTranslations("auth");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [error, setError] = useState(searchParams.get("error") ? "Could not complete sign in." : "");
+  const [error, setError] = useState(searchParams.get("error") ? t("signInError") : "");
   const [pending, setPending] = useState(false);
 
   async function onSubmit(formData: FormData) {
@@ -31,7 +33,7 @@ export function LoginForm() {
     }
 
     if (!isSupabaseConfigured()) {
-      setError("Supabase is not configured yet. Add your keys to .env.local.");
+      setError(t("supabaseMissing"));
       return;
     }
 
@@ -56,28 +58,28 @@ export function LoginForm() {
   return (
     <form action={onSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("email")}</Label>
         <Input id="email" name="email" type="email" autoComplete="email" required />
       </div>
       <div>
         <div className="mb-1.5 flex items-center justify-between">
           <Label htmlFor="password" className="mb-0">
-            Password
+            {t("password")}
           </Label>
           <Link href="/forgot-password" className="text-xs text-accent hover:underline">
-            Forgot password?
+            {t("forgotPassword")}
           </Link>
         </div>
         <Input id="password" name="password" type="password" autoComplete="current-password" required />
       </div>
       <FormError message={error} />
       <Button type="submit" className="w-full" disabled={pending}>
-        {pending ? "Signing in..." : "Log in"}
+        {pending ? t("signingIn") : t("login")}
       </Button>
       <p className="text-center text-sm text-muted">
-        No account?{" "}
+        {t("noAccount")}{" "}
         <Link href="/signup" className="text-accent hover:underline">
-          Sign up
+          {t("signUp")}
         </Link>
       </p>
     </form>

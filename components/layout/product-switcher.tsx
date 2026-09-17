@@ -6,10 +6,12 @@ import { ProductIcon } from "@/components/product-icon";
 import { products, type ProductId } from "@/config/products";
 import { switchProduct } from "@/services/product-switch";
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 export function ProductSwitcher({ activeProductId }: { activeProductId: ProductId }) {
+  const t = useTranslations("common");
   const router = useRouter();
   const [, startTransition] = useTransition();
   const active = products.find((product) => product.id === activeProductId) ?? products[0];
@@ -43,9 +45,9 @@ export function ProductSwitcher({ activeProductId }: { activeProductId: ProductI
           <ProductIcon product={product} size={24} className="h-6 w-6" />
           <span className="flex-1">{product.name}</span>
           {product.status === "coming_soon" ? (
-            <Badge>Coming soon</Badge>
+            <Badge>{t("comingSoon")}</Badge>
           ) : (
-            <Badge tone="accent">Ready</Badge>
+            <Badge tone="accent">{t("ready")}</Badge>
           )}
         </DropdownItem>
       ))}

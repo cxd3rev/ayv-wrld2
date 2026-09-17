@@ -9,11 +9,13 @@ import { toUserError } from "@/lib/errors";
 import { createClient } from "@/lib/supabase/client";
 import { getAppUrl, isSupabaseConfigured } from "@/lib/utils";
 import { firstZodError, signupSchema } from "@/lib/validations";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function SignupForm() {
+  const t = useTranslations("auth");
   const router = useRouter();
   const [error, setError] = useState("");
   const [emailSentTo, setEmailSentTo] = useState("");
@@ -33,7 +35,7 @@ export function SignupForm() {
     }
 
     if (!isSupabaseConfigured()) {
-      setError("Supabase is not configured yet. Add your keys to .env.local.");
+      setError(t("supabaseMissing"));
       return;
     }
 
@@ -71,14 +73,14 @@ export function SignupForm() {
   if (emailSentTo) {
     return (
       <AuthMessage
-        title="Check your email"
-        description={`We sent a verification link to ${emailSentTo}.`}
+        title={t("checkEmailTitle")}
+        description={t("checkEmailBody", { email: emailSentTo })}
         action={
           <Link
             href="/login"
             className="inline-flex h-14 items-center rounded-full border border-foreground/20 px-6 text-sm hover:bg-foreground/5"
           >
-            Go to login →
+            {t("goToLogin")}
           </Link>
         }
       />
@@ -88,29 +90,29 @@ export function SignupForm() {
   return (
     <form action={onSubmit} className="space-y-4">
       <div className="mb-2 text-center">
-        <h1 className="display text-5xl tracking-tight">Create an AYV WRLD account</h1>
-        <p className="mt-3 text-sm text-muted">Start with a workspace. Avyro will plug in later.</p>
+        <h1 className="display text-5xl tracking-tight">{t("signupTitle")}</h1>
+        <p className="mt-3 text-sm text-muted">{t("signupDescription")}</p>
       </div>
       <div>
-        <Label htmlFor="fullName">Full name</Label>
+        <Label htmlFor="fullName">{t("fullName")}</Label>
         <Input id="fullName" name="fullName" autoComplete="name" required />
       </div>
       <div>
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("email")}</Label>
         <Input id="email" name="email" type="email" autoComplete="email" required />
       </div>
       <div>
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t("password")}</Label>
         <Input id="password" name="password" type="password" autoComplete="new-password" required />
       </div>
       <FormError message={error} />
       <Button type="submit" className="w-full" disabled={pending}>
-        {pending ? "Creating account..." : "Create account"}
+        {pending ? t("creatingAccount") : t("createAccount")}
       </Button>
       <p className="text-center text-sm text-muted">
-        Already have an account?{" "}
+        {t("hasAccount")}{" "}
         <Link href="/login" className="text-accent hover:underline">
-          Log in
+          {t("login")}
         </Link>
       </p>
     </form>

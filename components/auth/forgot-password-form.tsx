@@ -8,10 +8,12 @@ import { toUserError } from "@/lib/errors";
 import { createClient } from "@/lib/supabase/client";
 import { getAppUrl, isSupabaseConfigured } from "@/lib/utils";
 import { emailSchema, firstZodError } from "@/lib/validations";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
 
 export function ForgotPasswordForm() {
+  const t = useTranslations("auth");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [pending, setPending] = useState(false);
@@ -26,7 +28,7 @@ export function ForgotPasswordForm() {
     }
 
     if (!isSupabaseConfigured()) {
-      setError("Supabase is not configured yet.");
+      setError(t("supabaseMissing"));
       return;
     }
 
@@ -40,7 +42,7 @@ export function ForgotPasswordForm() {
         setError(toUserError(resetError));
         return;
       }
-      setMessage("If that email exists, we sent a reset link.");
+      setMessage(t("resetSent"));
     } catch (caught) {
       setError(toUserError(caught));
     } finally {
@@ -51,17 +53,17 @@ export function ForgotPasswordForm() {
   return (
     <form action={onSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("email")}</Label>
         <Input id="email" name="email" type="email" required />
       </div>
       <FormError message={error} />
       {message ? <p className="text-sm text-success">{message}</p> : null}
       <Button type="submit" className="w-full" disabled={pending}>
-        {pending ? "Sending..." : "Send reset link"}
+        {pending ? t("sending") : t("sendReset")}
       </Button>
       <p className="text-center text-sm text-muted">
         <Link href="/login" className="text-accent hover:underline">
-          Back to login
+          {t("backToLogin")}
         </Link>
       </p>
     </form>

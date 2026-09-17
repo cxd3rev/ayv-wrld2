@@ -7,8 +7,11 @@ import type { Notification } from "@/types/database";
 import { Bell } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils";
+import { useLocale, useTranslations } from "next-intl";
 
 export function NotificationsMenu({ notifications }: { notifications: Notification[] }) {
+  const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const unread = notifications.filter((item) => !item.read).length;
 
@@ -18,7 +21,7 @@ export function NotificationsMenu({ notifications }: { notifications: Notificati
         <button
           type="button"
           className="relative rounded-full border border-foreground/15 p-2 hover:bg-foreground/5"
-          aria-label="Notifications"
+          aria-label={t("dashboard.notifications")}
         >
           <Bell className="h-4 w-4" />
           {unread > 0 ? (
@@ -31,7 +34,7 @@ export function NotificationsMenu({ notifications }: { notifications: Notificati
       className="w-80 p-2"
     >
       <div className="mb-2 flex items-center justify-between px-2">
-        <p className="text-sm font-medium">Notifications</p>
+        <p className="text-sm font-medium">{t("dashboard.notifications")}</p>
         {unread > 0 ? (
           <button
             type="button"
@@ -41,12 +44,12 @@ export function NotificationsMenu({ notifications }: { notifications: Notificati
               router.refresh();
             }}
           >
-            Mark all read
+            {t("dashboard.markAllRead")}
           </button>
         ) : null}
       </div>
       {notifications.length === 0 ? (
-        <p className="px-2 py-6 text-center text-sm text-muted">No notifications yet.</p>
+        <p className="px-2 py-6 text-center text-sm text-muted">{t("dashboard.noNotifications")}</p>
       ) : (
         notifications.map((item) => (
           <DropdownItem
@@ -61,10 +64,10 @@ export function NotificationsMenu({ notifications }: { notifications: Notificati
           >
             <span className="flex w-full items-center justify-between gap-2">
               <span className="font-medium">{item.title}</span>
-              {!item.read ? <Badge tone="accent">New</Badge> : null}
+              {!item.read ? <Badge tone="accent">{t("common.new")}</Badge> : null}
             </span>
             <span className="text-xs text-muted">{item.message}</span>
-            <span className="text-xs text-muted">{formatDate(item.created_at)}</span>
+            <span className="text-xs text-muted">{formatDate(item.created_at, locale)}</span>
           </DropdownItem>
         ))
       )}

@@ -1,9 +1,11 @@
 import { AuthShell } from "@/components/auth/auth-shell";
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
+import { getTranslations } from "next-intl/server";
 
-export default function ResetPasswordPage() {
+export default async function ResetPasswordPage() {
+  const t = await getTranslations("auth");
   return (
-    <AuthShell title="Choose a new password" description="Enter a new password for your account.">
+    <AuthShell title={t("resetTitle")} description={t("resetDescription")}>
       <ResetPasswordForm />
     </AuthShell>
   );

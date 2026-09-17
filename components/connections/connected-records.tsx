@@ -19,14 +19,15 @@ import {
 } from "@/services/record-links";
 import { openLinkedWorkspace } from "@/services/product-switch";
 import type { Booking, Lead, Quote, RecordLink } from "@/types/database";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
-function formatDay(value: string | null) {
+function formatDay(value: string | null, locale: string) {
   if (!value) return "";
   const [year, month, day] = value.split("-").map(Number);
   if (!year || !month || !day) return value;
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
   }).format(new Date(year, month - 1, day));
@@ -38,19 +39,21 @@ function recordLabel(
   leads: Lead[],
   bookings: Booking[],
   quotes: Quote[],
+  locale: string,
+  fallbacks: { lead: string; booking: string; quote: string },
 ) {
   if (product === "avyro") {
     const lead = leads.find((item) => item.id === id);
-    return lead?.name ?? "Lead";
+    return lead?.name ?? fallbacks.lead;
   }
   if (product === "velto") {
     const booking = bookings.find((item) => item.id === id);
-    if (!booking) return "Booking";
-    const when = formatDay(booking.starts_on);
+    if (!booking) return fallbacks.booking;
+    const when = formatDay(booking.starts_on, locale);
     return when ? `${booking.service} · ${when}` : booking.service;
   }
   const quote = quotes.find((item) => item.id === id);
-  if (!quote) return "Quote";
+  if (!quote) return fallbacks.quote;
   return quote.title;
 }
 
@@ -103,6 +106,9 @@ export function ConnectedRecords({
 }) {
   const router = useRouter();
   const { toast } = useToast();
+  const t = useTranslations("connections");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
   const current = getRecordEntity(product)!;
   const targets = otherRecordEntities(product);
   const [attachOpen, setAttachOpen] = useState(false);
@@ -157,11 +163,27 @@ export function ConnectedRecords({
     return quotes.some((quote) => !linkedKeys.has(`rovyn:${quote.id}`));
   });
 
+  const createLabel = {
+    avyro: t("addInAvyro"),
+    velto: t("bookInVelto"),
+    rovyn: t("quoteInRovyn"),
+  } as const;
+  const nounLabel = {
+    avyro: t("nounLead"),
+    velto: t("nounBooking"),
+    rovyn: t("nounQuote"),
+  } as const;
+  const fallbacks = {
+    lead: t("fallbackLead"),
+    booking: t("fallbackBooking"),
+    quote: t("fallbackQuote"),
+  };
+
   return (
     <div className="flex min-w-[12rem] flex-col items-start gap-2">
-      <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">Connected</p>
+      <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">{t("connected")}</p>
       {linked.length === 0 ? (
-        <p className="text-muted">Nothing connected</p>
+        <p className="text-muted">{t("nothing")}</p>
       ) : (
         linked.map((side) => {
           const entity = getRecordEntity(side.product);
@@ -176,7 +198,7 @@ export function ConnectedRecords({
                   openLinkedWorkspace(side.product, { [entity.focusParam]: side.id })
                 }
               >
-                {recordLabel(side.product, side.id, leads, bookings, quotes)}
+                {recordLabel(side.product, side.id, leads, bookings, quotes, locale, fallbacks)}
               </button>
               <p className="text-xs text-muted">
                 {name}
@@ -192,7 +214,7 @@ export function ConnectedRecords({
                     openLinkedWorkspace(side.product, { [entity.focusParam]: side.id })
                   }
                 >
-                  Open in {name}
+                  {t("openIn", { name })}
                 </Button>
                 <Button
                   size="sm"
@@ -206,11 +228,11 @@ export function ConnectedRecords({
                       toast({ title: result.error ?? "Could not unlink", tone: "error" });
                       return;
                     }
-                    toast({ title: "Unlinked", tone: "success" });
+                    toast({ title: t("unlinked"), tone: "success" });
                     router.refresh();
                   }}
                 >
-                  {unlinkPending === side.linkId ? "Unlinking..." : "Unlink"}
+                  {unlinkPending === side.linkId ? t("unlinking") : t("unlink")}
                 </Button>
               </div>
             </div>
@@ -227,7 +249,7 @@ export function ConnectedRecords({
               openLinkedWorkspace(target.product, { [current.fromParam]: recordId })
             }
           >
-            {target.createActionLabel}
+            {createLabel[target.product]}
           </Button>
         ))}
         {canAttach ? (
@@ -240,15 +262,15 @@ export function ConnectedRecords({
               setAttachOpen(true);
             }}
           >
-            Attach
+            {t("attach")}
           </Button>
         ) : null}
       </div>
 
       <Modal
         open={attachOpen}
-        title="Connect a record"
-        description="Link another record from this workspace. Unlink later without deleting either record."
+        title={t("title")}
+        description={t("description")}
         onClose={() => setAttachOpen(false)}
       >
         <form
@@ -262,7 +284,7 @@ export function ConnectedRecords({
               return;
             }
             setAttachOpen(false);
-            toast({ title: "Records connected", tone: "success" });
+            toast({ title: t("connectedToast"), tone: "success" });
             router.refresh();
           }}
           className="grid gap-4"
@@ -270,7 +292,7 @@ export function ConnectedRecords({
           <input type="hidden" name="fromProduct" value={product} />
           <input type="hidden" name="fromId" value={recordId} />
           <div>
-            <Label htmlFor={`attach-product-${recordId}`}>Product</Label>
+            <Label htmlFor={`attach-product-${recordId}`}>{t("product")}</Label>
             <Select
               id={`attach-product-${recordId}`}
               name="toProduct"
@@ -285,7 +307,7 @@ export function ConnectedRecords({
             </Select>
           </div>
           <div>
-            <Label htmlFor={`attach-record-${recordId}`}>Record</Label>
+            <Label htmlFor={`attach-record-${recordId}`}>{t("record")}</Label>
             <Select
               id={`attach-record-${recordId}`}
               key={attachProduct}
@@ -294,7 +316,7 @@ export function ConnectedRecords({
               defaultValue=""
             >
               <option value="" disabled>
-                Choose a {getRecordEntity(attachProduct)?.noun ?? "record"}
+                {t("choose", { noun: nounLabel[attachProduct] })}
               </option>
               {attachOptions.map((option) => (
                 <option key={option.id} value={option.id}>
@@ -306,10 +328,10 @@ export function ConnectedRecords({
           <FormError message={attachError} />
           <div className="flex justify-end gap-3">
             <Button variant="secondary" onClick={() => setAttachOpen(false)}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button type="submit" disabled={attachPending || attachOptions.length === 0}>
-              {attachPending ? "Linking..." : "Attach"}
+              {attachPending ? t("linking") : t("attach")}
             </Button>
           </div>
         </form>
@@ -317,3 +339,4 @@ export function ConnectedRecords({
     </div>
   );
 }
+
