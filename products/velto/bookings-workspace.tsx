@@ -24,7 +24,7 @@ import {
   updateBookingReminder,
   updateBookingStatus,
 } from "@/products/velto/actions";
-import type { Booking, BookingStatus, Lead, Quote, RecordLink } from "@/types/database";
+import type { Booking, BookingStatus, Invoice, Lead, Quote, RecordLink } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -103,6 +103,7 @@ export function VeltoBookingsWorkspace({
   bookings,
   leads,
   quotes,
+  invoices,
   links,
   prefill,
   focusBookingId,
@@ -110,6 +111,7 @@ export function VeltoBookingsWorkspace({
   bookings: Booking[];
   leads: Lead[];
   quotes: Quote[];
+  invoices: Invoice[];
   links: RecordLink[];
   prefill?: RecordPrefill;
   focusBookingId?: string;
@@ -370,6 +372,7 @@ export function VeltoBookingsWorkspace({
                         leads={leads}
                         bookings={bookings}
                         quotes={quotes}
+                        invoices={invoices}
                       />
                     </TD>
                     <TD className="max-w-xs text-muted">{booking.notes || "—"}</TD>

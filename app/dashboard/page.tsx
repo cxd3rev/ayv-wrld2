@@ -28,11 +28,12 @@ export default async function DashboardPage() {
     records.leads,
     records.bookings,
     records.quotes,
+    records.invoices,
     records.links,
     today,
   );
   const firstName = profile?.full_name?.split(" ")[0];
-  const hasRecords = metrics.raw.leads + metrics.raw.bookings + metrics.raw.quotes > 0;
+  const hasRecords = metrics.raw.leads + metrics.raw.bookings + metrics.raw.quotes + metrics.raw.invoices > 0;
   const number = new Intl.NumberFormat(locale);
   const date = new Intl.DateTimeFormat(locale, { month: "short", day: "numeric" });
   const funnelMax = Math.max(...Object.values(metrics.funnel), 1);
@@ -40,11 +41,13 @@ export default async function DashboardPage() {
     { product: "avyro", count: metrics.raw.leads, label: t("command.leads") },
     { product: "velto", count: metrics.raw.bookings, label: t("command.bookings") },
     { product: "rovyn", count: metrics.raw.quotes, label: t("command.quotes") },
+    { product: "orvyn", count: metrics.raw.invoices, label: t("command.invoices") },
   ] as const;
   const attentionLabels = {
     avyro: t("command.attentionavyro"),
     velto: t("command.attentionvelto"),
     rovyn: t("command.attentionrovyn"),
+    orvyn: t("command.attentionorvyn"),
   };
 
   return (
@@ -250,12 +253,12 @@ export default async function DashboardPage() {
             {t("command.productActivity")}
           </p>
         </div>
-        <div className="mt-4 grid border border-foreground/10 sm:grid-cols-3">
+        <div className="mt-4 grid border border-foreground/10 sm:grid-cols-4">
           {productActivity.map((item, index) => (
             <form
               key={item.product}
               action={openProductWorkspace}
-              className={index < 2 ? "border-b border-foreground/10 sm:border-r sm:border-b-0" : ""}
+              className={index < 3 ? "border-b border-foreground/10 sm:border-r sm:border-b-0" : ""}
             >
               <input type="hidden" name="productId" value={item.product} />
               <button
@@ -264,7 +267,7 @@ export default async function DashboardPage() {
               >
                 <div>
                   <p className="font-mono text-xs tracking-[0.14em] text-muted uppercase">
-                    {item.product === "avyro" ? "Avyro" : item.product === "velto" ? "Velto" : "Rovyn"}
+                    {item.product === "avyro" ? "Avyro" : item.product === "velto" ? "Velto" : item.product === "rovyn" ? "Rovyn" : "Orvyn"}
                   </p>
                   <p className="display mt-2 text-3xl">{number.format(item.count)}</p>
                   <p className="text-sm text-muted">{item.label}</p>

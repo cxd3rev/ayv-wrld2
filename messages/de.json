@@ -153,7 +153,7 @@
       "highlight2": "Schneller bezahlt werden — mit weniger unangenehmem Nachfassen",
       "highlight3": "Offene Beträge auf einen Blick im Blick behalten",
       "nav": "Zahlungen",
-      "dashboardDescription": "Zahlungs- und Rechnungs-Follow-up kommt bald."
+      "dashboardDescription": "Offene Rechnungen verfolgen und Erinnerungen planen, damit Zahlungen schneller eingehen."
     },
     "nexro": {
       "tagline": "Reaktivierung + Empfehlungen",
@@ -286,6 +286,7 @@
       "leads": "Leads",
       "bookings": "Buchungen",
       "quotes": "Angebote",
+      "invoices": "Rechnungen",
       "linkedBookings": "Mit Lead verknüpfte Buchungen",
       "linkedQuotes": "Über Buchung verknüpfte Angebote",
       "wonCustomers": "Gewonnene Angebote in der Reise",
@@ -305,6 +306,7 @@
       "attentionavyro": "Lead-Follow-up",
       "attentionvelto": "Buchungserinnerung",
       "attentionrovyn": "Angebots-Follow-up",
+      "attentionorvyn": "Rechnungserinnerung",
       "daysOverdue": "{count, plural, one {# Tag überfällig} other {# Tage überfällig}}",
       "today": "Heute",
       "inDays": "In {count, plural, one {# Tag} other {# Tagen}}",
@@ -315,7 +317,7 @@
       "directoryHelp": "Suchen und prüfen Sie Kontaktdaten, Status, nächste Aktion und verknüpfte Datensätze jedes Kunden an einem Ort.",
       "howCalculated": "Wie wird das berechnet?",
       "healthRules": "Nur feste Regeln: Verlorene Leads, No-Shows, verlorene Angebote ohne Gewinn oder 7+ Tage Verzug gelten als gefährdet. Andere überfällige oder unverbundene Leads brauchen Aufmerksamkeit. Gewonnene oder aktiv fortschreitende Reisen sind auf Kurs.",
-      "connectedCounts": "{bookings} Buchungen · {quotes} Angebote",
+      "connectedCounts": "{bookings} Buchungen · {quotes} Angebote · {invoices} Rechnungen",
       "health_on_track": "Auf Kurs",
       "health_needs_attention": "Aufmerksamkeit nötig",
       "health_at_risk": "Gefährdet",
@@ -344,6 +346,7 @@
       "nextBookingReminder": "Buchungserinnerung",
       "nextBooking": "Bevorstehende Buchung",
       "nextQuoteFollowUp": "Angebot nachfassen",
+      "nextInvoiceReminder": "Rechnungserinnerung",
       "noNextAction": "Keine nächste Aktion",
       "clientDetails": "Kundendetails",
       "lastActivity": "Letzte Aktivität am {date}",
@@ -351,6 +354,7 @@
       "reviewLead": "Avyro-Datensatz prüfen",
       "noBookings": "Keine verknüpften Buchungen",
       "noQuotes": "Keine verknüpften Angebote",
+      "noInvoices": "Keine verknüpften Rechnungen",
       "noResultsTitle": "Keine passenden Kunden",
       "noResultsBody": "Versuchen Sie eine andere Suche oder einen anderen Statusfilter.",
       "productActivity": "Produktaktivität"
@@ -383,12 +387,14 @@
       "appointment": "Termin",
       "booking_reminder": "Buchungserinnerung",
       "quote_follow_up": "Angebotsnachfassung"
+      ,"invoice_due": "Rechnung fällig"
+      ,"invoice_reminder": "Rechnungserinnerung"
     }
   },
   "billing": {
     "title": "Abrechnung",
-    "description": "Jedes Produkt hat ein eigenes Monatsabo. Nehmen Sie Avyro, Velto, Rovyn oder jede Kombination.",
-    "settingsDescription": "Starten Sie Avyro, Velto oder Rovyn — oder verwalten Sie sie im Stripe-Portal.",
+    "description": "Jedes Produkt hat ein eigenes Monatsabo. Nehmen Sie Avyro, Velto, Rovyn, Orvyn oder jede Kombination.",
+    "settingsDescription": "Starten Sie ein AYV WRLD-Produkt oder verwalten Sie Abonnements im Stripe-Portal.",
     "notSubscribed": "Kein Abo",
     "nextBill": "{status} · nächste Rechnung {date}",
     "active": "{name} aktiv",
@@ -568,6 +574,20 @@
     "followUpSaved": "Follow-up gespeichert",
     "removed": "Angebot entfernt"
   },
+  "orvyn": {
+    "open": "Offen", "openHint": "Warten auf Zahlung", "overdue": "Überfällig", "overdueHint": "Nach dem Fälligkeitsdatum",
+    "paid": "Bezahlt", "paidHint": "Beglichene Rechnungen", "outstanding": "Ausstehend", "outstandingHint": "Wert offener Rechnungen",
+    "addInvoice": "Rechnung hinzufügen", "prefill": "{name} aus {product} wird vorausgefüllt. Eine Rechnung kann auch ohne Verknüpfung erstellt werden.",
+    "customer": "Kunde", "invoiceNumber": "Rechnungsnummer", "description": "Beschreibung", "amount": "Betrag", "currency": "Währung",
+    "issuedOn": "Ausgestellt am", "dueOn": "Fällig am", "nextReminderOn": "Nächste Erinnerung", "email": "E-Mail", "phone": "Telefon",
+    "notes": "Notizen", "notesPlaceholder": "Zahlungsbedingungen oder Kontext", "add": "Rechnung hinzufügen", "adding": "Wird hinzugefügt...",
+    "emptyTitle": "Noch keine Rechnungen", "emptyBody": "Fügen Sie eine offene Rechnung hinzu. Orvyn bündelt Status, Fälligkeit und Erinnerungen.",
+    "colInvoice": "Rechnung", "colAmount": "Betrag", "colStatus": "Status", "colDates": "Daten", "colReminder": "Erinnerung", "colConnected": "Verknüpft",
+    "statusDraft": "Entwurf", "statusSent": "Gesendet", "statusOverdue": "Überfällig", "statusPaid": "Bezahlt", "statusVoid": "Storniert",
+    "statusFor": "Status der Rechnung {number}", "reminderFor": "Erinnerungsdatum für Rechnung {number}",
+    "issuedShort": "Ausgestellt {date}", "dueShort": "Fällig {date}", "remove": "Entfernen", "added": "Rechnung hinzugefügt",
+    "statusUpdated": "Status aktualisiert", "reminderSaved": "Erinnerung gespeichert", "removed": "Rechnung entfernt"
+  },
   "connections": {
     "connected": "Verknüpft",
     "nothing": "Nichts verknüpft",
@@ -586,12 +606,15 @@
     "addInAvyro": "In Avyro anlegen",
     "bookInVelto": "In Velto buchen",
     "quoteInRovyn": "In Rovyn anbieten",
+    "invoiceInOrvyn": "Rechnung in Orvyn",
     "nounLead": "Lead",
     "nounBooking": "Buchung",
     "nounQuote": "Angebot",
+    "nounInvoice": "Rechnung",
     "fallbackLead": "Lead",
     "fallbackBooking": "Buchung",
-    "fallbackQuote": "Angebot"
+    "fallbackQuote": "Angebot",
+    "fallbackInvoice": "Rechnung"
   },
   "errors": {
     "notFoundTitle": "Seite nicht gefunden",

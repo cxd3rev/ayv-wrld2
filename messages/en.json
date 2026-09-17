@@ -153,7 +153,7 @@
       "highlight2": "Get paid faster with less awkward chasing",
       "highlight3": "Keep track of what's outstanding at a glance",
       "nav": "Payments",
-      "dashboardDescription": "Payment and invoice follow-up is coming soon."
+      "dashboardDescription": "Track unpaid invoices and schedule reminders so money arrives sooner."
     },
     "nexro": {
       "tagline": "Customer reactivation + referrals",
@@ -286,6 +286,7 @@
       "leads": "Leads",
       "bookings": "Bookings",
       "quotes": "Quotes",
+      "invoices": "Invoices",
       "linkedBookings": "Bookings linked to a lead",
       "linkedQuotes": "Quotes linked through a booking",
       "wonCustomers": "Won quotes in the journey",
@@ -305,6 +306,7 @@
       "attentionavyro": "Lead follow-up",
       "attentionvelto": "Booking reminder",
       "attentionrovyn": "Quote follow-up",
+      "attentionorvyn": "Invoice reminder",
       "daysOverdue": "{count, plural, one {# day overdue} other {# days overdue}}",
       "today": "Today",
       "inDays": "In {count, plural, one {# day} other {# days}}",
@@ -315,7 +317,7 @@
       "directoryHelp": "Search and review each client's contact details, health, next action, and connected records in one place.",
       "howCalculated": "How this is calculated",
       "healthRules": "Deterministic rules only: lost leads, no-shows, lost quotes without a win, or 7+ overdue days are at risk. Other overdue or unconnected leads need attention. Won or actively progressing journeys are on track.",
-      "connectedCounts": "{bookings} bookings · {quotes} quotes",
+      "connectedCounts": "{bookings} bookings · {quotes} quotes · {invoices} invoices",
       "health_on_track": "On track",
       "health_needs_attention": "Needs attention",
       "health_at_risk": "At risk",
@@ -344,6 +346,7 @@
       "nextBookingReminder": "Booking reminder",
       "nextBooking": "Upcoming booking",
       "nextQuoteFollowUp": "Quote follow-up",
+      "nextInvoiceReminder": "Invoice reminder",
       "noNextAction": "No next action",
       "clientDetails": "Client details",
       "lastActivity": "Last activity {date}",
@@ -351,6 +354,7 @@
       "reviewLead": "Review Avyro record",
       "noBookings": "No connected bookings",
       "noQuotes": "No connected quotes",
+      "noInvoices": "No connected invoices",
       "noResultsTitle": "No matching clients",
       "noResultsBody": "Try another search or health filter.",
       "productActivity": "Product activity"
@@ -383,12 +387,14 @@
       "appointment": "Appointment",
       "booking_reminder": "Booking reminder",
       "quote_follow_up": "Quote follow-up"
+      ,"invoice_due": "Invoice due"
+      ,"invoice_reminder": "Invoice reminder"
     }
   },
   "billing": {
     "title": "Billing",
-    "description": "Each product is its own monthly subscription. Buy Avyro, Velto, Rovyn, or any combination.",
-    "settingsDescription": "Start Avyro, Velto, or Rovyn, or manage them in the Stripe portal.",
+    "description": "Each product is its own monthly subscription. Buy Avyro, Velto, Rovyn, Orvyn, or any combination.",
+    "settingsDescription": "Start any AYV WRLD product or manage subscriptions in the Stripe portal.",
     "notSubscribed": "Not subscribed",
     "nextBill": "{status} · next bill {date}",
     "active": "{name} active",
@@ -568,6 +574,20 @@
     "followUpSaved": "Follow-up saved",
     "removed": "Quote removed"
   },
+  "orvyn": {
+    "open": "Open", "openHint": "Awaiting payment", "overdue": "Overdue", "overdueHint": "Past the due date",
+    "paid": "Paid", "paidHint": "Settled invoices", "outstanding": "Outstanding", "outstandingHint": "Open invoice value",
+    "addInvoice": "Add an invoice", "prefill": "Prefilling {name} from {product}. You can still add an invoice without connecting one.",
+    "customer": "Customer", "invoiceNumber": "Invoice number", "description": "Description", "amount": "Amount", "currency": "Currency",
+    "issuedOn": "Issued on", "dueOn": "Due on", "nextReminderOn": "Next reminder", "email": "Email", "phone": "Phone",
+    "notes": "Notes", "notesPlaceholder": "Payment terms or context", "add": "Add invoice", "adding": "Adding...",
+    "emptyTitle": "No invoices yet", "emptyBody": "Add an unpaid invoice. Orvyn keeps payment status, due dates, and reminders together.",
+    "colInvoice": "Invoice", "colAmount": "Amount", "colStatus": "Status", "colDates": "Dates", "colReminder": "Reminder", "colConnected": "Connected",
+    "statusDraft": "Draft", "statusSent": "Sent", "statusOverdue": "Overdue", "statusPaid": "Paid", "statusVoid": "Void",
+    "statusFor": "Status for invoice {number}", "reminderFor": "Reminder date for invoice {number}",
+    "issuedShort": "Issued {date}", "dueShort": "Due {date}", "remove": "Remove", "added": "Invoice added",
+    "statusUpdated": "Status updated", "reminderSaved": "Reminder saved", "removed": "Invoice removed"
+  },
   "connections": {
     "connected": "Connected",
     "nothing": "Nothing connected",
@@ -586,12 +606,15 @@
     "addInAvyro": "Add in Avyro",
     "bookInVelto": "Book in Velto",
     "quoteInRovyn": "Quote in Rovyn",
+    "invoiceInOrvyn": "Invoice in Orvyn",
     "nounLead": "lead",
     "nounBooking": "booking",
     "nounQuote": "quote",
+    "nounInvoice": "invoice",
     "fallbackLead": "Lead",
     "fallbackBooking": "Booking",
-    "fallbackQuote": "Quote"
+    "fallbackQuote": "Quote",
+    "fallbackInvoice": "Invoice"
   },
   "errors": {
     "notFoundTitle": "Page not found",

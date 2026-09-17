@@ -1,11 +1,13 @@
 import type { ProductId } from "@/config/products";
-import type { Booking, Lead, Quote } from "@/types/database";
+import type { Booking, Invoice, Lead, Quote } from "@/types/database";
 
 export type CalendarEventType =
   | "lead_follow_up"
   | "appointment"
   | "booking_reminder"
-  | "quote_follow_up";
+  | "quote_follow_up"
+  | "invoice_due"
+  | "invoice_reminder";
 
 export type CalendarEvent = {
   id: string;
@@ -23,13 +25,14 @@ export type CalendarEvent = {
 export type CalendarProductDefinition = {
   slug: ProductId;
   name: string;
-  tone: "stone" | "violet" | "green";
+  tone: "stone" | "violet" | "green" | "red";
 };
 
 export type CalendarSourceMap = {
   leads: Lead[];
   bookings: Booking[];
   quotes: Quote[];
+  invoices: Invoice[];
 };
 
 export type CalendarEventAdapter = {
@@ -132,6 +135,41 @@ const rovynAdapter = defineCalendarAdapter({
       : [],
 });
 
+const orvynAdapter = defineCalendarAdapter({
+  source: "invoices",
+  product: { slug: "orvyn", name: "Orvyn", tone: "red" },
+  map: (invoice) => {
+    if (invoice.status === "paid" || invoice.status === "void") return [];
+    const events: CalendarEvent[] = [{
+      id: `orvyn:${invoice.id}:due`,
+      product: "orvyn",
+      type: "invoice_due",
+      recordId: invoice.id,
+      focusParam: "invoice",
+      title: invoice.customer_name,
+      detail: invoice.invoice_number,
+      date: invoice.due_on,
+      time: null,
+      allDay: true,
+    }];
+    if (invoice.next_reminder_on) {
+      events.push({
+        id: `orvyn:${invoice.id}:reminder`,
+        product: "orvyn",
+        type: "invoice_reminder",
+        recordId: invoice.id,
+        focusParam: "invoice",
+        title: invoice.customer_name,
+        detail: invoice.invoice_number,
+        date: invoice.next_reminder_on,
+        time: null,
+        allDay: true,
+      });
+    }
+    return events;
+  },
+});
+
 /**
  * Register one adapter per product. The interactive calendar only consumes
  * normalized CalendarEvent values and does not know product record shapes.
@@ -140,6 +178,7 @@ export const calendarEventAdapters = [
   avyroAdapter,
   veltoAdapter,
   rovynAdapter,
+  orvynAdapter,
 ] as const;
 
 export const calendarProducts = calendarEventAdapters.map((adapter) => adapter.product);

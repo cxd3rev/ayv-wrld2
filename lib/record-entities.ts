@@ -1,5 +1,5 @@
 import { getProduct, type ProductId } from "@/config/products";
-import type { Booking, Lead, Quote } from "@/types/database";
+import type { Booking, Invoice, Lead, Quote } from "@/types/database";
 
 /**
  * Product record registry for org-scoped connections (`record_links`).
@@ -19,13 +19,13 @@ import type { Booking, Lead, Quote } from "@/types/database";
  *
  * Only list products that have a live workspace so attach/open never 404.
  */
-export const recordProducts = ["avyro", "velto", "rovyn"] as const;
+export const recordProducts = ["avyro", "velto", "rovyn", "orvyn"] as const;
 
 export type RecordProduct = (typeof recordProducts)[number];
 
 export type RecordEntityDef = {
   product: RecordProduct;
-  table: "leads" | "bookings" | "quotes";
+  table: "leads" | "bookings" | "quotes" | "invoices";
   noun: string;
   createActionLabel: string;
   focusParam: string;
@@ -56,6 +56,14 @@ export const recordEntities: RecordEntityDef[] = [
     createActionLabel: "Quote in Rovyn",
     focusParam: "quote",
     fromParam: "fromQuote",
+  },
+  {
+    product: "orvyn",
+    table: "invoices",
+    noun: "invoice",
+    createActionLabel: "Invoice in Orvyn",
+    focusParam: "invoice",
+    fromParam: "fromInvoice",
   },
 ];
 
@@ -118,9 +126,11 @@ export function resolveRecordPrefill(
   fromLeadId: string | undefined,
   fromBookingId: string | undefined,
   fromQuoteId: string | undefined,
+  fromInvoiceId: string | undefined,
   leads: Lead[],
   bookings: Booking[],
   quotes: Quote[],
+  invoices: Invoice[],
 ): RecordPrefill | undefined {
   const lead = fromLeadId ? leads.find((item) => item.id === fromLeadId) : undefined;
   if (lead) {
@@ -156,6 +166,20 @@ export function resolveRecordPrefill(
       email: quote.email,
       phone: quote.phone,
       title: quote.title,
+    };
+  }
+
+  const invoice = fromInvoiceId
+    ? invoices.find((item) => item.id === fromInvoiceId)
+    : undefined;
+  if (invoice) {
+    return {
+      product: "orvyn",
+      id: invoice.id,
+      name: invoice.customer_name,
+      email: invoice.email,
+      phone: invoice.phone,
+      title: invoice.description,
     };
   }
 

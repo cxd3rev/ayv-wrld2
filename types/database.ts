@@ -76,8 +76,8 @@ export type Subscription = {
   stripe_subscription_id: string | null;
   stripe_customer_id?: string | null;
   stripe_price_id?: string | null;
-  /** Catalog slug (avyro / velto / rovyn) joined from products, not a DB column. */
-  product_slug?: "avyro" | "velto" | "rovyn" | null;
+  /** Catalog slug joined from products, not a DB column. */
+  product_slug?: "avyro" | "velto" | "rovyn" | "orvyn" | null;
   status: SubscriptionStatus;
   current_period_start: string | null;
   current_period_end: string | null;
@@ -175,7 +175,28 @@ export type Quote = {
   updated_at: string;
 };
 
-export type RecordProduct = "avyro" | "velto" | "rovyn";
+export type InvoiceStatus = "draft" | "sent" | "overdue" | "paid" | "void";
+
+export type Invoice = {
+  id: string;
+  organization_id: string;
+  customer_name: string;
+  email: string | null;
+  phone: string | null;
+  invoice_number: string;
+  description: string;
+  amount: number | string;
+  currency: string;
+  status: InvoiceStatus;
+  issued_on: string;
+  due_on: string;
+  next_reminder_on: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type RecordProduct = "avyro" | "velto" | "rovyn" | "orvyn";
 
 export type RecordLink = {
   id: string;

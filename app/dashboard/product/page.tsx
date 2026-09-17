@@ -9,6 +9,8 @@ import { AvyroLeadsWorkspace } from "@/products/avyro/leads-workspace";
 import { listLeads } from "@/products/avyro/actions";
 import { RovynQuotesWorkspace } from "@/products/rovyn/quotes-workspace";
 import { listQuotes } from "@/products/rovyn/actions";
+import { OrvynInvoicesWorkspace } from "@/products/orvyn/invoices-workspace";
+import { listInvoices } from "@/products/orvyn/actions";
 import { VeltoBookingsWorkspace } from "@/products/velto/bookings-workspace";
 import { listBookings } from "@/products/velto/actions";
 import { listRecordLinks } from "@/services/record-links";
@@ -28,20 +30,24 @@ export default async function ProductDashboardPage({
   const showAvyro = product.id === "avyro" && Boolean(product.featureFlags.leadCapture);
   const showVelto = product.id === "velto" && Boolean(product.featureFlags.bookings);
   const showRovyn = product.id === "rovyn" && Boolean(product.featureFlags.quotes);
-  const loadRecords = showAvyro || showVelto || showRovyn;
-  const [leads, bookings, quotes, links] = await Promise.all([
+  const showOrvyn = product.id === "orvyn" && Boolean(product.featureFlags.invoices);
+  const loadRecords = showAvyro || showVelto || showRovyn || showOrvyn;
+  const [leads, bookings, quotes, invoices, links] = await Promise.all([
     loadRecords ? listLeads() : Promise.resolve([]),
     loadRecords ? listBookings() : Promise.resolve([]),
     loadRecords ? listQuotes() : Promise.resolve([]),
+    loadRecords ? listInvoices() : Promise.resolve([]),
     loadRecords ? listRecordLinks() : Promise.resolve([]),
   ]);
   const prefill = resolveRecordPrefill(
     firstParam(params.fromLead),
     firstParam(params.fromBooking),
     firstParam(params.fromQuote),
+    firstParam(params.fromInvoice),
     leads,
     bookings,
     quotes,
+    invoices,
   );
 
   return (
@@ -69,6 +75,7 @@ export default async function ProductDashboardPage({
           leads={leads}
           bookings={bookings}
           quotes={quotes}
+          invoices={invoices}
           links={links}
           prefill={prefill}
           focusLeadId={firstParam(params.lead)}
@@ -78,6 +85,7 @@ export default async function ProductDashboardPage({
           bookings={bookings}
           leads={leads}
           quotes={quotes}
+          invoices={invoices}
           links={links}
           prefill={prefill}
           focusBookingId={firstParam(params.booking)}
@@ -87,9 +95,20 @@ export default async function ProductDashboardPage({
           quotes={quotes}
           leads={leads}
           bookings={bookings}
+          invoices={invoices}
           links={links}
           prefill={prefill}
           focusQuoteId={firstParam(params.quote)}
+        />
+      ) : showOrvyn ? (
+        <OrvynInvoicesWorkspace
+          invoices={invoices}
+          leads={leads}
+          bookings={bookings}
+          quotes={quotes}
+          links={links}
+          prefill={prefill}
+          focusInvoiceId={firstParam(params.invoice)}
         />
       ) : (
         <EmptyState

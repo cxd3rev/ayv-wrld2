@@ -18,7 +18,7 @@ import {
   deleteRecordLink,
 } from "@/services/record-links";
 import { openLinkedWorkspace } from "@/services/product-switch";
-import type { Booking, Lead, Quote, RecordLink } from "@/types/database";
+import type { Booking, Invoice, Lead, Quote, RecordLink } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -39,8 +39,9 @@ function recordLabel(
   leads: Lead[],
   bookings: Booking[],
   quotes: Quote[],
+  invoices: Invoice[],
   locale: string,
-  fallbacks: { lead: string; booking: string; quote: string },
+  fallbacks: { lead: string; booking: string; quote: string; invoice: string },
 ) {
   if (product === "avyro") {
     const lead = leads.find((item) => item.id === id);
@@ -52,9 +53,12 @@ function recordLabel(
     const when = formatDay(booking.starts_on, locale);
     return when ? `${booking.service} · ${when}` : booking.service;
   }
-  const quote = quotes.find((item) => item.id === id);
-  if (!quote) return fallbacks.quote;
-  return quote.title;
+  if (product === "rovyn") {
+    const quote = quotes.find((item) => item.id === id);
+    return quote?.title ?? fallbacks.quote;
+  }
+  const invoice = invoices.find((item) => item.id === id);
+  return invoice ? `${invoice.invoice_number} · ${invoice.customer_name}` : fallbacks.invoice;
 }
 
 function recordHint(
@@ -63,6 +67,7 @@ function recordHint(
   leads: Lead[],
   bookings: Booking[],
   quotes: Quote[],
+  invoices: Invoice[],
 ) {
   if (product === "avyro") {
     return leads.find((item) => item.id === id)?.email ?? "";
@@ -70,7 +75,8 @@ function recordHint(
   if (product === "velto") {
     return bookings.find((item) => item.id === id)?.customer_name ?? "";
   }
-  return quotes.find((item) => item.id === id)?.customer_name ?? "";
+  if (product === "rovyn") return quotes.find((item) => item.id === id)?.customer_name ?? "";
+  return invoices.find((item) => item.id === id)?.description ?? "";
 }
 
 export function IncomingLinkFields({
@@ -96,6 +102,7 @@ export function ConnectedRecords({
   leads,
   bookings,
   quotes,
+  invoices = [],
 }: {
   product: RecordProduct;
   recordId: string;
@@ -103,6 +110,7 @@ export function ConnectedRecords({
   leads: Lead[];
   bookings: Booking[];
   quotes: Quote[];
+  invoices?: Invoice[];
 }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -147,36 +155,44 @@ export function ConnectedRecords({
           label: `${booking.customer_name} · ${booking.service}`,
         }));
     }
-    return quotes
-      .filter((quote) => !linkedKeys.has(`rovyn:${quote.id}`))
-      .map((quote) => ({
-        id: quote.id,
-        label: `${quote.customer_name} · ${quote.title}`,
-      }));
-  }, [attachProduct, bookings, leads, linkedKeys, quotes]);
+    if (entity.product === "rovyn") {
+      return quotes
+        .filter((quote) => !linkedKeys.has(`rovyn:${quote.id}`))
+        .map((quote) => ({ id: quote.id, label: `${quote.customer_name} · ${quote.title}` }));
+    }
+    return invoices
+      .filter((invoice) => !linkedKeys.has(`orvyn:${invoice.id}`))
+      .map((invoice) => ({ id: invoice.id, label: `${invoice.invoice_number} · ${invoice.customer_name}` }));
+  }, [attachProduct, bookings, invoices, leads, linkedKeys, quotes]);
 
   const canAttach = targets.some((target) => {
     if (target.product === "avyro") return leads.some((lead) => !linkedKeys.has(`avyro:${lead.id}`));
     if (target.product === "velto") {
       return bookings.some((booking) => !linkedKeys.has(`velto:${booking.id}`));
     }
-    return quotes.some((quote) => !linkedKeys.has(`rovyn:${quote.id}`));
+    if (target.product === "rovyn") {
+      return quotes.some((quote) => !linkedKeys.has(`rovyn:${quote.id}`));
+    }
+    return invoices.some((invoice) => !linkedKeys.has(`orvyn:${invoice.id}`));
   });
 
   const createLabel = {
     avyro: t("addInAvyro"),
     velto: t("bookInVelto"),
     rovyn: t("quoteInRovyn"),
+    orvyn: t("invoiceInOrvyn"),
   } as const;
   const nounLabel = {
     avyro: t("nounLead"),
     velto: t("nounBooking"),
     rovyn: t("nounQuote"),
+    orvyn: t("nounInvoice"),
   } as const;
   const fallbacks = {
     lead: t("fallbackLead"),
     booking: t("fallbackBooking"),
     quote: t("fallbackQuote"),
+    invoice: t("fallbackInvoice"),
   };
 
   return (
@@ -198,12 +214,12 @@ export function ConnectedRecords({
                   openLinkedWorkspace(side.product, { [entity.focusParam]: side.id })
                 }
               >
-                {recordLabel(side.product, side.id, leads, bookings, quotes, locale, fallbacks)}
+                {recordLabel(side.product, side.id, leads, bookings, quotes, invoices, locale, fallbacks)}
               </button>
               <p className="text-xs text-muted">
                 {name}
-                {recordHint(side.product, side.id, leads, bookings, quotes)
-                  ? ` · ${recordHint(side.product, side.id, leads, bookings, quotes)}`
+                {recordHint(side.product, side.id, leads, bookings, quotes, invoices)
+                  ? ` · ${recordHint(side.product, side.id, leads, bookings, quotes, invoices)}`
                   : ""}
               </p>
               <div className="flex flex-wrap gap-2">

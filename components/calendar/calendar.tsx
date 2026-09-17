@@ -25,6 +25,8 @@ const eventTypes: CalendarEventType[] = [
   "appointment",
   "booking_reminder",
   "quote_follow_up",
+  "invoice_due",
+  "invoice_reminder",
 ];
 
 const toneClasses = {
@@ -39,6 +41,10 @@ const toneClasses = {
   green: {
     dot: "bg-emerald-700",
     chip: "border-emerald-300 bg-emerald-50 text-emerald-950",
+  },
+  red: {
+    dot: "bg-red-700",
+    chip: "border-red-300 bg-red-50 text-red-950",
   },
 } as const;
 

@@ -48,6 +48,7 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
   const t = useTranslations("dashboard.command");
   const tVelto = useTranslations("velto");
   const tRovyn = useTranslations("rovyn");
+  const tOrvyn = useTranslations("orvyn");
   const locale = useLocale();
   const [query, setQuery] = useState("");
   const [health, setHealth] = useState<HealthFilter>("all");
@@ -196,6 +197,13 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
                   date: quote.follow_up_on!,
                   label: t("nextQuoteFollowUp"),
                 })),
+              ...client.invoices
+                .filter((invoice) => invoice.status === "sent" || invoice.status === "overdue")
+                .filter((invoice) => Boolean(invoice.next_reminder_on))
+                .map((invoice) => ({
+                  date: invoice.next_reminder_on!,
+                  label: t("nextInvoiceReminder"),
+                })),
             ]
               .filter((item): item is { date: string; label: string } => Boolean(item))
               .sort((a, b) => a.date.localeCompare(b.date))[0];
@@ -203,6 +211,7 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
               client.lead.updated_at,
               ...client.bookings.map((booking) => booking.updated_at),
               ...client.quotes.map((quote) => quote.updated_at),
+              ...client.invoices.map((invoice) => invoice.updated_at),
             ].sort((a, b) => b.localeCompare(a))[0];
             const stage = client.quotes.length
               ? t("stageQuote")
@@ -240,6 +249,7 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
                       {t("connectedCounts", {
                         bookings: client.bookingCount,
                         quotes: client.quoteCount,
+                        invoices: client.invoiceCount,
                       })}
                     </span>
                     <ChevronDown
@@ -249,7 +259,7 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
                   </div>
                 </summary>
 
-                <div className="grid gap-6 bg-card px-4 py-5 sm:px-6 lg:grid-cols-[0.8fr_1.2fr_1.2fr]">
+                <div className="grid gap-6 bg-card px-4 py-5 sm:px-6 lg:grid-cols-4">
                   <div>
                     <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">
                       {t("clientDetails")}
@@ -340,6 +350,23 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
                       ) : (
                         <p className="text-sm text-muted">{t("noQuotes")}</p>
                       )}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">
+                      Orvyn · {t("invoices")}
+                    </p>
+                    <div className="mt-3 space-y-3">
+                      {client.invoices.length ? client.invoices.map((invoice) => (
+                        <div key={invoice.id}>
+                          <DashboardRecordButton product="orvyn" recordId={invoice.id}>
+                            {invoice.invoice_number}
+                          </DashboardRecordButton>
+                          <p className="mt-1 text-xs text-muted">
+                            {tOrvyn(invoice.status === "draft" ? "statusDraft" : invoice.status === "sent" ? "statusSent" : invoice.status === "overdue" ? "statusOverdue" : invoice.status === "paid" ? "statusPaid" : "statusVoid")}
+                          </p>
+                        </div>
+                      )) : <p className="text-sm text-muted">{t("noInvoices")}</p>}
                     </div>
                   </div>
                 </div>

@@ -22,7 +22,7 @@ import {
   updateLeadFollowUp,
   updateLeadStatus,
 } from "@/products/avyro/actions";
-import type { Booking, Lead, LeadStatus, Quote, RecordLink } from "@/types/database";
+import type { Booking, Invoice, Lead, LeadStatus, Quote, RecordLink } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -68,6 +68,7 @@ export function AvyroLeadsWorkspace({
   leads,
   bookings,
   quotes,
+  invoices,
   links,
   prefill,
   focusLeadId,
@@ -75,6 +76,7 @@ export function AvyroLeadsWorkspace({
   leads: Lead[];
   bookings: Booking[];
   quotes: Quote[];
+  invoices: Invoice[];
   links: RecordLink[];
   prefill?: RecordPrefill;
   focusLeadId?: string;
@@ -285,6 +287,7 @@ export function AvyroLeadsWorkspace({
                         leads={leads}
                         bookings={bookings}
                         quotes={quotes}
+                        invoices={invoices}
                       />
                     </TD>
                   </TR>

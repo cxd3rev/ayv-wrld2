@@ -153,7 +153,7 @@
       "highlight2": "Sneller betaald met minder ongemakkelijke reminders",
       "highlight3": "Houd openstaande posten in één oogopslag bij",
       "nav": "Betalingen",
-      "dashboardDescription": "Betalings- en factuuropvolging komt binnenkort."
+      "dashboardDescription": "Volg openstaande facturen en plan herinneringen zodat betalingen sneller binnenkomen."
     },
     "nexro": {
       "tagline": "Heractivering + referrals",
@@ -286,6 +286,7 @@
       "leads": "Leads",
       "bookings": "Boekingen",
       "quotes": "Offertes",
+      "invoices": "Facturen",
       "linkedBookings": "Boekingen gekoppeld aan een lead",
       "linkedQuotes": "Offertes gekoppeld via een boeking",
       "wonCustomers": "Gewonnen offertes in de klantreis",
@@ -305,6 +306,7 @@
       "attentionavyro": "Leadopvolging",
       "attentionvelto": "Boekingsherinnering",
       "attentionrovyn": "Offerteopvolging",
+      "attentionorvyn": "Factuurherinnering",
       "daysOverdue": "{count, plural, one {# dag te laat} other {# dagen te laat}}",
       "today": "Vandaag",
       "inDays": "Over {count, plural, one {# dag} other {# dagen}}",
@@ -315,7 +317,7 @@
       "directoryHelp": "Zoek en bekijk contactgegevens, status, volgende actie en gekoppelde dossiers van elke klant op één plek.",
       "howCalculated": "Hoe wordt dit berekend?",
       "healthRules": "Alleen vaste regels: verloren leads, no-shows, verloren offertes zonder winst of 7+ dagen achterstand zijn risicovol. Andere achterstallige of niet-gekoppelde leads vragen aandacht. Gewonnen of actief voortgaande klantreizen liggen op koers.",
-      "connectedCounts": "{bookings} boekingen · {quotes} offertes",
+      "connectedCounts": "{bookings} boekingen · {quotes} offertes · {invoices} facturen",
       "health_on_track": "Op koers",
       "health_needs_attention": "Aandacht nodig",
       "health_at_risk": "Risicovol",
@@ -344,6 +346,7 @@
       "nextBookingReminder": "Boekingsherinnering",
       "nextBooking": "Aankomende boeking",
       "nextQuoteFollowUp": "Offerte opvolgen",
+      "nextInvoiceReminder": "Factuurherinnering",
       "noNextAction": "Geen volgende actie",
       "clientDetails": "Klantgegevens",
       "lastActivity": "Laatste activiteit {date}",
@@ -351,6 +354,7 @@
       "reviewLead": "Avyro-dossier bekijken",
       "noBookings": "Geen gekoppelde boekingen",
       "noQuotes": "Geen gekoppelde offertes",
+      "noInvoices": "Geen gekoppelde facturen",
       "noResultsTitle": "Geen overeenkomende klanten",
       "noResultsBody": "Probeer een andere zoekterm of statusfilter.",
       "productActivity": "Productactiviteit"
@@ -383,12 +387,14 @@
       "appointment": "Afspraak",
       "booking_reminder": "Boekingsherinnering",
       "quote_follow_up": "Offerteopvolging"
+      ,"invoice_due": "Factuur vervalt"
+      ,"invoice_reminder": "Factuurherinnering"
     }
   },
   "billing": {
     "title": "Facturatie",
-    "description": "Elk product is een eigen maandabonnement. Neem Avyro, Velto, Rovyn of elke combinatie.",
-    "settingsDescription": "Start Avyro, Velto of Rovyn, of beheer ze in het Stripe-portaal.",
+    "description": "Elk product is een eigen maandabonnement. Neem Avyro, Velto, Rovyn, Orvyn of elke combinatie.",
+    "settingsDescription": "Start een AYV WRLD-product of beheer abonnementen in het Stripe-portaal.",
     "notSubscribed": "Geen abonnement",
     "nextBill": "{status} · volgende factuur {date}",
     "active": "{name} actief",
@@ -568,6 +574,20 @@
     "followUpSaved": "Opvolging opgeslagen",
     "removed": "Offerte verwijderd"
   },
+  "orvyn": {
+    "open": "Open", "openHint": "Wacht op betaling", "overdue": "Te laat", "overdueHint": "Na de vervaldatum",
+    "paid": "Betaald", "paidHint": "Afgeronde facturen", "outstanding": "Openstaand", "outstandingHint": "Open factuurbedrag",
+    "addInvoice": "Factuur toevoegen", "prefill": "Gegevens van {name} uit {product} zijn ingevuld. Je kunt ook zonder koppeling toevoegen.",
+    "customer": "Klant", "invoiceNumber": "Factuurnummer", "description": "Omschrijving", "amount": "Bedrag", "currency": "Valuta",
+    "issuedOn": "Factuurdatum", "dueOn": "Vervaldatum", "nextReminderOn": "Volgende herinnering", "email": "E-mail", "phone": "Telefoon",
+    "notes": "Notities", "notesPlaceholder": "Betalingsvoorwaarden of context", "add": "Factuur toevoegen", "adding": "Toevoegen...",
+    "emptyTitle": "Nog geen facturen", "emptyBody": "Voeg een openstaande factuur toe. Orvyn houdt status, vervaldatum en herinneringen bij elkaar.",
+    "colInvoice": "Factuur", "colAmount": "Bedrag", "colStatus": "Status", "colDates": "Datums", "colReminder": "Herinnering", "colConnected": "Gekoppeld",
+    "statusDraft": "Concept", "statusSent": "Verzonden", "statusOverdue": "Te laat", "statusPaid": "Betaald", "statusVoid": "Vervallen",
+    "statusFor": "Status van factuur {number}", "reminderFor": "Herinneringsdatum voor factuur {number}",
+    "issuedShort": "Verzonden {date}", "dueShort": "Vervalt {date}", "remove": "Verwijderen", "added": "Factuur toegevoegd",
+    "statusUpdated": "Status bijgewerkt", "reminderSaved": "Herinnering opgeslagen", "removed": "Factuur verwijderd"
+  },
   "connections": {
     "connected": "Gekoppeld",
     "nothing": "Niets gekoppeld",
@@ -586,12 +606,15 @@
     "addInAvyro": "Toevoegen in Avyro",
     "bookInVelto": "Boeken in Velto",
     "quoteInRovyn": "Offerte in Rovyn",
+    "invoiceInOrvyn": "Factuur in Orvyn",
     "nounLead": "lead",
     "nounBooking": "boeking",
     "nounQuote": "offerte",
+    "nounInvoice": "factuur",
     "fallbackLead": "Lead",
     "fallbackBooking": "Boeking",
-    "fallbackQuote": "Offerte"
+    "fallbackQuote": "Offerte",
+    "fallbackInvoice": "Factuur"
   },
   "errors": {
     "notFoundTitle": "Pagina niet gevonden",

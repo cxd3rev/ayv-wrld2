@@ -141,7 +141,7 @@ const optionalUuidField = (message: string) =>
 const requiredUuidField = (message: string) =>
   z.string().trim().refine((value) => uuidPattern.test(value), message);
 
-export const recordProductSchema = z.enum(["avyro", "velto", "rovyn"]);
+export const recordProductSchema = z.enum(["avyro", "velto", "rovyn", "orvyn"]);
 
 export const optionalRecordLinkSchema = z.object({
   linkProduct: z
@@ -230,6 +230,32 @@ export const createQuoteSchema = z.object({
 
 export const updateQuoteFollowUpSchema = z.object({
   followUpOn: optionalDateField("Please enter a valid follow-up date."),
+});
+
+export const invoiceStatuses = ["draft", "sent", "overdue", "paid", "void"] as const;
+export const invoiceStatusSchema = z.enum(invoiceStatuses);
+
+export const createInvoiceSchema = z
+  .object({
+    customerName: z.string().trim().min(2, "Please enter the customer's name."),
+    email: optionalEmailField,
+    phone: z.string().trim().optional().transform((value) => value || ""),
+    invoiceNumber: z.string().trim().min(1, "Please enter an invoice number.").max(80),
+    description: z.string().trim().min(2, "Please enter what this invoice is for."),
+    amount: optionalAmountField.refine((value) => value !== "", "Please enter an amount."),
+    currency: quoteCurrencySchema,
+    issuedOn: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/, "Please choose an issue date."),
+    dueOn: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/, "Please choose a due date."),
+    nextReminderOn: optionalDateField("Please enter a valid reminder date."),
+    notes: z.string().trim().optional().transform((value) => value || ""),
+  })
+  .refine((data) => data.dueOn >= data.issuedOn, {
+    message: "The due date cannot be before the issue date.",
+    path: ["dueOn"],
+  });
+
+export const updateInvoiceReminderSchema = z.object({
+  nextReminderOn: optionalDateField("Please enter a valid reminder date."),
 });
 
 export function firstZodError(error: z.ZodError) {

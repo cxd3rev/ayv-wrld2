@@ -1,4 +1,4 @@
-import type { Booking, Lead, Quote, RecordLink, RecordProduct } from "@/types/database";
+import type { Booking, Invoice, Lead, Quote, RecordLink, RecordProduct } from "@/types/database";
 
 export type ConversionMetric = {
   numerator: number;
@@ -31,8 +31,10 @@ export type ClientHealth = {
     | "progressing";
   bookingCount: number;
   quoteCount: number;
+  invoiceCount: number;
   bookings: Booking[];
   quotes: Quote[];
+  invoices: Invoice[];
 };
 
 export type DashboardMetrics = {
@@ -41,6 +43,7 @@ export type DashboardMetrics = {
     bookings: number;
     quotes: number;
     wonQuotes: number;
+    invoices: number;
   };
   funnel: {
     leads: number;
@@ -170,6 +173,7 @@ export function calculateDashboardMetrics(
   leads: Lead[],
   bookings: Booking[],
   quotes: Quote[],
+  invoices: Invoice[],
   links: RecordLink[],
   today: string,
 ): DashboardMetrics {
@@ -272,6 +276,25 @@ export function calculateDashboardMetrics(
       });
     }
   }
+  for (const invoice of invoices) {
+    if (
+      invoice.next_reminder_on &&
+      (invoice.status === "sent" || invoice.status === "overdue")
+    ) {
+      const days = daysBetween(invoice.next_reminder_on, today);
+      if (days <= 7) {
+        attention.push({
+          id: `orvyn:${invoice.id}`,
+          product: "orvyn",
+          recordId: invoice.id,
+          name: `${invoice.customer_name} · ${invoice.invoice_number}`,
+          date: invoice.next_reminder_on,
+          timing: days < 0 ? "overdue" : days === 0 ? "today" : "upcoming",
+          days,
+        });
+      }
+    }
+  }
   attention.sort((a, b) => a.days - b.days || a.name.localeCompare(b.name));
 
   const clientOrder = { at_risk: 0, needs_attention: 1, on_track: 2 };
@@ -284,13 +307,18 @@ export function calculateDashboardMetrics(
       const connectedQuotes = quotes.filter((quote) =>
         component.has(nodeKey("rovyn", quote.id)),
       );
+      const connectedInvoices = invoices.filter((invoice) =>
+        component.has(nodeKey("orvyn", invoice.id)),
+      );
       return {
         lead,
         ...classifyClient(lead, connectedBookings, connectedQuotes, today),
         bookingCount: connectedBookings.length,
         quoteCount: connectedQuotes.length,
+        invoiceCount: connectedInvoices.length,
         bookings: connectedBookings,
         quotes: connectedQuotes,
+        invoices: connectedInvoices,
       };
     })
     .sort(
@@ -310,6 +338,7 @@ export function calculateDashboardMetrics(
       bookings: bookings.length,
       quotes: quotes.length,
       wonQuotes: wonQuotes.length,
+      invoices: invoices.length,
     },
     funnel: {
       leads: leads.length,
