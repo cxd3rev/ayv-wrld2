@@ -35,6 +35,7 @@ export type ProductConfig = {
   tagline: string;
   description: string;
   longDescription: string;
+  highlights: string[];
   status: ProductStatus;
   marketingStatus: "In development" | "Coming soon";
   assets: BrandAssets;
@@ -61,6 +62,11 @@ export const products: ProductConfig[] = [
     description: "Lead conversion automation",
     longDescription:
       "Avyro helps businesses follow up with new leads quickly so more conversations turn into customers.",
+    highlights: [
+      "Reply to every new lead in seconds, automatically",
+      "Schedule smart follow-ups so nobody slips away",
+      "See which leads are hot and where they came from",
+    ],
     status: "active",
     marketingStatus: "In development",
     assets: productBrand("avyro"),
@@ -86,6 +92,11 @@ export const products: ProductConfig[] = [
     description: "Booking and reminder automation",
     longDescription:
       "Velto helps businesses take bookings and send reminders so fewer appointments are missed.",
+    highlights: [
+      "Let customers book you around the clock",
+      "Send automatic reminders before every appointment",
+      "Cut no-shows without the back-and-forth",
+    ],
     status: "active",
     marketingStatus: "In development",
     assets: productBrand("velto", true),
@@ -110,6 +121,11 @@ export const products: ProductConfig[] = [
     description: "Quote follow-up automation",
     longDescription:
       "Rovyn follows up on sent quotes so businesses close more work without chasing every lead by hand.",
+    highlights: [
+      "Follow up on every quote automatically",
+      "Nudge undecided prospects at the right moment",
+      "Close more work without chasing by hand",
+    ],
     status: "coming_soon",
     marketingStatus: "Coming soon",
     assets: productBrand("rovyn"),
@@ -131,6 +147,11 @@ export const products: ProductConfig[] = [
     description: "Payment and invoice follow-up automation",
     longDescription:
       "Orvyn reminds customers about unpaid invoices so money comes in faster and fewer bills are forgotten.",
+    highlights: [
+      "Send automatic reminders on unpaid invoices",
+      "Get paid faster with less awkward chasing",
+      "Keep track of what's outstanding at a glance",
+    ],
     status: "coming_soon",
     marketingStatus: "Coming soon",
     assets: productBrand("orvyn", true),
@@ -152,6 +173,11 @@ export const products: ProductConfig[] = [
     description: "Customer reactivation and referral automation",
     longDescription:
       "Nexro helps businesses bring past customers back and turn happy clients into referrals.",
+    highlights: [
+      "Win back past customers with timed campaigns",
+      "Turn happy clients into a steady referral stream",
+      "Re-engage your list on autopilot",
+    ],
     status: "coming_soon",
     marketingStatus: "Coming soon",
     assets: productBrand("nexro"),
@@ -173,6 +199,11 @@ export const products: ProductConfig[] = [
     description: "Review automation",
     longDescription:
       "Ravelo asks happy customers for reviews at the right time so businesses build trust without awkward follow-up.",
+    highlights: [
+      "Ask for reviews at the perfect moment",
+      "Build trust with more 5-star ratings",
+      "Grow your reputation without the awkward ask",
+    ],
     status: "coming_soon",
     marketingStatus: "Coming soon",
     assets: productBrand("ravelo"),
