@@ -2,7 +2,7 @@ import { Atmosphere } from "@/components/atmosphere";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/header";
 import { Badge } from "@/components/ui/badge";
 import { ProductLogo } from "@/components/product-icon";
-import { getProduct, products } from "@/config/products";
+import { formatPrice, getProduct, products } from "@/config/products";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -38,7 +38,19 @@ export default async function ProductPage({
             </Badge>
           </div>
           <p className="mt-10 text-xl leading-relaxed text-muted lg:text-2xl">{product.longDescription}</p>
-          <p className="mt-4 font-mono text-xs tracking-[0.16em] text-muted uppercase">{product.pricing.label}</p>
+          {product.pricing.monthly != null ? (
+            <p className="mt-8 flex items-baseline gap-3">
+              <span className="display text-4xl tracking-tight lg:text-5xl">
+                {formatPrice(product.pricing.monthly)}
+              </span>
+              <span className="font-mono text-xs uppercase tracking-[0.16em] text-muted">/ month</span>
+            </p>
+          ) : (
+            <p className="mt-4 font-mono text-xs tracking-[0.16em] text-muted uppercase">{product.pricing.label}</p>
+          )}
+          <p className="mt-4 text-sm text-muted">
+            Or get all six tools in the bundle and save 50%.
+          </p>
           {product.status === "active" ? (
             <Link
               href="/signup"

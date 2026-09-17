@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { ProductLogo } from "@/components/product-icon";
-import type { ProductConfig } from "@/config/products";
+import { formatPrice, type ProductConfig } from "@/config/products";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
@@ -30,6 +30,14 @@ export function ProductCard({
           </Badge>
         </div>
         <p className="mt-2 text-sm leading-relaxed text-muted">{product.description}</p>
+        {product.pricing.monthly != null && (
+          <p className="mt-5 flex items-baseline gap-1.5">
+            <span className="display text-xl tracking-tight text-foreground">
+              {formatPrice(product.pricing.monthly)}
+            </span>
+            <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">/ mo</span>
+          </p>
+        )}
         <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-foreground/80 transition-colors group-hover:text-accent">
           View product
           <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
