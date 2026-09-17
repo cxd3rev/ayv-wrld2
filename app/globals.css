@@ -70,27 +70,27 @@ body {
  * which does not use .atmosphere, keeps the light tokens above.
  */
 .atmosphere {
-  --background: #08080a;
-  --foreground: #f4f4f6;
-  --muted: #9a9aa6;
-  --card: #101014;
-  --card-hover: #17171d;
-  --border: #26262e;
-  --accent: #2f50ff;
-  --accent-hover: #2039e6;
-  --accent-foreground: #ffffff;
-  --accent-soft: rgba(47, 80, 255, 0.14);
-  --inverted: #f4f4f6;
-  --inverted-foreground: #08080a;
-  color-scheme: dark;
+  --background: #f5f4f1;
+  --foreground: #16130f;
+  --muted: #6b6459;
+  --card: #ffffff;
+  --card-hover: #efece6;
+  --border: #e4e0d8;
+  --accent: #16130f;
+  --accent-hover: #000000;
+  --accent-foreground: #f7f6f3;
+  --accent-soft: rgba(22, 19, 15, 0.06);
+  --inverted: #16130f;
+  --inverted-foreground: #f7f6f3;
+  color-scheme: light;
   background: var(--background);
   color: var(--foreground);
 }
 
 .display {
   font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  font-weight: 700;
+  letter-spacing: -0.035em;
 }
 
 .kicker {
@@ -114,19 +114,18 @@ body {
 
 .atmosphere {
   background-color: var(--background);
-  background-image: radial-gradient(120% 90% at 50% -10%, #12121b 0%, #08080a 62%);
+  background-image: linear-gradient(180deg, #f8f7f4 0%, #f5f4f1 55%, #f1efe9 100%);
 }
 
-/* Square-grid backdrop echoing the Dovetail hero lattice. */
+/* Dotted field evoking the reference world-map backdrop, fading toward the top-right. */
 .dot-field {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-  background-size: 68px 68px;
-  mask-image: radial-gradient(95% 80% at 50% 0%, black, transparent 78%);
+  color: rgba(20, 16, 12, 0.2);
+  background-image: radial-gradient(currentColor 1px, transparent 1.5px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(42% 58% at 86% 40%, black, transparent 72%);
 }
 
 /* Radial light-burst backdrop inspired by the Sui hero. */
@@ -221,9 +220,9 @@ body {
   mask-image: radial-gradient(75% 65% at 60% 40%, black, transparent 80%);
 }
 
-/* Solid-black source logos are inverted to white for the dark surface. */
+/* Solid-black source logos sit directly on the light surface, no inversion. */
 .mark-invert {
-  filter: invert(1);
+  filter: none;
 }
 
 .mark-glow {
