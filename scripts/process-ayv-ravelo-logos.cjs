@@ -2,17 +2,24 @@ const fs = require("node:fs");
 const path = require("node:path");
 const sharp = require("sharp");
 
-const ESPRESSO = { r: 8, g: 5, b: 3 };
 const ROOT = process.cwd();
+const SOURCES = {
+  ayv: "C:\\Users\\Aron\\.cursor\\projects\\c-Users-Aron-Documents-ayv-wrld-automations\\assets\\C__Users_Aron_.cursor_projects_c-Users-Aron-Documents-ayv-wrld-automations_assets_c__Users_Aron_AppData_Roaming_Cursor_User_workspaceStorage_55b5737cbc315e8b939e2198291f0ee8_images_ayvwrld-logo-48b83f35-7b9f-43cf-a3f9-b16f97c2a8e7.png",
+  ravelo: "C:\\Users\\Aron\\.cursor\\projects\\c-Users-Aron-Documents-ayv-wrld-automations\\assets\\C__Users_Aron_.cursor_projects_c-Users-Aron-Documents-ayv-wrld-automations_assets_c__Users_Aron_AppData_Roaming_Cursor_User_workspaceStorage_55b5737cbc315e8b939e2198291f0ee8_images_ravelo-logo-96b28181-ad83-483b-93b5-6749121fd65b.png",
+};
 const FILES = {
   ayv: path.join(ROOT, "public", "brands", "ayv", "logo.png"),
   ravelo: path.join(ROOT, "public", "brands", "ravelo", "logo.png"),
 };
 const PREVIEW_DIR = path.join(ROOT, ".tmp-screens", "logo-cream");
+const WHITE_THRESHOLD = 242;
 
 function isBlue(r, g, b) {
-  // Keep the crescent and its chromatic fade as blue — not espresso.
-  return b >= 10 && b >= r + 6 && b >= g + 6;
+  return b >= 40 && b >= r + 12 && b >= g + 12;
+}
+
+function isNearWhite(r, g, b, threshold = WHITE_THRESHOLD) {
+  return r >= threshold && g >= threshold && b >= threshold;
 }
 
 function punchFromEdges(data, width, height, threshold) {
@@ -31,7 +38,7 @@ function punchFromEdges(data, width, height, threshold) {
       visited[i] = 1;
       return;
     }
-    if (data[o] > threshold || data[o + 1] > threshold || data[o + 2] > threshold) return;
+    if (!isNearWhite(data[o], data[o + 1], data[o + 2], threshold)) return;
     visited[i] = 1;
     queue[tail++] = i;
   };
@@ -59,44 +66,37 @@ function punchFromEdges(data, width, height, threshold) {
   return tail;
 }
 
-function punchRemainingTrueBlack(data, width, height) {
+function punchRemainingNearWhite(data, width, height, threshold) {
   let punched = 0;
   const pixelCount = width * height;
   for (let i = 0; i < pixelCount; i++) {
     const o = i * 4;
     if (data[o + 3] === 0) continue;
-    if (data[o] === 0 && data[o + 1] === 0 && data[o + 2] === 0) {
-      data[o + 3] = 0;
-      punched++;
-    }
+    if (!isNearWhite(data[o], data[o + 1], data[o + 2], threshold)) continue;
+    data[o + 3] = 0;
+    punched++;
   }
   return punched;
 }
 
-function dilateEspresso(data, width, height, radius = 1) {
-  const src = Buffer.from(data);
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const i = (y * width + x) * 4;
-      if (src[i + 3] !== 0) continue;
-      let found = false;
-      for (let dy = -radius; dy <= radius && !found; dy++) {
-        for (let dx = -radius; dx <= radius; dx++) {
-          const nx = x + dx;
-          const ny = y + dy;
-          if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
-          const ni = (ny * width + nx) * 4;
-          if (src[ni + 3] === 0) continue;
-          if (isBlue(src[ni], src[ni + 1], src[ni + 2])) continue;
-          data[i] = src[ni];
-          data[i + 1] = src[ni + 1];
-          data[i + 2] = src[ni + 2];
-          data[i + 3] = src[ni + 3];
-          found = true;
-          break;
-        }
-      }
+function unwhiteAntialias(data, width, height) {
+  const pixelCount = width * height;
+  for (let i = 0; i < pixelCount; i++) {
+    const o = i * 4;
+    if (data[o + 3] === 0) continue;
+    const r = data[o];
+    const g = data[o + 1];
+    const b = data[o + 2];
+    const minC = Math.min(r, g, b);
+    const alpha = 1 - minC / 255;
+    if (alpha < 0.04) {
+      data[o + 3] = 0;
+      continue;
     }
+    data[o] = Math.min(255, Math.max(0, Math.round((r - 255 * (1 - alpha)) / alpha)));
+    data[o + 1] = Math.min(255, Math.max(0, Math.round((g - 255 * (1 - alpha)) / alpha)));
+    data[o + 2] = Math.min(255, Math.max(0, Math.round((b - 255 * (1 - alpha)) / alpha)));
+    data[o + 3] = Math.min(255, Math.round(alpha * 255));
   }
 }
 
@@ -115,8 +115,8 @@ function boundingBox(data, width, height) {
     }
   }
   if (maxX < 0) return { left: 0, top: 0, width, height };
-  const padX = Math.max(8, Math.round((maxX - minX + 1) * 0.08));
-  const padY = Math.max(8, Math.round((maxY - minY + 1) * 0.08));
+  const padX = Math.max(6, Math.round((maxX - minX + 1) * 0.04));
+  const padY = Math.max(6, Math.round((maxY - minY + 1) * 0.04));
   const left = Math.max(0, minX - padX);
   const top = Math.max(0, minY - padY);
   const right = Math.min(width - 1, maxX + padX);
@@ -170,86 +170,6 @@ function summarize(data, width, height, label) {
   };
 }
 
-function dilateMask(mask, width, height, radius) {
-  const src = Buffer.from(mask);
-  const out = Buffer.alloc(mask.length);
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const i = y * width + x;
-      if (src[i]) {
-        out[i] = 1;
-        continue;
-      }
-      let hit = 0;
-      for (let dy = -radius; dy <= radius && !hit; dy++) {
-        for (let dx = -radius; dx <= radius; dx++) {
-          const nx = x + dx;
-          const ny = y + dy;
-          if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
-          if (src[ny * width + nx]) {
-            hit = 1;
-            break;
-          }
-        }
-      }
-      out[i] = hit;
-    }
-  }
-  return out;
-}
-
-function recolorAyv(data, width, height) {
-  const pixelCount = width * height;
-  for (let i = 0; i < pixelCount; i++) {
-    const o = i * 4;
-    if (data[o + 3] === 0) continue;
-    const luma = Math.max(data[o], data[o + 1], data[o + 2]);
-    if (luma < 1) {
-      data[o + 3] = 0;
-      continue;
-    }
-    // Light-on-black hairline becomes a solid espresso stroke on cream.
-    data[o] = ESPRESSO.r;
-    data[o + 1] = ESPRESSO.g;
-    data[o + 2] = ESPRESSO.b;
-    data[o + 3] = 255;
-  }
-}
-
-function recolorRavelo(data, width, height) {
-  const pixelCount = width * height;
-  const blueMask = Buffer.alloc(pixelCount);
-  for (let i = 0; i < pixelCount; i++) {
-    const o = i * 4;
-    if (data[o + 3] === 0) continue;
-    if (isBlue(data[o], data[o + 1], data[o + 2])) blueMask[i] = 1;
-  }
-  const blueHalo = dilateMask(blueMask, width, height, 4);
-
-  for (let i = 0; i < pixelCount; i++) {
-    const o = i * 4;
-    if (data[o + 3] === 0) continue;
-    if (blueMask[i]) {
-      data[o + 3] = 255;
-      continue;
-    }
-    // Near-black fade around the crescent would otherwise become a dark box.
-    if (blueHalo[i]) {
-      data[o + 3] = 0;
-      continue;
-    }
-    const luma = Math.max(data[o], data[o + 1], data[o + 2]);
-    if (luma < 1) {
-      data[o + 3] = 0;
-      continue;
-    }
-    data[o] = ESPRESSO.r;
-    data[o + 1] = ESPRESSO.g;
-    data[o + 2] = ESPRESSO.b;
-    data[o + 3] = 255;
-  }
-}
-
 async function processLogo(file, kind) {
   const input = fs.readFileSync(file);
   const image = sharp(input).ensureAlpha();
@@ -257,11 +177,9 @@ async function processLogo(file, kind) {
   image.destroy();
   const pixels = Buffer.from(data);
   const before = summarize(pixels, info.width, info.height, `${kind}-before`);
-  const punchedEdge = punchFromEdges(pixels, info.width, info.height, 0);
-  const punchedInner = punchRemainingTrueBlack(pixels, info.width, info.height);
-  if (kind === "ayv") recolorAyv(pixels, info.width, info.height);
-  else recolorRavelo(pixels, info.width, info.height);
-  dilateEspresso(pixels, info.width, info.height, kind === "ayv" ? 2 : 1);
+  const punchedEdge = punchFromEdges(pixels, info.width, info.height, WHITE_THRESHOLD);
+  const punchedInner = punchRemainingNearWhite(pixels, info.width, info.height, WHITE_THRESHOLD);
+  unwhiteAntialias(pixels, info.width, info.height);
   const box = boundingBox(pixels, info.width, info.height);
   const cropped = Buffer.alloc(box.width * box.height * 4);
   for (let y = 0; y < box.height; y++) {
@@ -301,10 +219,20 @@ async function writeCreamPreview(file, name) {
 }
 
 async function main() {
-  for (const [kind, file] of Object.entries(FILES)) {
-    const result = await processLogo(file, kind);
+  const sources = {
+    ayv: process.env.AYV_LOGO_SRC || SOURCES.ayv,
+    ravelo: process.env.RAVELO_LOGO_SRC || SOURCES.ravelo,
+  };
+
+  for (const [kind, dest] of Object.entries(FILES)) {
+    const src = sources[kind];
+    if (!fs.existsSync(src)) {
+      throw new Error(`Missing source for ${kind}: ${src}`);
+    }
+    fs.copyFileSync(src, dest);
+    const result = await processLogo(dest, kind);
     console.log(JSON.stringify(result, null, 2));
-    const preview = await writeCreamPreview(file, kind);
+    const preview = await writeCreamPreview(dest, kind);
     console.log("preview", preview);
   }
 }
