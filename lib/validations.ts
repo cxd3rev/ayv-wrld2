@@ -204,6 +204,8 @@ export const updateBookingReminderSchema = z.object({
 export const quoteStatuses = ["sent", "followed_up", "won", "lost"] as const;
 
 export const quoteStatusSchema = z.enum(quoteStatuses);
+export const quoteCurrencies = ["EUR", "USD", "GBP"] as const;
+export const quoteCurrencySchema = z.enum(quoteCurrencies);
 
 const optionalAmountField = z
   .string()
@@ -221,6 +223,7 @@ export const createQuoteSchema = z.object({
   phone: z.string().trim().optional().transform((value) => value || ""),
   title: z.string().trim().min(2, "Please enter what this quote is for."),
   amount: optionalAmountField,
+  currency: quoteCurrencySchema,
   notes: z.string().trim().optional().transform((value) => value || ""),
   followUpOn: optionalDateField("Please enter a valid follow-up date."),
 });

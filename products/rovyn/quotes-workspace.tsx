@@ -12,12 +12,11 @@ import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
-import { formatPrice } from "@/config/products";
 import { useToast } from "@/hooks/use-toast";
 import type { RecordPrefill } from "@/lib/record-entities";
 import { recordProductName } from "@/lib/record-entities";
 import { cn } from "@/lib/utils";
-import { quoteStatuses } from "@/lib/validations";
+import { quoteCurrencies, quoteStatuses } from "@/lib/validations";
 import {
   createQuote,
   deleteQuote,
@@ -76,9 +75,14 @@ function quoteAmount(value: Quote["amount"]) {
   return Number.isFinite(amount) ? amount : null;
 }
 
-function formatQuoteAmount(value: Quote["amount"]) {
+function formatQuoteAmount(value: Quote["amount"], currency: string, locale: string) {
   const amount = quoteAmount(value);
-  return amount == null ? "—" : formatPrice(amount);
+  if (amount == null) return "—";
+  try {
+    return new Intl.NumberFormat(locale, { style: "currency", currency }).format(amount);
+  } catch {
+    return `${currency} ${amount.toFixed(2)}`;
+  }
 }
 
 export function RovynQuotesWorkspace({
@@ -180,7 +184,22 @@ export function RovynQuotesWorkspace({
         </div>
         <div>
           <Label htmlFor="amount">{t("amount")}</Label>
-          <Input id="amount" name="amount" inputMode="decimal" placeholder="2400" />
+          <div className="flex gap-2">
+            <Input id="amount" name="amount" inputMode="decimal" placeholder="2400" />
+            <select
+              id="currency"
+              name="currency"
+              aria-label={t("currency")}
+              defaultValue="EUR"
+              className="h-10 rounded-md border border-foreground/15 bg-card px-2 text-sm"
+            >
+              {quoteCurrencies.map((currency) => (
+                <option key={currency} value={currency}>
+                  {currency}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div>
           <Label htmlFor="followUpOn">{t("followUpOn")}</Label>
@@ -260,7 +279,9 @@ export function RovynQuotesWorkspace({
                     </TD>
                     <TD>
                       <p>{quote.title}</p>
-                      <p className="mt-1 text-muted">{formatQuoteAmount(quote.amount)}</p>
+                      <p className="mt-1 text-muted">
+                        {formatQuoteAmount(quote.amount, quote.currency, locale)}
+                      </p>
                     </TD>
                     <TD>
                       <div className="flex items-center gap-2">

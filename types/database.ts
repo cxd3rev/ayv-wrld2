@@ -167,6 +167,7 @@ export type Quote = {
   phone: string | null;
   title: string;
   amount: number | string | null;
+  currency: string;
   status: QuoteStatus;
   follow_up_on: string | null;
   notes: string | null;

@@ -13,7 +13,7 @@ import { linkCreatedRecord } from "@/services/record-links";
 import type { Quote } from "@/types/database";
 
 const quoteColumns =
-  "id, organization_id, customer_name, email, phone, title, amount, status, follow_up_on, notes, created_at, updated_at";
+  "id, organization_id, customer_name, email, phone, title, amount, currency, status, follow_up_on, notes, created_at, updated_at";
 
 export async function listQuotes(): Promise<Quote[]> {
   const { organization } = await requireWorkspace();
@@ -39,6 +39,7 @@ export async function createQuote(formData: FormData) {
     phone: formData.get("phone"),
     title: formData.get("title"),
     amount: formData.get("amount"),
+    currency: formData.get("currency"),
     notes: formData.get("notes"),
     followUpOn: formData.get("followUpOn"),
   });
@@ -57,6 +58,7 @@ export async function createQuote(formData: FormData) {
       phone: parsed.data.phone || null,
       title: parsed.data.title,
       amount: parsed.data.amount ? Number(parsed.data.amount) : null,
+      currency: parsed.data.currency,
       notes: parsed.data.notes || null,
       follow_up_on: parsed.data.followUpOn || null,
       status: "sent",
