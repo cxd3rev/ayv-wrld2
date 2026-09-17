@@ -71,11 +71,11 @@ body {
  */
 .atmosphere {
   --background: #09090b;
-  --foreground: #f4f4f5;
-  --muted: #a0a0aa;
-  --card: #0f0f12;
-  --card-hover: #16161a;
-  --border: #26262b;
+  --foreground: #f7f7f8;
+  --muted: #c2c2ca;
+  --card: #101014;
+  --card-hover: #17171c;
+  --border: #303036;
   --accent: #f4f4f5;
   --accent-hover: #ffffff;
   --accent-foreground: #09090b;
@@ -96,7 +96,7 @@ body {
   width: fit-content;
   font-size: 0.9375rem;
   letter-spacing: 0;
-  color: var(--muted);
+  color: color-mix(in srgb, var(--foreground) 82%, transparent);
 }
 
 .atmosphere {
