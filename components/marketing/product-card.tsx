@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { ProductIcon } from "@/components/product-icon";
+import { ProductLogo } from "@/components/product-icon";
 import type { ProductConfig } from "@/config/products";
 import Link from "next/link";
 
@@ -17,7 +17,7 @@ export function ProductCard({
         className="flex flex-col gap-6 py-10 lg:flex-row lg:items-center lg:gap-16 lg:py-16"
       >
         <span className="font-mono text-sm text-muted">{String(index + 1).padStart(2, "0")}</span>
-        <ProductIcon product={product} size={48} className="h-12 w-12" />
+        <ProductLogo product={product} size={72} className="h-[72px] w-[72px]" />
         <div className="flex-1">
           <h3 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
             {product.name}

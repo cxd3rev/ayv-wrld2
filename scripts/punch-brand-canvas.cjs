@@ -7,14 +7,20 @@ const appDir = path.join(process.cwd(), "app");
 const brands = ["ayv", "avyro", "velto", "rovyn", "orvyn", "nexro", "ravelo"];
 const kinds = ["icon", "logo", "name"];
 
-const SKIP = new Set(["ayv/logo", "ayv/name"]);
+const SKIP = new Set(["ayv/name"]);
 const ICON_THRESHOLD = 40;
 const MARK_THRESHOLD = 8;
 const OVERRIDES = {
+  // Hairline outline; luma 0 is canvas, AA starts at 1.
+  "ayv/logo": 0,
+  // Faint outlines sit just above true black; blue crescent is chroma.
+  "ravelo/logo": 0,
+  // Dark organic layers live around luma 2–5.
+  "nexro/logo": 1,
   // Gray swirl lives around luma 33–47.
   "avyro/logo": 16,
   "avyro/name": 16,
-  // Dark hex lives around luma 5–8.
+  // Dark hex rings live around luma 6–8.
   "rovyn/logo": 4,
   "rovyn/name": 4,
   // Dark companion blobs live around luma 13–16.
@@ -23,6 +29,7 @@ const OVERRIDES = {
   "velto/logo": 12,
   "velto/name": 12,
 };
+const SKIP_SPECKS = new Set(["ayv/logo", "ravelo/logo"]);
 
 function fileKey(brand, kind) {
   return `${brand}/${kind}`;
@@ -193,11 +200,13 @@ async function processFile(file, brand, kind) {
   const pixels = Buffer.from(data);
   const threshold = thresholdFor(brand, kind);
   let punched = punchFromEdges(pixels, info.width, info.height, threshold);
-  // Wordmark counters (O, A, etc.) are enclosed canvas and never touch the edges.
-  if (kind === "name") {
+  // Enclosed true-black canvas (logo interiors, wordmark counters) never touches the edges.
+  if (kind === "name" || kind === "logo") {
     punched += punchRemainingNearBlack(pixels, info.width, info.height, threshold);
   }
-  punched += removeTinySpecks(pixels, info.width, info.height);
+  if (!SKIP_SPECKS.has(fileKey(brand, kind))) {
+    punched += removeTinySpecks(pixels, info.width, info.height);
+  }
 
   await sharp(pixels, {
     raw: { width: info.width, height: info.height, channels: 4 },
@@ -217,6 +226,8 @@ async function writeAppIcons() {
 
 async function main() {
   const mode = process.argv[2] || "punch";
+  const kindsToProcess = mode === "logos" ? ["logo"] : kinds;
+  const writeIcons = mode !== "logos" && mode !== "inspect";
 
   if (mode === "inspect") {
     for (const brand of brands) {
@@ -230,7 +241,7 @@ async function main() {
   }
 
   for (const brand of brands) {
-    for (const kind of kinds) {
+    for (const kind of kindsToProcess) {
       const file = path.join(brandsRoot, brand, `${kind}.png`);
       if (SKIP.has(fileKey(brand, kind))) {
         console.log(`${brand}/${kind}.png skipped (black-on-black mark; punching would erase it)`);
@@ -243,8 +254,10 @@ async function main() {
     }
   }
 
-  await writeAppIcons();
-  console.log("wrote app/icon.png and app/apple-icon.png");
+  if (writeIcons) {
+    await writeAppIcons();
+    console.log("wrote app/icon.png and app/apple-icon.png");
+  }
 }
 
 main().catch((error) => {
