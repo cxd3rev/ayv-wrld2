@@ -70,19 +70,19 @@ body {
  * which does not use .atmosphere, keeps the light tokens above.
  */
 .atmosphere {
-  --background: #09090b;
-  --foreground: #ffffff;
-  --muted: #c9c9d1;
-  --card: #101014;
-  --card-hover: #17171c;
-  --border: #303036;
-  --accent: #f4f4f5;
-  --accent-hover: #ffffff;
-  --accent-foreground: #09090b;
-  --accent-soft: rgba(244, 244, 245, 0.08);
-  --inverted: #f4f4f5;
-  --inverted-foreground: #09090b;
-  color-scheme: dark;
+  --background: #f5f4f1;
+  --foreground: #16130f;
+  --muted: #6b6459;
+  --card: #ffffff;
+  --card-hover: #efece6;
+  --border: #e4e0d8;
+  --accent: #16130f;
+  --accent-hover: #000000;
+  --accent-foreground: #f7f6f3;
+  --accent-soft: rgba(22, 19, 15, 0.06);
+  --inverted: #16130f;
+  --inverted-foreground: #f7f6f3;
+  color-scheme: light;
   background: var(--background);
   color: var(--foreground);
 }
@@ -94,18 +94,27 @@ body {
 }
 
 .kicker {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
   width: fit-content;
-  font-size: 0.9375rem;
-  letter-spacing: 0;
-  color: color-mix(in srgb, var(--foreground) 82%, transparent);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.kicker::before {
+  content: "";
+  width: 2.75rem;
+  height: 1px;
+  background: currentColor;
 }
 
 .atmosphere {
   background-color: var(--background);
-  background-image:
-    radial-gradient(70% 55% at 82% -12%, rgba(255, 255, 255, 0.06), transparent 62%),
-    linear-gradient(180deg, #0b0b0d 0%, #09090b 55%, #070709 100%);
+  background-image: linear-gradient(180deg, #f8f7f4 0%, #f5f4f1 55%, #f1efe9 100%);
 }
 
 /* Dotted field evoking the reference world-map backdrop, fading toward the top-right. */
@@ -113,10 +122,48 @@ body {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  color: rgba(255, 255, 255, 0.14);
+  color: rgba(20, 16, 12, 0.2);
   background-image: radial-gradient(currentColor 1px, transparent 1.5px);
   background-size: 22px 22px;
-  mask-image: radial-gradient(115% 95% at 100% 0%, black, transparent 68%);
+  mask-image: radial-gradient(42% 58% at 86% 40%, black, transparent 72%);
+}
+
+/* Radial light-burst backdrop inspired by the Sui hero. */
+.hero-burst {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-burst::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 170vmax;
+  height: 170vmax;
+  transform: translate(-50%, -50%);
+  background:
+    repeating-conic-gradient(
+      from 0deg at 50% 50%,
+      rgba(255, 255, 255, 0.1) 0deg 0.5deg,
+      transparent 0.5deg 2.6deg
+    ),
+    repeating-conic-gradient(
+      from 1.3deg at 50% 50%,
+      rgba(77, 162, 255, 0.2) 0deg 0.4deg,
+      transparent 0.4deg 5.2deg
+    );
+  -webkit-mask-image: radial-gradient(closest-side at 50% 50%, transparent 7%, #000 26%, #000 52%, transparent 76%);
+  mask-image: radial-gradient(closest-side at 50% 50%, transparent 7%, #000 26%, #000 52%, transparent 76%);
+  animation: burst-spin 140s linear infinite;
+}
+
+@keyframes burst-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 /* Crosshair backing for feature icons, matching the reference cards. */
@@ -173,23 +220,13 @@ body {
   mask-image: radial-gradient(75% 65% at 60% 40%, black, transparent 80%);
 }
 
-/* Solid-black source logos rendered white on the dark surface. */
+/* Solid-black source logos sit directly on the light surface, no inversion. */
 .mark-invert {
-  filter: invert(1) brightness(1.9);
+  filter: none;
 }
 
 .mark-glow {
   position: relative;
-}
-
-.mark-glow::before {
-  content: "";
-  position: absolute;
-  inset: -18%;
-  z-index: 0;
-  border-radius: 9999px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 68%);
-  filter: blur(30px);
 }
 
 .nav-link {
@@ -298,6 +335,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track,
+  .hero-burst::before,
   .rise-in,
   .rise-in-2,
   .rise-in-3 {
