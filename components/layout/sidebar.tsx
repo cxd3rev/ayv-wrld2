@@ -71,6 +71,9 @@ export function Sidebar({
         <nav className="flex flex-1 flex-col gap-1">
           {dashboardNav.map((item) => {
             const Icon = icons[item.icon];
+            const productLabel = product.navigation.find((nav) => nav.href === item.href)?.label;
+            const label =
+              item.href === "/dashboard/product" ? (productLabel ?? product.name) : item.label;
             const active =
               item.href === "/dashboard"
                 ? pathname === "/dashboard"
@@ -89,7 +92,7 @@ export function Sidebar({
                 )}
               >
                 <Icon className="h-4 w-4" />
-                {item.label}
+                {label}
               </Link>
             );
           })}

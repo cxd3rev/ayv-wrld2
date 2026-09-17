@@ -114,6 +114,21 @@ export type OrganizationInvite = {
   created_at: string;
 };
 
+export type LeadStatus = "new" | "contacted" | "won" | "lost";
+
+export type Lead = {
+  id: string;
+  organization_id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  status: LeadStatus;
+  notes: string | null;
+  follow_up_on: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type MemberWithProfile = OrganizationMember & {
   profiles: Pick<Profile, "full_name" | "email"> | null;
 };

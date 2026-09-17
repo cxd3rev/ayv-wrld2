@@ -2,6 +2,8 @@ export type { ProductConfig, ProductId, ProductStatus } from "@/config/products"
 export type {
   BillingCustomer,
   EmailEvent,
+  Lead,
+  LeadStatus,
   MemberRole,
   MemberWithProfile,
   Notification,

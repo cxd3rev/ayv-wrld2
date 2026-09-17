@@ -59,6 +59,46 @@ export const inviteSchema = z.object({
   role: z.enum(["admin", "member"]),
 });
 
+export const leadStatuses = ["new", "contacted", "won", "lost"] as const;
+
+export const leadStatusSchema = z.enum(leadStatuses);
+
+export const createLeadSchema = z.object({
+  name: z.string().trim().min(2, "Please enter the lead's name."),
+  email: z
+    .string()
+    .trim()
+    .optional()
+    .transform((value) => value || "")
+    .refine(
+      (value) => value === "" || z.string().email().safeParse(value).success,
+      "Please enter a valid email.",
+    ),
+  phone: z.string().trim().optional().transform((value) => value || ""),
+  notes: z.string().trim().optional().transform((value) => value || ""),
+  followUpOn: z
+    .string()
+    .trim()
+    .optional()
+    .transform((value) => value || "")
+    .refine(
+      (value) => value === "" || /^\d{4}-\d{2}-\d{2}$/.test(value),
+      "Please enter a valid follow-up date.",
+    ),
+});
+
+export const updateLeadFollowUpSchema = z.object({
+  followUpOn: z
+    .string()
+    .trim()
+    .optional()
+    .transform((value) => value || "")
+    .refine(
+      (value) => value === "" || /^\d{4}-\d{2}-\d{2}$/.test(value),
+      "Please enter a valid follow-up date.",
+    ),
+});
+
 export function firstZodError(error: z.ZodError) {
   return error.issues[0]?.message ?? "Please check the form and try again.";
 }

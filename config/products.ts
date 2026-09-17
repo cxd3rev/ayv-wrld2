@@ -9,9 +9,8 @@ import { productBrand, type BrandAssets } from "@/config/brands";
  * 3. Add product-specific pages under app/dashboard later — do not mix
  *    product business logic into the shared foundation.
  *
- * Avyro is marked active so the dashboard product slot is ready.
- * Its real features are not built yet, so marketing copy says
- * "In development" instead of "Available".
+ * Avyro is the first live product: a small lead-conversion workspace.
+ * Other products stay coming_soon until they have their own tools.
  */
 
 export type ProductStatus = "active" | "coming_soon";
@@ -67,14 +66,15 @@ export const products: ProductConfig[] = [
     accent: "#A3A3A3",
     route: "/dashboard/product",
     pricing: { monthly: 49.99, label: "€49,99 / month" },
-    navigation: [{ label: "Overview", href: "/dashboard/product" }],
+    navigation: [{ label: "Leads", href: "/dashboard/product" }],
     featureFlags: {
-      leadCapture: false,
+      leadCapture: true,
+      followUp: true,
       followUpSequences: false,
     },
     dashboard: {
       title: "Avyro",
-      description: "Lead conversion workspace. Product features will be added here next.",
+      description: "Follow up with new leads quickly so more conversations become customers.",
     },
   },
   {

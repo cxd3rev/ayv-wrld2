@@ -48,7 +48,7 @@ export default async function DashboardPage() {
             <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
               Open Avyro
             </h2>
-            <p className="mt-2 text-sm text-muted">The first product workspace is waiting.</p>
+            <p className="mt-2 text-sm text-muted">Follow up with new leads so conversations become customers.</p>
           </div>
         </Link>
         <Link
