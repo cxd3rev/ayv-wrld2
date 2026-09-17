@@ -7,14 +7,24 @@ import type { Organization, Subscription } from "@/types/database";
 
 export { mapStripeStatus } from "@/lib/billing-status";
 
+function isUsableSecret(value: string | undefined, prefixes: string[]) {
+  if (!value) return false;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.includes("...")) return false;
+  return prefixes.some((prefix) => trimmed.startsWith(prefix) && trimmed.length > prefix.length + 8);
+}
+
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
-  if (!key) return null;
-  return new Stripe(key);
+  if (!isUsableSecret(key, ["sk_test_", "sk_live_", "rk_test_", "rk_live_"])) return null;
+  return new Stripe(key as string);
 }
 
 export function isStripeConfigured() {
-  return Boolean(process.env.STRIPE_SECRET_KEY);
+  return (
+    isUsableSecret(process.env.STRIPE_SECRET_KEY, ["sk_test_", "sk_live_", "rk_test_", "rk_live_"]) &&
+    isUsableSecret(process.env.STRIPE_PRICE_ID, ["price_"])
+  );
 }
 
 export async function getOrganizationSubscription(organizationId: string) {
