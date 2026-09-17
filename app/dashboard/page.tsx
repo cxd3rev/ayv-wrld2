@@ -1,11 +1,11 @@
 import { DashboardRecordButton } from "@/components/dashboard-record-button";
+import { ClientDirectory } from "@/components/client-directory";
 import { CalendarPreview } from "@/components/calendar/calendar";
 import { Badge } from "@/components/ui/badge";
 import { requireWorkspace } from "@/lib/auth/session";
 import { buildCalendarEvents } from "@/lib/calendar";
 import {
   calculateDashboardMetrics,
-  type ClientHealth,
   type ConversionMetric,
 } from "@/lib/dashboard-metrics";
 import { getDashboardRecords } from "@/services/dashboard";
@@ -41,31 +41,10 @@ export default async function DashboardPage() {
     { product: "velto", count: metrics.raw.bookings, label: t("command.bookings") },
     { product: "rovyn", count: metrics.raw.quotes, label: t("command.quotes") },
   ] as const;
-  const healthTone = {
-    on_track: "success",
-    needs_attention: "warning",
-    at_risk: "danger",
-  } as const;
   const attentionLabels = {
     avyro: t("command.attentionavyro"),
     velto: t("command.attentionvelto"),
     rovyn: t("command.attentionrovyn"),
-  };
-  const healthLabels = {
-    on_track: t("command.health_on_track"),
-    needs_attention: t("command.health_needs_attention"),
-    at_risk: t("command.health_at_risk"),
-  };
-  const reasonLabels: Record<ClientHealth["reason"], string> = {
-    won: t("command.reason_won"),
-    lost: t("command.reason_lost"),
-    no_show: t("command.reason_no_show"),
-    lost_quote: t("command.reason_lost_quote"),
-    severely_overdue: t("command.reason_severely_overdue"),
-    overdue: t("command.reason_overdue"),
-    cancelled: t("command.reason_cancelled"),
-    not_connected: t("command.reason_not_connected"),
-    progressing: t("command.reason_progressing"),
   };
 
   return (
@@ -222,8 +201,8 @@ export default async function DashboardPage() {
         </article>
       </section>
 
-      <section className="mt-10 grid gap-8 border-t border-foreground/10 pt-8 lg:grid-cols-2">
-        <div>
+      <section className="mt-10 border-t border-foreground/10 pt-8">
+        <div className="max-w-3xl">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">
@@ -260,49 +239,9 @@ export default async function DashboardPage() {
             )}
           </div>
         </div>
-
-        <div>
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">
-                {t("command.clientHealth")}
-              </p>
-              <h2 className="display mt-2 text-3xl">{t("command.clientTitle")}</h2>
-            </div>
-            <details className="max-w-52 text-right text-xs text-muted">
-              <summary className="cursor-pointer font-medium text-foreground">
-                {t("command.howCalculated")}
-              </summary>
-              <p className="mt-2">{t("command.healthRules")}</p>
-            </details>
-          </div>
-          <div className="mt-5 divide-y divide-foreground/10 border-y border-foreground/10">
-            {metrics.clients.length ? (
-              metrics.clients.slice(0, 8).map((client) => (
-                <div key={client.lead.id} className="flex items-center justify-between gap-4 py-4">
-                  <div className="min-w-0">
-                    <DashboardRecordButton product="avyro" recordId={client.lead.id}>
-                      <span className="truncate">{client.lead.name}</span>
-                    </DashboardRecordButton>
-                    <p className="mt-1 text-xs text-muted">
-                      {t("command.connectedCounts", {
-                        bookings: client.bookingCount,
-                        quotes: client.quoteCount,
-                      })}{" "}
-                      · {reasonLabels[client.reason]}
-                    </p>
-                  </div>
-                  <Badge tone={healthTone[client.status]}>
-                    {healthLabels[client.status]}
-                  </Badge>
-                </div>
-              ))
-            ) : (
-              <p className="py-6 text-sm text-muted">{t("command.clientsEmpty")}</p>
-            )}
-          </div>
-        </div>
       </section>
+
+      <ClientDirectory clients={metrics.clients} />
 
       <section className="mt-10 border-t border-foreground/10 pt-8">
         <div className="flex items-center gap-2">

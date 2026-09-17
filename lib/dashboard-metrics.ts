@@ -31,6 +31,8 @@ export type ClientHealth = {
     | "progressing";
   bookingCount: number;
   quoteCount: number;
+  bookings: Booking[];
+  quotes: Quote[];
 };
 
 export type DashboardMetrics = {
@@ -287,6 +289,8 @@ export function calculateDashboardMetrics(
         ...classifyClient(lead, connectedBookings, connectedQuotes, today),
         bookingCount: connectedBookings.length,
         quoteCount: connectedQuotes.length,
+        bookings: connectedBookings,
+        quotes: connectedQuotes,
       };
     })
     .sort(
