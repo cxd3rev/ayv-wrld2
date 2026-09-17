@@ -49,7 +49,7 @@ export function Features() {
             key={feature.title}
             className="group grid grid-cols-[auto_1fr] items-start gap-x-6 gap-y-4 border-t border-border py-10 last:border-b sm:grid-cols-[3rem_1fr_auto] lg:gap-x-12"
           >
-            <span className="font-mono text-sm text-accent">{String(index + 1).padStart(2, "0")}</span>
+            <span className="font-mono text-sm text-muted">{String(index + 1).padStart(2, "0")}</span>
             <div className="col-start-2 sm:col-start-2">
               <h3 className="display text-2xl leading-tight lg:text-3xl">{feature.title}</h3>
               <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted text-pretty">{feature.body}</p>
@@ -97,7 +97,7 @@ const codeLines = [
 
 export function HowItWorks() {
   return (
-    <section id="how" className="relative overflow-hidden border-y border-border bg-[#0c0c11] text-[#f4f4f6]">
+    <section id="how" className="relative overflow-hidden bg-[#141210] text-[#f5f3ef]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.5]"
@@ -118,7 +118,7 @@ export function HowItWorks() {
             {steps.map((step) => (
               <li key={step.numeral} className="border-t border-white/10 py-8 first:border-t-0 first:pt-0">
                 <div className="flex items-baseline gap-5">
-                  <span className="font-mono text-sm text-accent">{step.numeral}</span>
+                  <span className="font-mono text-sm text-white/45">{step.numeral}</span>
                   <div>
                     <h3 className="text-xl font-medium tracking-tight lg:text-2xl">{step.title}</h3>
                     <p className="mt-2 max-w-md text-sm leading-relaxed text-white/60 text-pretty lg:text-base">
