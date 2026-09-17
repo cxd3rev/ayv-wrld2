@@ -42,5 +42,19 @@ export function isSupabaseConfigured() {
 }
 
 export function getAppUrl() {
-  return process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const configured = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "") ?? "";
+  const isLocal = !configured || /localhost|127\.0\.0\.1/i.test(configured);
+
+  if (!isLocal) return configured;
+
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return window.location.origin;
+  }
+
+  const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+  if (vercelHost) {
+    return `https://${vercelHost.replace(/^https?:\/\//, "")}`;
+  }
+
+  return configured || "http://localhost:3000";
 }

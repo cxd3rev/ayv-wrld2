@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { mapStripeStatus } from "@/lib/billing-status";
+import { mapStripeStatus, isUsableSecret } from "@/lib/billing-status";
 
 export const runtime = "nodejs";
 
@@ -57,7 +57,10 @@ export async function POST(request: Request) {
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
   const stripeKey = process.env.STRIPE_SECRET_KEY;
 
-  if (!secret || !stripeKey) {
+  if (
+    !isUsableSecret(secret, ["whsec_"]) ||
+    !isUsableSecret(stripeKey, ["sk_test_", "sk_live_", "rk_test_", "rk_live_"])
+  ) {
     return NextResponse.json({ error: "Stripe is not configured." }, { status: 501 });
   }
 

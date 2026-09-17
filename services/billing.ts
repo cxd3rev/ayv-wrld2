@@ -3,16 +3,10 @@ import "server-only";
 import Stripe from "stripe";
 import { getAppUrl } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
+import { isUsableSecret } from "@/lib/billing-status";
 import type { Organization, Subscription } from "@/types/database";
 
-export { mapStripeStatus } from "@/lib/billing-status";
-
-function isUsableSecret(value: string | undefined, prefixes: string[]) {
-  if (!value) return false;
-  const trimmed = value.trim();
-  if (!trimmed || trimmed.includes("...")) return false;
-  return prefixes.some((prefix) => trimmed.startsWith(prefix) && trimmed.length > prefix.length + 8);
-}
+export { mapStripeStatus, isUsableSecret } from "@/lib/billing-status";
 
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -52,29 +46,35 @@ export async function createCheckoutSession(organization: Organization, priceId?
     return { ok: false as const, error: "Billing is not configured yet." };
   }
 
-  const customerId = await getOrCreateStripeCustomer(stripe, organization);
+  try {
+    const customerId = await getOrCreateStripeCustomer(stripe, organization);
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "subscription",
-    customer: customerId,
-    line_items: [{ price: resolvedPrice, quantity: 1 }],
-    success_url: `${getAppUrl()}/dashboard/billing?checkout=success`,
-    cancel_url: `${getAppUrl()}/dashboard/billing?checkout=cancelled`,
-    metadata: {
-      organization_id: organization.id,
-    },
-    subscription_data: {
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      customer: customerId,
+      line_items: [{ price: resolvedPrice, quantity: 1 }],
+      success_url: `${getAppUrl()}/dashboard/billing?checkout=success`,
+      cancel_url: `${getAppUrl()}/dashboard/billing?checkout=cancelled`,
       metadata: {
         organization_id: organization.id,
       },
-    },
-  });
+      subscription_data: {
+        metadata: {
+          organization_id: organization.id,
+        },
+      },
+    });
 
-  if (!session.url) {
-    return { ok: false as const, error: "Could not start checkout." };
+    if (!session.url) {
+      return { ok: false as const, error: "Could not start checkout." };
+    }
+
+    return { ok: true as const, url: session.url };
+  } catch (error) {
+    const message = error instanceof Stripe.errors.StripeError ? error.message : "Could not start checkout.";
+    console.error("Stripe checkout failed:", message);
+    return { ok: false as const, error: message };
   }
-
-  return { ok: true as const, url: session.url };
 }
 
 export async function createBillingPortalSession(organization: Organization) {
@@ -94,12 +94,18 @@ export async function createBillingPortalSession(organization: Organization) {
     return { ok: false as const, error: "No billing customer exists yet. Start a subscription first." };
   }
 
-  const session = await stripe.billingPortal.sessions.create({
-    customer: customer.stripe_customer_id,
-    return_url: `${getAppUrl()}/dashboard/billing`,
-  });
+  try {
+    const session = await stripe.billingPortal.sessions.create({
+      customer: customer.stripe_customer_id,
+      return_url: `${getAppUrl()}/dashboard/billing`,
+    });
 
-  return { ok: true as const, url: session.url };
+    return { ok: true as const, url: session.url };
+  } catch (error) {
+    const message = error instanceof Stripe.errors.StripeError ? error.message : "Could not open billing portal.";
+    console.error("Stripe billing portal failed:", message);
+    return { ok: false as const, error: message };
+  }
 }
 
 async function getOrCreateStripeCustomer(stripe: Stripe, organization: Organization) {
