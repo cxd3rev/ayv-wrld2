@@ -71,8 +71,8 @@ body {
  */
 .atmosphere {
   --background: #09090b;
-  --foreground: #f7f7f8;
-  --muted: #c2c2ca;
+  --foreground: #ffffff;
+  --muted: #c9c9d1;
   --card: #101014;
   --card-hover: #17171c;
   --border: #303036;
@@ -83,6 +83,8 @@ body {
   --inverted: #f4f4f5;
   --inverted-foreground: #09090b;
   color-scheme: dark;
+  background: var(--background);
+  color: var(--foreground);
 }
 
 .display {
