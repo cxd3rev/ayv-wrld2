@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  ConnectedRecords,
+  IncomingLinkFields,
+} from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DashboardCard } from "@/components/ui/dashboard-card";
@@ -10,6 +14,8 @@ import { Label } from "@/components/ui/label";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
 import { formatPrice } from "@/config/products";
 import { useToast } from "@/hooks/use-toast";
+import type { RecordPrefill } from "@/lib/record-entities";
+import { recordProductName } from "@/lib/record-entities";
 import { cn } from "@/lib/utils";
 import { quoteStatuses } from "@/lib/validations";
 import {
@@ -18,9 +24,9 @@ import {
   updateQuoteFollowUp,
   updateQuoteStatus,
 } from "@/products/rovyn/actions";
-import type { Quote, QuoteStatus } from "@/types/database";
+import type { Booking, Lead, Quote, QuoteStatus, RecordLink } from "@/types/database";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const statusTone: Record<QuoteStatus, "accent" | "warning" | "success" | "danger"> = {
   sent: "accent",
@@ -74,7 +80,21 @@ function formatQuoteAmount(value: Quote["amount"]) {
   return amount == null ? "—" : formatPrice(amount);
 }
 
-export function RovynQuotesWorkspace({ quotes }: { quotes: Quote[] }) {
+export function RovynQuotesWorkspace({
+  quotes,
+  leads,
+  bookings,
+  links,
+  prefill,
+  focusQuoteId,
+}: {
+  quotes: Quote[];
+  leads: Lead[];
+  bookings: Booking[];
+  links: RecordLink[];
+  prefill?: RecordPrefill;
+  focusQuoteId?: string;
+}) {
   const { toast } = useToast();
   const router = useRouter();
   const [error, setError] = useState("");
@@ -88,6 +108,14 @@ export function RovynQuotesWorkspace({ quotes }: { quotes: Quote[] }) {
       due: quotes.filter(isFollowUpDue).length,
     };
   }, [quotes]);
+
+  useEffect(() => {
+    if (!focusQuoteId) return;
+    document.getElementById(`quote-${focusQuoteId}`)?.scrollIntoView({
+      block: "center",
+      behavior: "smooth",
+    });
+  }, [focusQuoteId]);
 
   async function onAdd(formData: FormData) {
     setError("");
@@ -118,15 +146,34 @@ export function RovynQuotesWorkspace({ quotes }: { quotes: Quote[] }) {
         className="mt-10 grid gap-4 border border-foreground/10 p-4 md:grid-cols-2 lg:grid-cols-4"
       >
         <div className="md:col-span-2 lg:col-span-4">
+          <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Add a quote</p>
+          {prefill ? (
+            <p className="mt-2 text-sm text-muted">
+              Prefilling {prefill.name} from {recordProductName(prefill.product)}. You can still add a
+              quote without connecting one.
+            </p>
+          ) : null}
         </div>
         <div>
           <Label htmlFor="customerName">Customer</Label>
-          <Input id="customerName" name="customerName" placeholder="Sam Ortiz" required />
+          <Input
+            id="customerName"
+            name="customerName"
+            placeholder="Sam Ortiz"
+            required
+            defaultValue={prefill?.name ?? ""}
+          />
         </div>
         <div>
           <Label htmlFor="title">Quote for</Label>
-          <Input id="title" name="title" placeholder="Kitchen remodel" required />
+          <Input
+            id="title"
+            name="title"
+            placeholder="Kitchen remodel"
+            required
+            defaultValue={prefill?.title ?? ""}
+          />
         </div>
         <div>
           <Label htmlFor="amount">Amount (€)</Label>
@@ -138,11 +185,23 @@ export function RovynQuotesWorkspace({ quotes }: { quotes: Quote[] }) {
         </div>
         <div>
           <Label htmlFor="email">Email</Label>
-          <Input id="email" name="email" type="email" placeholder="sam@business.com" />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="sam@business.com"
+            defaultValue={prefill?.email ?? ""}
+          />
         </div>
         <div>
           <Label htmlFor="phone">Phone</Label>
-          <Input id="phone" name="phone" type="tel" placeholder="Optional" />
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            placeholder="Optional"
+            defaultValue={prefill?.phone ?? ""}
+          />
         </div>
         <div className="md:col-span-2 lg:col-span-3">
           <Label htmlFor="notes">Notes</Label>
@@ -172,95 +231,113 @@ export function RovynQuotesWorkspace({ quotes }: { quotes: Quote[] }) {
                 <TH>Quote</TH>
                 <TH>Status</TH>
                 <TH>Follow up</TH>
+                <TH>Connected</TH>
                 <TH>Notes</TH>
                 <TH className="text-right"> </TH>
               </TR>
             </THead>
             <TBody>
-              {quotes.map((quote) => (
-                <TR key={quote.id}>
-                  <TD>
-                    <p className="font-medium">{quote.customer_name}</p>
-                    {quote.email ? <p className="mt-1 text-muted">{quote.email}</p> : null}
-                    {quote.phone ? <p className="mt-1 text-xs text-muted">{quote.phone}</p> : null}
-                    {isFollowUpDue(quote) ? (
-                      <p className="mt-1 font-mono text-[11px] tracking-[0.12em] text-warning uppercase">
-                        Follow up today
-                      </p>
-                    ) : null}
-                  </TD>
-                  <TD>
-                    <p>{quote.title}</p>
-                    <p className="mt-1 text-muted">{formatQuoteAmount(quote.amount)}</p>
-                  </TD>
-                  <TD>
-                    <div className="flex items-center gap-2">
-                      <Badge tone={statusTone[quote.status]}>{statusLabel[quote.status]}</Badge>
-                      <select
-                        aria-label={`Status for ${quote.customer_name}`}
-                        className="h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm"
-                        defaultValue={quote.status}
+              {quotes.map((quote) => {
+                const focused = focusQuoteId === quote.id;
+                return (
+                  <TR
+                    key={quote.id}
+                    id={`quote-${quote.id}`}
+                    className={cn(focused && "bg-accent-soft")}
+                  >
+                    <TD>
+                      <p className="font-medium">{quote.customer_name}</p>
+                      {quote.email ? <p className="mt-1 text-muted">{quote.email}</p> : null}
+                      {quote.phone ? <p className="mt-1 text-xs text-muted">{quote.phone}</p> : null}
+                      {isFollowUpDue(quote) ? (
+                        <p className="mt-1 font-mono text-[11px] tracking-[0.12em] text-warning uppercase">
+                          Follow up today
+                        </p>
+                      ) : null}
+                    </TD>
+                    <TD>
+                      <p>{quote.title}</p>
+                      <p className="mt-1 text-muted">{formatQuoteAmount(quote.amount)}</p>
+                    </TD>
+                    <TD>
+                      <div className="flex items-center gap-2">
+                        <Badge tone={statusTone[quote.status]}>{statusLabel[quote.status]}</Badge>
+                        <select
+                          aria-label={`Status for ${quote.customer_name}`}
+                          className="h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm"
+                          defaultValue={quote.status}
+                          onChange={async (event) => {
+                            const result = await updateQuoteStatus(quote.id, event.target.value);
+                            if (!result.ok) {
+                              toast({ title: result.error ?? "Could not update status", tone: "error" });
+                              return;
+                            }
+                            toast({ title: "Status updated", tone: "success" });
+                            router.refresh();
+                          }}
+                        >
+                          {quoteStatuses.map((status) => (
+                            <option key={status} value={status}>
+                              {statusLabel[status]}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </TD>
+                    <TD>
+                      <input
+                        type="date"
+                        aria-label={`Follow-up date for ${quote.customer_name}`}
+                        defaultValue={quote.follow_up_on ?? ""}
+                        className={cn(
+                          "h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm",
+                          isFollowUpDue(quote) && "border-warning/40 text-warning",
+                        )}
                         onChange={async (event) => {
-                          const result = await updateQuoteStatus(quote.id, event.target.value);
+                          const result = await updateQuoteFollowUp(quote.id, event.target.value);
                           if (!result.ok) {
-                            toast({ title: result.error ?? "Could not update status", tone: "error" });
+                            toast({ title: result.error ?? "Could not save follow-up", tone: "error" });
                             return;
                           }
-                          toast({ title: "Status updated", tone: "success" });
+                          toast({ title: "Follow-up saved", tone: "success" });
+                          router.refresh();
+                        }}
+                      />
+                      {quote.follow_up_on ? (
+                        <p className="mt-1 text-xs text-muted">{formatFollowUp(quote.follow_up_on)}</p>
+                      ) : null}
+                    </TD>
+                    <TD>
+                      <ConnectedRecords
+                        product="rovyn"
+                        recordId={quote.id}
+                        links={links}
+                        leads={leads}
+                        bookings={bookings}
+                        quotes={quotes}
+                      />
+                    </TD>
+                    <TD className="max-w-xs text-muted">{quote.notes || "—"}</TD>
+                    <TD className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={async () => {
+                          const result = await deleteQuote(quote.id);
+                          if (!result.ok) {
+                            toast({ title: result.error ?? "Could not remove quote", tone: "error" });
+                            return;
+                          }
+                          toast({ title: "Quote removed", tone: "success" });
                           router.refresh();
                         }}
                       >
-                        {quoteStatuses.map((status) => (
-                          <option key={status} value={status}>
-                            {statusLabel[status]}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </TD>
-                  <TD>
-                    <input
-                      type="date"
-                      aria-label={`Follow-up date for ${quote.customer_name}`}
-                      defaultValue={quote.follow_up_on ?? ""}
-                      className={cn(
-                        "h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm",
-                        isFollowUpDue(quote) && "border-warning/40 text-warning",
-                      )}
-                      onChange={async (event) => {
-                        const result = await updateQuoteFollowUp(quote.id, event.target.value);
-                        if (!result.ok) {
-                          toast({ title: result.error ?? "Could not save follow-up", tone: "error" });
-                          return;
-                        }
-                        toast({ title: "Follow-up saved", tone: "success" });
-                        router.refresh();
-                      }}
-                    />
-                    {quote.follow_up_on ? (
-                      <p className="mt-1 text-xs text-muted">{formatFollowUp(quote.follow_up_on)}</p>
-                    ) : null}
-                  </TD>
-                  <TD className="max-w-xs text-muted">{quote.notes || "—"}</TD>
-                  <TD className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={async () => {
-                        const result = await deleteQuote(quote.id);
-                        if (!result.ok) {
-                          toast({ title: result.error ?? "Could not remove quote", tone: "error" });
-                          return;
-                        }
-                        toast({ title: "Quote removed", tone: "success" });
-                        router.refresh();
-                      }}
-                    >
-                      Remove
-                    </Button>
-                  </TD>
-                </TR>
-              ))}
+                        Remove
+                      </Button>
+                    </TD>
+                  </TR>
+                );
+              })}
             </TBody>
           </Table>
         )}

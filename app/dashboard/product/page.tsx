@@ -4,12 +4,14 @@ import { PageHeader } from "@/components/page-header";
 import { ProductIcon } from "@/components/product-icon";
 import { getProduct } from "@/config/products";
 import { getActiveProductId } from "@/lib/product-cookie";
+import { resolveRecordPrefill } from "@/lib/record-entities";
 import { AvyroLeadsWorkspace } from "@/products/avyro/leads-workspace";
 import { listLeads } from "@/products/avyro/actions";
 import { RovynQuotesWorkspace } from "@/products/rovyn/quotes-workspace";
 import { listQuotes } from "@/products/rovyn/actions";
 import { VeltoBookingsWorkspace } from "@/products/velto/bookings-workspace";
 import { listBookings } from "@/products/velto/actions";
+import { listRecordLinks } from "@/services/record-links";
 
 function firstParam(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
@@ -24,11 +26,21 @@ export default async function ProductDashboardPage({
   const showAvyro = product.id === "avyro" && Boolean(product.featureFlags.leadCapture);
   const showVelto = product.id === "velto" && Boolean(product.featureFlags.bookings);
   const showRovyn = product.id === "rovyn" && Boolean(product.featureFlags.quotes);
-  const [leads, bookings, quotes] = await Promise.all([
-    showAvyro || showVelto ? listLeads() : Promise.resolve([]),
-    showAvyro || showVelto ? listBookings() : Promise.resolve([]),
-    showRovyn ? listQuotes() : Promise.resolve([]),
+  const loadRecords = showAvyro || showVelto || showRovyn;
+  const [leads, bookings, quotes, links] = await Promise.all([
+    loadRecords ? listLeads() : Promise.resolve([]),
+    loadRecords ? listBookings() : Promise.resolve([]),
+    loadRecords ? listQuotes() : Promise.resolve([]),
+    loadRecords ? listRecordLinks() : Promise.resolve([]),
   ]);
+  const prefill = resolveRecordPrefill(
+    firstParam(params.fromLead),
+    firstParam(params.fromBooking),
+    firstParam(params.fromQuote),
+    leads,
+    bookings,
+    quotes,
+  );
 
   return (
     <div>
@@ -52,17 +64,29 @@ export default async function ProductDashboardPage({
         <AvyroLeadsWorkspace
           leads={leads}
           bookings={bookings}
+          quotes={quotes}
+          links={links}
+          prefill={prefill}
           focusLeadId={firstParam(params.lead)}
         />
       ) : showVelto ? (
         <VeltoBookingsWorkspace
           bookings={bookings}
           leads={leads}
-          fromLeadId={firstParam(params.fromLead)}
+          quotes={quotes}
+          links={links}
+          prefill={prefill}
           focusBookingId={firstParam(params.booking)}
         />
       ) : showRovyn ? (
-        <RovynQuotesWorkspace quotes={quotes} />
+        <RovynQuotesWorkspace
+          quotes={quotes}
+          leads={leads}
+          bookings={bookings}
+          links={links}
+          prefill={prefill}
+          focusQuoteId={firstParam(params.quote)}
+        />
       ) : (
         <EmptyState
           icon={<ProductIcon product={product} size={64} className="h-16 w-16" />}

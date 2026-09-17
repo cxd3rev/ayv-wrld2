@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  ConnectedRecords,
+  IncomingLinkFields,
+} from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DashboardCard } from "@/components/ui/dashboard-card";
@@ -7,10 +11,10 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Modal } from "@/components/ui/modal";
-import { Select } from "@/components/ui/select";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
+import type { RecordPrefill } from "@/lib/record-entities";
+import { recordProductName } from "@/lib/record-entities";
 import { cn } from "@/lib/utils";
 import { leadStatuses } from "@/lib/validations";
 import {
@@ -18,9 +22,7 @@ import {
   updateLeadFollowUp,
   updateLeadStatus,
 } from "@/products/avyro/actions";
-import { updateBookingLead } from "@/products/velto/actions";
-import { openLinkedWorkspace } from "@/services/product-switch";
-import type { Booking, Lead, LeadStatus } from "@/types/database";
+import type { Booking, Lead, LeadStatus, Quote, RecordLink } from "@/types/database";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -61,26 +63,25 @@ function isFollowUpDue(lead: Lead) {
   return lead.follow_up_on <= todayIsoDate();
 }
 
-function bookingLabel(booking: Booking) {
-  return `${booking.service} · ${formatFollowUp(booking.starts_on)}`;
-}
-
 export function AvyroLeadsWorkspace({
   leads,
   bookings,
+  quotes,
+  links,
+  prefill,
   focusLeadId,
 }: {
   leads: Lead[];
   bookings: Booking[];
+  quotes: Quote[];
+  links: RecordLink[];
+  prefill?: RecordPrefill;
   focusLeadId?: string;
 }) {
   const { toast } = useToast();
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
-  const [attachLead, setAttachLead] = useState<Lead | null>(null);
-  const [attachError, setAttachError] = useState("");
-  const [attachPending, setAttachPending] = useState(false);
 
   const counts = useMemo(() => {
     return {
@@ -90,22 +91,6 @@ export function AvyroLeadsWorkspace({
       due: leads.filter(isFollowUpDue).length,
     };
   }, [leads]);
-
-  const bookingsByLead = useMemo(() => {
-    const map = new Map<string, Booking[]>();
-    for (const booking of bookings) {
-      if (!booking.lead_id) continue;
-      const list = map.get(booking.lead_id) ?? [];
-      list.push(booking);
-      map.set(booking.lead_id, list);
-    }
-    return map;
-  }, [bookings]);
-
-  const unlinkedBookings = useMemo(
-    () => bookings.filter((booking) => !booking.lead_id),
-    [bookings],
-  );
 
   useEffect(() => {
     if (!focusLeadId) return;
@@ -129,24 +114,6 @@ export function AvyroLeadsWorkspace({
     router.refresh();
   }
 
-  async function onAttach(formData: FormData) {
-    if (!attachLead) return;
-    setAttachError("");
-    setAttachPending(true);
-    const result = await updateBookingLead(
-      String(formData.get("bookingId") ?? ""),
-      attachLead.id,
-    );
-    setAttachPending(false);
-    if (!result.ok) {
-      setAttachError(result.error ?? "Could not attach that booking.");
-      return;
-    }
-    toast({ title: "Booking linked", tone: "success" });
-    setAttachLead(null);
-    router.refresh();
-  }
-
   return (
     <div>
       <div className="grid gap-0 border-t border-foreground/10 sm:grid-cols-4">
@@ -162,19 +129,44 @@ export function AvyroLeadsWorkspace({
         className="mt-10 grid gap-4 border border-foreground/10 p-4 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_auto]"
       >
         <div className="md:col-span-2 lg:col-span-4">
+          <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Add a lead</p>
+          {prefill ? (
+            <p className="mt-2 text-sm text-muted">
+              Prefilling {prefill.name} from {recordProductName(prefill.product)}. You can still add a
+              lead without connecting one.
+            </p>
+          ) : null}
         </div>
         <div>
           <Label htmlFor="name">Name</Label>
-          <Input id="name" name="name" placeholder="Jordan Lee" required />
+          <Input
+            id="name"
+            name="name"
+            placeholder="Jordan Lee"
+            required
+            defaultValue={prefill?.name ?? ""}
+          />
         </div>
         <div>
           <Label htmlFor="email">Email</Label>
-          <Input id="email" name="email" type="email" placeholder="jordan@business.com" />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="jordan@business.com"
+            defaultValue={prefill?.email ?? ""}
+          />
         </div>
         <div>
           <Label htmlFor="phone">Phone</Label>
-          <Input id="phone" name="phone" type="tel" placeholder="Optional" />
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            placeholder="Optional"
+            defaultValue={prefill?.phone ?? ""}
+          />
         </div>
         <div>
           <Label htmlFor="followUpOn">Follow up on</Label>
@@ -209,12 +201,11 @@ export function AvyroLeadsWorkspace({
                 <TH>Status</TH>
                 <TH>Follow up</TH>
                 <TH>Notes</TH>
-                <TH>Velto</TH>
+                <TH>Connected</TH>
               </TR>
             </THead>
             <TBody>
               {leads.map((lead) => {
-                const linked = bookingsByLead.get(lead.id) ?? [];
                 const focused = focusLeadId === lead.id;
                 return (
                   <TR
@@ -284,47 +275,14 @@ export function AvyroLeadsWorkspace({
                     </TD>
                     <TD className="max-w-xs text-muted">{lead.notes || "—"}</TD>
                     <TD>
-                      <div className="flex min-w-[11rem] flex-col items-start gap-2">
-                        {linked.length === 0 ? (
-                          <p className="text-muted">No booking</p>
-                        ) : (
-                          linked.map((booking) => (
-                            <button
-                              key={booking.id}
-                              type="button"
-                              className="text-left text-sm hover:text-accent"
-                              onClick={() =>
-                                openLinkedWorkspace("velto", { booking: booking.id })
-                              }
-                            >
-                              {bookingLabel(booking)}
-                            </button>
-                          ))
-                        )}
-                        <div className="flex flex-wrap gap-2">
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            onClick={() =>
-                              openLinkedWorkspace("velto", { fromLead: lead.id })
-                            }
-                          >
-                            Book in Velto
-                          </Button>
-                          {unlinkedBookings.length > 0 ? (
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={() => {
-                                setAttachError("");
-                                setAttachLead(lead);
-                              }}
-                            >
-                              Attach
-                            </Button>
-                          ) : null}
-                        </div>
-                      </div>
+                      <ConnectedRecords
+                        product="avyro"
+                        recordId={lead.id}
+                        links={links}
+                        leads={leads}
+                        bookings={bookings}
+                        quotes={quotes}
+                      />
                     </TD>
                   </TR>
                 );
@@ -333,42 +291,6 @@ export function AvyroLeadsWorkspace({
           </Table>
         )}
       </div>
-
-      <Modal
-        open={Boolean(attachLead)}
-        title="Attach a Velto booking"
-        description={
-          attachLead
-            ? `Link an existing booking to ${attachLead.name}. Bookings without a lead can be attached here.`
-            : undefined
-        }
-        onClose={() => setAttachLead(null)}
-      >
-        <form action={onAttach} className="grid gap-4">
-          <div>
-            <Label htmlFor="attach-booking">Booking</Label>
-            <Select id="attach-booking" name="bookingId" required defaultValue="">
-              <option value="" disabled>
-                Choose a booking
-              </option>
-              {unlinkedBookings.map((booking) => (
-                <option key={booking.id} value={booking.id}>
-                  {booking.customer_name} · {bookingLabel(booking)}
-                </option>
-              ))}
-            </Select>
-          </div>
-          <FormError message={attachError} />
-          <div className="flex justify-end gap-3">
-            <Button variant="secondary" onClick={() => setAttachLead(null)}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={attachPending}>
-              {attachPending ? "Linking..." : "Attach booking"}
-            </Button>
-          </div>
-        </form>
-      </Modal>
     </div>
   );
 }

@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  ConnectedRecords,
+  IncomingLinkFields,
+} from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DashboardCard } from "@/components/ui/dashboard-card";
@@ -10,17 +14,17 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
+import type { RecordPrefill } from "@/lib/record-entities";
+import { recordProductName } from "@/lib/record-entities";
 import { cn } from "@/lib/utils";
 import { bookingStatuses } from "@/lib/validations";
 import {
   createBooking,
   deleteBooking,
-  updateBookingLead,
   updateBookingReminder,
   updateBookingStatus,
 } from "@/products/velto/actions";
-import { openLinkedWorkspace } from "@/services/product-switch";
-import type { Booking, BookingStatus, Lead } from "@/types/database";
+import type { Booking, BookingStatus, Lead, Quote, RecordLink } from "@/types/database";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -94,12 +98,16 @@ function fillLeadFields(form: HTMLFormElement, lead: Lead | undefined) {
 export function VeltoBookingsWorkspace({
   bookings,
   leads,
-  fromLeadId,
+  quotes,
+  links,
+  prefill,
   focusBookingId,
 }: {
   bookings: Booking[];
   leads: Lead[];
-  fromLeadId?: string;
+  quotes: Quote[];
+  links: RecordLink[];
+  prefill?: RecordPrefill;
   focusBookingId?: string;
 }) {
   const { toast } = useToast();
@@ -108,15 +116,9 @@ export function VeltoBookingsWorkspace({
   const [pending, setPending] = useState(false);
 
   const fromLead = useMemo(
-    () => leads.find((lead) => lead.id === fromLeadId),
-    [leads, fromLeadId],
+    () => (prefill?.product === "avyro" ? leads.find((lead) => lead.id === prefill.id) : undefined),
+    [leads, prefill],
   );
-
-  const leadsById = useMemo(() => {
-    const map = new Map<string, Lead>();
-    for (const lead of leads) map.set(lead.id, lead);
-    return map;
-  }, [leads]);
 
   const counts = useMemo(() => {
     return {
@@ -164,10 +166,15 @@ export function VeltoBookingsWorkspace({
         className="mt-10 grid gap-4 border border-foreground/10 p-4 md:grid-cols-2 lg:grid-cols-4"
       >
         <div className="md:col-span-2 lg:col-span-4">
+          <IncomingLinkFields
+            prefillProduct={prefill?.product === "avyro" ? undefined : prefill?.product}
+            prefillId={prefill?.product === "avyro" ? undefined : prefill?.id}
+          />
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Add a booking</p>
-          {fromLead ? (
+          {prefill ? (
             <p className="mt-2 text-sm text-muted">
-              Prefilling {fromLead.name} from Avyro. A lead is optional — you can still book without one.
+              Prefilling {prefill.name} from {recordProductName(prefill.product)}. A connection is
+              optional — you can still book without one.
             </p>
           ) : null}
         </div>
@@ -178,12 +185,18 @@ export function VeltoBookingsWorkspace({
             name="customerName"
             placeholder="Alex Rivera"
             required
-            defaultValue={fromLead?.name ?? ""}
+            defaultValue={prefill?.name ?? ""}
           />
         </div>
         <div>
           <Label htmlFor="service">Service</Label>
-          <Input id="service" name="service" placeholder="Consultation" required />
+          <Input
+            id="service"
+            name="service"
+            placeholder="Consultation"
+            required
+            defaultValue={prefill?.product === "rovyn" ? (prefill.title ?? "") : ""}
+          />
         </div>
         <div>
           <Label htmlFor="startsOn">Date</Label>
@@ -200,7 +213,7 @@ export function VeltoBookingsWorkspace({
             name="email"
             type="email"
             placeholder="alex@business.com"
-            defaultValue={fromLead?.email ?? ""}
+            defaultValue={prefill?.email ?? ""}
           />
         </div>
         <div>
@@ -210,7 +223,7 @@ export function VeltoBookingsWorkspace({
             name="phone"
             type="tel"
             placeholder="Optional"
-            defaultValue={fromLead?.phone ?? ""}
+            defaultValue={prefill?.phone ?? ""}
           />
         </div>
         <div>
@@ -266,14 +279,13 @@ export function VeltoBookingsWorkspace({
                 <TH>When</TH>
                 <TH>Status</TH>
                 <TH>Reminder</TH>
-                <TH>Avyro lead</TH>
+                <TH>Connected</TH>
                 <TH>Notes</TH>
                 <TH className="text-right"> </TH>
               </TR>
             </THead>
             <TBody>
               {bookings.map((booking) => {
-                const linkedLead = booking.lead_id ? leadsById.get(booking.lead_id) : undefined;
                 const focused = focusBookingId === booking.id;
                 return (
                   <TR
@@ -345,43 +357,14 @@ export function VeltoBookingsWorkspace({
                       ) : null}
                     </TD>
                     <TD>
-                      <div className="flex min-w-[10rem] flex-col items-start gap-2">
-                        <select
-                          aria-label={`Linked lead for ${booking.customer_name}`}
-                          className="h-9 w-full rounded-md border border-foreground/15 bg-card px-2 text-sm"
-                          defaultValue={booking.lead_id ?? ""}
-                          onChange={async (event) => {
-                            const result = await updateBookingLead(booking.id, event.target.value);
-                            if (!result.ok) {
-                              toast({ title: result.error ?? "Could not link lead", tone: "error" });
-                              return;
-                            }
-                            toast({
-                              title: event.target.value ? "Lead linked" : "Lead unlinked",
-                              tone: "success",
-                            });
-                            router.refresh();
-                          }}
-                        >
-                          <option value="">No linked lead</option>
-                          {leads.map((lead) => (
-                            <option key={lead.id} value={lead.id}>
-                              {lead.name}
-                            </option>
-                          ))}
-                        </select>
-                        {linkedLead ? (
-                          <button
-                            type="button"
-                            className="text-left text-sm hover:text-accent"
-                            onClick={() =>
-                              openLinkedWorkspace("avyro", { lead: linkedLead.id })
-                            }
-                          >
-                            Open {linkedLead.name} in Avyro
-                          </button>
-                        ) : null}
-                      </div>
+                      <ConnectedRecords
+                        product="velto"
+                        recordId={booking.id}
+                        links={links}
+                        leads={leads}
+                        bookings={bookings}
+                        quotes={quotes}
+                      />
                     </TD>
                     <TD className="max-w-xs text-muted">{booking.notes || "—"}</TD>
                     <TD className="text-right">

@@ -10,6 +10,7 @@ import {
   updateBookingLeadSchema,
   updateBookingReminderSchema,
 } from "@/lib/validations";
+import { linkCreatedRecord } from "@/services/record-links";
 import type { Booking } from "@/types/database";
 
 const bookingColumns =
@@ -76,24 +77,29 @@ export async function createBooking(formData: FormData) {
     return leadCheck;
   }
 
-  const { error } = await supabase.from("bookings").insert({
-    organization_id: organization.id,
-    lead_id: leadId,
-    customer_name: parsed.data.customerName,
-    email: parsed.data.email || null,
-    phone: parsed.data.phone || null,
-    service: parsed.data.service,
-    starts_on: parsed.data.startsOn,
-    start_time: parsed.data.startTime,
-    reminder_on: parsed.data.reminderOn || null,
-    notes: parsed.data.notes || null,
-    status: "scheduled",
-  });
+  const { data, error } = await supabase
+    .from("bookings")
+    .insert({
+      organization_id: organization.id,
+      lead_id: leadId,
+      customer_name: parsed.data.customerName,
+      email: parsed.data.email || null,
+      phone: parsed.data.phone || null,
+      service: parsed.data.service,
+      starts_on: parsed.data.startsOn,
+      start_time: parsed.data.startTime,
+      reminder_on: parsed.data.reminderOn || null,
+      notes: parsed.data.notes || null,
+      status: "scheduled",
+    })
+    .select("id")
+    .single();
 
-  if (error) {
+  if (error || !data) {
     return { ok: false, error: "Could not add this booking. Please try again." };
   }
 
+  await linkCreatedRecord(formData, "velto", data.id);
   revalidatePath("/dashboard/product");
   return { ok: true, message: "Booking added." };
 }

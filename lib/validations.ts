@@ -127,20 +127,45 @@ const optionalDateField = (message: string) =>
     .transform((value) => value || "")
     .refine((value) => value === "" || /^\d{4}-\d{2}-\d{2}$/.test(value), message);
 
+const uuidPattern =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 const optionalUuidField = (message: string) =>
   z
     .string()
     .trim()
     .optional()
     .transform((value) => value || "")
+    .refine((value) => value === "" || uuidPattern.test(value), message);
+
+const requiredUuidField = (message: string) =>
+  z.string().trim().refine((value) => uuidPattern.test(value), message);
+
+export const recordProductSchema = z.enum(["avyro", "velto", "rovyn"]);
+
+export const optionalRecordLinkSchema = z.object({
+  linkProduct: z
+    .string()
+    .trim()
+    .optional()
+    .transform((value) => value || "")
     .refine(
-      (value) =>
-        value === "" ||
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-          value,
-        ),
-      message,
-    );
+      (value) => value === "" || recordProductSchema.safeParse(value).success,
+      "That product is not valid.",
+    ),
+  linkId: optionalUuidField("That record is not valid."),
+});
+
+export const attachRecordLinkSchema = z.object({
+  fromProduct: recordProductSchema,
+  fromId: requiredUuidField("That record is not valid."),
+  toProduct: recordProductSchema,
+  toId: requiredUuidField("That record is not valid."),
+});
+
+export const deleteRecordLinkSchema = z.object({
+  linkId: requiredUuidField("That connection is not valid."),
+});
 
 export const createBookingSchema = z.object({
   customerName: z.string().trim().min(2, "Please enter the customer's name."),
@@ -166,9 +191,7 @@ export const updateBookingLeadSchema = z.object({
     .trim()
     .refine(
       (value) =>
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-          value,
-        ),
+        uuidPattern.test(value),
       "That booking is not valid.",
     ),
   leadId: optionalUuidField("That lead is not valid."),

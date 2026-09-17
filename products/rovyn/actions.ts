@@ -9,6 +9,7 @@ import {
   quoteStatusSchema,
   updateQuoteFollowUpSchema,
 } from "@/lib/validations";
+import { linkCreatedRecord } from "@/services/record-links";
 import type { Quote } from "@/types/database";
 
 const quoteColumns =
@@ -47,22 +48,27 @@ export async function createQuote(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.from("quotes").insert({
-    organization_id: organization.id,
-    customer_name: parsed.data.customerName,
-    email: parsed.data.email || null,
-    phone: parsed.data.phone || null,
-    title: parsed.data.title,
-    amount: parsed.data.amount ? Number(parsed.data.amount) : null,
-    notes: parsed.data.notes || null,
-    follow_up_on: parsed.data.followUpOn || null,
-    status: "sent",
-  });
+  const { data, error } = await supabase
+    .from("quotes")
+    .insert({
+      organization_id: organization.id,
+      customer_name: parsed.data.customerName,
+      email: parsed.data.email || null,
+      phone: parsed.data.phone || null,
+      title: parsed.data.title,
+      amount: parsed.data.amount ? Number(parsed.data.amount) : null,
+      notes: parsed.data.notes || null,
+      follow_up_on: parsed.data.followUpOn || null,
+      status: "sent",
+    })
+    .select("id")
+    .single();
 
-  if (error) {
+  if (error || !data) {
     return { ok: false, error: "Could not add this quote. Please try again." };
   }
 
+  await linkCreatedRecord(formData, "rovyn", data.id);
   revalidatePath("/dashboard/product");
   return { ok: true, message: "Quote added." };
 }

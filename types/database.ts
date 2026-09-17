@@ -174,6 +174,18 @@ export type Quote = {
   updated_at: string;
 };
 
+export type RecordProduct = "avyro" | "velto" | "rovyn";
+
+export type RecordLink = {
+  id: string;
+  organization_id: string;
+  from_product: RecordProduct;
+  from_id: string;
+  to_product: RecordProduct;
+  to_id: string;
+  created_at: string;
+};
+
 export type MemberWithProfile = OrganizationMember & {
   profiles: Pick<Profile, "full_name" | "email"> | null;
 };

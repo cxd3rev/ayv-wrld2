@@ -9,6 +9,7 @@ import {
   leadStatusSchema,
   updateLeadFollowUpSchema,
 } from "@/lib/validations";
+import { linkCreatedRecord } from "@/services/record-links";
 import type { Lead } from "@/types/database";
 
 export async function listLeads(): Promise<Lead[]> {
@@ -44,20 +45,25 @@ export async function createLead(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.from("leads").insert({
-    organization_id: organization.id,
-    name: parsed.data.name,
-    email: parsed.data.email || null,
-    phone: parsed.data.phone || null,
-    notes: parsed.data.notes || null,
-    follow_up_on: parsed.data.followUpOn || null,
-    status: "new",
-  });
+  const { data, error } = await supabase
+    .from("leads")
+    .insert({
+      organization_id: organization.id,
+      name: parsed.data.name,
+      email: parsed.data.email || null,
+      phone: parsed.data.phone || null,
+      notes: parsed.data.notes || null,
+      follow_up_on: parsed.data.followUpOn || null,
+      status: "new",
+    })
+    .select("id")
+    .single();
 
-  if (error) {
+  if (error || !data) {
     return { ok: false, error: "Could not add this lead. Please try again." };
   }
 
+  await linkCreatedRecord(formData, "avyro", data.id);
   revalidatePath("/dashboard/product");
   return { ok: true, message: "Lead added." };
 }
