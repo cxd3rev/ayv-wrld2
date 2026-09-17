@@ -34,6 +34,7 @@ function withProductSlug(row: SubscriptionRow): Subscription {
   const related = Array.isArray(row.products) ? row.products[0] : row.products;
   const slug = related?.slug && isBillableProductId(related.slug) ? related.slug : null;
   const { products: _products, ...subscription } = row;
+  void _products;
   return {
     ...subscription,
     product_slug: slug ?? productFromStripePriceId(subscription.stripe_price_id ?? null),
@@ -190,7 +191,7 @@ export function getBillableCatalog() {
     return {
       id,
       name: product?.name ?? id,
-      priceLabel: product?.pricing.label ?? "",
+      monthlyPrice: product?.pricing.monthly ?? null,
       configured: isProductCheckoutReady(id),
     };
   });

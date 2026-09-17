@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProductLogo } from "@/components/product-icon";
 import { formatPrice, type ProductConfig } from "@/config/products";
 import { ArrowUpRight } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 
 export function ProductCard({
@@ -13,6 +13,7 @@ export function ProductCard({
   index: number;
 }) {
   const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <Link
@@ -38,7 +39,7 @@ export function ProductCard({
         {product.pricing.monthly != null && (
           <p className="mt-5 flex items-baseline gap-1.5">
             <span className="display text-xl tracking-tight text-foreground">
-              {formatPrice(product.pricing.monthly)}
+              {formatPrice(product.pricing.monthly, locale)}
             </span>
             <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
               {t("common.perMonthShort")}

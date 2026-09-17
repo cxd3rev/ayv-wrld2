@@ -1,4 +1,5 @@
 import { productBrand, type BrandAssets } from "@/config/brands";
+import { calculatePricingSummary, formatEuroPrice } from "@/lib/pricing";
 
 /**
  * Central product catalog for every AYV WRLD product.
@@ -44,7 +45,6 @@ export type ProductConfig = {
   route: string;
   pricing: {
     monthly: number | null;
-    label: string;
   };
   navigation: ProductNavItem[];
   featureFlags: Record<string, boolean>;
@@ -73,7 +73,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("avyro"),
     accent: "#A3A3A3",
     route: "/dashboard/product",
-    pricing: { monthly: 49.99, label: "€49,99 / month" },
+    pricing: { monthly: 49 },
     navigation: [{ label: "Leads", href: "/dashboard/product" }],
     featureFlags: {
       leadCapture: true,
@@ -103,7 +103,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("velto", true),
     accent: "#7C3AED",
     route: "/dashboard/product",
-    pricing: { monthly: 49.99, label: "€49,99 / month" },
+    pricing: { monthly: 49 },
     navigation: [{ label: "Bookings", href: "/dashboard/product" }],
     featureFlags: {
       bookings: true,
@@ -132,7 +132,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("rovyn"),
     accent: "#00C853",
     route: "/dashboard/product",
-    pricing: { monthly: 89.99, label: "€89,99 / month" },
+    pricing: { monthly: 89 },
     navigation: [{ label: "Quotes", href: "/dashboard/product" }],
     featureFlags: {
       quotes: true,
@@ -161,7 +161,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("orvyn", true),
     accent: "#E10600",
     route: "/dashboard/product",
-    pricing: { monthly: 89.99, label: "€89,99 / month" },
+    pricing: { monthly: 89 },
     navigation: [{ label: "Invoices", href: "/dashboard/product" }],
     featureFlags: { invoices: true, reminders: true },
     dashboard: {
@@ -187,7 +187,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("nexro"),
     accent: "#1E40AF",
     route: "/dashboard/product",
-    pricing: { monthly: 129.99, label: "€129,99 / month" },
+    pricing: { monthly: 129 },
     navigation: [],
     featureFlags: {},
     dashboard: {
@@ -213,7 +213,7 @@ export const products: ProductConfig[] = [
     assets: productBrand("ravelo"),
     accent: "#1D4ED8",
     route: "/dashboard/product",
-    pricing: { monthly: 129.99, label: "€129,99 / month" },
+    pricing: { monthly: 129 },
     navigation: [],
     featureFlags: {},
     dashboard: {
@@ -228,21 +228,15 @@ export const defaultProductId: ProductId = "avyro";
 /** Fraction off the combined price when all products are bought as a bundle. */
 export const BUNDLE_DISCOUNT = 0.5;
 
-/** Combined monthly price of every product at its individual price. */
-export const bundleFullMonthly = Number(
-  products
-    .reduce((total, product) => total + (product.pricing.monthly ?? 0), 0)
-    .toFixed(2),
+export const bundlePricing = calculatePricingSummary(
+  products.flatMap((product) =>
+    product.pricing.monthly === null ? [] : [product.pricing.monthly],
+  ),
+  BUNDLE_DISCOUNT,
 );
 
-/** Discounted monthly price when the full bundle is purchased. */
-export const bundleMonthly = Number(
-  (bundleFullMonthly * (1 - BUNDLE_DISCOUNT)).toFixed(2),
-);
-
-/** Format a numeric amount as a euro price string (e.g. 49.99 -> "€49,99"). */
-export function formatPrice(amount: number) {
-  return `€${amount.toFixed(2).replace(".", ",")}`;
+export function formatPrice(amount: number, locale: string) {
+  return formatEuroPrice(amount, locale);
 }
 
 export function getProduct(slugOrId: string) {

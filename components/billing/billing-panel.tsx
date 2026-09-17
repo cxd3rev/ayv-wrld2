@@ -6,6 +6,7 @@ import { FormError } from "@/components/ui/form-error";
 import { formatDate } from "@/lib/utils";
 import { openBillingPortal, startCheckout } from "@/services/billing-actions";
 import { isPaidStatus } from "@/lib/billing-status";
+import { formatEuroPrice } from "@/lib/pricing";
 import type { BillableProductId } from "@/lib/stripe-catalog";
 import type { Subscription } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
@@ -14,7 +15,7 @@ import { useState } from "react";
 export type BillableCatalogItem = {
   id: BillableProductId;
   name: string;
-  priceLabel: string;
+  monthlyPrice: number | null;
   configured: boolean;
 };
 
@@ -28,6 +29,7 @@ export function BillingPanel({
   stripeReady: boolean;
 }) {
   const t = useTranslations("billing");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const statusLabel: Record<string, string> = {
     active: t("statusActive"),
@@ -67,7 +69,11 @@ export function BillingPanel({
         return (
           <Card key={product.id}>
             <CardHeader>
-              <CardDescription>{product.priceLabel}</CardDescription>
+              <CardDescription>
+                {product.monthlyPrice === null
+                  ? t("notSubscribed")
+                  : `${formatEuroPrice(product.monthlyPrice, locale)} ${tCommon("perMonth")}`}
+              </CardDescription>
               <CardTitle>{product.name}</CardTitle>
               <p className="pt-2 text-sm text-muted">
                 {subscription

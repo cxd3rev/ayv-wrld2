@@ -2,10 +2,10 @@ import { Atmosphere } from "@/components/atmosphere";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/header";
 import { Badge } from "@/components/ui/badge";
 import { ProductLogo } from "@/components/product-icon";
-import { bundleMonthly, formatPrice, getProduct, products } from "@/config/products";
+import { bundlePricing, formatPrice, getProduct, products } from "@/config/products";
 import { openProductWorkspace } from "@/services/product-switch";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -23,6 +23,7 @@ export default async function ProductPage({
   if (!product) notFound();
 
   const t = await getTranslations();
+  const locale = await getLocale();
   const isActive = product.status === "active";
   const productNumber = String(products.findIndex((p) => p.id === product.id) + 1).padStart(2, "0");
   const others = products.filter((p) => p.id !== product.id).slice(0, 3);
@@ -65,13 +66,17 @@ export default async function ProductPage({
                 <div className="mt-10 flex flex-wrap items-end gap-x-8 gap-y-4">
                   {product.pricing.monthly != null ? (
                     <p className="flex items-baseline gap-2">
-                      <span className="display text-5xl tracking-tight">{formatPrice(product.pricing.monthly)}</span>
+                      <span className="display text-5xl tracking-tight">
+                        {formatPrice(product.pricing.monthly, locale)}
+                      </span>
                       <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
                         {t("common.perMonth")}
                       </span>
                     </p>
                   ) : (
-                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">{product.pricing.label}</p>
+                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
+                      {t("common.comingSoon")}
+                    </p>
                   )}
                 </div>
 
@@ -164,14 +169,16 @@ export default async function ProductPage({
                 <p className="mt-6 flex items-baseline gap-2">
                   {product.pricing.monthly != null ? (
                     <>
-                      <span className="display text-5xl tracking-tight">{formatPrice(product.pricing.monthly)}</span>
+                      <span className="display text-5xl tracking-tight">
+                        {formatPrice(product.pricing.monthly, locale)}
+                      </span>
                       <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
                         {t("common.perMonth")}
                       </span>
                     </>
                   ) : (
                     <span className="font-mono text-sm uppercase tracking-[0.14em] text-muted">
-                      {product.pricing.label}
+                      {t("common.comingSoon")}
                     </span>
                   )}
                 </p>
@@ -193,7 +200,9 @@ export default async function ProductPage({
                   <Badge tone="accent">{t("common.save50")}</Badge>
                 </div>
                 <p className="mt-6 flex items-baseline gap-2">
-                  <span className="display text-5xl tracking-tight">{formatPrice(bundleMonthly)}</span>
+                  <span className="display text-5xl tracking-tight">
+                    {formatPrice(bundlePricing.discountedMonthly, locale)}
+                  </span>
                   <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
                     {t("common.perMonth")}
                   </span>

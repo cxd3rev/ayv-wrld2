@@ -1,8 +1,8 @@
 import { ArrowRight, LayoutGrid, Repeat, ShieldCheck, Users, Wallet, Zap } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { bundleFullMonthly, bundleMonthly, formatPrice } from "@/config/products";
+import { bundlePricing, formatPrice } from "@/config/products";
 
 const featureIcons = [LayoutGrid, Zap, Repeat, Users, ShieldCheck, Wallet] as const;
 const featureKeys = ["login", "live", "automations", "teams", "secure", "pricing"] as const;
@@ -133,6 +133,7 @@ export function HowItWorks() {
 export function BundleOffer() {
   const t = useTranslations("bundle");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
 
   return (
     <div className="relative mt-8 overflow-hidden rounded-2xl border border-border bg-card p-8 lg:p-12">
@@ -147,8 +148,12 @@ export function BundleOffer() {
         </div>
         <div className="flex flex-col items-start gap-5 lg:items-end">
           <div className="flex items-baseline gap-3">
-            <span className="font-mono text-lg text-muted line-through">{formatPrice(bundleFullMonthly)}</span>
-            <span className="display text-4xl tracking-tight lg:text-5xl">{formatPrice(bundleMonthly)}</span>
+            <span className="font-mono text-lg text-muted line-through">
+              {formatPrice(bundlePricing.fullMonthly, locale)}
+            </span>
+            <span className="display text-4xl tracking-tight lg:text-5xl">
+              {formatPrice(bundlePricing.discountedMonthly, locale)}
+            </span>
             <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">{tCommon("perMonth")}</span>
           </div>
           <Link

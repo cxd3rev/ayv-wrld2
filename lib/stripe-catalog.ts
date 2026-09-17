@@ -12,6 +12,13 @@ const PRICE_ENV: Record<BillableProductId, string> = {
   orvyn: "STRIPE_ORVYN_PRICE_ID",
 };
 
+const LEGACY_PRICE_IDS: Record<BillableProductId, readonly string[]> = {
+  avyro: ["price_1UGfwEV05bHNwI4Wgwd8IUTt"],
+  velto: ["price_1UGiKnV05bHNwI4WUPKCUXiG"],
+  rovyn: ["price_1UGlkJV05bHNwI4WyHW2P9WH"],
+  orvyn: ["price_1UGnkrV05bHNwI4W2UBrFrKc"],
+};
+
 export function isBillableProductId(value: string): value is BillableProductId {
   return (BILLABLE_PRODUCTS as readonly string[]).includes(value);
 }
@@ -24,7 +31,12 @@ export function getStripePriceId(product: BillableProductId) {
 export function productFromStripePriceId(priceId: string | null | undefined): BillableProductId | null {
   if (!priceId) return null;
   for (const product of BILLABLE_PRODUCTS) {
-    if (getStripePriceId(product) === priceId) return product;
+    if (
+      getStripePriceId(product) === priceId ||
+      LEGACY_PRICE_IDS[product].includes(priceId)
+    ) {
+      return product;
+    }
   }
   return null;
 }
