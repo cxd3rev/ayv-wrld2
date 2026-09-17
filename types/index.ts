@@ -1,6 +1,8 @@
 export type { ProductConfig, ProductId, ProductStatus } from "@/config/products";
 export type {
   BillingCustomer,
+  Booking,
+  BookingStatus,
   EmailEvent,
   Lead,
   LeadStatus,

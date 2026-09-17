@@ -10,6 +10,7 @@ import { productBrand, type BrandAssets } from "@/config/brands";
  *    product business logic into the shared foundation.
  *
  * Avyro is the first live product: a small lead-conversion workspace.
+ * Velto is the second: org-scoped bookings with reminder dates.
  * Other products stay coming_soon until they have their own tools.
  */
 
@@ -85,17 +86,20 @@ export const products: ProductConfig[] = [
     description: "Booking and reminder automation",
     longDescription:
       "Velto helps businesses take bookings and send reminders so fewer appointments are missed.",
-    status: "coming_soon",
-    marketingStatus: "Coming soon",
+    status: "active",
+    marketingStatus: "In development",
     assets: productBrand("velto", true),
     accent: "#7C3AED",
     route: "/dashboard/product",
     pricing: { monthly: 49.99, label: "€49,99 / month" },
-    navigation: [],
-    featureFlags: {},
+    navigation: [{ label: "Bookings", href: "/dashboard/product" }],
+    featureFlags: {
+      bookings: true,
+      reminders: true,
+    },
     dashboard: {
       title: "Velto",
-      description: "Booking and reminder automation is coming soon.",
+      description: "Take bookings and send reminders so fewer appointments are missed.",
     },
   },
   {

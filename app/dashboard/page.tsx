@@ -3,6 +3,7 @@ import { products } from "@/config/products";
 import { requireWorkspace } from "@/lib/auth/session";
 import { getOrganizationSubscription } from "@/services/billing";
 import { listNotifications } from "@/services/notifications";
+import { openProductWorkspace } from "@/services/product-switch";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 
@@ -39,30 +40,39 @@ export default async function DashboardPage() {
       </div>
 
       <div className="mt-4 grid gap-0 border-t border-foreground/10 lg:grid-cols-2">
-        <Link
-          href="/dashboard/product"
-          className="group flex min-h-44 flex-col justify-between border-b border-foreground/10 py-8 pr-6 lg:border-r lg:border-b-0 lg:pr-10"
+        <form
+          action={openProductWorkspace}
+          className="border-b border-foreground/10 lg:border-r lg:border-b-0"
         >
-          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Start here</p>
-          <div>
-            <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
-              Open Avyro
-            </h2>
-            <p className="mt-2 text-sm text-muted">Follow up with new leads so conversations become customers.</p>
-          </div>
-        </Link>
-        <Link
-          href="/dashboard/settings/team"
-          className="group flex min-h-44 flex-col justify-between py-8 lg:pl-10"
-        >
-          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Team</p>
-          <div>
-            <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
-              Invite a teammate
-            </h2>
-            <p className="mt-2 text-sm text-muted">Share this workspace when you are ready.</p>
-          </div>
-        </Link>
+          <input type="hidden" name="productId" value="avyro" />
+          <button
+            type="submit"
+            className="group flex min-h-44 w-full flex-col justify-between py-8 pr-6 text-left lg:pr-10"
+          >
+            <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Start here</p>
+            <div>
+              <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
+                Open Avyro
+              </h2>
+              <p className="mt-2 text-sm text-muted">Follow up with new leads so conversations become customers.</p>
+            </div>
+          </button>
+        </form>
+        <form action={openProductWorkspace}>
+          <input type="hidden" name="productId" value="velto" />
+          <button
+            type="submit"
+            className="group flex min-h-44 w-full flex-col justify-between py-8 text-left lg:pl-10"
+          >
+            <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Bookings</p>
+            <div>
+              <h2 className="display text-3xl tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-4xl">
+                Open Velto
+              </h2>
+              <p className="mt-2 text-sm text-muted">Take bookings and send reminders so fewer appointments are missed.</p>
+            </div>
+          </button>
+        </form>
       </div>
 
       <section className="mt-4 border-t border-foreground/10 py-8">
@@ -73,7 +83,6 @@ export default async function DashboardPage() {
         <ol className="divide-y divide-foreground/10 border-y border-foreground/10">
           {[
             { href: "/dashboard/settings", label: "Complete business profile", done: Boolean(organization.industry) },
-            { href: "/dashboard/product", label: "Open the Avyro workspace", done: false },
             { href: "/dashboard/settings/team", label: "Invite teammates", done: false },
             { href: "/dashboard/billing", label: "Review billing", done: Boolean(subscription) },
           ].map((item, index) => (
@@ -89,11 +98,23 @@ export default async function DashboardPage() {
       </section>
 
       <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
-        {products.map((product) => (
-          <span key={product.id} className="font-mono text-xs tracking-[0.14em] text-muted uppercase">
-            {product.name}
-          </span>
-        ))}
+        {products.map((product) =>
+          product.status === "active" ? (
+            <form key={product.id} action={openProductWorkspace}>
+              <input type="hidden" name="productId" value={product.id} />
+              <button
+                type="submit"
+                className="font-mono text-xs tracking-[0.14em] text-muted uppercase hover:text-foreground"
+              >
+                {product.name}
+              </button>
+            </form>
+          ) : (
+            <span key={product.id} className="font-mono text-xs tracking-[0.14em] text-muted uppercase">
+              {product.name}
+            </span>
+          ),
+        )}
       </div>
     </div>
   );

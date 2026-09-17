@@ -3,6 +3,7 @@ import { MarketingFooter, MarketingHeader } from "@/components/marketing/header"
 import { Badge } from "@/components/ui/badge";
 import { ProductLogo } from "@/components/product-icon";
 import { formatPrice, getProduct, products } from "@/config/products";
+import { openProductWorkspace } from "@/services/product-switch";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -52,13 +53,21 @@ export default async function ProductPage({
             Or get all six tools in the bundle and save 50%.
           </p>
           {product.status === "active" ? (
-            <Link
-              href="/signup"
-              className="group mt-12 inline-flex h-14 items-center rounded-full bg-foreground px-8 text-base font-medium text-background hover:bg-foreground/90"
-            >
-              Join the foundation
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+            <div className="mt-12 flex flex-wrap items-center gap-6">
+              <form action={openProductWorkspace}>
+                <input type="hidden" name="productId" value={product.id} />
+                <button
+                  type="submit"
+                  className="group inline-flex h-14 items-center rounded-full bg-foreground px-8 text-base font-medium text-background hover:bg-foreground/90"
+                >
+                  Open {product.name}
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </button>
+              </form>
+              <Link href="/signup" className="text-sm text-muted hover:text-foreground">
+                Join the foundation
+              </Link>
+            </div>
           ) : (
             <p className="mt-12 text-sm text-muted">
               This product is not available yet. Create an AYV WRLD account to be ready when it launches.

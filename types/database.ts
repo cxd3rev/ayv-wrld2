@@ -129,6 +129,29 @@ export type Lead = {
   updated_at: string;
 };
 
+export type BookingStatus =
+  | "scheduled"
+  | "confirmed"
+  | "completed"
+  | "cancelled"
+  | "no_show";
+
+export type Booking = {
+  id: string;
+  organization_id: string;
+  customer_name: string;
+  email: string | null;
+  phone: string | null;
+  service: string;
+  starts_on: string;
+  start_time: string;
+  status: BookingStatus;
+  reminder_on: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type MemberWithProfile = OrganizationMember & {
   profiles: Pick<Profile, "full_name" | "email"> | null;
 };

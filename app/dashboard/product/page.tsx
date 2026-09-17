@@ -6,11 +6,16 @@ import { getProduct } from "@/config/products";
 import { getActiveProductId } from "@/lib/product-cookie";
 import { AvyroLeadsWorkspace } from "@/products/avyro/leads-workspace";
 import { listLeads } from "@/products/avyro/actions";
+import { VeltoBookingsWorkspace } from "@/products/velto/bookings-workspace";
+import { listBookings } from "@/products/velto/actions";
 
 export default async function ProductDashboardPage() {
   const productId = await getActiveProductId();
   const product = getProduct(productId)!;
-  const leads = product.id === "avyro" && product.featureFlags.leadCapture ? await listLeads() : [];
+  const showAvyro = product.id === "avyro" && Boolean(product.featureFlags.leadCapture);
+  const showVelto = product.id === "velto" && Boolean(product.featureFlags.bookings);
+  const leads = showAvyro ? await listLeads() : [];
+  const bookings = showVelto ? await listBookings() : [];
 
   return (
     <div>
@@ -28,15 +33,17 @@ export default async function ProductDashboardPage() {
         <EmptyState
           icon={<ProductIcon product={product} size={64} className="h-16 w-16" />}
           title={`${product.name} is coming soon`}
-          description="This product is configured in the foundation, but its features are not built yet. Switch back to Avyro to continue."
+          description="This product is configured in the foundation, but its features are not built yet. Switch back to Avyro or Velto to continue."
         />
-      ) : product.id === "avyro" && product.featureFlags.leadCapture ? (
+      ) : showAvyro ? (
         <AvyroLeadsWorkspace leads={leads} />
+      ) : showVelto ? (
+        <VeltoBookingsWorkspace bookings={bookings} />
       ) : (
         <EmptyState
           icon={<ProductIcon product={product} size={64} className="h-16 w-16" />}
           title={`${product.name} is not ready yet`}
-          description="Switch back to Avyro to follow up with new leads."
+          description="Switch back to Avyro or Velto to keep working."
         />
       )}
     </div>

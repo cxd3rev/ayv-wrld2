@@ -99,6 +99,55 @@ export const updateLeadFollowUpSchema = z.object({
     ),
 });
 
+export const bookingStatuses = [
+  "scheduled",
+  "confirmed",
+  "completed",
+  "cancelled",
+  "no_show",
+] as const;
+
+export const bookingStatusSchema = z.enum(bookingStatuses);
+
+const optionalEmailField = z
+  .string()
+  .trim()
+  .optional()
+  .transform((value) => value || "")
+  .refine(
+    (value) => value === "" || z.string().email().safeParse(value).success,
+    "Please enter a valid email.",
+  );
+
+const optionalDateField = (message: string) =>
+  z
+    .string()
+    .trim()
+    .optional()
+    .transform((value) => value || "")
+    .refine((value) => value === "" || /^\d{4}-\d{2}-\d{2}$/.test(value), message);
+
+export const createBookingSchema = z.object({
+  customerName: z.string().trim().min(2, "Please enter the customer's name."),
+  email: optionalEmailField,
+  phone: z.string().trim().optional().transform((value) => value || ""),
+  service: z.string().trim().min(2, "Please enter what they are booking."),
+  startsOn: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Please choose a booking date."),
+  startTime: z
+    .string()
+    .trim()
+    .regex(/^\d{2}:\d{2}(?::\d{2})?$/, "Please choose a booking time."),
+  reminderOn: optionalDateField("Please enter a valid reminder date."),
+  notes: z.string().trim().optional().transform((value) => value || ""),
+});
+
+export const updateBookingReminderSchema = z.object({
+  reminderOn: optionalDateField("Please enter a valid reminder date."),
+});
+
 export function firstZodError(error: z.ZodError) {
   return error.issues[0]?.message ?? "Please check the form and try again.";
 }
