@@ -5,6 +5,7 @@ import { BundleOffer, Features, FinalCta, HowItWorks } from "@/components/market
 import { products } from "@/config/products";
 import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function HomePage() {
@@ -22,32 +23,44 @@ export default async function HomePage() {
 
       <section className="relative overflow-hidden">
         <div className="dot-field" />
-        <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pt-20 pb-16 lg:px-12 lg:pt-28">
-          <p className="kicker rise-in">{t("kicker")}</p>
-          <h1 className="display mt-8 max-w-[13ch] text-[clamp(3rem,11vw,9rem)] leading-[0.9] rise-in-2 text-balance">
-            {t.rich("headline", {
-              muted: (chunks) => <span className="text-muted">{chunks}</span>,
-            })}
-          </h1>
-          <div className="mt-10 flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
-            <p className="max-w-xl text-lg leading-relaxed text-muted lg:text-xl text-pretty rise-in-3">
+        <div className="relative z-10 mx-auto grid w-full max-w-[1400px] items-center gap-12 px-6 pt-16 pb-16 lg:grid-cols-[1fr_0.95fr] lg:gap-8 lg:px-12 lg:pt-24">
+          <div>
+            <p className="kicker rise-in">{t("kicker")}</p>
+            <h1 className="display mt-8 max-w-[12ch] text-[clamp(3rem,9vw,7rem)] leading-[0.95] rise-in-2 text-balance">
+              {t.rich("headline", {
+                muted: (chunks) => <span className="text-muted">{chunks}</span>,
+              })}
+            </h1>
+            <p className="mt-8 max-w-lg text-lg leading-relaxed text-muted lg:text-xl text-pretty rise-in-3">
               {(await getTranslations("meta"))("description")}
             </p>
-            <div className="flex flex-col gap-3 rise-in-3 sm:flex-row">
+            <div className="mt-10 flex flex-col items-start gap-3 rise-in-3 sm:flex-row sm:items-center">
               <Link
                 href="/signup"
-                className="group inline-flex h-14 items-center justify-center rounded-full bg-accent px-8 text-base font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
+                className="group inline-flex h-14 items-center justify-center rounded-full bg-card px-7 text-base font-medium text-foreground ring-1 ring-border transition-colors hover:bg-card-hover"
               >
                 {t("startFree")}
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 href="#products"
-                className="inline-flex h-14 items-center justify-center rounded-full border border-border bg-card px-8 text-base font-medium transition-colors hover:bg-card-hover"
+                className="inline-flex h-14 items-center justify-center rounded-full px-5 text-base font-medium text-muted transition-colors hover:text-foreground"
               >
                 {t("seeProducts")}
               </Link>
             </div>
+          </div>
+
+          <div className="relative rise-in-3">
+            <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_60%)]" />
+            <Image
+              src="/hero/cube.png"
+              alt=""
+              width={900}
+              height={900}
+              priority
+              className="mx-auto h-auto w-full max-w-[560px] select-none object-contain"
+            />
           </div>
         </div>
 

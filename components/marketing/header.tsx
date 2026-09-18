@@ -54,7 +54,7 @@ export function MarketingHeader() {
           </Link>
           <Link
             href="/signup"
-            className="inline-flex h-10 items-center rounded-full bg-accent px-5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
+            className="inline-flex h-10 items-center rounded-full bg-card px-5 text-sm font-medium text-foreground ring-1 ring-border transition-colors hover:bg-card-hover"
           >
             {t("signup")}
           </Link>
