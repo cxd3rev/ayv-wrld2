@@ -42,6 +42,13 @@ export type ProductConfig = {
   marketingStatus: "Available" | "Coming soon";
   assets: BrandAssets;
   accent: string;
+  category: "Acquire" | "Schedule" | "Convert" | "Collect" | "Retain" | "Reputation";
+  productType: "automation";
+  marketingRoute: `/automation/${ProductId}`;
+  cta: {
+    active: string;
+    comingSoon: string;
+  };
   route: string;
   pricing: {
     monthly: number | null;
@@ -72,6 +79,10 @@ export const products: ProductConfig[] = [
     marketingStatus: "Available",
     assets: productBrand("avyro"),
     accent: "#A3A3A3",
+    category: "Acquire",
+    productType: "automation",
+    marketingRoute: "/automation/avyro",
+    cta: { active: "Open Avyro", comingSoon: "Coming soon" },
     route: "/dashboard/avyro",
     pricing: { monthly: 49 },
     navigation: [{ label: "Leads", href: "/dashboard/avyro" }],
@@ -102,6 +113,10 @@ export const products: ProductConfig[] = [
     marketingStatus: "Available",
     assets: productBrand("velto", true),
     accent: "#7C3AED",
+    category: "Schedule",
+    productType: "automation",
+    marketingRoute: "/automation/velto",
+    cta: { active: "Open Velto", comingSoon: "Coming soon" },
     route: "/dashboard/velto",
     pricing: { monthly: 49 },
     navigation: [{ label: "Bookings", href: "/dashboard/velto" }],
@@ -131,6 +146,10 @@ export const products: ProductConfig[] = [
     marketingStatus: "Available",
     assets: productBrand("rovyn"),
     accent: "#00C853",
+    category: "Convert",
+    productType: "automation",
+    marketingRoute: "/automation/rovyn",
+    cta: { active: "Open Rovyn", comingSoon: "Coming soon" },
     route: "/dashboard/rovyn",
     pricing: { monthly: 89 },
     navigation: [{ label: "Quotes", href: "/dashboard/rovyn" }],
@@ -160,6 +179,10 @@ export const products: ProductConfig[] = [
     marketingStatus: "Available",
     assets: productBrand("orvyn", true),
     accent: "#E10600",
+    category: "Collect",
+    productType: "automation",
+    marketingRoute: "/automation/orvyn",
+    cta: { active: "Open Orvyn", comingSoon: "Coming soon" },
     route: "/dashboard/orvyn",
     pricing: { monthly: 89 },
     navigation: [{ label: "Invoices", href: "/dashboard/orvyn" }],
@@ -186,6 +209,10 @@ export const products: ProductConfig[] = [
     marketingStatus: "Coming soon",
     assets: productBrand("nexro"),
     accent: "#1E40AF",
+    category: "Retain",
+    productType: "automation",
+    marketingRoute: "/automation/nexro",
+    cta: { active: "Open Nexro", comingSoon: "In development" },
     route: "/dashboard/product",
     pricing: { monthly: 129 },
     navigation: [],
@@ -212,6 +239,10 @@ export const products: ProductConfig[] = [
     marketingStatus: "Coming soon",
     assets: productBrand("ravelo"),
     accent: "#1D4ED8",
+    category: "Reputation",
+    productType: "automation",
+    marketingRoute: "/automation/ravelo",
+    cta: { active: "Open Ravelo", comingSoon: "In development" },
     route: "/dashboard/product",
     pricing: { monthly: 129 },
     navigation: [],

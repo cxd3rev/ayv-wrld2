@@ -114,9 +114,79 @@ body {
 
 .atmosphere {
   background-color: var(--background);
+}
+
+.technical-grid {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
   background-image:
-    radial-gradient(120% 90% at 82% 12%, rgba(255, 255, 255, 0.06) 0%, transparent 46%),
-    linear-gradient(180deg, #0d0d0d 0%, #0a0a0a 55%, #070707 100%);
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  mask-image: linear-gradient(to right, transparent, black 35%, black);
+}
+
+.button-primary,
+.button-secondary {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0 1.25rem;
+  border: 1px solid var(--border);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+
+.button-primary {
+  border-color: var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.button-secondary {
+  background: var(--card);
+  color: var(--foreground);
+}
+
+.button-primary:hover,
+.button-secondary:hover {
+  transform: translateY(-2px);
+}
+
+.button-secondary:hover {
+  border-color: color-mix(in srgb, var(--foreground) 45%, var(--border));
+  background: var(--card-hover);
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  background: var(--foreground);
+  color: var(--background);
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+:where(a, button, select, summary):focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 4px;
+}
+
+main > section:not(:first-child) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
 }
 
 /* Dotted field evoking the reference world-map backdrop, fading toward the top-right. */
@@ -342,5 +412,14 @@ body {
   .rise-in-2,
   .rise-in-3 {
     animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

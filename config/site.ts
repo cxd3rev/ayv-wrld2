@@ -5,8 +5,8 @@
 export const siteConfig = {
   name: "AYV WRLD",
   shortName: "AYV",
-  tagline: "Software that turns everyday business tasks into automated revenue.",
+  tagline: "Build systems. Automate work. Create what’s next.",
   description:
-    "AYV WRLD creates focused software tools that help businesses capture leads, book customers, close quotes, collect payments, and bring customers back.",
-  url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+    "AYV WRLD builds practical software, business automation systems, and independent digital products.",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ayv-wrld2.vercel.app",
 } as const;

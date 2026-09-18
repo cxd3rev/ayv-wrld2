@@ -26,11 +26,31 @@ const jetbrainsMono = JetBrains_Mono({
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("meta");
   return {
+    metadataBase: new URL(siteConfig.url),
     title: {
       default: siteConfig.name,
       template: `%s · ${siteConfig.name}`,
     },
     description: t("description"),
+    applicationName: siteConfig.name,
+    icons: {
+      icon: "/brands/ayv/icon.png",
+      apple: "/brands/ayv/icon.png",
+    },
+    openGraph: {
+      siteName: siteConfig.name,
+      title: siteConfig.name,
+      description: siteConfig.description,
+      url: "/",
+      type: "website",
+      images: [{ url: "/brands/ayv/logo.png", alt: "AYV WRLD" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: siteConfig.name,
+      description: siteConfig.description,
+      images: ["/brands/ayv/logo.png"],
+    },
   };
 }
 

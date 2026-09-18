@@ -1,112 +1,166 @@
-import { Atmosphere } from "@/components/atmosphere";
-import { MarketingFooter, MarketingHeader } from "@/components/marketing/header";
-import { ProductCard } from "@/components/marketing/product-card";
-import { BetterTogether, BundleOffer, Features, FinalCta, HowItWorks } from "@/components/marketing/sections";
-import { products } from "@/config/products";
 import { ayvBrand } from "@/config/brands";
-import { ArrowRight } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { products, formatPrice } from "@/config/products";
+import { getPublicCopy, projects } from "@/config/public-site";
+import { resolveLocale } from "@/i18n/config";
+import {
+  AutomationProductCard,
+  CTASection,
+  ProjectCard,
+  PublicShell,
+  SectionHeading,
+} from "@/components/marketing/public-site";
+import { ArrowRight, Boxes, FlaskConical, Workflow } from "lucide-react";
+import type { Metadata } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 
+export async function generateMetadata(): Promise<Metadata> {
+  const c = getPublicCopy(resolveLocale(await getLocale()));
+  return {
+    title: c.metadata.home[0],
+    description: c.metadata.home[1],
+    alternates: { canonical: "/" },
+    openGraph: { title: c.metadata.home[0], description: c.metadata.home[1], url: "/", type: "website" },
+  };
+}
+
 export default async function HomePage() {
-  const t = await getTranslations("home");
-  const stats = [
-    { value: "6", label: t("statTools") },
-    { value: "1", label: t("statLogin") },
-    { value: "0", label: t("statStitch") },
-    { value: "∞", label: t("statAutomations") },
+  const locale = resolveLocale(await getLocale());
+  const c = getPublicCopy(locale);
+  const t = await getTranslations();
+  const disciplines = [
+    { title: c.home.build, body: c.home.buildBody, icon: Boxes },
+    { title: c.home.automate, body: c.home.automateBody, icon: Workflow },
+    { title: c.home.experiment, body: c.home.experimentBody, icon: FlaskConical },
   ];
+  const organization = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "AYV WRLD",
+    url: "https://ayv-wrld2.vercel.app",
+    description: c.metadata.home[1],
+  };
 
   return (
-    <Atmosphere>
-      <MarketingHeader />
-
-      <section className="relative overflow-hidden">
-        <div className="dot-field" />
-        <div className="relative z-10 mx-auto grid w-full max-w-[1400px] items-center gap-12 px-6 pt-16 pb-16 lg:grid-cols-[1fr_0.95fr] lg:gap-8 lg:px-12 lg:pt-24">
+    <PublicShell>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization).replace(/</g, "\\u003c") }} />
+      <main id="main-content">
+        <section className="relative overflow-hidden border-b border-border">
+          <div className="technical-grid" aria-hidden />
+          <div className="relative mx-auto grid w-full max-w-[1400px] items-center gap-12 px-6 py-20 lg:grid-cols-[1fr_0.72fr] lg:px-12 lg:py-28">
           <div>
-            <p className="kicker rise-in">{t("kicker")}</p>
-            <h1 className="display mt-8 max-w-[12ch] text-[clamp(3rem,9vw,7rem)] leading-[0.95] rise-in-2 text-balance">
-              {t.rich("headline", {
-                muted: (chunks) => <span className="text-muted">{chunks}</span>,
-              })}
-            </h1>
-            <p className="mt-8 max-w-lg text-lg leading-relaxed text-muted lg:text-xl text-pretty rise-in-3">
-              {(await getTranslations("meta"))("description")}
-            </p>
-            <div className="mt-10 flex flex-col items-start gap-3 rise-in-3 sm:flex-row sm:items-center">
-              <Link
-                href="/signup"
-                className="group inline-flex h-14 items-center justify-center rounded-full bg-card px-7 text-base font-medium text-foreground ring-1 ring-border transition-colors hover:bg-card-hover"
-              >
-                {t("startFree")}
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link
-                href="#products"
-                className="inline-flex h-14 items-center justify-center rounded-full px-5 text-base font-medium text-muted transition-colors hover:text-foreground"
-              >
-                {t("seeProducts")}
-              </Link>
+              <p className="kicker rise-in">{c.home.eyebrow}</p>
+              <h1 className="display mt-8 max-w-[12ch] text-[clamp(3.5rem,8vw,7.6rem)] leading-[0.9] rise-in-2 text-balance">{c.home.title}</h1>
+              <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted sm:text-xl rise-in-3">{c.home.body}</p>
+              <div className="mt-10 flex flex-wrap gap-3 rise-in-3">
+                <Link href="/projects" className="button-primary">{c.home.projectsCta}<ArrowRight className="h-4 w-4" /></Link>
+                <Link href="#paths" className="button-secondary">{c.home.stacksCta}</Link>
+              </div>
+            </div>
+            <div className="hero-frame relative mx-auto flex aspect-square w-full max-w-[430px] items-center justify-center p-12 rise-in-3">
+              <div className="absolute inset-[12%] border border-border" />
+              <div className="absolute inset-[27%] rotate-45 border border-border" />
+              <Image src={ayvBrand.icon} alt="AYV WRLD" width={360} height={360} priority sizes="(max-width: 1024px) 70vw, 360px" className="mark-invert relative h-auto w-3/5 object-contain" />
+              <span className="absolute bottom-5 left-5 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">Build / Automate / Experiment</span>
             </div>
           </div>
+        </section>
 
-          <div className="relative rise-in-3">
-            <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_60%)]" />
-            <Image
-              src={ayvBrand.icon}
-              alt=""
-              width={900}
-              height={900}
-              priority
-              className="mark-invert mx-auto h-auto w-full max-w-[420px] select-none object-contain"
-            />
-          </div>
-        </div>
-
-        <div className="relative z-10 border-t border-border">
-          <div className="mx-auto grid w-full max-w-[1400px] grid-cols-2 md:grid-cols-4">
-            {stats.map((stat, index) => (
-              <div
-                key={stat.label}
-                className={`px-6 py-8 lg:px-12 ${index > 0 ? "border-l border-border" : ""} ${
-                  index === 2 ? "border-t border-border md:border-t-0" : ""
-                } ${index === 3 ? "border-t border-border md:border-t-0" : ""}`}
-              >
-                <p className="display text-5xl leading-none tracking-tight lg:text-6xl">{stat.value}</p>
-                <p className="mt-3 font-mono text-xs uppercase tracking-[0.14em] text-muted">{stat.label}</p>
-              </div>
+        <section className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
+          <SectionHeading eyebrow="01 / BUILD · AUTOMATE · EXPERIMENT" title={c.home.whatTitle} />
+          <div className="mt-12 grid border-l border-t border-border md:grid-cols-3">
+            {disciplines.map(({ title, body, icon: Icon }, index) => (
+              <article key={title} className="border-b border-r border-border p-7 lg:p-9">
+                <div className="flex items-center justify-between">
+                  <Icon className="h-5 w-5" strokeWidth={1.5} />
+                  <span className="font-mono text-xs text-muted">0{index + 1}</span>
+                </div>
+                <h3 className="display mt-16 text-2xl">{title}</h3>
+                <p className="mt-4 text-sm leading-relaxed text-muted">{body}</p>
+              </article>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      <Features />
+        <section id="paths" className="border-y border-border bg-card">
+          <div className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
+            <SectionHeading eyebrow="02 / PRODUCT PATHS" title={c.home.pathsTitle} body={c.home.pathsBody} />
+            <div className="mt-12 grid gap-5 lg:grid-cols-2">
+              <article className="flex min-h-[390px] flex-col justify-between border border-border bg-background p-8 lg:p-10">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">AYV WRLD → {c.common.individual}</p>
+                <div>
+                  <h3 className="display text-4xl lg:text-5xl">{c.home.armyTitle}</h3>
+                  <p className="mt-5 max-w-lg leading-relaxed text-muted">{c.home.armyBody}</p>
+                  <Link href="/one-man-army" className="button-secondary mt-8">{c.home.armyCta}<ArrowRight className="h-4 w-4" /></Link>
+                </div>
+              </article>
+              <article className="flex min-h-[390px] flex-col justify-between border border-border bg-background p-8 lg:p-10">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">AYV WRLD → {c.nav.automation}</p>
+                <div>
+                  <h3 className="display text-4xl lg:text-5xl">{c.home.automationTitle}</h3>
+                  <p className="mt-5 max-w-lg leading-relaxed text-muted">{c.home.automationBody}</p>
+                  <Link href="/automation" className="button-primary mt-8">{c.home.automationCta}<ArrowRight className="h-4 w-4" /></Link>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
 
-      <BetterTogether />
+        <section id="automation-products" className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
+          <SectionHeading eyebrow="03 / AYV AUTOMATION / PRODUCTS" title={c.home.productsTitle} body={c.home.productsBody} />
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <AutomationProductCard key={product.id} product={product} description={t(`catalog.${product.id}.description`)} status={product.status === "active" ? c.common.available : c.common.soon} cta={c.common.view} price={`${formatPrice(product.pricing.monthly ?? 0, locale)} ${c.common.perMonth}`} category={c.common.categories[product.category]} />
+            ))}
+          </div>
+        </section>
 
-      <HowItWorks />
+        <section className="border-y border-border bg-card">
+          <div className="mx-auto grid w-full max-w-[1400px] gap-12 px-6 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-28">
+            <SectionHeading eyebrow="04 / AYV AUTOMATION STACK / BUNDLE" title={c.home.stackTitle} body={c.home.stackBody} />
+            <div className="border border-border bg-background p-7 lg:p-9">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {products.map((product) => <div key={product.id} className="border border-border p-3 text-center font-mono text-xs uppercase tracking-[0.12em]">{product.name}</div>)}
+              </div>
+              <div className="my-5 flex items-center gap-3 text-muted"><span className="h-px flex-1 bg-border" /><span className="font-mono text-xs">↓</span><span className="h-px flex-1 bg-border" /></div>
+              <div className="border border-foreground/25 p-5 text-center">
+                <p className="display text-2xl">AYV Automation Stack</p>
+                <p className="mt-2 text-sm text-muted">{c.common.bundle} · €534 → €267</p>
+              </div>
+              <Link href="/automation/stack" className="button-primary mt-6 w-full">{c.home.stackCta}<ArrowRight className="h-4 w-4" /></Link>
+            </div>
+          </div>
+        </section>
 
-      <section id="products" className="mx-auto w-full max-w-[1400px] px-6 py-24 lg:px-12 lg:py-32">
-        <p className="kicker">{t("productsKicker")}</p>
-        <h2 className="display mt-7 max-w-3xl text-4xl leading-[1.02] lg:text-6xl text-balance">
-          {t.rich("productsTitle", {
-            muted: (chunks) => <span className="text-muted">{chunks}</span>,
-          })}
-        </h2>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">{t("productsBody")}</p>
-        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
-          ))}
-        </div>
-        <BundleOffer />
-      </section>
+        <section className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
+          <SectionHeading eyebrow="05 / AYV WRLD / PROJECTS" title={c.home.projectsTitle} body={c.home.projectsBody} />
+          <div className="mt-12 grid gap-5 lg:grid-cols-2">
+            {projects.map((project) => <ProjectCard key={project.slug} project={project} status={c.common.development} cta={c.common.view} />)}
+          </div>
+        </section>
 
-      <FinalCta />
+        <section className="border-y border-border">
+          <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-6 py-20 lg:grid-cols-2 lg:px-12 lg:py-28">
+            <SectionHeading eyebrow="06 / ONE MAN ARMY STACK" title={c.home.armyTitle} body={c.home.armyBody} />
+            <div className="grid grid-cols-2 gap-px bg-border border border-border">
+              {["Research", "Build", "Deploy", "Monetize", "Improve"].map((step, index) => <div key={step} className="bg-background p-5 font-mono text-xs uppercase tracking-[0.14em]"><span className="text-muted">0{index + 1} / </span>{step}</div>)}
+              <Link href="/one-man-army" className="flex items-center justify-between bg-foreground p-5 text-sm font-medium text-background">{c.home.armyCta}<ArrowRight className="h-4 w-4" /></Link>
+            </div>
+          </div>
+        </section>
 
-      <MarketingFooter />
-    </Atmosphere>
+        <section className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
+          <SectionHeading eyebrow="07 / ABOUT AYV WRLD" title={c.home.aboutTitle} body={c.home.aboutBody} />
+          <Link href="/about" className="button-secondary mt-9">{c.home.aboutCta}<ArrowRight className="h-4 w-4" /></Link>
+        </section>
+
+        <CTASection title={c.home.finalTitle} body={c.home.finalBody} links={[
+          { label: c.nav.projects, href: "/projects" },
+          { label: "One Man Army Stack", href: "/one-man-army" },
+          { label: "AYV Automation", href: "/automation", primary: true },
+        ]} />
+      </main>
+    </PublicShell>
   );
 }
