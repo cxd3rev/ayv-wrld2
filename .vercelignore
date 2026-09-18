@@ -1,0 +1,7 @@
+.cursor
+.tmp-screens
+supabase/.temp
+.env*
+!.env.example
+*.log
+coverage
