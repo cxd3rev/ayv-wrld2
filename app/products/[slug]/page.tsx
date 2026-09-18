@@ -30,7 +30,6 @@ export default async function ProductPage({
     | "catalog.velto.connectedValue"
     | "catalog.rovyn.connectedValue"
     | "catalog.orvyn.connectedValue";
-  const productNumber = String(products.findIndex((p) => p.id === product.id) + 1).padStart(2, "0");
   const others = products.filter((p) => p.id !== product.id).slice(0, 3);
   const highlights = [
     t(`catalog.${product.id}.highlight1`),
@@ -89,7 +88,7 @@ export default async function ProductPage({
                       <input type="hidden" name="productId" value={product.id} />
                       <button
                         type="submit"
-                        className="group inline-flex h-14 items-center rounded-full bg-accent px-8 text-base font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
+                        className="group inline-flex h-14 items-center justify-center rounded-full bg-card px-7 text-base font-medium text-foreground ring-1 ring-border transition-colors hover:bg-card-hover"
                       >
                         {t("productPage.openProduct", { name: product.name })}
                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -98,7 +97,7 @@ export default async function ProductPage({
                   ) : (
                     <Link
                       href="/signup"
-                      className="group inline-flex h-14 items-center rounded-full bg-accent px-8 text-base font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
+                      className="group inline-flex h-14 items-center justify-center rounded-full bg-card px-7 text-base font-medium text-foreground ring-1 ring-border transition-colors hover:bg-card-hover"
                     >
                       {t("productPage.getNotified")}
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -106,7 +105,7 @@ export default async function ProductPage({
                   )}
                   <Link
                     href="/signup"
-                    className="inline-flex h-14 items-center rounded-full border border-border bg-card px-8 text-base font-medium transition-colors hover:bg-card-hover"
+                    className="inline-flex h-14 items-center justify-center rounded-full px-5 text-base font-medium text-muted transition-colors hover:text-foreground"
                   >
                     {t("productPage.createAccount")}
                   </Link>
@@ -114,24 +113,12 @@ export default async function ProductPage({
               </div>
 
               <div className="relative">
-                <div
-                  className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-3xl border border-border bg-card"
-                  style={{
-                    backgroundImage: `radial-gradient(120% 120% at 50% 0%, ${product.accent}1f, transparent 60%)`,
-                  }}
-                >
-                  <span className="absolute left-6 top-6 font-mono text-xs uppercase tracking-[0.14em] text-muted">
-                    {productNumber}
-                  </span>
-                  <span
-                    className="absolute right-6 top-6 h-2.5 w-2.5 rounded-full"
-                    style={{ backgroundColor: isActive ? product.accent : "var(--border)" }}
-                  />
-                  <ProductLogo product={product} size={220} className="mark-invert h-40 w-40 lg:h-52 lg:w-52" />
-                  <span className="absolute bottom-6 left-6 right-6 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted">
-                    {t(`catalog.${product.id}.description`)}
-                  </span>
-                </div>
+                <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_60%)]" />
+                <ProductLogo
+                  product={product}
+                  size={900}
+                  className="mark-invert mx-auto h-auto w-full max-w-[420px] select-none"
+                />
               </div>
             </div>
           </div>
