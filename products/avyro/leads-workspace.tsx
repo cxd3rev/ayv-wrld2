@@ -88,6 +88,7 @@ export function AvyroLeadsWorkspace({
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [query, setQuery] = useState("");
 
   const counts = useMemo(() => {
     return {
@@ -97,6 +98,15 @@ export function AvyroLeadsWorkspace({
       due: leads.filter(isFollowUpDue).length,
     };
   }, [leads]);
+  const visibleLeads = useMemo(() => {
+    const needle = query.trim().toLocaleLowerCase(locale);
+    if (!needle) return leads;
+    return leads.filter((lead) =>
+      [lead.name, lead.email, lead.phone, lead.notes].some((value) =>
+        value?.toLocaleLowerCase(locale).includes(needle),
+      ),
+    );
+  }, [leads, locale, query]);
 
   useEffect(() => {
     if (!focusLeadId) return;
@@ -192,6 +202,12 @@ export function AvyroLeadsWorkspace({
       </form>
 
       <div className="mt-8">
+        {leads.length ? (
+          <div className="mb-4 max-w-sm">
+            <Label htmlFor="avyro-search">{tCommon("searchRecords")}</Label>
+            <Input id="avyro-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
+          </div>
+        ) : null}
         {leads.length === 0 ? (
           <EmptyState
             title={t("emptyTitle")}
@@ -210,7 +226,7 @@ export function AvyroLeadsWorkspace({
               </TR>
             </THead>
             <TBody>
-              {leads.map((lead) => {
+              {visibleLeads.map((lead) => {
                 const focused = focusLeadId === lead.id;
                 return (
                   <TR

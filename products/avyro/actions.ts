@@ -64,7 +64,7 @@ export async function createLead(formData: FormData) {
   }
 
   await linkCreatedRecord(formData, "avyro", data.id);
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/avyro");
   return { ok: true, message: "Lead added." };
 }
 
@@ -86,7 +86,7 @@ export async function updateLeadStatus(leadId: string, status: string) {
     return { ok: false, error: "Could not update this lead." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/avyro");
   return { ok: true, message: "Status updated." };
 }
 
@@ -108,6 +108,6 @@ export async function updateLeadFollowUp(leadId: string, followUpOn: string) {
     return { ok: false, error: "Could not save the follow-up date." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/avyro");
   return { ok: true, message: "Follow-up date saved." };
 }

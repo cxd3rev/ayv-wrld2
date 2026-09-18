@@ -25,7 +25,8 @@
     "currentProduct": "Current product",
     "notifications": "Notifications",
     "new": "New",
-    "optional": "Optional"
+    "optional": "Optional",
+    "searchRecords": "Search records"
   },
   "language": {
     "label": "Language",
@@ -53,7 +54,17 @@
     "statAutomations": "Automations once set",
     "productsKicker": "The products",
     "productsTitle": "Six focused tools. <muted>One for every job.</muted>",
-    "productsBody": "Each product does one thing well. Avyro is first — the rest connect to this same workspace as they launch."
+    "productsBody": "Start with one focused app. Avyro, Velto, Rovyn, and Orvyn are available now and connect in one workspace; Nexro and Ravelo are coming soon."
+  },
+  "together": {
+    "kicker": "Better together",
+    "title": "One client journey. Four focused apps.",
+    "body": "Each app works on its own. Connect them when you are ready and customer details, context, dates, and next actions move with the work.",
+    "step1": "Capture and follow up with a lead",
+    "step2": "Book the appointment and reminders",
+    "step3": "Send and follow up on the quote",
+    "step4": "Track the invoice and payment",
+    "outcome": "Enter details once, keep one client history, and see the full journey in the command center and shared calendar."
   },
   "features": {
     "kicker": "Capabilities",
@@ -87,7 +98,8 @@
     "title": "All six tools, one price.",
     "body": "Get every AYV WRLD product in a single subscription and pay half of what they cost on their own.",
     "cta": "Get the bundle",
-    "productBody": "Get {name} and all five other tools in one subscription for half the price of buying them separately."
+    "productBody": "The six-product bundle is displayed at 50% off the €534 catalog total. Product subscriptions are purchased individually today.",
+    "availability": "Bundle pricing is displayed for planning; there is no separate bundle checkout yet."
   },
   "cta": {
     "title": "Start turning work into revenue.",
@@ -112,7 +124,10 @@
     "planBody": "One clear monthly price. No setup fees, cancel anytime.",
     "startWith": "Start with {name}",
     "keepExploring": "Keep exploring",
-    "otherTools": "Other tools in AYV WRLD"
+    "otherTools": "Other tools in AYV WRLD",
+    "connectedKicker": "Connected value",
+    "connectedTitle": "{name} works alone—and better together.",
+    "connectedOutcome": "Connections reuse customer details, preserve context, update the shared calendar and command center, and never merge or delete the original records."
   },
   "catalog": {
     "avyro": {
@@ -123,7 +138,8 @@
       "highlight2": "Schedule smart follow-ups so nobody slips away",
       "highlight3": "See which leads are hot and where they came from",
       "nav": "Leads",
-      "dashboardDescription": "Follow up with new leads quickly so more conversations become customers."
+      "dashboardDescription": "Follow up with new leads quickly so more conversations become customers.",
+      "connectedValue": "Turn a qualified Avyro lead into a Velto booking without re-entering contact details, then keep the later quote and invoice in the same client journey."
     },
     "velto": {
       "tagline": "Booking + reminders",
@@ -133,7 +149,8 @@
       "highlight2": "Send automatic reminders before every appointment",
       "highlight3": "Cut no-shows without the back-and-forth",
       "nav": "Bookings",
-      "dashboardDescription": "Take bookings and send reminders so fewer appointments are missed."
+      "dashboardDescription": "Take bookings and send reminders so fewer appointments are missed.",
+      "connectedValue": "Create a booking from an Avyro lead, then hand a completed appointment to Rovyn with the customer and service context already filled."
     },
     "rovyn": {
       "tagline": "Quote follow-up",
@@ -143,7 +160,8 @@
       "highlight2": "Nudge undecided prospects at the right moment",
       "highlight3": "Close more work without chasing by hand",
       "nav": "Quotes",
-      "dashboardDescription": "Follow up on sent quotes so more proposals turn into booked work."
+      "dashboardDescription": "Follow up on sent quotes so more proposals turn into booked work.",
+      "connectedValue": "Build a quote from a Velto booking, keep its service context, and turn won work into an Orvyn invoice without typing the customer again."
     },
     "orvyn": {
       "tagline": "Payment + invoice follow-up",
@@ -153,7 +171,8 @@
       "highlight2": "Get paid faster with less awkward chasing",
       "highlight3": "Keep track of what's outstanding at a glance",
       "nav": "Payments",
-      "dashboardDescription": "Track unpaid invoices and schedule reminders so money arrives sooner."
+      "dashboardDescription": "Track unpaid invoices and schedule reminders so money arrives sooner.",
+      "connectedValue": "Create an invoice from a won Rovyn quote and retain the lead, booking, and quote context beside payment status and reminders."
     },
     "nexro": {
       "tagline": "Customer reactivation + referrals",
@@ -215,7 +234,7 @@
   "onboarding": {
     "kicker": "Workspace",
     "title": "Set up your workspace",
-    "body": "This creates your organization. You will be the owner. Future AYV WRLD products will use this same business profile.",
+    "body": "Start with one app and add others later. This shared organization keeps your business profile, customer context, calendar, and connected history without losing work.",
     "businessName": "Business name",
     "industry": "Industry",
     "chooseIndustry": "Choose an industry",
@@ -463,6 +482,7 @@
     "followUpOn": "Follow up on",
     "notes": "Notes",
     "notesPlaceholder": "Where they came from, what they asked for",
+    "searchPlaceholder": "Search leads by name or contact",
     "add": "Add lead",
     "adding": "Adding...",
     "emptyTitle": "No leads yet",
@@ -507,6 +527,7 @@
     "noLinkedLead": "No linked lead",
     "notes": "Notes",
     "notesPlaceholder": "What they booked, anything to remember",
+    "searchPlaceholder": "Search bookings by customer or service",
     "add": "Add booking",
     "adding": "Adding...",
     "emptyTitle": "No bookings yet",
@@ -526,6 +547,8 @@
     "statusCancelled": "Cancelled",
     "statusNoShow": "No-show",
     "remove": "Remove",
+    "removeTitle": "Remove this booking?",
+    "removeBody": "This removes the booking. Connected records remain available and are not deleted.",
     "added": "Booking added",
     "statusUpdated": "Status updated",
     "reminderSaved": "Reminder saved",
@@ -551,6 +574,7 @@
     "phone": "Phone",
     "notes": "Notes",
     "notesPlaceholder": "What you quoted, anything to remember",
+    "searchPlaceholder": "Search quotes by customer or title",
     "add": "Add quote",
     "adding": "Adding...",
     "emptyTitle": "No quotes yet",
@@ -569,6 +593,8 @@
     "statusWon": "Won",
     "statusLost": "Lost",
     "remove": "Remove",
+    "removeTitle": "Remove this quote?",
+    "removeBody": "This removes the quote. Connected records remain available and are not deleted.",
     "added": "Quote added",
     "statusUpdated": "Status updated",
     "followUpSaved": "Follow-up saved",
@@ -580,15 +606,20 @@
     "addInvoice": "Add an invoice", "prefill": "Prefilling {name} from {product}. You can still add an invoice without connecting one.",
     "customer": "Customer", "invoiceNumber": "Invoice number", "description": "Description", "amount": "Amount", "currency": "Currency",
     "issuedOn": "Issued on", "dueOn": "Due on", "nextReminderOn": "Next reminder", "email": "Email", "phone": "Phone",
-    "notes": "Notes", "notesPlaceholder": "Payment terms or context", "add": "Add invoice", "adding": "Adding...",
+    "notes": "Notes", "notesPlaceholder": "Payment terms or context", "searchPlaceholder": "Search invoices by customer or number", "add": "Add invoice", "adding": "Adding...",
     "emptyTitle": "No invoices yet", "emptyBody": "Add an unpaid invoice. Orvyn keeps payment status, due dates, and reminders together.",
     "colInvoice": "Invoice", "colAmount": "Amount", "colStatus": "Status", "colDates": "Dates", "colReminder": "Reminder", "colConnected": "Connected",
     "statusDraft": "Draft", "statusSent": "Sent", "statusOverdue": "Overdue", "statusPaid": "Paid", "statusVoid": "Void",
     "statusFor": "Status for invoice {number}", "reminderFor": "Reminder date for invoice {number}",
-    "issuedShort": "Issued {date}", "dueShort": "Due {date}", "remove": "Remove", "added": "Invoice added",
+    "issuedShort": "Issued {date}", "dueShort": "Due {date}", "remove": "Remove", "removeTitle": "Remove this invoice?", "removeBody": "This removes the invoice. Connected records remain available and are not deleted.", "added": "Invoice added",
     "statusUpdated": "Status updated", "reminderSaved": "Reminder saved", "removed": "Invoice removed"
   },
   "connections": {
+    "workflow": "Connected workflow",
+    "journeyProgress": "{count} of 4 journey steps connected",
+    "stepsConnected": "{count}/4 steps connected",
+    "nextBestAction": "Next: continue in {name}",
+    "journeyComplete": "Client journey complete",
     "connected": "Connected",
     "nothing": "Nothing connected",
     "openIn": "Open in {name}",

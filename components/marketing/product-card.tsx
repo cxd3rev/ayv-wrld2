@@ -30,9 +30,7 @@ export function ProductCard({
         <div className="flex items-center gap-3">
           <h3 className="display text-2xl tracking-tight text-foreground">{product.name}</h3>
           <Badge tone={product.status === "active" ? "accent" : "neutral"}>
-            {product.marketingStatus === "Coming soon"
-              ? t("common.comingSoon")
-              : t("common.inDevelopment")}
+            {product.status === "active" ? t("common.ready") : t("common.comingSoon")}
           </Badge>
         </div>
         <p className="mt-2 text-sm leading-relaxed text-muted">{t(`catalog.${product.id}.description`)}</p>

@@ -18,10 +18,13 @@ import {
   deleteRecordLink,
 } from "@/services/record-links";
 import { openLinkedWorkspace } from "@/services/product-switch";
+import { cn } from "@/lib/utils";
 import type { Booking, Invoice, Lead, Quote, RecordLink } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+
+const journeyProducts: RecordProduct[] = ["avyro", "velto", "rovyn", "orvyn"];
 
 function formatDay(value: string | null, locale: string) {
   if (!value) return "";
@@ -135,6 +138,31 @@ export function ConnectedRecords({
     () => new Set(linked.map((side) => `${side.product}:${side.id}`)),
     [linked],
   );
+  const journey = useMemo(() => {
+    const visited = new Set([`${product}:${recordId}`]);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const link of links) {
+        const from = `${link.from_product}:${link.from_id}`;
+        const to = `${link.to_product}:${link.to_id}`;
+        if (visited.has(from) && !visited.has(to)) {
+          visited.add(to);
+          changed = true;
+        } else if (visited.has(to) && !visited.has(from)) {
+          visited.add(from);
+          changed = true;
+        }
+      }
+    }
+    const completed = journeyProducts.filter((step) =>
+      [...visited].some((key) => key.startsWith(`${step}:`)),
+    );
+    return { completed };
+  }, [links, product, recordId]);
+  const nextProduct = journeyProducts
+    .slice(journeyProducts.indexOf(product) + 1)
+    .find((step) => !journey.completed.includes(step));
 
   const attachOptions = useMemo(() => {
     const entity = getRecordEntity(attachProduct);
@@ -197,6 +225,33 @@ export function ConnectedRecords({
 
   return (
     <div className="flex min-w-[12rem] flex-col items-start gap-2">
+      <div className="w-full border-l-2 border-foreground/15 pl-3">
+        <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">
+          {t("workflow")}
+        </p>
+        <div className="mt-2 flex items-center gap-1" aria-label={t("journeyProgress", { count: journey.completed.length })}>
+          {journeyProducts.map((step) => (
+            <span
+              key={step}
+              title={recordProductName(step)}
+              className={cn(
+                "h-1.5 flex-1",
+                journey.completed.includes(step) ? "bg-accent" : "bg-foreground/10",
+              )}
+            />
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          {t("stepsConnected", { count: journey.completed.length })}
+        </p>
+        {nextProduct ? (
+          <p className="mt-1 text-xs font-medium">
+            {t("nextBestAction", { name: recordProductName(nextProduct) })}
+          </p>
+        ) : (
+          <p className="mt-1 text-xs font-medium text-success">{t("journeyComplete")}</p>
+        )}
+      </div>
       <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">{t("connected")}</p>
       {linked.length === 0 ? (
         <p className="text-muted">{t("nothing")}</p>

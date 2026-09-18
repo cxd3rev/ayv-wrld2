@@ -4,6 +4,7 @@ import { ConnectedRecords, IncomingLinkFields } from "@/components/connections/c
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DashboardCard } from "@/components/ui/dashboard-card";
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
@@ -90,6 +91,8 @@ export function OrvynInvoicesWorkspace({
   const { toast } = useToast();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
   const today = todayIsoDate();
 
   const counts = useMemo(
@@ -110,6 +113,15 @@ export function OrvynInvoicesWorkspace({
     },
     [invoices],
   );
+  const visibleInvoices = useMemo(() => {
+    const needle = query.trim().toLocaleLowerCase(locale);
+    if (!needle) return invoices;
+    return invoices.filter((invoice) =>
+      [invoice.invoice_number, invoice.customer_name, invoice.description, invoice.email, invoice.phone, invoice.notes].some((value) =>
+        value?.toLocaleLowerCase(locale).includes(needle),
+      ),
+    );
+  }, [invoices, locale, query]);
 
   useEffect(() => {
     if (!focusInvoiceId) return;
@@ -208,13 +220,19 @@ export function OrvynInvoicesWorkspace({
       </form>
 
       <div className="mt-8">
+        {invoices.length ? (
+          <div className="mb-4 max-w-sm">
+            <Label htmlFor="orvyn-search">{tCommon("searchRecords")}</Label>
+            <Input id="orvyn-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
+          </div>
+        ) : null}
         {invoices.length === 0 ? (
           <EmptyState title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <Table>
             <THead><TR><TH>{t("colInvoice")}</TH><TH>{t("colAmount")}</TH><TH>{t("colStatus")}</TH><TH>{t("colDates")}</TH><TH>{t("colReminder")}</TH><TH>{t("colConnected")}</TH><TH className="text-right"> </TH></TR></THead>
             <TBody>
-              {invoices.map((invoice) => (
+              {visibleInvoices.map((invoice) => (
                 <TR key={invoice.id} id={`invoice-${invoice.id}`} className={cn(focusInvoiceId === invoice.id && "bg-accent-soft")}>
                   <TD><p className="font-medium">{invoice.invoice_number}</p><p>{invoice.customer_name}</p><p className="text-xs text-muted">{invoice.description}</p></TD>
                   <TD>{formatMoney(invoice.amount, invoice.currency, locale)}</TD>
@@ -237,17 +255,29 @@ export function OrvynInvoicesWorkspace({
                     }} />
                   </TD>
                   <TD><ConnectedRecords product="orvyn" recordId={invoice.id} links={links} leads={leads} bookings={bookings} quotes={quotes} invoices={invoices} /></TD>
-                  <TD className="text-right"><Button variant="ghost" size="sm" onClick={async () => {
-                    const result = await deleteInvoice(invoice.id);
-                    toast({ title: result.ok ? t("removed") : result.error, tone: result.ok ? "success" : "error" });
-                    if (result.ok) router.refresh();
-                  }}>{t("remove")}</Button></TD>
+                  <TD className="text-right"><Button variant="ghost" size="sm" onClick={() => setDeleteId(invoice.id)}>{t("remove")}</Button></TD>
                 </TR>
               ))}
             </TBody>
           </Table>
         )}
       </div>
+      <ConfirmationDialog
+        open={Boolean(deleteId)}
+        title={t("removeTitle")}
+        description={t("removeBody")}
+        confirmLabel={t("remove")}
+        cancelLabel={tCommon("cancel")}
+        danger
+        onClose={() => setDeleteId(null)}
+        onConfirm={async () => {
+          if (!deleteId) return;
+          const result = await deleteInvoice(deleteId);
+          setDeleteId(null);
+          toast({ title: result.ok ? t("removed") : result.error, tone: result.ok ? "success" : "error" });
+          if (result.ok) router.refresh();
+        }}
+      />
     </div>
   );
 }

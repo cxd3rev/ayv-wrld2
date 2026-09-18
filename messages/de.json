@@ -25,7 +25,8 @@
     "currentProduct": "Aktuelles Produkt",
     "notifications": "Benachrichtigungen",
     "new": "Neu",
-    "optional": "Optional"
+    "optional": "Optional",
+    "searchRecords": "Datensätze durchsuchen"
   },
   "language": {
     "label": "Sprache",
@@ -53,7 +54,17 @@
     "statAutomations": "Automatisierungen nach dem Setup",
     "productsKicker": "Die Produkte",
     "productsTitle": "Sechs fokussierte Tools. <muted>Eins für jede Aufgabe.</muted>",
-    "productsBody": "Jedes Produkt macht eine Sache richtig gut. Avyro ist zuerst da — die anderen verbinden sich mit demselben Arbeitsbereich, sobald sie live gehen."
+    "productsBody": "Starten Sie mit einer spezialisierten App. Avyro, Velto, Rovyn und Orvyn sind verfügbar und in einem Arbeitsbereich verbunden; Nexro und Ravelo folgen bald."
+  },
+  "together": {
+    "kicker": "Gemeinsam besser",
+    "title": "Eine Kundenreise. Vier spezialisierte Apps.",
+    "body": "Jede App funktioniert allein. Verbinden Sie sie bei Bedarf, damit Kontaktdaten, Kontext, Termine und nächste Schritte mit der Arbeit weiterfließen.",
+    "step1": "Lead erfassen und nachfassen",
+    "step2": "Termin und Erinnerungen planen",
+    "step3": "Angebot senden und nachfassen",
+    "step4": "Rechnung und Zahlung verfolgen",
+    "outcome": "Daten einmal eingeben, einen Kundenverlauf behalten und die gesamte Reise in Kommandozentrale und Kalender sehen."
   },
   "features": {
     "kicker": "Leistungen",
@@ -87,7 +98,8 @@
     "title": "Alle sechs Tools, ein Preis.",
     "body": "Alle AYV-WRLD-Produkte in einem Abo — zur Hälfte des Einzelpreises.",
     "cta": "Paket holen",
-    "productBody": "Holen Sie {name} und die fünf anderen Tools in einem Abo zum halben Preis des Einzelkaufs."
+    "productBody": "Das Sechs-Produkte-Paket wird mit 50 % Rabatt auf den Katalogpreis von 534 € angezeigt. Abonnements werden derzeit einzeln gekauft.",
+    "availability": "Der Paketpreis dient zur Planung; einen separaten Paket-Checkout gibt es noch nicht."
   },
   "cta": {
     "title": "Machen Sie aus Arbeit Umsatz.",
@@ -112,7 +124,10 @@
     "planBody": "Ein klarer Monatspreis. Keine Setup-Gebühr, jederzeit kündbar.",
     "startWith": "Mit {name} starten",
     "keepExploring": "Weiter entdecken",
-    "otherTools": "Weitere Tools in AYV WRLD"
+    "otherTools": "Weitere Tools in AYV WRLD",
+    "connectedKicker": "Verbundener Mehrwert",
+    "connectedTitle": "{name} funktioniert allein – und gemeinsam noch besser.",
+    "connectedOutcome": "Verbindungen verwenden Kundendaten erneut, erhalten Kontext und aktualisieren Kalender sowie Kommandozentrale, ohne Datensätze zusammenzuführen oder zu löschen."
   },
   "catalog": {
     "avyro": {
@@ -123,7 +138,8 @@
       "highlight2": "Intelligente Follow-ups planen, damit niemand verloren geht",
       "highlight3": "Sehen, welche Leads heiß sind und woher sie kommen",
       "nav": "Leads",
-      "dashboardDescription": "Neue Leads schnell nachfassen, damit aus mehr Gesprächen Kunden werden."
+      "dashboardDescription": "Neue Leads schnell nachfassen, damit aus mehr Gesprächen Kunden werden.",
+      "connectedValue": "Machen Sie aus einem qualifizierten Avyro-Lead eine Velto-Buchung, ohne Kontaktdaten erneut einzugeben, und behalten Sie Angebot und Rechnung in derselben Kundenreise."
     },
     "velto": {
       "tagline": "Buchung + Erinnerungen",
@@ -133,7 +149,8 @@
       "highlight2": "Automatische Erinnerungen vor jedem Termin",
       "highlight3": "No-Shows reduzieren — ohne Hin und Her",
       "nav": "Buchungen",
-      "dashboardDescription": "Buchungen annehmen und Erinnerungen senden, damit weniger Termine ausfallen."
+      "dashboardDescription": "Buchungen annehmen und Erinnerungen senden, damit weniger Termine ausfallen.",
+      "connectedValue": "Erstellen Sie eine Buchung aus einem Avyro-Lead und übergeben Sie den abgeschlossenen Termin mit vorausgefülltem Kunden- und Leistungskontext an Rovyn."
     },
     "rovyn": {
       "tagline": "Angebots-Follow-up",
@@ -143,7 +160,8 @@
       "highlight2": "Unentschlossene zum richtigen Zeitpunkt anstoßen",
       "highlight3": "Mehr Aufträge schließen, ohne von Hand hinterherzulaufen",
       "nav": "Angebote",
-      "dashboardDescription": "Versendete Angebote nachfassen, damit mehr Vorschläge zu Aufträgen werden."
+      "dashboardDescription": "Versendete Angebote nachfassen, damit mehr Vorschläge zu Aufträgen werden.",
+      "connectedValue": "Erstellen Sie ein Angebot aus einer Velto-Buchung und machen Sie gewonnene Arbeit zur Orvyn-Rechnung, ohne den Kunden erneut einzugeben."
     },
     "orvyn": {
       "tagline": "Zahlung + Rechnungs-Follow-up",
@@ -153,7 +171,8 @@
       "highlight2": "Schneller bezahlt werden — mit weniger unangenehmem Nachfassen",
       "highlight3": "Offene Beträge auf einen Blick im Blick behalten",
       "nav": "Zahlungen",
-      "dashboardDescription": "Offene Rechnungen verfolgen und Erinnerungen planen, damit Zahlungen schneller eingehen."
+      "dashboardDescription": "Offene Rechnungen verfolgen und Erinnerungen planen, damit Zahlungen schneller eingehen.",
+      "connectedValue": "Erstellen Sie eine Rechnung aus einem gewonnenen Rovyn-Angebot und behalten Sie Lead-, Buchungs- und Angebotskontext neben Zahlung und Erinnerungen."
     },
     "nexro": {
       "tagline": "Reaktivierung + Empfehlungen",
@@ -215,7 +234,7 @@
   "onboarding": {
     "kicker": "Arbeitsbereich",
     "title": "Arbeitsbereich einrichten",
-    "body": "Damit legen Sie Ihre Organisation an. Sie sind der Inhaber. Künftige AYV-WRLD-Produkte nutzen dasselbe Unternehmensprofil.",
+    "body": "Starten Sie mit einer App und fügen Sie später weitere hinzu. Diese gemeinsame Organisation bewahrt Profil, Kundenkontext, Kalender und verbundenen Verlauf.",
     "businessName": "Firmenname",
     "industry": "Branche",
     "chooseIndustry": "Branche wählen",
@@ -463,6 +482,7 @@
     "followUpOn": "Nachfassen am",
     "notes": "Notizen",
     "notesPlaceholder": "Woher sie kommen, wonach sie gefragt haben",
+    "searchPlaceholder": "Leads nach Name oder Kontakt suchen",
     "add": "Lead hinzufügen",
     "adding": "Wird hinzugefügt...",
     "emptyTitle": "Noch keine Leads",
@@ -507,6 +527,7 @@
     "noLinkedLead": "Kein verknüpfter Lead",
     "notes": "Notizen",
     "notesPlaceholder": "Was gebucht wurde, was merken",
+    "searchPlaceholder": "Buchungen nach Kunde oder Leistung suchen",
     "add": "Buchung hinzufügen",
     "adding": "Wird hinzugefügt...",
     "emptyTitle": "Noch keine Buchungen",
@@ -526,6 +547,8 @@
     "statusCancelled": "Storniert",
     "statusNoShow": "No-Show",
     "remove": "Entfernen",
+    "removeTitle": "Diese Buchung entfernen?",
+    "removeBody": "Die Buchung wird entfernt. Verbundene Datensätze bleiben verfügbar und werden nicht gelöscht.",
     "added": "Buchung hinzugefügt",
     "statusUpdated": "Status aktualisiert",
     "reminderSaved": "Erinnerung gespeichert",
@@ -551,6 +574,7 @@
     "phone": "Telefon",
     "notes": "Notizen",
     "notesPlaceholder": "Was angeboten wurde, was merken",
+    "searchPlaceholder": "Angebote nach Kunde oder Titel suchen",
     "add": "Angebot hinzufügen",
     "adding": "Wird hinzugefügt...",
     "emptyTitle": "Noch keine Angebote",
@@ -569,6 +593,8 @@
     "statusWon": "Gewonnen",
     "statusLost": "Verloren",
     "remove": "Entfernen",
+    "removeTitle": "Dieses Angebot entfernen?",
+    "removeBody": "Das Angebot wird entfernt. Verbundene Datensätze bleiben verfügbar und werden nicht gelöscht.",
     "added": "Angebot hinzugefügt",
     "statusUpdated": "Status aktualisiert",
     "followUpSaved": "Follow-up gespeichert",
@@ -580,15 +606,20 @@
     "addInvoice": "Rechnung hinzufügen", "prefill": "{name} aus {product} wird vorausgefüllt. Eine Rechnung kann auch ohne Verknüpfung erstellt werden.",
     "customer": "Kunde", "invoiceNumber": "Rechnungsnummer", "description": "Beschreibung", "amount": "Betrag", "currency": "Währung",
     "issuedOn": "Ausgestellt am", "dueOn": "Fällig am", "nextReminderOn": "Nächste Erinnerung", "email": "E-Mail", "phone": "Telefon",
-    "notes": "Notizen", "notesPlaceholder": "Zahlungsbedingungen oder Kontext", "add": "Rechnung hinzufügen", "adding": "Wird hinzugefügt...",
+    "notes": "Notizen", "notesPlaceholder": "Zahlungsbedingungen oder Kontext", "searchPlaceholder": "Rechnungen nach Kunde oder Nummer suchen", "add": "Rechnung hinzufügen", "adding": "Wird hinzugefügt...",
     "emptyTitle": "Noch keine Rechnungen", "emptyBody": "Fügen Sie eine offene Rechnung hinzu. Orvyn bündelt Status, Fälligkeit und Erinnerungen.",
     "colInvoice": "Rechnung", "colAmount": "Betrag", "colStatus": "Status", "colDates": "Daten", "colReminder": "Erinnerung", "colConnected": "Verknüpft",
     "statusDraft": "Entwurf", "statusSent": "Gesendet", "statusOverdue": "Überfällig", "statusPaid": "Bezahlt", "statusVoid": "Storniert",
     "statusFor": "Status der Rechnung {number}", "reminderFor": "Erinnerungsdatum für Rechnung {number}",
-    "issuedShort": "Ausgestellt {date}", "dueShort": "Fällig {date}", "remove": "Entfernen", "added": "Rechnung hinzugefügt",
+    "issuedShort": "Ausgestellt {date}", "dueShort": "Fällig {date}", "remove": "Entfernen", "removeTitle": "Diese Rechnung entfernen?", "removeBody": "Die Rechnung wird entfernt. Verbundene Datensätze bleiben verfügbar und werden nicht gelöscht.", "added": "Rechnung hinzugefügt",
     "statusUpdated": "Status aktualisiert", "reminderSaved": "Erinnerung gespeichert", "removed": "Rechnung entfernt"
   },
   "connections": {
+    "workflow": "Verbundener Ablauf",
+    "journeyProgress": "{count} von 4 Schritten verbunden",
+    "stepsConnected": "{count}/4 Schritte verbunden",
+    "nextBestAction": "Als Nächstes: in {name} fortfahren",
+    "journeyComplete": "Kundenreise abgeschlossen",
     "connected": "Verknüpft",
     "nothing": "Nichts verknüpft",
     "openIn": "In {name} öffnen",

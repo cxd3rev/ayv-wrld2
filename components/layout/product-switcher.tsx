@@ -7,14 +7,16 @@ import { products, type ProductId } from "@/config/products";
 import { switchProduct } from "@/services/product-switch";
 import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 export function ProductSwitcher({ activeProductId }: { activeProductId: ProductId }) {
   const t = useTranslations("common");
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const active = products.find((product) => product.id === activeProductId) ?? products[0];
+  const pathname = usePathname();
+  const routeProduct = products.find((product) => pathname === product.route);
+  const active = routeProduct ?? products.find((product) => product.id === activeProductId) ?? products[0];
 
   return (
     <Dropdown
@@ -36,8 +38,12 @@ export function ProductSwitcher({ activeProductId }: { activeProductId: ProductI
           key={product.id}
           onClick={() => {
             startTransition(async () => {
-              await switchProduct(product.id);
-              router.push("/dashboard/product");
+              if (product.status === "active") {
+                await switchProduct(product.id);
+                router.push(product.route);
+              } else {
+                router.push(`/products/${product.slug}`);
+              }
               router.refresh();
             });
           }}

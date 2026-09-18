@@ -71,7 +71,7 @@ export async function createQuote(formData: FormData) {
   }
 
   await linkCreatedRecord(formData, "rovyn", data.id);
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/rovyn");
   return { ok: true, message: "Quote added." };
 }
 
@@ -93,7 +93,7 @@ export async function updateQuoteStatus(quoteId: string, status: string) {
     return { ok: false, error: "Could not update this quote." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/rovyn");
   return { ok: true, message: "Status updated." };
 }
 
@@ -115,7 +115,7 @@ export async function updateQuoteFollowUp(quoteId: string, followUpOn: string) {
     return { ok: false, error: "Could not save the follow-up date." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/rovyn");
   return { ok: true, message: "Follow-up date saved." };
 }
 
@@ -132,6 +132,6 @@ export async function deleteQuote(quoteId: string) {
     return { ok: false, error: "Could not remove this quote." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/rovyn");
   return { ok: true, message: "Quote removed." };
 }

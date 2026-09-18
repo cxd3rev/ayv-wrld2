@@ -1,7 +1,7 @@
 import { Atmosphere } from "@/components/atmosphere";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/header";
 import { ProductCard } from "@/components/marketing/product-card";
-import { BundleOffer, Features, FinalCta, HowItWorks } from "@/components/marketing/sections";
+import { BetterTogether, BundleOffer, Features, FinalCta, HowItWorks } from "@/components/marketing/sections";
 import { products } from "@/config/products";
 import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
@@ -69,6 +69,8 @@ export default async function HomePage() {
       </section>
 
       <Features />
+
+      <BetterTogether />
 
       <HowItWorks />
 

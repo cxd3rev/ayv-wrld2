@@ -74,7 +74,7 @@ export async function createInvoice(formData: FormData) {
   await linkCreatedRecord(formData, "orvyn", data.id);
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/calendar");
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/orvyn");
   return { ok: true as const, message: "Invoice added." };
 }
 
@@ -96,7 +96,7 @@ export async function updateInvoiceStatus(invoiceId: string, status: string) {
   if (error) return { ok: false as const, error: "Could not update this invoice." };
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/calendar");
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/orvyn");
   return { ok: true as const, message: "Status updated." };
 }
 
@@ -115,7 +115,7 @@ export async function updateInvoiceReminder(invoiceId: string, nextReminderOn: s
   if (error) return { ok: false as const, error: "Could not save the reminder date." };
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/calendar");
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/orvyn");
   return { ok: true as const, message: "Reminder saved." };
 }
 
@@ -131,6 +131,6 @@ export async function deleteInvoice(invoiceId: string) {
   if (error) return { ok: false as const, error: "Could not remove this invoice." };
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/calendar");
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/orvyn");
   return { ok: true as const, message: "Invoice removed." };
 }

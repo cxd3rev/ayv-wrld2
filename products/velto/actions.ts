@@ -100,7 +100,7 @@ export async function createBooking(formData: FormData) {
   }
 
   await linkCreatedRecord(formData, "velto", data.id);
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/velto");
   return { ok: true, message: "Booking added." };
 }
 
@@ -122,7 +122,7 @@ export async function updateBookingStatus(bookingId: string, status: string) {
     return { ok: false, error: "Could not update this booking." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/velto");
   return { ok: true, message: "Status updated." };
 }
 
@@ -144,7 +144,7 @@ export async function updateBookingReminder(bookingId: string, reminderOn: strin
     return { ok: false, error: "Could not save the reminder date." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/velto");
   return { ok: true, message: "Reminder date saved." };
 }
 
@@ -172,7 +172,7 @@ export async function updateBookingLead(bookingId: string, leadId: string) {
     return { ok: false, error: "Could not link that lead." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/velto");
   return { ok: true, message: nextLeadId ? "Lead linked." : "Lead unlinked." };
 }
 
@@ -189,6 +189,6 @@ export async function deleteBooking(bookingId: string) {
     return { ok: false, error: "Could not remove this booking." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard/velto");
   return { ok: true, message: "Booking removed." };
 }

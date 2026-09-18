@@ -2,10 +2,12 @@ import { ArrowRight, LayoutGrid, Repeat, ShieldCheck, Users, Wallet, Zap } from 
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { bundlePricing, formatPrice } from "@/config/products";
+import { ProductIcon } from "@/components/product-icon";
+import { bundlePricing, formatPrice, getActiveProducts } from "@/config/products";
 
 const featureIcons = [LayoutGrid, Zap, Repeat, Users, ShieldCheck, Wallet] as const;
 const featureKeys = ["login", "live", "automations", "teams", "secure", "pricing"] as const;
+const togetherStepKeys = ["step1", "step2", "step3", "step4"] as const;
 
 export function Features() {
   const t = useTranslations("features");
@@ -39,6 +41,43 @@ export function Features() {
             </div>
           );
         })}
+      </div>
+    </section>
+  );
+}
+
+export function BetterTogether() {
+  const t = useTranslations("together");
+  const activeProducts = getActiveProducts();
+
+  return (
+    <section id="platform" className="border-y border-border bg-card">
+      <div className="mx-auto w-full max-w-[1400px] px-6 py-24 lg:px-12 lg:py-28">
+        <p className="kicker">{t("kicker")}</p>
+        <div className="mt-7 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+          <div>
+            <h2 className="display text-4xl leading-[1.02] lg:text-6xl text-balance">{t("title")}</h2>
+            <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">{t("body")}</p>
+          </div>
+          <div>
+            <ol className="grid gap-3 sm:grid-cols-2">
+              {activeProducts.map((product, index) => (
+                <li key={product.id} className="flex items-center gap-4 border border-border bg-background p-4">
+                  <ProductIcon product={product} size={36} className="h-9 w-9" />
+                  <div>
+                    <p className="font-mono text-[10px] tracking-[0.14em] text-muted uppercase">
+                      {String(index + 1).padStart(2, "0")} · {product.name}
+                    </p>
+                    <p className="mt-1 text-sm font-medium">{t(togetherStepKeys[index])}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-5 border-l-2 border-accent pl-4 text-sm leading-relaxed text-muted">
+              {t("outcome")}
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -156,6 +195,9 @@ export function BundleOffer() {
             </span>
             <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">{tCommon("perMonth")}</span>
           </div>
+          <p className="max-w-md text-left text-xs leading-relaxed text-muted lg:text-right">
+            {t("availability")}
+          </p>
           <Link
             href="/signup"
             className="group inline-flex h-14 items-center justify-center rounded-full bg-accent px-8 text-base font-medium text-accent-foreground transition-colors hover:bg-accent-hover"

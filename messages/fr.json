@@ -25,7 +25,8 @@
     "currentProduct": "Produit actuel",
     "notifications": "Notifications",
     "new": "Nouveau",
-    "optional": "Facultatif"
+    "optional": "Facultatif",
+    "searchRecords": "Rechercher des enregistrements"
   },
   "language": {
     "label": "Langue",
@@ -53,7 +54,17 @@
     "statAutomations": "Automatisations une fois réglées",
     "productsKicker": "Les produits",
     "productsTitle": "Six outils ciblés. <muted>Un pour chaque métier.</muted>",
-    "productsBody": "Chaque produit fait une chose, très bien. Avyro est le premier — les autres se connectent au même espace de travail dès leur lancement."
+    "productsBody": "Commencez avec une application spécialisée. Avyro, Velto, Rovyn et Orvyn sont disponibles et se connectent dans un même espace ; Nexro et Ravelo arrivent bientôt."
+  },
+  "together": {
+    "kicker": "Encore mieux ensemble",
+    "title": "Un parcours client. Quatre applications spécialisées.",
+    "body": "Chaque application fonctionne seule. Connectez-les quand vous le souhaitez : les coordonnées, le contexte, les dates et les prochaines actions suivent le travail.",
+    "step1": "Capturer et relancer un lead",
+    "step2": "Planifier le rendez-vous et les rappels",
+    "step3": "Envoyer et relancer le devis",
+    "step4": "Suivre la facture et le paiement",
+    "outcome": "Saisissez les informations une fois, conservez un historique client unique et suivez tout le parcours dans le centre de commande et le calendrier partagé."
   },
   "features": {
     "kicker": "Capacités",
@@ -87,7 +98,8 @@
     "title": "Les six outils, un seul prix.",
     "body": "Tous les produits AYV WRLD dans un seul abonnement, à la moitié du prix unitaire.",
     "cta": "Prendre le pack",
-    "productBody": "Obtenez {name} et les cinq autres outils dans un seul abonnement, à la moitié du prix de l''achat séparé."
+    "productBody": "Le pack de six produits affiche 50 % de remise sur le total catalogue de 534 €. Les abonnements sont achetés séparément aujourd'hui.",
+    "availability": "Le tarif du pack est présenté à titre indicatif ; il n'existe pas encore de paiement séparé pour le pack."
   },
   "cta": {
     "title": "Commencez à transformer le travail en chiffre d'affaires.",
@@ -112,7 +124,10 @@
     "planBody": "Un prix mensuel clair. Pas de frais d'installation, résiliable à tout moment.",
     "startWith": "Commencer avec {name}",
     "keepExploring": "Continuer à explorer",
-    "otherTools": "Autres outils AYV WRLD"
+    "otherTools": "Autres outils AYV WRLD",
+    "connectedKicker": "Valeur connectée",
+    "connectedTitle": "{name} fonctionne seul — et encore mieux avec les autres.",
+    "connectedOutcome": "Les connexions réutilisent les coordonnées, préservent le contexte, mettent à jour le calendrier et le centre de commande, sans fusionner ni supprimer les enregistrements."
   },
   "catalog": {
     "avyro": {
@@ -123,7 +138,8 @@
       "highlight2": "Planifiez des relances intelligentes pour que personne ne s'échappe",
       "highlight3": "Voyez quels leads sont chauds et d'où ils viennent",
       "nav": "Leads",
-      "dashboardDescription": "Relancez rapidement les nouveaux leads pour transformer plus de conversations en clients."
+      "dashboardDescription": "Relancez rapidement les nouveaux leads pour transformer plus de conversations en clients.",
+      "connectedValue": "Transformez un lead Avyro qualifié en réservation Velto sans ressaisir ses coordonnées, puis conservez le devis et la facture dans le même parcours client."
     },
     "velto": {
       "tagline": "Réservations + rappels",
@@ -133,7 +149,8 @@
       "highlight2": "Envoyez des rappels automatiques avant chaque rendez-vous",
       "highlight3": "Réduisez les absences sans allers-retours",
       "nav": "Réservations",
-      "dashboardDescription": "Prenez des réservations et envoyez des rappels pour réduire les rendez-vous manqués."
+      "dashboardDescription": "Prenez des réservations et envoyez des rappels pour réduire les rendez-vous manqués.",
+      "connectedValue": "Créez une réservation depuis un lead Avyro, puis transmettez le rendez-vous terminé à Rovyn avec le client et le service déjà renseignés."
     },
     "rovyn": {
       "tagline": "Relance de devis",
@@ -143,7 +160,8 @@
       "highlight2": "Relancez les prospects indécis au bon moment",
       "highlight3": "Concluez plus de missions sans relancer à la main",
       "nav": "Devis",
-      "dashboardDescription": "Relancez les devis envoyés pour transformer plus de propositions en missions."
+      "dashboardDescription": "Relancez les devis envoyés pour transformer plus de propositions en missions.",
+      "connectedValue": "Créez un devis depuis une réservation Velto et transformez une affaire gagnée en facture Orvyn sans ressaisir le client."
     },
     "orvyn": {
       "tagline": "Paiements + relance de factures",
@@ -153,7 +171,8 @@
       "highlight2": "Soyez payé plus vite, avec moins de relances gênantes",
       "highlight3": "Suivez l'encours d'un coup d'œil",
       "nav": "Paiements",
-      "dashboardDescription": "Suivez les factures impayées et planifiez les rappels pour être payé plus vite."
+      "dashboardDescription": "Suivez les factures impayées et planifiez les rappels pour être payé plus vite.",
+      "connectedValue": "Créez une facture depuis un devis Rovyn gagné et conservez le contexte du lead, de la réservation et du devis avec le paiement."
     },
     "nexro": {
       "tagline": "Réactivation + parrainage",
@@ -215,7 +234,7 @@
   "onboarding": {
     "kicker": "Espace de travail",
     "title": "Configurez votre espace",
-    "body": "Cela crée votre organisation. Vous en serez le propriétaire. Les futurs produits AYV WRLD utiliseront ce même profil d'entreprise.",
+    "body": "Commencez avec une application et ajoutez-en d'autres plus tard. Cette organisation partagée conserve votre profil, le contexte client, le calendrier et l'historique connecté.",
     "businessName": "Nom de l'entreprise",
     "industry": "Secteur",
     "chooseIndustry": "Choisir un secteur",
@@ -463,6 +482,7 @@
     "followUpOn": "Relancer le",
     "notes": "Notes",
     "notesPlaceholder": "D'où ils viennent, ce qu'ils ont demandé",
+    "searchPlaceholder": "Rechercher par nom ou coordonnées",
     "add": "Ajouter le lead",
     "adding": "Ajout...",
     "emptyTitle": "Aucun lead pour le moment",
@@ -507,6 +527,7 @@
     "noLinkedLead": "Aucun lead lié",
     "notes": "Notes",
     "notesPlaceholder": "Ce qu'ils ont réservé, ce qu'il faut retenir",
+    "searchPlaceholder": "Rechercher par client ou service",
     "add": "Ajouter la réservation",
     "adding": "Ajout...",
     "emptyTitle": "Aucune réservation pour le moment",
@@ -526,6 +547,8 @@
     "statusCancelled": "Annulé",
     "statusNoShow": "Absent",
     "remove": "Retirer",
+    "removeTitle": "Retirer cette réservation ?",
+    "removeBody": "La réservation sera retirée. Les enregistrements connectés restent disponibles et ne sont pas supprimés.",
     "added": "Réservation ajoutée",
     "statusUpdated": "Statut mis à jour",
     "reminderSaved": "Rappel enregistré",
@@ -551,6 +574,7 @@
     "phone": "Téléphone",
     "notes": "Notes",
     "notesPlaceholder": "Ce que vous avez chiffré, ce qu'il faut retenir",
+    "searchPlaceholder": "Rechercher par client ou objet",
     "add": "Ajouter le devis",
     "adding": "Ajout...",
     "emptyTitle": "Aucun devis pour le moment",
@@ -569,6 +593,8 @@
     "statusWon": "Gagné",
     "statusLost": "Perdu",
     "remove": "Retirer",
+    "removeTitle": "Retirer ce devis ?",
+    "removeBody": "Le devis sera retiré. Les enregistrements connectés restent disponibles et ne sont pas supprimés.",
     "added": "Devis ajouté",
     "statusUpdated": "Statut mis à jour",
     "followUpSaved": "Relance enregistrée",
@@ -580,15 +606,20 @@
     "addInvoice": "Ajouter une facture", "prefill": "Préremplissage de {name} depuis {product}. Vous pouvez ajouter sans liaison.",
     "customer": "Client", "invoiceNumber": "Numéro de facture", "description": "Description", "amount": "Montant", "currency": "Devise",
     "issuedOn": "Émise le", "dueOn": "Échéance", "nextReminderOn": "Prochain rappel", "email": "E-mail", "phone": "Téléphone",
-    "notes": "Notes", "notesPlaceholder": "Conditions de paiement ou contexte", "add": "Ajouter la facture", "adding": "Ajout...",
+    "notes": "Notes", "notesPlaceholder": "Conditions de paiement ou contexte", "searchPlaceholder": "Rechercher par client ou numéro", "add": "Ajouter la facture", "adding": "Ajout...",
     "emptyTitle": "Aucune facture", "emptyBody": "Ajoutez une facture impayée. Orvyn réunit statut, échéance et rappels.",
     "colInvoice": "Facture", "colAmount": "Montant", "colStatus": "Statut", "colDates": "Dates", "colReminder": "Rappel", "colConnected": "Lié",
     "statusDraft": "Brouillon", "statusSent": "Envoyée", "statusOverdue": "En retard", "statusPaid": "Payée", "statusVoid": "Annulée",
     "statusFor": "Statut de la facture {number}", "reminderFor": "Date de rappel de la facture {number}",
-    "issuedShort": "Émise {date}", "dueShort": "Échéance {date}", "remove": "Supprimer", "added": "Facture ajoutée",
+    "issuedShort": "Émise {date}", "dueShort": "Échéance {date}", "remove": "Supprimer", "removeTitle": "Supprimer cette facture ?", "removeBody": "La facture sera supprimée. Les enregistrements connectés restent disponibles et ne sont pas supprimés.", "added": "Facture ajoutée",
     "statusUpdated": "Statut mis à jour", "reminderSaved": "Rappel enregistré", "removed": "Facture supprimée"
   },
   "connections": {
+    "workflow": "Parcours connecté",
+    "journeyProgress": "{count} étapes sur 4 connectées",
+    "stepsConnected": "{count}/4 étapes connectées",
+    "nextBestAction": "Ensuite : continuer dans {name}",
+    "journeyComplete": "Parcours client terminé",
     "connected": "Lié",
     "nothing": "Rien de lié",
     "openIn": "Ouvrir dans {name}",

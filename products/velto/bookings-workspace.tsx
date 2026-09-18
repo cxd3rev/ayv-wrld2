@@ -7,6 +7,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DashboardCard } from "@/components/ui/dashboard-card";
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
@@ -123,6 +124,8 @@ export function VeltoBookingsWorkspace({
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
 
   const fromLead = useMemo(
     () => (prefill?.product === "avyro" ? leads.find((lead) => lead.id === prefill.id) : undefined),
@@ -137,6 +140,15 @@ export function VeltoBookingsWorkspace({
       missed: bookings.filter((booking) => booking.status === "no_show").length,
     };
   }, [bookings]);
+  const visibleBookings = useMemo(() => {
+    const needle = query.trim().toLocaleLowerCase(locale);
+    if (!needle) return bookings;
+    return bookings.filter((booking) =>
+      [booking.customer_name, booking.service, booking.email, booking.phone, booking.notes].some((value) =>
+        value?.toLocaleLowerCase(locale).includes(needle),
+      ),
+    );
+  }, [bookings, locale, query]);
 
   useEffect(() => {
     if (!focusBookingId) return;
@@ -274,6 +286,12 @@ export function VeltoBookingsWorkspace({
       </form>
 
       <div className="mt-8">
+        {bookings.length ? (
+          <div className="mb-4 max-w-sm">
+            <Label htmlFor="velto-search">{tCommon("searchRecords")}</Label>
+            <Input id="velto-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
+          </div>
+        ) : null}
         {bookings.length === 0 ? (
           <EmptyState
             title={t("emptyTitle")}
@@ -293,7 +311,7 @@ export function VeltoBookingsWorkspace({
               </TR>
             </THead>
             <TBody>
-              {bookings.map((booking) => {
+              {visibleBookings.map((booking) => {
                 const focused = focusBookingId === booking.id;
                 return (
                   <TR
@@ -380,15 +398,7 @@ export function VeltoBookingsWorkspace({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={async () => {
-                          const result = await deleteBooking(booking.id);
-                          if (!result.ok) {
-                            toast({ title: result.error ?? "Could not remove booking", tone: "error" });
-                            return;
-                          }
-                          toast({ title: t("removed"), tone: "success" });
-                          router.refresh();
-                        }}
+                        onClick={() => setDeleteId(booking.id)}
                       >
                         {t("remove")}
                       </Button>
@@ -400,6 +410,22 @@ export function VeltoBookingsWorkspace({
           </Table>
         )}
       </div>
+      <ConfirmationDialog
+        open={Boolean(deleteId)}
+        title={t("removeTitle")}
+        description={t("removeBody")}
+        confirmLabel={t("remove")}
+        cancelLabel={tCommon("cancel")}
+        danger
+        onClose={() => setDeleteId(null)}
+        onConfirm={async () => {
+          if (!deleteId) return;
+          const result = await deleteBooking(deleteId);
+          setDeleteId(null);
+          toast({ title: result.ok ? t("removed") : (result.error ?? t("removeBody")), tone: result.ok ? "success" : "error" });
+          if (result.ok) router.refresh();
+        }}
+      />
     </div>
   );
 }

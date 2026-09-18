@@ -25,6 +25,11 @@ export default async function ProductPage({
   const t = await getTranslations();
   const locale = await getLocale();
   const isActive = product.status === "active";
+  const connectedValueKey = `catalog.${product.id}.connectedValue` as
+    | "catalog.avyro.connectedValue"
+    | "catalog.velto.connectedValue"
+    | "catalog.rovyn.connectedValue"
+    | "catalog.orvyn.connectedValue";
   const productNumber = String(products.findIndex((p) => p.id === product.id) + 1).padStart(2, "0");
   const others = products.filter((p) => p.id !== product.id).slice(0, 3);
   const highlights = [
@@ -53,9 +58,7 @@ export default async function ProductPage({
                 <div className="flex items-center gap-3">
                   <p className="kicker">{t(`catalog.${product.id}.tagline`)}</p>
                   <Badge tone={isActive ? "accent" : "neutral"}>
-                    {product.marketingStatus === "Coming soon"
-                      ? t("common.comingSoon")
-                      : t("common.inDevelopment")}
+                    {isActive ? t("common.ready") : t("common.comingSoon")}
                   </Badge>
                 </div>
                 <h1 className="display mt-7 text-6xl tracking-tight lg:text-8xl">{product.name}</h1>
@@ -161,6 +164,27 @@ export default async function ProductPage({
           </div>
         </section>
 
+        {isActive ? (
+          <section className="border-y border-border bg-card">
+            <div className="mx-auto grid w-full max-w-[1400px] gap-8 px-6 py-16 lg:grid-cols-[0.7fr_1.3fr] lg:px-12">
+              <div>
+                <p className="kicker">{t("productPage.connectedKicker")}</p>
+                <h2 className="display mt-5 text-3xl tracking-tight lg:text-4xl">
+                  {t("productPage.connectedTitle", { name: product.name })}
+                </h2>
+              </div>
+              <div>
+                <p className="max-w-2xl text-lg leading-relaxed text-muted">
+                  {t(connectedValueKey)}
+                </p>
+                <p className="mt-5 border-l-2 border-accent pl-4 text-sm leading-relaxed text-muted">
+                  {t("productPage.connectedOutcome")}
+                </p>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
         <section className="mx-auto w-full max-w-[1400px] px-6 pb-20 lg:px-12 lg:pb-28">
           <div className="grid gap-5 lg:grid-cols-2">
             <div className="flex flex-col justify-between rounded-2xl border border-border bg-card p-8 lg:p-10">
@@ -249,9 +273,7 @@ export default async function ProductPage({
                       <ProductLogo product={other} size={28} className="mark-invert h-7 w-7" />
                     </div>
                     <Badge tone={other.status === "active" ? "accent" : "neutral"}>
-                      {other.marketingStatus === "Coming soon"
-                        ? t("common.comingSoon")
-                        : t("common.inDevelopment")}
+                      {other.status === "active" ? t("common.ready") : t("common.comingSoon")}
                     </Badge>
                   </div>
                   <div className="mt-8">

@@ -10,7 +10,7 @@ import { Logo } from "@/components/logo";
 import { ProductIcon } from "@/components/product-icon";
 import { cn } from "@/lib/utils";
 import type { Organization } from "@/types/database";
-import type { ProductConfig } from "@/config/products";
+import { products, type ProductConfig } from "@/config/products";
 
 const icons = {
   layout: LayoutDashboard,
@@ -41,6 +41,7 @@ export function Sidebar({
   const pathname = usePathname();
   const t = useTranslations();
   const [open, setOpen] = useState(false);
+  const activeProduct = products.find((item) => pathname === item.route) ?? product;
 
   return (
     <>
@@ -85,17 +86,18 @@ export function Sidebar({
         <nav className="flex flex-1 flex-col gap-1">
           {dashboardNav.map((item) => {
             const Icon = icons[item.icon];
+            const href = item.href === "/dashboard/product" ? activeProduct.route : item.href;
             const productLabel =
-              item.href === "/dashboard/product" ? t(`catalog.${product.id}.nav`) : t(`dashboard.${navKeys[item.href]}`);
+              item.href === "/dashboard/product" ? t(`catalog.${activeProduct.id}.nav`) : t(`dashboard.${navKeys[item.href]}`);
             const active =
-              item.href === "/dashboard"
+              href === "/dashboard"
                 ? pathname === "/dashboard"
-                : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                : pathname === href || pathname.startsWith(`${href}/`);
 
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={href}
                 onClick={() => setOpen(false)}
                 className={cn(
                   "flex items-center gap-3 border-l px-3 py-2.5 text-sm transition-colors",
@@ -112,11 +114,11 @@ export function Sidebar({
         </nav>
 
         <div className="flex items-center gap-3 border-t border-foreground/10 pt-5">
-          <ProductIcon product={product} size={32} className="h-8 w-8" />
+          <ProductIcon product={activeProduct} size={32} className="h-8 w-8" />
           <div>
             <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">{t("common.currentProduct")}</p>
-            <p className="mt-1 text-sm font-medium" style={{ color: product.accent }}>
-              {product.name}
+            <p className="mt-1 text-sm font-medium" style={{ color: activeProduct.accent }}>
+              {activeProduct.name}
             </p>
           </div>
         </div>

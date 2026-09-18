@@ -7,6 +7,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DashboardCard } from "@/components/ui/dashboard-card";
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
@@ -109,6 +110,8 @@ export function RovynQuotesWorkspace({
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
 
   const counts = useMemo(() => {
     return {
@@ -118,6 +121,15 @@ export function RovynQuotesWorkspace({
       due: quotes.filter(isFollowUpDue).length,
     };
   }, [quotes]);
+  const visibleQuotes = useMemo(() => {
+    const needle = query.trim().toLocaleLowerCase(locale);
+    if (!needle) return quotes;
+    return quotes.filter((quote) =>
+      [quote.customer_name, quote.title, quote.email, quote.phone, quote.notes].some((value) =>
+        value?.toLocaleLowerCase(locale).includes(needle),
+      ),
+    );
+  }, [locale, query, quotes]);
 
   useEffect(() => {
     if (!focusQuoteId) return;
@@ -242,6 +254,12 @@ export function RovynQuotesWorkspace({
       </form>
 
       <div className="mt-8">
+        {quotes.length ? (
+          <div className="mb-4 max-w-sm">
+            <Label htmlFor="rovyn-search">{tCommon("searchRecords")}</Label>
+            <Input id="rovyn-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
+          </div>
+        ) : null}
         {quotes.length === 0 ? (
           <EmptyState
             title={t("emptyTitle")}
@@ -261,7 +279,7 @@ export function RovynQuotesWorkspace({
               </TR>
             </THead>
             <TBody>
-              {quotes.map((quote) => {
+              {visibleQuotes.map((quote) => {
                 const focused = focusQuoteId === quote.id;
                 return (
                   <TR
@@ -349,15 +367,7 @@ export function RovynQuotesWorkspace({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={async () => {
-                          const result = await deleteQuote(quote.id);
-                          if (!result.ok) {
-                            toast({ title: result.error ?? "Could not remove quote", tone: "error" });
-                            return;
-                          }
-                          toast({ title: t("removed"), tone: "success" });
-                          router.refresh();
-                        }}
+                        onClick={() => setDeleteId(quote.id)}
                       >
                         {t("remove")}
                       </Button>
@@ -369,6 +379,22 @@ export function RovynQuotesWorkspace({
           </Table>
         )}
       </div>
+      <ConfirmationDialog
+        open={Boolean(deleteId)}
+        title={t("removeTitle")}
+        description={t("removeBody")}
+        confirmLabel={t("remove")}
+        cancelLabel={tCommon("cancel")}
+        danger
+        onClose={() => setDeleteId(null)}
+        onConfirm={async () => {
+          if (!deleteId) return;
+          const result = await deleteQuote(deleteId);
+          setDeleteId(null);
+          toast({ title: result.ok ? t("removed") : (result.error ?? t("removeBody")), tone: result.ok ? "success" : "error" });
+          if (result.ok) router.refresh();
+        }}
+      />
     </div>
   );
 }

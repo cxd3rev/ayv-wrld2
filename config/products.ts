@@ -39,7 +39,7 @@ export type ProductConfig = {
   longDescription: string;
   highlights: string[];
   status: ProductStatus;
-  marketingStatus: "In development" | "Coming soon";
+  marketingStatus: "Available" | "Coming soon";
   assets: BrandAssets;
   accent: string;
   route: string;
@@ -69,12 +69,12 @@ export const products: ProductConfig[] = [
       "See which leads are hot and where they came from",
     ],
     status: "active",
-    marketingStatus: "In development",
+    marketingStatus: "Available",
     assets: productBrand("avyro"),
     accent: "#A3A3A3",
-    route: "/dashboard/product",
+    route: "/dashboard/avyro",
     pricing: { monthly: 49 },
-    navigation: [{ label: "Leads", href: "/dashboard/product" }],
+    navigation: [{ label: "Leads", href: "/dashboard/avyro" }],
     featureFlags: {
       leadCapture: true,
       followUp: true,
@@ -99,12 +99,12 @@ export const products: ProductConfig[] = [
       "Cut no-shows without the back-and-forth",
     ],
     status: "active",
-    marketingStatus: "In development",
+    marketingStatus: "Available",
     assets: productBrand("velto", true),
     accent: "#7C3AED",
-    route: "/dashboard/product",
+    route: "/dashboard/velto",
     pricing: { monthly: 49 },
-    navigation: [{ label: "Bookings", href: "/dashboard/product" }],
+    navigation: [{ label: "Bookings", href: "/dashboard/velto" }],
     featureFlags: {
       bookings: true,
       reminders: true,
@@ -128,12 +128,12 @@ export const products: ProductConfig[] = [
       "Close more work without chasing by hand",
     ],
     status: "active",
-    marketingStatus: "In development",
+    marketingStatus: "Available",
     assets: productBrand("rovyn"),
     accent: "#00C853",
-    route: "/dashboard/product",
+    route: "/dashboard/rovyn",
     pricing: { monthly: 89 },
-    navigation: [{ label: "Quotes", href: "/dashboard/product" }],
+    navigation: [{ label: "Quotes", href: "/dashboard/rovyn" }],
     featureFlags: {
       quotes: true,
       followUp: true,
@@ -157,12 +157,12 @@ export const products: ProductConfig[] = [
       "Keep track of what's outstanding at a glance",
     ],
     status: "active",
-    marketingStatus: "In development",
+    marketingStatus: "Available",
     assets: productBrand("orvyn", true),
     accent: "#E10600",
-    route: "/dashboard/product",
+    route: "/dashboard/orvyn",
     pricing: { monthly: 89 },
-    navigation: [{ label: "Invoices", href: "/dashboard/product" }],
+    navigation: [{ label: "Invoices", href: "/dashboard/orvyn" }],
     featureFlags: { invoices: true, reminders: true },
     dashboard: {
       title: "Orvyn",

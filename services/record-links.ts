@@ -95,7 +95,7 @@ export async function createRecordLink(
     return { ok: false as const, error: "Could not connect those records." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard", "layout");
   return { ok: true as const, message: "Records connected." };
 }
 
@@ -137,7 +137,7 @@ export async function deleteRecordLink(linkId: string) {
     return { ok: false as const, error: "Could not unlink those records." };
   }
 
-  revalidatePath("/dashboard/product");
+  revalidatePath("/dashboard", "layout");
   return { ok: true as const, message: "Connection removed." };
 }
 

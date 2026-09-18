@@ -15,7 +15,7 @@ export async function openProductWorkspace(formData: FormData) {
   }
 
   await setActiveProductId(product.id);
-  redirect("/dashboard/product");
+  redirect(product.route);
 }
 
 /** Switch the product cookie, then open that workspace, optionally focused on a linked record. */
@@ -34,5 +34,5 @@ export async function openLinkedWorkspace(
     if (value) params.set(key, value);
   }
   const search = params.toString();
-  redirect(search ? `/dashboard/product?${search}` : "/dashboard/product");
+  redirect(search ? `${product.route}?${search}` : product.route);
 }

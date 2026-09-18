@@ -25,7 +25,8 @@
     "currentProduct": "Huidig product",
     "notifications": "Meldingen",
     "new": "Nieuw",
-    "optional": "Optioneel"
+    "optional": "Optioneel",
+    "searchRecords": "Records doorzoeken"
   },
   "language": {
     "label": "Taal",
@@ -53,7 +54,17 @@
     "statAutomations": "Automatiseringen na setup",
     "productsKicker": "De producten",
     "productsTitle": "Zes gerichte tools. <muted>Eén voor elke klus.</muted>",
-    "productsBody": "Elk product doet één ding goed. Avyro is er als eerste — de rest koppelt aan dezelfde werkruimte zodra ze live gaan."
+    "productsBody": "Begin met één gerichte app. Avyro, Velto, Rovyn en Orvyn zijn beschikbaar en verbinden in één werkruimte; Nexro en Ravelo komen binnenkort."
+  },
+  "together": {
+    "kicker": "Beter samen",
+    "title": "Eén klantreis. Vier gerichte apps.",
+    "body": "Elke app werkt zelfstandig. Verbind ze wanneer u wilt, zodat klantgegevens, context, datums en volgende acties met het werk meegaan.",
+    "step1": "Een lead vastleggen en opvolgen",
+    "step2": "De afspraak en herinneringen plannen",
+    "step3": "De offerte sturen en opvolgen",
+    "step4": "De factuur en betaling volgen",
+    "outcome": "Voer gegevens één keer in, behoud één klantgeschiedenis en zie de hele reis in het commandocentrum en de gedeelde agenda."
   },
   "features": {
     "kicker": "Mogelijkheden",
@@ -87,7 +98,8 @@
     "title": "Alle zes tools, één prijs.",
     "body": "Alle AYV WRLD-producten in één abonnement, voor de helft van de losse prijs.",
     "cta": "Pakket nemen",
-    "productBody": "Krijg {name} en de vijf andere tools in één abonnement, voor de helft van de losse prijs."
+    "productBody": "De bundel met zes producten wordt getoond met 50% korting op het catalogustotaal van €534. Abonnementen worden momenteel los gekocht.",
+    "availability": "De bundelprijs wordt ter planning getoond; er is nog geen aparte bundelcheckout."
   },
   "cta": {
     "title": "Begin werk om te zetten in omzet.",
@@ -112,7 +124,10 @@
     "planBody": "Eén duidelijke maandprijs. Geen setupkosten, opzeggen wanneer u wilt.",
     "startWith": "Start met {name}",
     "keepExploring": "Blijf kijken",
-    "otherTools": "Andere tools in AYV WRLD"
+    "otherTools": "Andere tools in AYV WRLD",
+    "connectedKicker": "Verbonden waarde",
+    "connectedTitle": "{name} werkt zelfstandig — en nog beter samen.",
+    "connectedOutcome": "Verbindingen hergebruiken klantgegevens, bewaren context en werken agenda en commandocentrum bij zonder records samen te voegen of te verwijderen."
   },
   "catalog": {
     "avyro": {
@@ -123,7 +138,8 @@
       "highlight2": "Plan slimme follow-ups zodat niemand wegglipt",
       "highlight3": "Zie welke leads hot zijn en waar ze vandaan komen",
       "nav": "Leads",
-      "dashboardDescription": "Volg nieuwe leads snel op zodat meer gesprekken klanten worden."
+      "dashboardDescription": "Volg nieuwe leads snel op zodat meer gesprekken klanten worden.",
+      "connectedValue": "Maak van een gekwalificeerde Avyro-lead een Velto-boeking zonder contactgegevens opnieuw in te voeren en houd offerte en factuur in dezelfde klantreis."
     },
     "velto": {
       "tagline": "Boekingen + herinneringen",
@@ -133,7 +149,8 @@
       "highlight2": "Stuur automatische herinneringen voor elke afspraak",
       "highlight3": "Minder no-shows zonder heen-en-weer",
       "nav": "Boekingen",
-      "dashboardDescription": "Neem boekingen aan en stuur herinneringen zodat minder afspraken worden gemist."
+      "dashboardDescription": "Neem boekingen aan en stuur herinneringen zodat minder afspraken worden gemist.",
+      "connectedValue": "Maak een boeking vanuit een Avyro-lead en draag een afgeronde afspraak over aan Rovyn met klant- en dienstcontext al ingevuld."
     },
     "rovyn": {
       "tagline": "Offerte-opvolging",
@@ -143,7 +160,8 @@
       "highlight2": "Duw twijfelende prospects op het juiste moment",
       "highlight3": "Sluit meer werk zonder handmatig achteraan te gaan",
       "nav": "Offertes",
-      "dashboardDescription": "Volg verzonden offertes op zodat meer voorstellen tot werk leiden."
+      "dashboardDescription": "Volg verzonden offertes op zodat meer voorstellen tot werk leiden.",
+      "connectedValue": "Maak een offerte vanuit een Velto-boeking en verander gewonnen werk in een Orvyn-factuur zonder de klant opnieuw in te voeren."
     },
     "orvyn": {
       "tagline": "Betaling + factuuropvolging",
@@ -153,7 +171,8 @@
       "highlight2": "Sneller betaald met minder ongemakkelijke reminders",
       "highlight3": "Houd openstaande posten in één oogopslag bij",
       "nav": "Betalingen",
-      "dashboardDescription": "Volg openstaande facturen en plan herinneringen zodat betalingen sneller binnenkomen."
+      "dashboardDescription": "Volg openstaande facturen en plan herinneringen zodat betalingen sneller binnenkomen.",
+      "connectedValue": "Maak een factuur vanuit een gewonnen Rovyn-offerte en behoud lead-, boekings- en offertecontext naast betaling en herinneringen."
     },
     "nexro": {
       "tagline": "Heractivering + referrals",
@@ -215,7 +234,7 @@
   "onboarding": {
     "kicker": "Werkruimte",
     "title": "Zet uw werkruimte op",
-    "body": "Dit maakt uw organisatie aan. U bent de eigenaar. Toekomstige AYV WRLD-producten gebruiken ditzelfde bedrijfsprofiel.",
+    "body": "Begin met één app en voeg later andere toe. Deze gedeelde organisatie bewaart uw profiel, klantcontext, agenda en verbonden geschiedenis zonder werk te verliezen.",
     "businessName": "Bedrijfsnaam",
     "industry": "Branche",
     "chooseIndustry": "Kies een branche",
@@ -463,6 +482,7 @@
     "followUpOn": "Opvolgen op",
     "notes": "Notities",
     "notesPlaceholder": "Waar ze vandaan komen, wat ze vroegen",
+    "searchPlaceholder": "Zoek leads op naam of contact",
     "add": "Lead toevoegen",
     "adding": "Toevoegen...",
     "emptyTitle": "Nog geen leads",
@@ -507,6 +527,7 @@
     "noLinkedLead": "Geen gekoppelde lead",
     "notes": "Notities",
     "notesPlaceholder": "Wat ze boekten, wat u moet onthouden",
+    "searchPlaceholder": "Zoek boekingen op klant of dienst",
     "add": "Boeking toevoegen",
     "adding": "Toevoegen...",
     "emptyTitle": "Nog geen boekingen",
@@ -526,6 +547,8 @@
     "statusCancelled": "Geannuleerd",
     "statusNoShow": "No-show",
     "remove": "Verwijderen",
+    "removeTitle": "Deze boeking verwijderen?",
+    "removeBody": "De boeking wordt verwijderd. Verbonden records blijven beschikbaar en worden niet verwijderd.",
     "added": "Boeking toegevoegd",
     "statusUpdated": "Status bijgewerkt",
     "reminderSaved": "Herinnering opgeslagen",
@@ -551,6 +574,7 @@
     "phone": "Telefoon",
     "notes": "Notities",
     "notesPlaceholder": "Wat u hebt aangeboden, wat u moet onthouden",
+    "searchPlaceholder": "Zoek offertes op klant of titel",
     "add": "Offerte toevoegen",
     "adding": "Toevoegen...",
     "emptyTitle": "Nog geen offertes",
@@ -569,6 +593,8 @@
     "statusWon": "Gewonnen",
     "statusLost": "Verloren",
     "remove": "Verwijderen",
+    "removeTitle": "Deze offerte verwijderen?",
+    "removeBody": "De offerte wordt verwijderd. Verbonden records blijven beschikbaar en worden niet verwijderd.",
     "added": "Offerte toegevoegd",
     "statusUpdated": "Status bijgewerkt",
     "followUpSaved": "Opvolging opgeslagen",
@@ -580,15 +606,20 @@
     "addInvoice": "Factuur toevoegen", "prefill": "Gegevens van {name} uit {product} zijn ingevuld. Je kunt ook zonder koppeling toevoegen.",
     "customer": "Klant", "invoiceNumber": "Factuurnummer", "description": "Omschrijving", "amount": "Bedrag", "currency": "Valuta",
     "issuedOn": "Factuurdatum", "dueOn": "Vervaldatum", "nextReminderOn": "Volgende herinnering", "email": "E-mail", "phone": "Telefoon",
-    "notes": "Notities", "notesPlaceholder": "Betalingsvoorwaarden of context", "add": "Factuur toevoegen", "adding": "Toevoegen...",
+    "notes": "Notities", "notesPlaceholder": "Betalingsvoorwaarden of context", "searchPlaceholder": "Zoek facturen op klant of nummer", "add": "Factuur toevoegen", "adding": "Toevoegen...",
     "emptyTitle": "Nog geen facturen", "emptyBody": "Voeg een openstaande factuur toe. Orvyn houdt status, vervaldatum en herinneringen bij elkaar.",
     "colInvoice": "Factuur", "colAmount": "Bedrag", "colStatus": "Status", "colDates": "Datums", "colReminder": "Herinnering", "colConnected": "Gekoppeld",
     "statusDraft": "Concept", "statusSent": "Verzonden", "statusOverdue": "Te laat", "statusPaid": "Betaald", "statusVoid": "Vervallen",
     "statusFor": "Status van factuur {number}", "reminderFor": "Herinneringsdatum voor factuur {number}",
-    "issuedShort": "Verzonden {date}", "dueShort": "Vervalt {date}", "remove": "Verwijderen", "added": "Factuur toegevoegd",
+    "issuedShort": "Verzonden {date}", "dueShort": "Vervalt {date}", "remove": "Verwijderen", "removeTitle": "Deze factuur verwijderen?", "removeBody": "De factuur wordt verwijderd. Verbonden records blijven beschikbaar en worden niet verwijderd.", "added": "Factuur toegevoegd",
     "statusUpdated": "Status bijgewerkt", "reminderSaved": "Herinnering opgeslagen", "removed": "Factuur verwijderd"
   },
   "connections": {
+    "workflow": "Verbonden workflow",
+    "journeyProgress": "{count} van 4 stappen verbonden",
+    "stepsConnected": "{count}/4 stappen verbonden",
+    "nextBestAction": "Volgende: ga verder in {name}",
+    "journeyComplete": "Klantreis voltooid",
     "connected": "Gekoppeld",
     "nothing": "Niets gekoppeld",
     "openIn": "Openen in {name}",
