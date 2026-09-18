@@ -283,14 +283,27 @@ body {
 }
 
 @keyframes rise-in {
-  from {
+  0% {
     opacity: 0;
-    transform: translateY(1.25rem);
+    transform: translateY(40px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
 }
 
 .rise-in {

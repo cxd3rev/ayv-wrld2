@@ -124,7 +124,7 @@ export default async function ProductPage({
                     className="absolute right-6 top-6 h-2.5 w-2.5 rounded-full"
                     style={{ backgroundColor: isActive ? product.accent : "var(--border)" }}
                   />
-                  <ProductLogo product={product} size={220} className="mark-invert h-40 w-40 lg:h-52 lg:w-52" />
+                  <ProductLogo product={product} size={220} className="mark-invert h-40 w-40 lg:h-52 lg:w-52 animate-float" />
                   <span className="absolute bottom-6 left-6 right-6 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted">
                     {t(`catalog.${product.id}.description`)}
                   </span>
