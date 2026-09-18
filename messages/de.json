@@ -619,6 +619,8 @@
     "journeyProgress": "{count} von 4 Schritten verbunden",
     "stepsConnected": "{count}/4 Schritte verbunden",
     "nextBestAction": "Als Nächstes: in {name} fortfahren",
+    "handoffPending": "Bringen Sie diesen Datensatz vor der nächsten Übergabe weiter",
+    "finalStep": "Letzter Schritt: Zahlung und Erinnerungen hier verfolgen",
     "journeyComplete": "Kundenreise abgeschlossen",
     "connected": "Verknüpft",
     "nothing": "Nichts verknüpft",

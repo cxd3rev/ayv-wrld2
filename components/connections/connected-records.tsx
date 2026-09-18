@@ -163,6 +163,14 @@ export function ConnectedRecords({
   const nextProduct = journeyProducts
     .slice(journeyProducts.indexOf(product) + 1)
     .find((step) => !journey.completed.includes(step));
+  const readyForHandoff =
+    product === "avyro"
+      ? leads.find((lead) => lead.id === recordId)?.status !== "lost"
+      : product === "velto"
+        ? bookings.find((booking) => booking.id === recordId)?.status === "completed"
+        : product === "rovyn"
+          ? quotes.find((quote) => quote.id === recordId)?.status === "won"
+          : false;
 
   const attachOptions = useMemo(() => {
     const entity = getRecordEntity(attachProduct);
@@ -244,12 +252,16 @@ export function ConnectedRecords({
         <p className="mt-2 text-xs text-muted">
           {t("stepsConnected", { count: journey.completed.length })}
         </p>
-        {nextProduct ? (
+        {nextProduct && readyForHandoff ? (
           <p className="mt-1 text-xs font-medium">
             {t("nextBestAction", { name: recordProductName(nextProduct) })}
           </p>
-        ) : (
+        ) : nextProduct ? (
+          <p className="mt-1 text-xs font-medium">{t("handoffPending")}</p>
+        ) : journey.completed.length === journeyProducts.length ? (
           <p className="mt-1 text-xs font-medium text-success">{t("journeyComplete")}</p>
+        ) : (
+          <p className="mt-1 text-xs font-medium">{t("finalStep")}</p>
         )}
       </div>
       <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">{t("connected")}</p>

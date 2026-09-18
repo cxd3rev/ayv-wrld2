@@ -619,6 +619,8 @@
     "journeyProgress": "{count} van 4 stappen verbonden",
     "stepsConnected": "{count}/4 stappen verbonden",
     "nextBestAction": "Volgende: ga verder in {name}",
+    "handoffPending": "Breng dit record verder vóór de volgende overdracht",
+    "finalStep": "Laatste stap: volg betaling en herinneringen hier",
     "journeyComplete": "Klantreis voltooid",
     "connected": "Gekoppeld",
     "nothing": "Niets gekoppeld",

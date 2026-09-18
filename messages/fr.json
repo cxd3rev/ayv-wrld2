@@ -619,6 +619,8 @@
     "journeyProgress": "{count} étapes sur 4 connectées",
     "stepsConnected": "{count}/4 étapes connectées",
     "nextBestAction": "Ensuite : continuer dans {name}",
+    "handoffPending": "Faites avancer cet enregistrement avant la prochaine transmission",
+    "finalStep": "Dernière étape : suivez ici le paiement et les rappels",
     "journeyComplete": "Parcours client terminé",
     "connected": "Lié",
     "nothing": "Rien de lié",

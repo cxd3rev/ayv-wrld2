@@ -619,6 +619,8 @@
     "journeyProgress": "{count} of 4 journey steps connected",
     "stepsConnected": "{count}/4 steps connected",
     "nextBestAction": "Next: continue in {name}",
+    "handoffPending": "Keep this record moving before the next handoff",
+    "finalStep": "Final step: track payment and reminders here",
     "journeyComplete": "Client journey complete",
     "connected": "Connected",
     "nothing": "Nothing connected",
