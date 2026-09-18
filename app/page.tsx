@@ -3,6 +3,7 @@ import { MarketingFooter, MarketingHeader } from "@/components/marketing/header"
 import { ProductCard } from "@/components/marketing/product-card";
 import { BundleOffer, Features, FinalCta, HowItWorks } from "@/components/marketing/sections";
 import { products } from "@/config/products";
+import { ayvBrand } from "@/config/brands";
 import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -54,12 +55,12 @@ export default async function HomePage() {
           <div className="relative rise-in-3">
             <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_60%)]" />
             <Image
-              src="/hero/cube.png"
+              src={ayvBrand.icon}
               alt=""
               width={900}
               height={900}
               priority
-              className="mx-auto h-auto w-full max-w-[560px] select-none object-contain"
+              className="mark-invert mx-auto h-auto w-full max-w-[420px] select-none object-contain"
             />
           </div>
         </div>
