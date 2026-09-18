@@ -80,7 +80,7 @@
     "secureTitle": "Sicher von Anfang an",
     "secureBody": "Kundendaten bleiben geschützt: moderne Authentifizierung und Isolation je Konto ab Tag eins.",
     "pricingTitle": "Fairer, klarer Preis",
-    "pricingBody": "Jede verfügbare App hat einen klaren Monatspreis. Der Vergleich der sechs Produkte zeigt den geplanten Paketwert mit 50 % Rabatt; Abonnements werden derzeit einzeln gekauft."
+    "pricingBody": "Jede verfügbare App hat einen klaren Monatspreis. Der Vergleich für AYV Automation Stack zeigt den geplanten Wert mit 50 % Rabatt; Abonnements werden derzeit einzeln gekauft."
   },
   "how": {
     "kicker": "So funktioniert's",
@@ -94,12 +94,12 @@
     "ready": "Bereit"
   },
   "bundle": {
-    "kicker": "Das Paket",
-    "title": "Bauen Sie Ihre verbundene Suite.",
-    "body": "Starten Sie mit einer verfügbaren App und fügen Sie weitere hinzu. Der Vergleich zeigt 534 € Katalogwert und einen geplanten Paketpreis von 267 €.",
+    "kicker": "AYV Automation Stack",
+    "title": "Bauen Sie Ihren vernetzten Automatisierungs-Stack.",
+    "body": "Starten Sie mit einer verfügbaren App und fügen Sie weitere hinzu. AYV Automation Stack zeigt 534 € Katalogwert und einen geplanten Preis von 267 €.",
     "cta": "Mit einer App starten",
-    "productBody": "Das Sechs-Produkte-Paket wird mit 50 % Rabatt auf den Katalogpreis von 534 € angezeigt. Abonnements werden derzeit einzeln gekauft.",
-    "availability": "Der Paketpreis dient zur Planung; einen separaten Paket-Checkout gibt es noch nicht."
+    "productBody": "AYV Automation Stack wird mit 50 % Rabatt auf den Katalogpreis von 534 € angezeigt. Abonnements werden derzeit einzeln gekauft.",
+    "availability": "Der Preis für AYV Automation Stack dient zur Planung; einen separaten Stack-Checkout gibt es noch nicht."
   },
   "cta": {
     "title": "Machen Sie aus Arbeit Umsatz.",

@@ -4,7 +4,7 @@ import test from "node:test";
 // @ts-expect-error This test intentionally executes TypeScript source directly.
 const { calculatePricingSummary, formatEuroPrice } = await import("./pricing.ts");
 
-test("calculates the six-product catalog and exact 50% bundle", () => {
+test("calculates the AYV Automation Stack catalog and exact 50% price", () => {
   assert.deepEqual(
     calculatePricingSummary([49, 49, 89, 89, 129, 129], 0.5),
     {

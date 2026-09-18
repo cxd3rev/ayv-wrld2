@@ -80,7 +80,7 @@
     "secureTitle": "Secure by default",
     "secureBody": "Your customer data stays protected with modern authentication and per-account isolation from day one.",
     "pricingTitle": "Fair, simple pricing",
-    "pricingBody": "Each available app has one clear monthly price. The six-product suite comparison shows the planned 50% bundle value; subscriptions are purchased individually today."
+    "pricingBody": "Each available app has one clear monthly price. The AYV Automation Stack comparison shows the planned 50% value; subscriptions are purchased individually today."
   },
   "how": {
     "kicker": "How it works",
@@ -94,12 +94,12 @@
     "ready": "Ready"
   },
   "bundle": {
-    "kicker": "The bundle",
-    "title": "Build your connected suite.",
-    "body": "Start with any available app and add others as your workflow grows. The six-product comparison shows €534 catalog value and a €267 planned bundle price.",
+    "kicker": "AYV Automation Stack",
+    "title": "Build your connected automation stack.",
+    "body": "Start with any available app and add others as your workflow grows. AYV Automation Stack shows €534 catalog value and a planned price of €267.",
     "cta": "Start with one app",
-    "productBody": "The six-product bundle is displayed at 50% off the €534 catalog total. Product subscriptions are purchased individually today.",
-    "availability": "Bundle pricing is displayed for planning; there is no separate bundle checkout yet."
+    "productBody": "AYV Automation Stack is displayed at 50% off the €534 catalog total. Product subscriptions are purchased individually today.",
+    "availability": "AYV Automation Stack pricing is displayed for planning; there is no separate stack checkout yet."
   },
   "cta": {
     "title": "Start turning work into revenue.",

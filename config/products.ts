@@ -225,7 +225,7 @@ export const products: ProductConfig[] = [
 
 export const defaultProductId: ProductId = "avyro";
 
-/** Fraction off the combined price when all products are bought as a bundle. */
+/** Fraction off the combined AYV Automation Stack catalog price. */
 export const BUNDLE_DISCOUNT = 0.5;
 
 export const bundlePricing = calculatePricingSummary(

@@ -80,7 +80,7 @@
     "secureTitle": "Sécurisé par défaut",
     "secureBody": "Les données clients restent protégées grâce à une authentification moderne et une isolation par compte dès le premier jour.",
     "pricingTitle": "Un tarif simple et juste",
-    "pricingBody": "Chaque application disponible a un prix mensuel clair. La comparaison des six produits affiche la valeur prévue du pack à -50 % ; les abonnements sont achetés séparément aujourd'hui."
+    "pricingBody": "Chaque application disponible a un prix mensuel clair. La comparaison AYV Automation Stack affiche la valeur prévue avec 50 % de remise ; les abonnements sont achetés séparément aujourd'hui."
   },
   "how": {
     "kicker": "Fonctionnement",
@@ -94,12 +94,12 @@
     "ready": "Prêt"
   },
   "bundle": {
-    "kicker": "Le pack",
-    "title": "Construisez votre suite connectée.",
-    "body": "Commencez avec une application disponible et ajoutez-en d'autres. La comparaison affiche 534 € au catalogue et un tarif de pack prévu à 267 €.",
+    "kicker": "AYV Automation Stack",
+    "title": "Construisez votre stack d'automatisation connectée.",
+    "body": "Commencez avec une application disponible et ajoutez-en d'autres. AYV Automation Stack affiche une valeur catalogue de 534 € et un tarif prévu de 267 €.",
     "cta": "Commencer avec une application",
-    "productBody": "Le pack de six produits affiche 50 % de remise sur le total catalogue de 534 €. Les abonnements sont achetés séparément aujourd'hui.",
-    "availability": "Le tarif du pack est présenté à titre indicatif ; il n'existe pas encore de paiement séparé pour le pack."
+    "productBody": "AYV Automation Stack affiche 50 % de remise sur le total catalogue de 534 €. Les abonnements sont achetés séparément aujourd'hui.",
+    "availability": "Le tarif AYV Automation Stack est présenté à titre indicatif ; il n'existe pas encore de paiement séparé pour la stack."
   },
   "cta": {
     "title": "Commencez à transformer le travail en chiffre d'affaires.",

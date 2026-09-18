@@ -80,7 +80,7 @@
     "secureTitle": "Standaard beveiligd",
     "secureBody": "Klantdata blijft beschermd met moderne authenticatie en isolatie per account vanaf dag één.",
     "pricingTitle": "Eerlijke, eenvoudige prijzen",
-    "pricingBody": "Elke beschikbare app heeft één duidelijke maandprijs. De vergelijking van zes producten toont de geplande bundelwaarde met 50% korting; abonnementen worden momenteel los gekocht."
+    "pricingBody": "Elke beschikbare app heeft één duidelijke maandprijs. De vergelijking voor AYV Automation Stack toont de geplande waarde met 50% korting; abonnementen worden momenteel los gekocht."
   },
   "how": {
     "kicker": "Hoe het werkt",
@@ -94,12 +94,12 @@
     "ready": "Klaar"
   },
   "bundle": {
-    "kicker": "Het pakket",
-    "title": "Bouw uw verbonden suite.",
-    "body": "Begin met een beschikbare app en voeg andere toe. De vergelijking toont €534 cataloguswaarde en een geplande bundelprijs van €267.",
+    "kicker": "AYV Automation Stack",
+    "title": "Bouw uw verbonden automatiseringsstack.",
+    "body": "Begin met een beschikbare app en voeg andere toe. AYV Automation Stack toont €534 cataloguswaarde en een geplande prijs van €267.",
     "cta": "Begin met één app",
-    "productBody": "De bundel met zes producten wordt getoond met 50% korting op het catalogustotaal van €534. Abonnementen worden momenteel los gekocht.",
-    "availability": "De bundelprijs wordt ter planning getoond; er is nog geen aparte bundelcheckout."
+    "productBody": "AYV Automation Stack wordt getoond met 50% korting op het catalogustotaal van €534. Abonnementen worden momenteel los gekocht.",
+    "availability": "De prijs van AYV Automation Stack wordt ter planning getoond; er is nog geen aparte stackcheckout."
   },
   "cta": {
     "title": "Begin werk om te zetten in omzet.",
