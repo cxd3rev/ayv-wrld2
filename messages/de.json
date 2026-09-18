@@ -80,7 +80,7 @@
     "secureTitle": "Sicher von Anfang an",
     "secureBody": "Kundendaten bleiben geschützt: moderne Authentifizierung und Isolation je Konto ab Tag eins.",
     "pricingTitle": "Fairer, klarer Preis",
-    "pricingBody": "Jedes Tool hat einen klaren Monatspreis — oder nehmen Sie das Komplettpaket und zahlen 50 % weniger als einzeln."
+    "pricingBody": "Jede verfügbare App hat einen klaren Monatspreis. Der Vergleich der sechs Produkte zeigt den geplanten Paketwert mit 50 % Rabatt; Abonnements werden derzeit einzeln gekauft."
   },
   "how": {
     "kicker": "So funktioniert's",
@@ -95,9 +95,9 @@
   },
   "bundle": {
     "kicker": "Das Paket",
-    "title": "Alle sechs Tools, ein Preis.",
-    "body": "Alle AYV-WRLD-Produkte in einem Abo — zur Hälfte des Einzelpreises.",
-    "cta": "Paket holen",
+    "title": "Bauen Sie Ihre verbundene Suite.",
+    "body": "Starten Sie mit einer verfügbaren App und fügen Sie weitere hinzu. Der Vergleich zeigt 534 € Katalogwert und einen geplanten Paketpreis von 267 €.",
+    "cta": "Mit einer App starten",
     "productBody": "Das Sechs-Produkte-Paket wird mit 50 % Rabatt auf den Katalogpreis von 534 € angezeigt. Abonnements werden derzeit einzeln gekauft.",
     "availability": "Der Paketpreis dient zur Planung; einen separaten Paket-Checkout gibt es noch nicht."
   },

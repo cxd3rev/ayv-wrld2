@@ -80,7 +80,7 @@
     "secureTitle": "Secure by default",
     "secureBody": "Your customer data stays protected with modern authentication and per-account isolation from day one.",
     "pricingTitle": "Fair, simple pricing",
-    "pricingBody": "Each tool has one clear monthly price — or take the full bundle and pay 50% less than buying them separately."
+    "pricingBody": "Each available app has one clear monthly price. The six-product suite comparison shows the planned 50% bundle value; subscriptions are purchased individually today."
   },
   "how": {
     "kicker": "How it works",
@@ -95,9 +95,9 @@
   },
   "bundle": {
     "kicker": "The bundle",
-    "title": "All six tools, one price.",
-    "body": "Get every AYV WRLD product in a single subscription and pay half of what they cost on their own.",
-    "cta": "Get the bundle",
+    "title": "Build your connected suite.",
+    "body": "Start with any available app and add others as your workflow grows. The six-product comparison shows €534 catalog value and a €267 planned bundle price.",
+    "cta": "Start with one app",
     "productBody": "The six-product bundle is displayed at 50% off the €534 catalog total. Product subscriptions are purchased individually today.",
     "availability": "Bundle pricing is displayed for planning; there is no separate bundle checkout yet."
   },

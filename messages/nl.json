@@ -80,7 +80,7 @@
     "secureTitle": "Standaard beveiligd",
     "secureBody": "Klantdata blijft beschermd met moderne authenticatie en isolatie per account vanaf dag één.",
     "pricingTitle": "Eerlijke, eenvoudige prijzen",
-    "pricingBody": "Elke tool heeft één duidelijke maandprijs — of neem het volledige pakket en betaal 50% minder dan los."
+    "pricingBody": "Elke beschikbare app heeft één duidelijke maandprijs. De vergelijking van zes producten toont de geplande bundelwaarde met 50% korting; abonnementen worden momenteel los gekocht."
   },
   "how": {
     "kicker": "Hoe het werkt",
@@ -95,9 +95,9 @@
   },
   "bundle": {
     "kicker": "Het pakket",
-    "title": "Alle zes tools, één prijs.",
-    "body": "Alle AYV WRLD-producten in één abonnement, voor de helft van de losse prijs.",
-    "cta": "Pakket nemen",
+    "title": "Bouw uw verbonden suite.",
+    "body": "Begin met een beschikbare app en voeg andere toe. De vergelijking toont €534 cataloguswaarde en een geplande bundelprijs van €267.",
+    "cta": "Begin met één app",
     "productBody": "De bundel met zes producten wordt getoond met 50% korting op het catalogustotaal van €534. Abonnementen worden momenteel los gekocht.",
     "availability": "De bundelprijs wordt ter planning getoond; er is nog geen aparte bundelcheckout."
   },

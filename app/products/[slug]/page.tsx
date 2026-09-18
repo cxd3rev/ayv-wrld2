@@ -212,7 +212,9 @@ export default async function ProductPage({
                 href="/signup"
                 className="group mt-8 inline-flex h-12 w-fit items-center rounded-full border border-border bg-background px-7 text-sm font-medium transition-colors hover:bg-card-hover"
               >
-                {t("productPage.startWith", { name: product.name })}
+                {isActive
+                  ? t("productPage.startWith", { name: product.name })
+                  : t("productPage.getNotified")}
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>

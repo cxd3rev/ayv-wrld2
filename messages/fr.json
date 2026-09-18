@@ -80,7 +80,7 @@
     "secureTitle": "Sécurisé par défaut",
     "secureBody": "Les données clients restent protégées grâce à une authentification moderne et une isolation par compte dès le premier jour.",
     "pricingTitle": "Un tarif simple et juste",
-    "pricingBody": "Chaque outil a un prix mensuel clair — ou prenez le pack complet et payez 50 % de moins qu'à l'unité."
+    "pricingBody": "Chaque application disponible a un prix mensuel clair. La comparaison des six produits affiche la valeur prévue du pack à -50 % ; les abonnements sont achetés séparément aujourd'hui."
   },
   "how": {
     "kicker": "Fonctionnement",
@@ -95,9 +95,9 @@
   },
   "bundle": {
     "kicker": "Le pack",
-    "title": "Les six outils, un seul prix.",
-    "body": "Tous les produits AYV WRLD dans un seul abonnement, à la moitié du prix unitaire.",
-    "cta": "Prendre le pack",
+    "title": "Construisez votre suite connectée.",
+    "body": "Commencez avec une application disponible et ajoutez-en d'autres. La comparaison affiche 534 € au catalogue et un tarif de pack prévu à 267 €.",
+    "cta": "Commencer avec une application",
     "productBody": "Le pack de six produits affiche 50 % de remise sur le total catalogue de 534 €. Les abonnements sont achetés séparément aujourd'hui.",
     "availability": "Le tarif du pack est présenté à titre indicatif ; il n'existe pas encore de paiement séparé pour le pack."
   },
