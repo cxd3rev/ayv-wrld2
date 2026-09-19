@@ -1,5 +1,6 @@
 import { AutomationProductCard, Breadcrumbs, CTASection, PublicShell, SectionHeading } from "@/components/marketing/public-site";
-import { bundlePricing, formatPrice, products } from "@/config/products";
+import { BundlePricingCard } from "@/components/marketing/bundle-pricing-card";
+import { formatPrice, products } from "@/config/products";
 import { getPublicCopy } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
 import type { Metadata } from "next";
@@ -36,24 +37,14 @@ export default async function AutomationStackPage() {
           </div>
         </section>
         <section className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
-          <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="border border-border bg-card p-8 lg:p-12">
-              <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">{c.common.catalogMath}</p>
-              <div className="mt-8 flex flex-wrap items-baseline gap-4">
-                <span className="display text-5xl text-muted line-through">{formatPrice(bundlePricing.fullMonthly, locale)}</span>
-                <span aria-hidden className="text-3xl text-muted">→</span>
-                <span className="display text-7xl">{formatPrice(bundlePricing.discountedMonthly, locale)}</span>
-              </div>
-              <p className="mt-5 text-lg">{c.stack.math}</p>
-            </div>
-            <div className="border border-border p-8 lg:p-12">
-              <p className="kicker">{c.common.availability}</p>
-              <p className="mt-7 text-lg leading-relaxed text-muted">{c.stack.truth}</p>
-            </div>
-          </div>
+          <BundlePricingCard
+            locale={locale}
+            labels={{ bundle: c.common.bundle, purchasedSeparately: c.common.purchasedSeparately, plannedPrice: c.common.plannedPrice, save: c.common.save, perMonth: c.common.perMonth, includes: c.common.includes, individualNote: c.stack.truth }}
+            cta={{ href: "/automation", label: c.stack.cta }}
+          />
         </section>
         <section className="border-y border-border bg-card">
-          <div className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
+          <div id="included-products" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-6 py-20 lg:px-12 lg:py-28">
             <SectionHeading eyebrow="AYV AUTOMATION STACK" title={c.stack.connected} body={c.stack.connectedBody} />
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {products.map((product) => (

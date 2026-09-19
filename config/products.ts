@@ -84,7 +84,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/avyro",
     cta: { active: "Open Avyro", comingSoon: "Coming soon" },
     route: "/dashboard/avyro",
-    pricing: { monthly: 49 },
+    pricing: { monthly: 40 },
     navigation: [{ label: "Leads", href: "/dashboard/avyro" }],
     featureFlags: {
       leadCapture: true,
@@ -118,7 +118,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/velto",
     cta: { active: "Open Velto", comingSoon: "Coming soon" },
     route: "/dashboard/velto",
-    pricing: { monthly: 49 },
+    pricing: { monthly: 40 },
     navigation: [{ label: "Bookings", href: "/dashboard/velto" }],
     featureFlags: {
       bookings: true,
@@ -151,7 +151,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/rovyn",
     cta: { active: "Open Rovyn", comingSoon: "Coming soon" },
     route: "/dashboard/rovyn",
-    pricing: { monthly: 89 },
+    pricing: { monthly: 70 },
     navigation: [{ label: "Quotes", href: "/dashboard/rovyn" }],
     featureFlags: {
       quotes: true,
@@ -184,7 +184,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/orvyn",
     cta: { active: "Open Orvyn", comingSoon: "Coming soon" },
     route: "/dashboard/orvyn",
-    pricing: { monthly: 89 },
+    pricing: { monthly: 70 },
     navigation: [{ label: "Invoices", href: "/dashboard/orvyn" }],
     featureFlags: { invoices: true, reminders: true },
     dashboard: {
@@ -214,7 +214,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/nexro",
     cta: { active: "Open Nexro", comingSoon: "In development" },
     route: "/dashboard/product",
-    pricing: { monthly: 129 },
+    pricing: { monthly: 90 },
     navigation: [],
     featureFlags: {},
     dashboard: {
@@ -244,7 +244,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/ravelo",
     cta: { active: "Open Ravelo", comingSoon: "In development" },
     route: "/dashboard/product",
-    pricing: { monthly: 129 },
+    pricing: { monthly: 90 },
     navigation: [],
     featureFlags: {},
     dashboard: {

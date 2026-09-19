@@ -10,6 +10,11 @@
     "perMonth": "/ mois",
     "perMonthShort": "/ mois",
     "save50": "−50 %",
+    "purchasedSeparately": "Valeur si achetés séparément",
+    "plannedPrice": "Prix prévu de l’offre groupée",
+    "save": "Économisez",
+    "includes": "Six produits inclus",
+    "individualNote": "Le paiement groupé n’est pas encore disponible. Les produits disponibles peuvent toujours être achetés séparément.",
     "ready": "Prêt",
     "comingSoon": "Bientôt",
     "inDevelopment": "En cours",
@@ -96,9 +101,10 @@
   "bundle": {
     "kicker": "AYV Automation Stack",
     "title": "Construisez votre stack d'automatisation connectée.",
-    "body": "Commencez avec une application disponible et ajoutez-en d'autres. AYV Automation Stack affiche une valeur catalogue de 534 € et un tarif prévu de 267 €.",
+    "body": "Commencez avec une application disponible et ajoutez-en d'autres. AYV Automation Stack affiche une valeur catalogue de 400 € et un tarif prévu de 200 €.",
     "cta": "Commencer avec une application",
-    "productBody": "AYV Automation Stack affiche 50 % de remise sur le total catalogue de 534 €. Les abonnements sont achetés séparément aujourd'hui.",
+    "explore": "Explorer l’offre groupée",
+    "productBody": "AYV Automation Stack affiche 50 % de remise sur le total catalogue de 400 €, soit 200 € économisés par mois. Les abonnements sont achetés séparément aujourd'hui.",
     "availability": "Le tarif AYV Automation Stack est présenté à titre indicatif ; il n'existe pas encore de paiement séparé pour la stack."
   },
   "cta": {

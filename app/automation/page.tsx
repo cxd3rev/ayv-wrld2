@@ -1,11 +1,10 @@
 import { AutomationProductCard, CTASection, PageHero, PublicShell, SectionHeading } from "@/components/marketing/public-site";
+import { BundlePricingCard } from "@/components/marketing/bundle-pricing-card";
 import { formatPrice, products } from "@/config/products";
 import { getPublicCopy } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
-import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import Link from "next/link";
 
 export async function generateMetadata(): Promise<Metadata> {
   const c = getPublicCopy(resolveLocale(await getLocale()));
@@ -43,15 +42,13 @@ export default async function AutomationPage() {
           </div>
         </section>
         <section className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
-          <div className="grid gap-8 border border-border bg-card p-8 lg:grid-cols-[1fr_auto] lg:items-end lg:p-12">
-            <div>
-              <p className="kicker">{c.common.bundle}</p>
-              <h2 className="display mt-6 text-4xl lg:text-6xl">{c.automation.stackTitle}</h2>
-              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">{c.automation.stackBody}</p>
-              <p className="mt-5 font-mono text-sm">€534 → €267</p>
-            </div>
-            <Link href="/automation/stack" className="button-primary">{c.automation.stackCta}<ArrowRight className="h-4 w-4" /></Link>
-          </div>
+          <SectionHeading eyebrow={c.common.bundle} title={c.automation.stackTitle} body={c.automation.stackBody} />
+          <BundlePricingCard
+            locale={locale}
+            className="mt-10"
+            labels={{ bundle: c.common.bundle, purchasedSeparately: c.common.purchasedSeparately, plannedPrice: c.common.plannedPrice, save: c.common.save, perMonth: c.common.perMonth, includes: c.common.includes, individualNote: c.common.individualNote }}
+            cta={{ href: "/automation/stack", label: c.automation.stackCta }}
+          />
         </section>
         <CTASection title={c.home.finalTitle} body={c.home.finalBody} links={[{ label: "One Man Army Stack", href: "/one-man-army" }, { label: c.nav.projects, href: "/projects" }]} />
       </main>

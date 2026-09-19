@@ -1,9 +1,9 @@
 import { ArrowRight, LayoutGrid, Repeat, ShieldCheck, Users, Wallet, Zap } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
+import { BundlePricingCard } from "@/components/marketing/bundle-pricing-card";
 import { ProductIcon } from "@/components/product-icon";
-import { bundlePricing, formatPrice, getActiveProducts } from "@/config/products";
+import { getActiveProducts } from "@/config/products";
 
 const featureIcons = [LayoutGrid, Zap, Repeat, Users, ShieldCheck, Wallet] as const;
 const featureKeys = ["login", "live", "automations", "teams", "secure", "pricing"] as const;
@@ -175,39 +175,20 @@ export function BundleOffer() {
   const locale = useLocale();
 
   return (
-    <div className="relative mt-8 overflow-hidden rounded-2xl border border-border bg-card p-8 lg:p-12">
-      <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
-        <div className="max-w-md">
-          <div className="flex items-center gap-3">
-            <p className="kicker">{t("kicker")}</p>
-            <Badge tone="accent">{tCommon("save50")}</Badge>
-          </div>
-          <h3 className="display mt-5 text-3xl tracking-tight lg:text-4xl">{t("title")}</h3>
-          <p className="mt-3 text-base leading-relaxed text-muted text-pretty">{t("body")}</p>
-        </div>
-        <div className="flex flex-col items-start gap-5 lg:items-end">
-          <div className="flex items-baseline gap-3">
-            <span className="font-mono text-lg text-muted line-through">
-              {formatPrice(bundlePricing.fullMonthly, locale)}
-            </span>
-            <span className="display text-4xl tracking-tight lg:text-5xl">
-              {formatPrice(bundlePricing.discountedMonthly, locale)}
-            </span>
-            <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">{tCommon("perMonth")}</span>
-          </div>
-          <p className="max-w-md text-left text-xs leading-relaxed text-muted lg:text-right">
-            {t("availability")}
-          </p>
-          <Link
-            href="/signup"
-            className="group inline-flex h-14 items-center justify-center rounded-full bg-accent px-8 text-base font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
-          >
-            {t("cta")}
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
-        </div>
-      </div>
-    </div>
+    <BundlePricingCard
+      locale={locale}
+      className="mt-8"
+      labels={{
+        bundle: t("kicker"),
+        purchasedSeparately: tCommon("purchasedSeparately"),
+        plannedPrice: tCommon("plannedPrice"),
+        save: tCommon("save"),
+        perMonth: tCommon("perMonth"),
+        includes: tCommon("includes"),
+        individualNote: t("availability"),
+      }}
+      cta={{ href: "/automation", label: t("cta") }}
+    />
   );
 }
 

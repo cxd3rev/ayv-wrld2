@@ -1,8 +1,9 @@
 import { Atmosphere } from "@/components/atmosphere";
+import { BundlePricingCard } from "@/components/marketing/bundle-pricing-card";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/header";
 import { Badge } from "@/components/ui/badge";
 import { ProductLogo } from "@/components/product-icon";
-import { bundlePricing, formatPrice, getProduct, products } from "@/config/products";
+import { formatPrice, getProduct, products } from "@/config/products";
 import { openProductWorkspace } from "@/services/product-switch";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -206,32 +207,19 @@ export default async function ProductPage({
               </Link>
             </div>
 
-            <div className="flex flex-col justify-between rounded-2xl border border-accent/30 bg-accent-soft p-8 lg:p-10">
-              <div>
-                <div className="flex items-center gap-3">
-                  <p className="kicker">{t("bundle.kicker")}</p>
-                  <Badge tone="accent">{t("common.save50")}</Badge>
-                </div>
-                <p className="mt-6 flex items-baseline gap-2">
-                  <span className="display text-5xl tracking-tight">
-                    {formatPrice(bundlePricing.discountedMonthly, locale)}
-                  </span>
-                  <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
-                    {t("common.perMonth")}
-                  </span>
-                </p>
-                <p className="mt-4 text-sm leading-relaxed text-muted">
-                  {t("bundle.productBody", { name: product.name })}
-                </p>
-              </div>
-              <Link
-                href="/signup"
-                className="group mt-8 inline-flex h-12 w-fit items-center rounded-full bg-accent px-7 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover"
-              >
-                {t("bundle.cta")}
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
+            <BundlePricingCard
+              locale={locale}
+              labels={{
+                bundle: t("bundle.kicker"),
+                purchasedSeparately: t("common.purchasedSeparately"),
+                plannedPrice: t("common.plannedPrice"),
+                save: t("common.save"),
+                perMonth: t("common.perMonth"),
+                includes: t("common.includes"),
+                individualNote: t("bundle.availability"),
+              }}
+              cta={{ href: "/automation/stack", label: t("bundle.explore") }}
+            />
           </div>
         </section>
 

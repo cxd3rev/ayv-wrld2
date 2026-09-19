@@ -1,6 +1,7 @@
 import { ayvBrand } from "@/config/brands";
 import { products, formatPrice } from "@/config/products";
 import { getPublicCopy, projects } from "@/config/public-site";
+import { ecosystems } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
 import {
   AutomationProductCard,
@@ -9,6 +10,7 @@ import {
   PublicShell,
   SectionHeading,
 } from "@/components/marketing/public-site";
+import { BundlePricingCard } from "@/components/marketing/bundle-pricing-card";
 import { ArrowRight, Boxes, FlaskConical, Workflow } from "lucide-react";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -90,6 +92,7 @@ export default async function HomePage() {
               <article className="flex min-h-[390px] flex-col justify-between border border-border bg-background p-8 lg:p-10">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">AYV WRLD → {c.common.individual}</p>
                 <div>
+                  <Image src={ecosystems.oneManArmy.logo} alt="One Man Army Stack logo" width={240} height={240} sizes="160px" className="mb-8 h-24 w-24 object-contain" />
                   <h3 className="display text-4xl lg:text-5xl">{c.home.armyTitle}</h3>
                   <p className="mt-5 max-w-lg leading-relaxed text-muted">{c.home.armyBody}</p>
                   <Link href="/one-man-army" className="button-secondary mt-8">{c.home.armyCta}<ArrowRight className="h-4 w-4" /></Link>
@@ -119,17 +122,11 @@ export default async function HomePage() {
         <section className="border-y border-border bg-card">
           <div className="mx-auto grid w-full max-w-[1400px] gap-12 px-6 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-28">
             <SectionHeading eyebrow="04 / AYV AUTOMATION STACK / BUNDLE" title={c.home.stackTitle} body={c.home.stackBody} />
-            <div className="border border-border bg-background p-7 lg:p-9">
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {products.map((product) => <div key={product.id} className="border border-border p-3 text-center font-mono text-xs uppercase tracking-[0.12em]">{product.name}</div>)}
-              </div>
-              <div className="my-5 flex items-center gap-3 text-muted"><span className="h-px flex-1 bg-border" /><span className="font-mono text-xs">↓</span><span className="h-px flex-1 bg-border" /></div>
-              <div className="border border-foreground/25 p-5 text-center">
-                <p className="display text-2xl">AYV Automation Stack</p>
-                <p className="mt-2 text-sm text-muted">{c.common.bundle} · €534 → €267</p>
-              </div>
-              <Link href="/automation/stack" className="button-primary mt-6 w-full">{c.home.stackCta}<ArrowRight className="h-4 w-4" /></Link>
-            </div>
+            <BundlePricingCard
+              locale={locale}
+              labels={{ bundle: c.common.bundle, purchasedSeparately: c.common.purchasedSeparately, plannedPrice: c.common.plannedPrice, save: c.common.save, perMonth: c.common.perMonth, includes: c.common.includes, individualNote: c.common.individualNote }}
+              cta={{ href: "/automation/stack", label: c.home.stackCta }}
+            />
           </div>
         </section>
 
@@ -143,9 +140,14 @@ export default async function HomePage() {
         <section className="border-y border-border">
           <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-6 py-20 lg:grid-cols-2 lg:px-12 lg:py-28">
             <SectionHeading eyebrow="06 / ONE MAN ARMY STACK" title={c.home.armyTitle} body={c.home.armyBody} />
-            <div className="grid grid-cols-2 gap-px bg-border border border-border">
-              {["Research", "Build", "Deploy", "Monetize", "Improve"].map((step, index) => <div key={step} className="bg-background p-5 font-mono text-xs uppercase tracking-[0.14em]"><span className="text-muted">0{index + 1} / </span>{step}</div>)}
-              <Link href="/one-man-army" className="flex items-center justify-between bg-foreground p-5 text-sm font-medium text-background">{c.home.armyCta}<ArrowRight className="h-4 w-4" /></Link>
+            <div className="grid gap-px border border-border bg-border sm:grid-cols-[0.65fr_1fr]">
+              <div className="flex min-h-64 items-center justify-center bg-background p-8">
+                <Image src={ecosystems.oneManArmy.logo} alt="One Man Army Stack logo" width={320} height={320} sizes="(max-width: 640px) 180px, 240px" className="h-44 w-44 object-contain sm:h-52 sm:w-52" />
+              </div>
+              <div className="grid grid-cols-2 gap-px bg-border">
+                {["Research", "Build", "Deploy", "Monetize", "Improve"].map((step, index) => <div key={step} className="bg-background p-5 font-mono text-xs uppercase tracking-[0.14em]"><span className="text-muted">0{index + 1} / </span>{step}</div>)}
+                <Link href="/one-man-army" className="flex items-center justify-between bg-foreground p-5 text-sm font-medium text-background">{c.home.armyCta}<ArrowRight className="h-4 w-4" /></Link>
+              </div>
             </div>
           </div>
         </section>

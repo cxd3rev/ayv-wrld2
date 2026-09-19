@@ -10,6 +10,11 @@
     "perMonth": "/ month",
     "perMonthShort": "/ mo",
     "save50": "Save 50%",
+    "purchasedSeparately": "Value when purchased separately",
+    "plannedPrice": "Planned bundle price",
+    "save": "Save",
+    "includes": "Six products included",
+    "individualNote": "No bundle checkout is available yet. Available products can still be purchased individually.",
     "ready": "Ready",
     "comingSoon": "Coming soon",
     "inDevelopment": "In development",
@@ -96,9 +101,10 @@
   "bundle": {
     "kicker": "AYV Automation Stack",
     "title": "Build your connected automation stack.",
-    "body": "Start with any available app and add others as your workflow grows. AYV Automation Stack shows €534 catalog value and a planned price of €267.",
+    "body": "Start with any available app and add others as your workflow grows. AYV Automation Stack shows €400 catalog value and a planned price of €200.",
     "cta": "Start with one app",
-    "productBody": "AYV Automation Stack is displayed at 50% off the €534 catalog total. Product subscriptions are purchased individually today.",
+    "explore": "Explore the bundle",
+    "productBody": "AYV Automation Stack is displayed at 50% off the €400 catalog total, saving €200 per month. Product subscriptions are purchased individually today.",
     "availability": "AYV Automation Stack pricing is displayed for planning; there is no separate stack checkout yet."
   },
   "cta": {

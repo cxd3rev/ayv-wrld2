@@ -7,6 +7,7 @@ import { getPublicCopy } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { getLocale } from "next-intl/server";
+import Image from "next/image";
 import Link from "next/link";
 
 export async function PublicShell({ children }: { children: React.ReactNode }) {
@@ -109,7 +110,19 @@ export function ProjectCard({
         <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">AYV WRLD / Project</span>
         <span className="border border-border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted">{status}</span>
       </div>
-      <div className="mt-14">
+      {project.logo ? (
+        <div className="mt-10 flex h-28 items-center justify-center border border-border bg-[#0b0b0b] p-5">
+          <Image
+            src={project.logo}
+            alt={`${project.name} logo`}
+            width={420}
+            height={180}
+            sizes="(max-width: 1024px) calc(100vw - 6rem), 540px"
+            className="h-full w-full object-contain"
+          />
+        </div>
+      ) : null}
+      <div className={project.logo ? "mt-8" : "mt-14"}>
         <h3 className="display text-3xl">{project.name}</h3>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">{description ?? project.description}</p>
         <Link href={project.route} className="mt-7 inline-flex items-center gap-1.5 text-sm font-medium">

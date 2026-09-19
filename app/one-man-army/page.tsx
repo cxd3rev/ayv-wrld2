@@ -1,7 +1,8 @@
 import { CTASection, PageHero, PublicShell, SectionHeading } from "@/components/marketing/public-site";
-import { getPublicCopy } from "@/config/public-site";
+import { ecosystems, getPublicCopy } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getLocale } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -22,7 +23,12 @@ export default async function OneManArmyPage() {
     <PublicShell>
       <main id="main-content">
         <PageHero eyebrow={c.army.eyebrow} title={c.army.title} body={c.army.body}>
-          <span className="inline-flex border border-border bg-card px-3 py-2 font-mono text-xs uppercase tracking-[0.16em] text-muted">{c.army.status}</span>
+          <div className="flex flex-wrap items-center gap-6">
+            <div className="flex h-32 w-32 items-center justify-center border border-border bg-card p-5 sm:h-40 sm:w-40">
+              <Image src={ecosystems.oneManArmy.logo} alt="One Man Army Stack logo" width={320} height={320} sizes="160px" loading="eager" className="h-full w-full object-contain" />
+            </div>
+            <span className="inline-flex border border-border bg-card px-3 py-2 font-mono text-xs uppercase tracking-[0.16em] text-muted">{c.army.status}</span>
+          </div>
         </PageHero>
         <section className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
           <SectionHeading eyebrow="ONE MAN ARMY STACK / LIFECYCLE" title={c.army.lifecycle} />

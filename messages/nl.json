@@ -10,6 +10,11 @@
     "perMonth": "/ maand",
     "perMonthShort": "/ mnd",
     "save50": "50% korting",
+    "purchasedSeparately": "Waarde bij losse aankoop",
+    "plannedPrice": "Geplande bundelprijs",
+    "save": "Bespaar",
+    "includes": "Zes producten inbegrepen",
+    "individualNote": "Een bundelcheckout is nog niet beschikbaar. Beschikbare producten kunnen nog steeds los worden gekocht.",
     "ready": "Klaar",
     "comingSoon": "Binnenkort",
     "inDevelopment": "In ontwikkeling",
@@ -96,9 +101,10 @@
   "bundle": {
     "kicker": "AYV Automation Stack",
     "title": "Bouw uw verbonden automatiseringsstack.",
-    "body": "Begin met een beschikbare app en voeg andere toe. AYV Automation Stack toont €534 cataloguswaarde en een geplande prijs van €267.",
+    "body": "Begin met een beschikbare app en voeg andere toe. AYV Automation Stack toont €400 cataloguswaarde en een geplande prijs van €200.",
     "cta": "Begin met één app",
-    "productBody": "AYV Automation Stack wordt getoond met 50% korting op het catalogustotaal van €534. Abonnementen worden momenteel los gekocht.",
+    "explore": "Bekijk de bundel",
+    "productBody": "AYV Automation Stack wordt getoond met 50% korting op het catalogustotaal van €400, een besparing van €200 per maand. Abonnementen worden momenteel los gekocht.",
     "availability": "De prijs van AYV Automation Stack wordt ter planning getoond; er is nog geen aparte stackcheckout."
   },
   "cta": {

@@ -2,6 +2,7 @@ import { Breadcrumbs, CTASection, PublicShell } from "@/components/marketing/pub
 import { getProject, getProjectDescription, getPublicCopy, projects } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
@@ -50,7 +51,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 <p className="kicker">{c.common.project}</p>
                 <h1 className="display mt-7 text-[clamp(4rem,12vw,9rem)] leading-none">{project.name}</h1>
               </div>
-              <span className="w-fit border border-border bg-card px-3 py-2 font-mono text-xs uppercase tracking-[0.14em] text-muted">{c.common.development}</span>
+              <div className="flex flex-col items-start gap-4 lg:items-end">
+                {project.logo ? (
+                  <div className="flex h-36 w-64 items-center justify-center border border-border bg-[#0b0b0b] p-5 sm:h-44 sm:w-80">
+                    <Image src={project.logo} alt={`${project.name} logo`} width={640} height={360} sizes="(max-width: 640px) 256px, 320px" loading="eager" className="h-full w-full object-contain" />
+                  </div>
+                ) : null}
+                <span className="w-fit border border-border bg-card px-3 py-2 font-mono text-xs uppercase tracking-[0.14em] text-muted">{c.common.development}</span>
+              </div>
             </div>
           </div>
         </section>

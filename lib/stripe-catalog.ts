@@ -13,10 +13,22 @@ const PRICE_ENV: Record<BillableProductId, string> = {
 };
 
 const LEGACY_PRICE_IDS: Record<BillableProductId, readonly string[]> = {
-  avyro: ["price_1UGfwEV05bHNwI4Wgwd8IUTt"],
-  velto: ["price_1UGiKnV05bHNwI4WUPKCUXiG"],
-  rovyn: ["price_1UGlkJV05bHNwI4WyHW2P9WH"],
-  orvyn: ["price_1UGnkrV05bHNwI4W2UBrFrKc"],
+  avyro: [
+    "price_1UGfwEV05bHNwI4Wgwd8IUTt",
+    "price_1UGoAcV05bHNwI4WhutfWSOT",
+  ],
+  velto: [
+    "price_1UGiKnV05bHNwI4WUPKCUXiG",
+    "price_1UGoAdV05bHNwI4Wzx1Dr7pi",
+  ],
+  rovyn: [
+    "price_1UGlkJV05bHNwI4WyHW2P9WH",
+    "price_1UGoBTV05bHNwI4WffhSPoXs",
+  ],
+  orvyn: [
+    "price_1UGnkrV05bHNwI4W2UBrFrKc",
+    "price_1UGoAcV05bHNwI4W7qgb9GzE",
+  ],
 };
 
 export function isBillableProductId(value: string): value is BillableProductId {

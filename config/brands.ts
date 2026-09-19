@@ -5,6 +5,16 @@ export const ayvBrand = {
   nameMark: "/brands/ayv/name.png",
 } as const;
 
+export const oneManArmyBrand = {
+  name: "One Man Army Stack",
+  logo: "/brands/one-man-army/logo.webp",
+} as const;
+
+export const ratedBrand = {
+  name: "Rated",
+  logo: "/projects/rated/logo.webp",
+} as const;
+
 export type BrandAssets = {
   icon: string;
   logo: string;
