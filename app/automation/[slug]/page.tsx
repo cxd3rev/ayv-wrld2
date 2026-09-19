@@ -75,7 +75,7 @@ export default async function AutomationProductPage({ params }: { params: Promis
               </div>
               <div className="hero-frame relative flex aspect-square items-center justify-center p-12">
                 <div className="absolute inset-[18%] border border-border" style={{ boxShadow: `0 0 90px ${product.accent}1f` }} />
-                <ProductLogo product={product} size={420} className="mark-invert relative h-auto w-3/5 object-contain" />
+                <ProductLogo product={product} size={420} className="relative h-auto w-3/5 object-contain" />
               </div>
             </div>
           </div>

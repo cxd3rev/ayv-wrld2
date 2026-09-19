@@ -1,18 +1,18 @@
 export const ayvBrand = {
   name: "AYV WRLD",
-  icon: "/brands/ayv/icon.png",
-  logo: "/brands/ayv/logo.png",
-  nameMark: "/brands/ayv/name.png",
+  icon: "/brands/ayv/mark-v2.webp",
+  logo: "/brands/ayv/mark-v2.webp",
+  nameMark: "/brands/ayv/mark-v2.webp",
 } as const;
 
 export const oneManArmyBrand = {
   name: "One Man Army Stack",
-  logo: "/brands/one-man-army/logo.webp",
+  logo: "/brands/one-man-army/mark-v2.webp",
 } as const;
 
 export const ratedBrand = {
   name: "Rated",
-  logo: "/projects/rated/logo.webp",
+  logo: "/projects/rated/mark-v2.webp",
 } as const;
 
 export type BrandAssets = {
@@ -22,11 +22,13 @@ export type BrandAssets = {
   hasWordmark: boolean;
 };
 
-export function productBrand(id: string, hasWordmark = false): BrandAssets {
+export function productBrand(id: string): BrandAssets {
+  const mark = `/brands/${id}/mark-v2.webp`;
+
   return {
-    icon: `/brands/${id}/icon.png`,
-    logo: `/brands/${id}/logo.png`,
-    name: `/brands/${id}/name.png`,
-    hasWordmark,
+    icon: mark,
+    logo: mark,
+    name: mark,
+    hasWordmark: false,
   };
 }

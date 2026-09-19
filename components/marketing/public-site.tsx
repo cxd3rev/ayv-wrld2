@@ -75,7 +75,7 @@ export function AutomationProductCard({
       <div>
         <div className="flex items-start justify-between gap-4">
           <div className="flex h-13 w-13 items-center justify-center border border-border bg-background">
-            <ProductLogo product={product} size={34} className="mark-invert h-8 w-8 object-contain" />
+            <ProductLogo product={product} size={34} className="h-8 w-8 object-contain" />
           </div>
           <span className="border border-border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">{status}</span>
         </div>

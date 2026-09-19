@@ -292,11 +292,6 @@ main > section:not(:first-child) {
   mask-image: radial-gradient(75% 65% at 60% 40%, black, transparent 80%);
 }
 
-/* Solid-black source logos are inverted to white for the dark surface. */
-.mark-invert {
-  filter: invert(1);
-}
-
 .mark-glow {
   position: relative;
 }

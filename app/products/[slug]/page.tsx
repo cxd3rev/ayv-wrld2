@@ -118,7 +118,7 @@ export default async function ProductPage({
                 <ProductLogo
                   product={product}
                   size={900}
-                  className="mark-invert mx-auto h-auto w-full max-w-[420px] select-none"
+                  className="mx-auto h-auto w-full max-w-[420px] select-none"
                 />
               </div>
             </div>
@@ -247,7 +247,7 @@ export default async function ProductPage({
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-background">
-                      <ProductLogo product={other} size={28} className="mark-invert h-7 w-7" />
+                      <ProductLogo product={other} size={28} className="h-7 w-7" />
                     </div>
                     <Badge tone={other.status === "active" ? "accent" : "neutral"}>
                       {other.status === "active" ? t("common.ready") : t("common.comingSoon")}

@@ -22,7 +22,7 @@ export function ProductCard({
     >
       <div className="relative flex items-start justify-between">
         <div className="flex h-14 w-14 items-center justify-center rounded-lg border border-border bg-background">
-          <ProductLogo product={product} size={32} className="mark-invert h-8 w-8" />
+          <ProductLogo product={product} size={32} className="h-8 w-8" />
         </div>
         <span className="font-mono text-xs text-muted">{String(index + 1).padStart(2, "0")}</span>
       </div>

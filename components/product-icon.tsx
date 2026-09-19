@@ -17,7 +17,7 @@ export function ProductIcon({
       alt={product.name}
       width={size}
       height={size}
-      className={cn("object-contain", className)}
+      className={cn("rounded-md bg-black object-contain", className)}
     />
   );
 }
@@ -37,7 +37,7 @@ export function ProductLogo({
       alt={product.name}
       width={size}
       height={size}
-      className={cn("object-contain", className)}
+      className={cn("rounded-xl bg-black object-contain", className)}
     />
   );
 }

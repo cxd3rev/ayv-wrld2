@@ -34,8 +34,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t("description"),
     applicationName: siteConfig.name,
     icons: {
-      icon: "/brands/ayv/icon.png",
-      apple: "/brands/ayv/icon.png",
+      icon: "/icon.png",
+      apple: "/apple-icon.png",
     },
     openGraph: {
       siteName: siteConfig.name,
@@ -43,13 +43,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description: siteConfig.description,
       url: "/",
       type: "website",
-      images: [{ url: "/brands/ayv/logo.png", alt: "AYV WRLD" }],
+      images: [{ url: "/brands/ayv/mark-v2.webp", alt: "AYV WRLD" }],
     },
     twitter: {
       card: "summary_large_image",
       title: siteConfig.name,
       description: siteConfig.description,
-      images: ["/brands/ayv/logo.png"],
+      images: ["/brands/ayv/mark-v2.webp"],
     },
   };
 }
