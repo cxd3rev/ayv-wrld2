@@ -1,5 +1,5 @@
 import type { AppLocale } from "@/i18n/config";
-import { oneManArmyBrand, ratedBrand } from "@/config/brands";
+import { oneManArmyBrand, ratedBrand, kleuroBrand } from "@/config/brands";
 
 export const projects = [
   {
@@ -12,7 +12,7 @@ export const projects = [
     category: "Visualization",
     productType: "project",
     cta: "View project",
-    logo: null,
+    logo: kleuroBrand.logo,
   },
   {
     slug: "rated",

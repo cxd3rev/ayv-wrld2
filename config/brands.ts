@@ -15,6 +15,11 @@ export const ratedBrand = {
   logo: "/projects/rated/mark-v2.webp",
 } as const;
 
+export const kleuroBrand = {
+  name: "Kleuro",
+  logo: "/brands/kleuro-logo.png",
+} as const;
+
 export type BrandAssets = {
   icon: string;
   logo: string;
