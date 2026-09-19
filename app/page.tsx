@@ -63,7 +63,7 @@ export default async function HomePage() {
             <div className="hero-frame relative mx-auto flex aspect-square w-full max-w-[430px] items-center justify-center p-12 rise-in-3">
               <div className="absolute inset-[12%] border border-border" />
               <div className="absolute inset-[27%] rotate-45 border border-border" />
-              <Image src={ayvBrand.icon} alt="AYV WRLD" width={360} height={360} priority sizes="(max-width: 1024px) 70vw, 360px" className="relative h-auto w-3/5 rounded-3xl bg-black object-contain" />
+              <Image src={ayvBrand.icon} alt="AYV WRLD" width={360} height={360} priority sizes="(max-width: 1024px) 70vw, 360px" className="relative h-auto w-3/5 rounded-3xl object-contain" />
               <span className="absolute bottom-5 left-5 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">Build / Automate / Experiment</span>
             </div>
           </div>

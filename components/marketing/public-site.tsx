@@ -111,7 +111,7 @@ export function ProjectCard({
         <span className="border border-border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted">{status}</span>
       </div>
       {project.logo ? (
-        <div className="mt-10 flex h-28 items-center justify-center border border-border bg-[#0b0b0b] p-5">
+        <div className="mt-10 flex h-28 items-center justify-center p-5">
           <Image
             src={project.logo}
             alt={`${project.name} logo`}
