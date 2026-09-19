@@ -10,7 +10,7 @@ export function HeroSculpture() {
           alt={ayvBrand.name}
           width={420}
           height={420}
-          className="relative z-10 h-64 w-64 rounded-3xl bg-black object-contain sm:h-80 sm:w-80"
+          className="relative z-10 h-64 w-64 rounded-3xl object-contain sm:h-80 sm:w-80"
           priority
         />
       </div>
