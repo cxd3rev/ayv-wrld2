@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { automationBrand } from "@/config/brands";
 import { dashboardNav } from "@/config/navigation";
-import { ProductIcon } from "@/components/product-icon";
+import { ProductSwitcher } from "@/components/layout/product-switcher";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { Organization } from "@/types/database";
@@ -85,44 +85,50 @@ export function Sidebar({
         </div>
 
         <nav className="flex flex-1 flex-col gap-1">
-          {dashboardNav.map((item) => {
-            const Icon = icons[item.icon];
-            const href = item.href === "/dashboard/product" ? activeProduct.route : item.href;
-            const productLabel =
-              item.href === "/dashboard/product" ? t(`catalog.${activeProduct.id}.nav`) : t(`dashboard.${navKeys[item.href]}`);
-            const active =
-              href === "/dashboard"
-                ? pathname === "/dashboard"
-                : pathname === href || pathname.startsWith(`${href}/`);
-
-            return (
-              <Link
-                key={item.href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "flex items-center gap-3 rounded-full px-3 py-2.5 text-sm transition-colors",
-                  active
-                    ? "bg-accent-soft text-foreground"
-                    : "text-muted hover:bg-white/5 hover:text-foreground",
-                )}
-              >
-                <Icon className={cn("h-4 w-4", active && "text-accent")} />
-                {productLabel}
-              </Link>
-            );
-          })}
+          {dashboardNav
+            .filter((item) => item.href === "/dashboard" || item.href === "/dashboard/calendar")
+            .map((item) => {
+              const Icon = icons[item.icon];
+              const active = item.href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "flex items-center gap-3 rounded-full px-3 py-2.5 text-sm transition-colors",
+                    active ? "bg-accent-soft text-foreground" : "text-muted hover:bg-white/5 hover:text-foreground",
+                  )}
+                >
+                  <Icon className={cn("h-4 w-4", active && "text-accent")} />
+                  {t(`dashboard.${navKeys[item.href]}`)}
+                </Link>
+              );
+            })}
+          <div className="my-3 border-t border-white/10" />
+          <ProductSwitcher activeProductId={activeProduct.id} layout="list" onNavigate={() => setOpen(false)} />
+          <div className="my-3 border-t border-white/10" />
+          {dashboardNav
+            .filter((item) => item.href === "/dashboard/settings" || item.href === "/dashboard/billing")
+            .map((item) => {
+              const Icon = icons[item.icon];
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "flex items-center gap-3 rounded-full px-3 py-2.5 text-sm transition-colors",
+                    active ? "bg-accent-soft text-foreground" : "text-muted hover:bg-white/5 hover:text-foreground",
+                  )}
+                >
+                  <Icon className={cn("h-4 w-4", active && "text-accent")} />
+                  {t(`dashboard.${navKeys[item.href]}`)}
+                </Link>
+              );
+            })}
         </nav>
-
-        <div className="flex items-center gap-3 border-t border-white/10 pt-5">
-          <ProductIcon product={activeProduct} size={32} className="h-8 w-8" />
-          <div>
-            <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">{t("common.currentProduct")}</p>
-            <p className="mt-1 text-sm font-medium" style={{ color: activeProduct.accent }}>
-              {activeProduct.name}
-            </p>
-          </div>
-        </div>
       </aside>
     </>
   );

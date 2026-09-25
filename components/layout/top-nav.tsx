@@ -27,7 +27,12 @@ export function TopNav({
         <div className="hidden min-w-0 sm:block">
           <p className="truncate text-sm font-medium">AYV workspace</p>
         </div>
-        <ProductSwitcher activeProductId={productId} />
+        <div className="hidden lg:block">
+          <ProductSwitcher activeProductId={productId} layout="rail" />
+        </div>
+        <div className="lg:hidden">
+          <ProductSwitcher activeProductId={productId} />
+        </div>
       </div>
       <div className="flex items-center gap-2">
         <Link
