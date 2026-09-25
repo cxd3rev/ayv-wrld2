@@ -1,5 +1,6 @@
 import { AutomationProductCard, Breadcrumbs, CTASection, PublicShell, SectionHeading } from "@/components/marketing/public-site";
-import { ProductLogo } from "@/components/product-icon";
+import { AyvAutomationParentBadge, ProductLogo } from "@/components/product-icon";
+import { ayvBrand } from "@/config/brands";
 import { formatPrice, getProduct, products } from "@/config/products";
 import { getPublicCopy } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
@@ -43,7 +44,11 @@ export default async function AutomationProductPage({ params }: { params: Promis
     name: product.name,
     description,
     applicationCategory: "BusinessApplication",
-    brand: { "@type": "Brand", name: "AYV WRLD" },
+    brand: {
+      "@type": "Brand",
+      name: "AYV WRLD",
+      logo: `https://ayv-wrld2.vercel.app${ayvBrand.automationParentMark}`,
+    },
     ...(active ? { offers: { "@type": "Offer", price: product.pricing.monthly, priceCurrency: "EUR", availability: "https://schema.org/InStock" } } : {}),
   };
 
@@ -57,7 +62,8 @@ export default async function AutomationProductPage({ params }: { params: Promis
             <Breadcrumbs items={[{ label: "AYV WRLD", href: "/" }, { label: "AYV Automation", href: "/automation" }, { label: product.name }]} />
             <div className="mt-14 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
               <div>
-                <div className="flex flex-wrap items-center gap-3">
+                <AyvAutomationParentBadge />
+                <div className="mt-7 flex flex-wrap items-center gap-3">
                   <p className="kicker">{c.common.categories[product.category]} · {c.common.individual}</p>
                   <span className="border border-border bg-card px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">{active ? c.common.available : c.common.soon}</span>
                 </div>

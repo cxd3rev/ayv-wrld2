@@ -8,9 +8,9 @@ export function HeroSculpture() {
         <Image
           src={ayvBrand.logo}
           alt={ayvBrand.name}
-          width={420}
-          height={420}
-          className="relative z-10 h-64 w-64 rounded-3xl object-contain sm:h-80 sm:w-80"
+          width={512}
+          height={512}
+          className="relative z-10 h-64 w-64 object-contain sm:h-80 sm:w-80"
           priority
         />
       </div>

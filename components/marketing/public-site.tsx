@@ -115,8 +115,8 @@ export function ProjectCard({
           <Image
             src={project.logo}
             alt={`${project.name} logo`}
-            width={420}
-            height={180}
+            width={512}
+            height={512}
             sizes="(max-width: 1024px) calc(100vw - 6rem), 540px"
             className="h-full w-full object-contain"
           />

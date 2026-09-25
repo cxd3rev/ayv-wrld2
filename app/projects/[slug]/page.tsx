@@ -19,7 +19,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: project.name,
     description,
     alternates: { canonical: project.route },
-    openGraph: { title: `${project.name} · AYV WRLD Projects`, description, url: project.route },
+    openGraph: {
+      title: `${project.name} · AYV WRLD Projects`,
+      description,
+      url: project.route,
+      images: [{ url: project.logo, width: 512, height: 512, alt: `${project.name} logo` }],
+    },
   };
 }
 
@@ -36,6 +41,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     description,
     creator: { "@type": "Organization", name: "AYV WRLD" },
     url: `https://ayv-wrld2.vercel.app${project.route}`,
+    image: `https://ayv-wrld2.vercel.app${project.logo}`,
   };
 
   return (
@@ -54,7 +60,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <div className="flex flex-col items-start gap-4 lg:items-end">
                 {project.logo ? (
                   <div className="flex h-36 w-64 items-center justify-center border border-border bg-[#0b0b0b] p-5 sm:h-44 sm:w-80">
-                    <Image src={project.logo} alt={`${project.name} logo`} width={640} height={360} sizes="(max-width: 640px) 256px, 320px" loading="eager" className="h-full w-full object-contain" />
+                    <Image src={project.logo} alt={`${project.name} logo`} width={512} height={512} sizes="(max-width: 640px) 216px, 280px" loading="eager" className="h-full w-full object-contain" />
                   </div>
                 ) : null}
                 <span className="w-fit border border-border bg-card px-3 py-2 font-mono text-xs uppercase tracking-[0.14em] text-muted">{c.common.development}</span>

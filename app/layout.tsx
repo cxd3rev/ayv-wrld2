@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ToastProvider } from "@/components/ui/toast";
+import { ayvBrand } from "@/config/brands";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -43,13 +44,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description: siteConfig.description,
       url: "/",
       type: "website",
-      images: [{ url: "/brands/ayv/mark-v2.webp", alt: "AYV WRLD" }],
+      images: [{ url: ayvBrand.logo, width: 512, height: 512, alt: "AYV WRLD" }],
     },
     twitter: {
       card: "summary_large_image",
       title: siteConfig.name,
       description: siteConfig.description,
-      images: ["/brands/ayv/mark-v2.webp"],
+      images: [ayvBrand.logo],
     },
   };
 }
