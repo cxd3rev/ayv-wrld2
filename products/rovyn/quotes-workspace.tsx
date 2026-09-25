@@ -155,7 +155,7 @@ export function RovynQuotesWorkspace({
 
   return (
     <div>
-      <div className="grid gap-0 border-t border-foreground/10 sm:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-4">
         <DashboardCard title={t("sent")} value={String(counts.sent)} hint={t("sentHint")} />
         <DashboardCard title={t("followedUp")} value={String(counts.followedUp)} hint={t("followedUpHint")} />
         <DashboardCard title={t("won")} value={String(counts.won)} hint={t("wonHint")} />
@@ -165,7 +165,7 @@ export function RovynQuotesWorkspace({
       <form
         id="rovyn-add-quote"
         action={onAdd}
-        className="mt-10 grid gap-4 border border-foreground/10 p-4 md:grid-cols-2 lg:grid-cols-4"
+        className="workspace-card mt-10 grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-4"
       >
         <div className="md:col-span-2 lg:col-span-4">
           <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />

@@ -139,10 +139,10 @@
     "avyro": {
       "tagline": "Lead conversion",
       "description": "Lead conversion automation",
-      "longDescription": "Avyro helps businesses follow up with new leads quickly so more conversations turn into customers.",
-      "highlight1": "Reply to every new lead in seconds, automatically",
-      "highlight2": "Schedule smart follow-ups so nobody slips away",
-      "highlight3": "See which leads are hot and where they came from",
+      "longDescription": "Avyro captures new leads from forms, ads, DMs, or website chat and starts a personalized email or SMS follow-up so no lead goes cold. It scores leads and alerts you when one is hot.",
+      "highlight1": "Instant lead capture and response",
+      "highlight2": "Automated multi-step follow-up sequences",
+      "highlight3": "Lead scoring and hot-lead alerts",
       "nav": "Leads",
       "dashboardDescription": "Follow up with new leads quickly so more conversations become customers.",
       "connectedValue": "Turn a qualified Avyro lead into a Velto booking without re-entering contact details, then keep the later quote and invoice in the same client journey."
@@ -150,10 +150,10 @@
     "velto": {
       "tagline": "Booking + reminders",
       "description": "Booking and reminder automation",
-      "longDescription": "Velto helps businesses take bookings and send reminders so fewer appointments are missed.",
-      "highlight1": "Let customers book you around the clock",
-      "highlight2": "Send automatic reminders before every appointment",
-      "highlight3": "Cut no-shows without the back-and-forth",
+      "longDescription": "Velto lets clients book without back-and-forth messaging, then sends confirmation and reminder email or SMS, including 24 hours and 1 hour before. It can also handle reschedule requests.",
+      "highlight1": "Self-serve booking link",
+      "highlight2": "Automated confirmation messages and reminders 24 hours and 1 hour before",
+      "highlight3": "Automated reschedule handling",
       "nav": "Bookings",
       "dashboardDescription": "Take bookings and send reminders so fewer appointments are missed.",
       "connectedValue": "Create a booking from an Avyro lead, then hand a completed appointment to Rovyn with the customer and service context already filled."
@@ -161,10 +161,10 @@
     "rovyn": {
       "tagline": "Quote follow-up",
       "description": "Quote follow-up automation",
-      "longDescription": "Rovyn follows up on sent quotes so businesses close more work without chasing every lead by hand.",
-      "highlight1": "Follow up on every quote automatically",
-      "highlight2": "Nudge undecided prospects at the right moment",
-      "highlight3": "Close more work without chasing by hand",
+      "longDescription": "After a quote is sent, Rovyn follows up on a schedule, such as day 2, day 5, and day 10, until the prospect responds. Follow-up pauses once they reply.",
+      "highlight1": "Automated quote follow-up sequences",
+      "highlight2": "Customizable follow-up timing and response tracking",
+      "highlight3": "Follow-up pauses once the client responds",
       "nav": "Quotes",
       "dashboardDescription": "Follow up on sent quotes so more proposals turn into booked work.",
       "connectedValue": "Build a quote from a Velto booking, keep its service context, and turn won work into an Orvyn invoice without typing the customer again."
@@ -172,10 +172,10 @@
     "orvyn": {
       "tagline": "Payment + invoice follow-up",
       "description": "Payment and invoice follow-up automation",
-      "longDescription": "Orvyn reminds customers about unpaid invoices so money comes in faster and fewer bills are forgotten.",
-      "highlight1": "Send automatic reminders on unpaid invoices",
-      "highlight2": "Get paid faster with less awkward chasing",
-      "highlight3": "Keep track of what's outstanding at a glance",
+      "longDescription": "Orvyn sends invoice reminders before and after the due date, follows up on late payments with a firmer tone, and tells you when an invoice is paid.",
+      "highlight1": "Automated invoice reminders",
+      "highlight2": "Escalating follow-up for overdue payments",
+      "highlight3": "Payment confirmation notifications",
       "nav": "Payments",
       "dashboardDescription": "Track unpaid invoices and schedule reminders so money arrives sooner.",
       "connectedValue": "Create an invoice from a won Rovyn quote and retain the lead, booking, and quote context beside payment status and reminders."
@@ -183,20 +183,20 @@
     "nexro": {
       "tagline": "Customer reactivation + referrals",
       "description": "Customer reactivation and referral automation",
-      "longDescription": "Nexro helps businesses bring past customers back and turn happy clients into referrals.",
-      "highlight1": "Win back past customers with timed campaigns",
-      "highlight2": "Turn happy clients into a steady referral stream",
-      "highlight3": "Re-engage your list on autopilot",
+      "longDescription": "Nexro reaches inactive customers with a win-back offer or check-in, and asks happy customers for a referral with an incentive.",
+      "highlight1": "Automated win-back campaigns for inactive customers",
+      "highlight2": "Referral request automation",
+      "highlight3": "Referral incentive tracking",
       "nav": "Referrals",
       "dashboardDescription": "Customer reactivation and referrals are coming soon."
     },
     "ravelo": {
       "tagline": "Review automation",
       "description": "Review automation",
-      "longDescription": "Ravelo asks happy customers for reviews at the right time so businesses build trust without awkward follow-up.",
-      "highlight1": "Ask for reviews at the perfect moment",
-      "highlight2": "Build trust with more 5-star ratings",
-      "highlight3": "Grow your reputation without the awkward ask",
+      "longDescription": "Ravelo asks for a review shortly after a job is done, sends happy clients to a public review site, and routes unhappy feedback to the business first.",
+      "highlight1": "Automated post-service review requests",
+      "highlight2": "Public review or private feedback routing",
+      "highlight3": "Links for more than one review platform",
       "nav": "Reviews",
       "dashboardDescription": "Review automation is coming soon."
     }

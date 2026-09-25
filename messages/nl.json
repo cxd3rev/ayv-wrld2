@@ -139,10 +139,10 @@
     "avyro": {
       "tagline": "Leadconversie",
       "description": "Automatisering van leadconversie",
-      "longDescription": "Avyro helpt bedrijven snel op te volgen bij nieuwe leads, zodat meer gesprekken klanten worden.",
-      "highlight1": "Reageer automatisch binnen seconden op elke nieuwe lead",
-      "highlight2": "Plan slimme follow-ups zodat niemand wegglipt",
-      "highlight3": "Zie welke leads hot zijn en waar ze vandaan komen",
+      "longDescription": "Avyro vangt een nieuwe lead uit een formulier, advertentie, DM of websitechat en start een persoonlijke opvolging per e-mail of sms.",
+      "highlight1": "Direct een lead vangen en antwoorden",
+      "highlight2": "Opvolgreeksen in meerdere stappen",
+      "highlight3": "Leadscore en een melding als een lead warm is",
       "nav": "Leads",
       "dashboardDescription": "Volg nieuwe leads snel op zodat meer gesprekken klanten worden.",
       "connectedValue": "Maak van een gekwalificeerde Avyro-lead een Velto-boeking zonder contactgegevens opnieuw in te voeren en houd offerte en factuur in dezelfde klantreis."
@@ -150,10 +150,10 @@
     "velto": {
       "tagline": "Boekingen + herinneringen",
       "description": "Automatisering van boekingen en herinneringen",
-      "longDescription": "Velto helpt bedrijven boekingen aan te nemen en herinneringen te sturen, zodat minder afspraken worden gemist.",
-      "highlight1": "Laat klanten u 24/7 boeken",
-      "highlight2": "Stuur automatische herinneringen voor elke afspraak",
-      "highlight3": "Minder no-shows zonder heen-en-weer",
+      "longDescription": "Velto laat klanten boeken zonder heen-en-weer en stuurt daarna een bevestiging en herinneringen per e-mail of sms, ook 24 uur en 1 uur van tevoren.",
+      "highlight1": "Boekingslink die de klant zelf gebruikt",
+      "highlight2": "Automatische bevestigingen",
+      "highlight3": "Herinneringen 24 uur en 1 uur van tevoren, en automatisch verzetten",
       "nav": "Boekingen",
       "dashboardDescription": "Neem boekingen aan en stuur herinneringen zodat minder afspraken worden gemist.",
       "connectedValue": "Maak een boeking vanuit een Avyro-lead en draag een afgeronde afspraak over aan Rovyn met klant- en dienstcontext al ingevuld."
@@ -161,10 +161,10 @@
     "rovyn": {
       "tagline": "Offerte-opvolging",
       "description": "Automatisering van offerte-opvolging",
-      "longDescription": "Rovyn volgt verzonden offertes op zodat bedrijven meer werk sluiten zonder elke lead handmatig na te jagen.",
-      "highlight1": "Volg elke offerte automatisch op",
-      "highlight2": "Duw twijfelende prospects op het juiste moment",
-      "highlight3": "Sluit meer werk zonder handmatig achteraan te gaan",
+      "longDescription": "Rovyn volgt een verstuurde offerte op een schema, bijvoorbeeld dag 2, dag 5 en dag 10, tot er een antwoord is, en stopt dan.",
+      "highlight1": "Automatische offerte-opvolging",
+      "highlight2": "Instelbare tijdstippen en bijgehouden reacties",
+      "highlight3": "Opvolging stopt zodra de klant reageert",
       "nav": "Offertes",
       "dashboardDescription": "Volg verzonden offertes op zodat meer voorstellen tot werk leiden.",
       "connectedValue": "Maak een offerte vanuit een Velto-boeking en verander gewonnen werk in een Orvyn-factuur zonder de klant opnieuw in te voeren."
@@ -172,10 +172,10 @@
     "orvyn": {
       "tagline": "Betaling + factuuropvolging",
       "description": "Automatisering van betalings- en factuuropvolging",
-      "longDescription": "Orvyn herinnert klanten aan openstaande facturen, zodat geld sneller binnenkomt en minder rekeningen blijven liggen.",
-      "highlight1": "Stuur automatische herinneringen bij openstaande facturen",
-      "highlight2": "Sneller betaald met minder ongemakkelijke reminders",
-      "highlight3": "Houd openstaande posten in één oogopslag bij",
+      "longDescription": "Orvyn stuurt factuurherinneringen voor en na de vervaldatum, wordt stelliger bij een late betaling, en laat weten wanneer er betaald is.",
+      "highlight1": "Automatische factuurherinneringen",
+      "highlight2": "Stevigere opvolging bij te late betalingen",
+      "highlight3": "Melding als de betaling binnen is",
       "nav": "Betalingen",
       "dashboardDescription": "Volg openstaande facturen en plan herinneringen zodat betalingen sneller binnenkomen.",
       "connectedValue": "Maak een factuur vanuit een gewonnen Rovyn-offerte en behoud lead-, boekings- en offertecontext naast betaling en herinneringen."
@@ -183,20 +183,20 @@
     "nexro": {
       "tagline": "Heractivering + referrals",
       "description": "Automatisering van klantheractivering en referrals",
-      "longDescription": "Nexro helpt bedrijven oude klanten terug te halen en tevreden klanten om te zetten in referrals.",
-      "highlight1": "Win oude klanten terug met getimede campagnes",
-      "highlight2": "Zet tevreden klanten om in een vaste stroom referrals",
-      "highlight3": "Activeer uw lijst opnieuw op de automatische piloot",
+      "longDescription": "Nexro neemt contact op met inactieve klanten met een terugkomactie of een bericht, en vraagt tevreden klanten om een referral.",
+      "highlight1": "Terugwinacties voor inactieve klanten",
+      "highlight2": "Automatische referralverzoeken",
+      "highlight3": "Bijhouden van de referralbonus",
       "nav": "Referrals",
       "dashboardDescription": "Klantheractivering en referrals komen binnenkort."
     },
     "ravelo": {
       "tagline": "Review-automatisering",
       "description": "Review-automatisering",
-      "longDescription": "Ravelo vraagt tevreden klanten op het juiste moment om een review, zodat bedrijven vertrouwen opbouwen zonder ongemakkelijke follow-up.",
-      "highlight1": "Vraag om reviews op het perfecte moment",
-      "highlight2": "Bouw vertrouwen met meer 5-sterrenbeoordelingen",
-      "highlight3": "Laat uw reputatie groeien zonder de ongemakkelijke vraag",
+      "longDescription": "Ravelo vraagt na de klus om een review, stuurt tevreden klanten naar een openbaar reviewplatform en houdt ontevreden feedback eerst privé.",
+      "highlight1": "Reviewverzoek na de klus",
+      "highlight2": "Openbare review of privéfeedback",
+      "highlight3": "Links naar meer dan één reviewplatform",
       "nav": "Reviews",
       "dashboardDescription": "Review-automatisering komt binnenkort."
     }

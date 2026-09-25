@@ -12,7 +12,7 @@ export function DashboardCard({
   className?: string;
 }) {
   return (
-    <div className={cn("border-b border-foreground/10 px-1 py-6", className)}>
+    <div className={cn("workspace-card px-5 py-6", className)}>
       <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{title}</p>
       <p className="display mt-3 text-3xl tracking-tight lg:text-4xl">{value}</p>
       {hint ? <p className="mt-2 text-sm text-muted">{hint}</p> : null}

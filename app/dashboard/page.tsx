@@ -61,7 +61,7 @@ export default async function DashboardPage() {
       </p>
 
       {!hasRecords ? (
-        <section className="mt-10 border border-foreground/10 bg-card p-6 sm:p-8">
+        <section className="workspace-card mt-10 p-6 sm:p-8">
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">
             {t("command.emptyKicker")}
           </p>
@@ -113,17 +113,15 @@ export default async function DashboardPage() {
               brand: "Rovyn",
             },
           ].map((stage) => (
-            <article key={stage.key} className="border border-foreground/10 bg-card p-5">
+            <article key={stage.key} className="workspace-card p-5">
               <p className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
                 {stage.brand}
               </p>
               <p className="display mt-5 text-4xl">{number.format(stage.value)}</p>
               <p className="mt-1 text-sm">{stage.label}</p>
-              <div className="mt-5 h-1.5 bg-foreground/5" aria-hidden="true">
-                <div
-                  className="h-full bg-accent"
-                  style={{ width: `${(stage.value / funnelMax) * 100}%` }}
-                />
+              {/* Counts only — there is no time series on these metrics, so this stays a proportion bar. */}
+              <div className="stat-meter mt-5" aria-hidden="true">
+                <span style={{ width: `${(stage.value / funnelMax) * 100}%` }} />
               </div>
               <p className="mt-3 text-xs text-muted">
                 {t("command.rawTotal", { count: stage.raw })}
@@ -160,7 +158,7 @@ export default async function DashboardPage() {
               },
             ].map(({ key, label, formula, metric }) => {
               return (
-                <article key={String(key)} className="border border-foreground/10 bg-card p-5">
+                <article key={String(key)} className="workspace-card p-5">
                   <p className="text-sm font-medium">{label}</p>
                   <p className="display mt-4 text-3xl">
                     {formatPercent(metric, t("command.noData"))}
@@ -176,12 +174,12 @@ export default async function DashboardPage() {
             })}
           </div>
         </div>
-        <article className="border border-foreground/10 bg-foreground p-5 text-background">
-          <div className="flex items-center gap-2 font-mono text-xs tracking-[0.16em] uppercase opacity-70">
+        <article className="workspace-card stat-glow p-5">
+          <div className="relative flex items-center gap-2 font-mono text-xs tracking-[0.16em] text-muted uppercase">
             <CircleDollarSign className="h-4 w-4" aria-hidden="true" />
             {t("command.pipeline")}
           </div>
-          <div className="mt-5 space-y-2">
+          <div className="relative mt-5 space-y-2">
             {metrics.pipeline.byCurrency.length ? (
               metrics.pipeline.byCurrency.map(({ currency, amount }) => (
                 <p key={currency} className="display text-3xl">
@@ -195,7 +193,7 @@ export default async function DashboardPage() {
               <p className="display text-3xl">{t("command.noData")}</p>
             )}
           </div>
-          <p className="mt-4 text-xs opacity-70">
+          <p className="relative mt-4 text-xs text-muted">
             {t("command.pipelineFormula", {
               valued: metrics.pipeline.valuedQuotes,
               missing: metrics.pipeline.missingAmounts,
@@ -215,7 +213,7 @@ export default async function DashboardPage() {
             </div>
             <CalendarClock className="h-6 w-6 text-muted" aria-hidden="true" />
           </div>
-          <div className="mt-5 divide-y divide-foreground/10 border-y border-foreground/10">
+          <div className="workspace-card mt-5 divide-y divide-white/10 px-5">
             {metrics.attention.length ? (
               metrics.attention.slice(0, 8).map((item) => (
                 <div key={item.id} className="flex items-center justify-between gap-4 py-4">
@@ -253,17 +251,17 @@ export default async function DashboardPage() {
             {t("command.productActivity")}
           </p>
         </div>
-        <div className="mt-4 grid border border-foreground/10 sm:grid-cols-4">
-          {productActivity.map((item, index) => (
+        <div className="mt-4 grid gap-3 sm:grid-cols-4">
+          {productActivity.map((item) => (
             <form
               key={item.product}
               action={openProductWorkspace}
-              className={index < 3 ? "border-b border-foreground/10 sm:border-r sm:border-b-0" : ""}
+              className="workspace-card"
             >
               <input type="hidden" name="productId" value={item.product} />
               <button
                 type="submit"
-                className="group flex w-full items-center justify-between gap-4 p-5 text-left hover:bg-card"
+                className="group flex w-full items-center justify-between gap-4 p-5 text-left"
               >
                 <div>
                   <p className="font-mono text-xs tracking-[0.14em] text-muted uppercase">

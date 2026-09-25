@@ -147,7 +147,7 @@ export function OrvynInvoicesWorkspace({
 
   return (
     <div>
-      <div className="grid gap-0 border-t border-foreground/10 sm:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-4">
         <DashboardCard title={t("open")} value={String(counts.open)} hint={t("openHint")} />
         <DashboardCard title={t("overdue")} value={String(counts.overdue)} hint={t("overdueHint")} />
         <DashboardCard title={t("paid")} value={String(counts.paid)} hint={t("paidHint")} />
@@ -162,7 +162,7 @@ export function OrvynInvoicesWorkspace({
         />
       </div>
 
-      <form id="orvyn-add-invoice" action={onAdd} className="mt-10 grid gap-4 border border-foreground/10 p-4 md:grid-cols-2 lg:grid-cols-4">
+      <form id="orvyn-add-invoice" action={onAdd} className="workspace-card mt-10 grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="md:col-span-2 lg:col-span-4">
           <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("addInvoice")}</p>

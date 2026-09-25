@@ -31,20 +31,20 @@ const eventTypes: CalendarEventType[] = [
 
 const toneClasses = {
   stone: {
-    dot: "bg-stone-700",
-    chip: "border-stone-300 bg-stone-100 text-stone-900",
+    dot: "bg-white/70",
+    chip: "border-white/15 bg-white/10 text-white/90",
   },
   violet: {
-    dot: "bg-violet-700",
-    chip: "border-violet-300 bg-violet-50 text-violet-950",
+    dot: "bg-[#8ea4ff]",
+    chip: "border-[#8ea4ff]/30 bg-[#1b2e7a]/40 text-[#d5ddff]",
   },
   green: {
-    dot: "bg-emerald-700",
-    chip: "border-emerald-300 bg-emerald-50 text-emerald-950",
+    dot: "bg-[#3dd68c]",
+    chip: "border-[#3dd68c]/30 bg-[#3dd68c]/15 text-[#b8f5d4]",
   },
   red: {
-    dot: "bg-red-700",
-    chip: "border-red-300 bg-red-50 text-red-950",
+    dot: "bg-[#f07178]",
+    chip: "border-[#f07178]/30 bg-[#f07178]/15 text-[#ffc9cc]",
   },
 } as const;
 
@@ -232,7 +232,7 @@ export function Calendar({
             new Date(activeMonth.year, activeMonth.month - 1, 1, 12),
           )}
         </h2>
-        <div className="flex items-center border border-foreground/10 bg-card">
+        <div className="workspace-card flex items-center">
           <button
             type="button"
             onClick={() => moveMonth(-1)}
@@ -259,7 +259,7 @@ export function Calendar({
         </div>
       </div>
 
-      <div className="mt-4 overflow-hidden border border-foreground/10 bg-card">
+      <div className="workspace-card mt-4 overflow-hidden">
         <div className="grid grid-cols-7 border-b border-foreground/10 bg-card-hover/60">
           {weekdays.map((weekday, index) => (
             <div
@@ -413,7 +413,7 @@ export function CalendarPreview({
       <div className="mt-5 grid gap-2 lg:grid-cols-5">
         {upcoming.length ? (
           upcoming.map((event) => (
-            <div key={event.id} className="border border-foreground/10 bg-card p-3">
+            <div key={event.id} className="workspace-card p-3">
               <p className="font-mono text-[10px] tracking-[0.12em] text-muted uppercase">
                 {dateFormatter.format(dateOnlyToLocalNoon(event.date))}
                 {event.time ? ` · ${event.time}` : ` · ${t("allDay")}`}

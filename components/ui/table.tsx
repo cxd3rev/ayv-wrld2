@@ -8,7 +8,7 @@ export function Table({
   className?: string;
 }) {
   return (
-    <div className={cn("overflow-x-auto border border-foreground/10", className)}>
+    <div className={cn("workspace-card overflow-x-auto", className)}>
       <table className="w-full min-w-[640px] text-left text-sm">{children}</table>
     </div>
   );

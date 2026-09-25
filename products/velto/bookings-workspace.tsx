@@ -174,7 +174,7 @@ export function VeltoBookingsWorkspace({
 
   return (
     <div>
-      <div className="grid gap-0 border-t border-foreground/10 sm:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-4">
         <DashboardCard title={t("upcoming")} value={String(counts.upcoming)} hint={t("upcomingHint")} />
         <DashboardCard title={t("reminders")} value={String(counts.reminders)} hint={t("remindersHint")} />
         <DashboardCard title={t("completed")} value={String(counts.completed)} hint={t("completedHint")} />
@@ -184,7 +184,7 @@ export function VeltoBookingsWorkspace({
       <form
         id="velto-add-booking"
         action={onAdd}
-        className="mt-10 grid gap-4 border border-foreground/10 p-4 md:grid-cols-2 lg:grid-cols-4"
+        className="workspace-card mt-10 grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-4"
       >
         <div className="md:col-span-2 lg:col-span-4">
           <IncomingLinkFields

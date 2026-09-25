@@ -179,6 +179,106 @@ body {
   box-shadow: 0 22px 60px rgba(170, 70, 160, 0.16);
 }
 
+.glass-card.is-featured {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 30px 80px rgba(180, 80, 170, 0.22);
+  transform: scale(1.03);
+}
+
+.glass-card.is-featured:hover {
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: translateY(-4px) scale(1.03);
+}
+
+/*
+ * Authenticated workspace. Tokens stay local to this wrapper so the public
+ * site and auth pages keep their own theme.
+ */
+.workspace {
+  --background: #0c0c0c;
+  --foreground: #ededed;
+  --muted: #9a9a9a;
+  --card: rgba(255, 255, 255, 0.045);
+  --card-hover: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.12);
+  --accent: #8ea4ff;
+  --accent-hover: #b3c0ff;
+  --accent-foreground: #0a0a0a;
+  --accent-soft: rgba(27, 46, 122, 0.55);
+  --danger: #f07178;
+  --success: #3dd68c;
+  --warning: #e2b15a;
+  --inverted: #ededed;
+  --inverted-foreground: #0a0a0a;
+  color-scheme: dark;
+  background:
+    radial-gradient(ellipse 42% 32% at 88% 0%, rgba(61, 214, 140, 0.08), transparent 68%),
+    radial-gradient(ellipse 36% 28% at 0% 12%, rgba(27, 46, 122, 0.45), transparent 72%),
+    linear-gradient(180deg, #101010 0%, #0a0a0a 40%, #0c0c0c 100%);
+  color: var(--foreground);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+.workspace .display {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+.workspace-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(16px);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.workspace-card:not(:has(table)):not(form):hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.stat-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-glow::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  height: 70%;
+  width: 70%;
+  background: radial-gradient(circle, rgba(61, 214, 140, 0.2), transparent 68%);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+.stat-meter {
+  height: 0.35rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.stat-meter > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1b2e7a, #8ea4ff);
+  box-shadow: 0 0 14px rgba(142, 164, 255, 0.75);
+}
+
+.workspace-rise {
+  animation: fade-up 0.45s ease both;
+}
+
+.workspace input,
+.workspace select,
+.workspace textarea {
+  border-radius: 0.9rem;
+}
+
 .bloom-pink,
 .bloom-navy {
   pointer-events: none;
@@ -460,7 +560,8 @@ main > section:not(:first-child) {
   .rise-in,
   .rise-in-2,
   .rise-in-3,
-  .fade-up {
+  .fade-up,
+  .workspace-rise {
     animation: none;
   }
 

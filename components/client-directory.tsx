@@ -107,16 +107,16 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
         </details>
       </div>
 
-      <div className="mt-6 grid border-y border-foreground/10 sm:grid-cols-4">
-        {(["all", "on_track", "needs_attention", "at_risk"] as const).map((status, index) => (
+      <div className="mt-6 grid gap-3 sm:grid-cols-4">
+        {(["all", "on_track", "needs_attention", "at_risk"] as const).map((status) => (
           <button
             key={status}
             type="button"
             aria-pressed={health === status}
             onClick={() => setHealth(status)}
-            className={`px-4 py-4 text-left transition-colors hover:bg-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground ${
-              health === status ? "bg-card" : ""
-            } ${index > 0 ? "border-t border-foreground/10 sm:border-t-0 sm:border-l" : ""}`}
+            className={`workspace-card px-4 py-4 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground ${
+              health === status ? "border-white/30 bg-white/[0.08]" : ""
+            }`}
           >
             <span className="display block text-2xl">{counts[status]}</span>
             <span className="mt-1 block text-xs text-muted">
@@ -156,7 +156,7 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
         {t("resultsCount", { count: filteredClients.length })}
       </p>
 
-      <div className="mt-2 divide-y divide-foreground/10 border-y border-foreground/10">
+      <div className="workspace-card mt-2 divide-y divide-white/10 px-4">
         {filteredClients.length ? (
           filteredClients.map((client) => {
             const activeQuoteValues = new Map<string, number>();

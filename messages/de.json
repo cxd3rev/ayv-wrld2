@@ -139,10 +139,10 @@
     "avyro": {
       "tagline": "Lead-Conversion",
       "description": "Automatisierung der Lead-Conversion",
-      "longDescription": "Avyro hilft Unternehmen, neue Leads schnell nachzufassen, damit aus mehr Gesprächen Kunden werden.",
-      "highlight1": "Auf jeden neuen Lead in Sekunden automatisch antworten",
-      "highlight2": "Intelligente Follow-ups planen, damit niemand verloren geht",
-      "highlight3": "Sehen, welche Leads heiß sind und woher sie kommen",
+      "longDescription": "Avyro erfasst eine neue Anfrage aus Formular, Anzeige, DM oder Website-Chat und startet eine persönliche E-Mail- oder SMS-Nachfassung.",
+      "highlight1": "Sofortige Erfassung und Antwort",
+      "highlight2": "Mehrstufige Nachfass-Sequenzen",
+      "highlight3": "Lead-Bewertung und Hinweis, wenn ein Lead heiß ist",
       "nav": "Leads",
       "dashboardDescription": "Neue Leads schnell nachfassen, damit aus mehr Gesprächen Kunden werden.",
       "connectedValue": "Machen Sie aus einem qualifizierten Avyro-Lead eine Velto-Buchung, ohne Kontaktdaten erneut einzugeben, und behalten Sie Angebot und Rechnung in derselben Kundenreise."
@@ -150,10 +150,10 @@
     "velto": {
       "tagline": "Buchung + Erinnerungen",
       "description": "Automatisierung von Buchungen und Erinnerungen",
-      "longDescription": "Velto hilft Unternehmen, Buchungen anzunehmen und Erinnerungen zu senden, damit weniger Termine ausfallen.",
-      "highlight1": "Kunden rund um die Uhr buchen lassen",
-      "highlight2": "Automatische Erinnerungen vor jedem Termin",
-      "highlight3": "No-Shows reduzieren — ohne Hin und Her",
+      "longDescription": "Velto lässt Kunden ohne Hin und Her buchen und schickt danach Bestätigung und Erinnerung per E-Mail oder SMS, auch 24 Stunden und 1 Stunde vorher.",
+      "highlight1": "Buchungslink zur Selbstbedienung",
+      "highlight2": "Automatische Bestätigungen",
+      "highlight3": "Erinnerungen 24 Stunden und 1 Stunde vorher, plus automatisches Verschieben",
       "nav": "Buchungen",
       "dashboardDescription": "Buchungen annehmen und Erinnerungen senden, damit weniger Termine ausfallen.",
       "connectedValue": "Erstellen Sie eine Buchung aus einem Avyro-Lead und übergeben Sie den abgeschlossenen Termin mit vorausgefülltem Kunden- und Leistungskontext an Rovyn."
@@ -161,10 +161,10 @@
     "rovyn": {
       "tagline": "Angebots-Follow-up",
       "description": "Automatisierung des Angebots-Follow-ups",
-      "longDescription": "Rovyn fasst versendete Angebote nach, damit Unternehmen mehr Aufträge schließen — ohne jeden Lead von Hand zu jagen.",
-      "highlight1": "Jedes Angebot automatisch nachfassen",
-      "highlight2": "Unentschlossene zum richtigen Zeitpunkt anstoßen",
-      "highlight3": "Mehr Aufträge schließen, ohne von Hand hinterherzulaufen",
+      "longDescription": "Rovyn verfolgt ein gesendetes Angebot nach Plan, etwa Tag 2, Tag 5 und Tag 10, bis eine Antwort kommt, und stoppt dann.",
+      "highlight1": "Automatische Angebots-Nachfassung",
+      "highlight2": "Einstellbare Zeitpunkte und verfolgte Antworten",
+      "highlight3": "Nachfassung stoppt, sobald der Kunde antwortet",
       "nav": "Angebote",
       "dashboardDescription": "Versendete Angebote nachfassen, damit mehr Vorschläge zu Aufträgen werden.",
       "connectedValue": "Erstellen Sie ein Angebot aus einer Velto-Buchung und machen Sie gewonnene Arbeit zur Orvyn-Rechnung, ohne den Kunden erneut einzugeben."
@@ -172,10 +172,10 @@
     "orvyn": {
       "tagline": "Zahlung + Rechnungs-Follow-up",
       "description": "Automatisierung von Zahlungs- und Rechnungserinnerungen",
-      "longDescription": "Orvyn erinnert an offene Rechnungen, damit Geld schneller kommt und weniger Posten vergessen werden.",
-      "highlight1": "Automatische Erinnerungen an offene Rechnungen",
-      "highlight2": "Schneller bezahlt werden — mit weniger unangenehmem Nachfassen",
-      "highlight3": "Offene Beträge auf einen Blick im Blick behalten",
+      "longDescription": "Orvyn schickt Rechnungserinnerungen vor und nach dem Fälligkeitsdatum, wird bei Verzug bestimmter und meldet, wenn bezahlt wurde.",
+      "highlight1": "Automatische Rechnungserinnerungen",
+      "highlight2": "Deutlicherer Ton bei überfälligen Zahlungen",
+      "highlight3": "Meldung, wenn die Zahlung eingeht",
       "nav": "Zahlungen",
       "dashboardDescription": "Offene Rechnungen verfolgen und Erinnerungen planen, damit Zahlungen schneller eingehen.",
       "connectedValue": "Erstellen Sie eine Rechnung aus einem gewonnenen Rovyn-Angebot und behalten Sie Lead-, Buchungs- und Angebotskontext neben Zahlung und Erinnerungen."
@@ -183,20 +183,20 @@
     "nexro": {
       "tagline": "Reaktivierung + Empfehlungen",
       "description": "Automatisierung von Kundenreaktivierung und Empfehlungen",
-      "longDescription": "Nexro holt frühere Kunden zurück und macht zufriedene Kunden zu Empfehlern.",
-      "highlight1": "Frühere Kunden mit getakteten Kampagnen zurückgewinnen",
-      "highlight2": "Zufriedene Kunden in einen stetigen Empfehlungsstrom verwandeln",
-      "highlight3": "Ihre Liste im Autopilot wieder aktivieren",
+      "longDescription": "Nexro meldet sich bei inaktiven Kunden mit einem Rückgewinn-Angebot oder einer Nachfrage und bittet zufriedene Kunden um eine Empfehlung.",
+      "highlight1": "Rückgewinnung inaktiver Kunden",
+      "highlight2": "Automatische Empfehlungsanfragen",
+      "highlight3": "Verfolgung des Empfehlungsanreizes",
       "nav": "Empfehlungen",
       "dashboardDescription": "Kundenreaktivierung und Empfehlungen kommen bald."
     },
     "ravelo": {
       "tagline": "Bewertungsautomatisierung",
       "description": "Bewertungsautomatisierung",
-      "longDescription": "Ravelo bittet zufriedene Kunden zum richtigen Zeitpunkt um Bewertungen — Vertrauen ohne unangenehmes Nachfragen.",
-      "highlight1": "Zum richtigen Zeitpunkt um Bewertungen bitten",
-      "highlight2": "Mehr Vertrauen durch mehr 5-Sterne-Bewertungen",
-      "highlight3": "Reputation aufbauen, ohne unangenehm zu fragen",
+      "longDescription": "Ravelo bittet nach dem Auftrag um eine Bewertung, schickt zufriedene Kunden auf eine öffentliche Seite und hält unzufriedenes Feedback zuerst privat.",
+      "highlight1": "Bewertungsanfrage nach dem Auftrag",
+      "highlight2": "Öffentliche Bewertung oder privates Feedback",
+      "highlight3": "Links zu mehr als einer Bewertungsplattform",
       "nav": "Bewertungen",
       "dashboardDescription": "Bewertungsautomatisierung kommt bald."
     }

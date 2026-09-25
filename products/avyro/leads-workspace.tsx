@@ -132,7 +132,7 @@ export function AvyroLeadsWorkspace({
 
   return (
     <div>
-      <div className="grid gap-0 border-t border-foreground/10 sm:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-4">
         <DashboardCard title={t("new")} value={String(counts.new)} hint={t("newHint")} />
         <DashboardCard title={t("contacted")} value={String(counts.contacted)} hint={t("contactedHint")} />
         <DashboardCard title={t("won")} value={String(counts.won)} hint={t("wonHint")} />
@@ -142,7 +142,7 @@ export function AvyroLeadsWorkspace({
       <form
         id="avyro-add-lead"
         action={onAdd}
-        className="mt-10 grid gap-4 border border-foreground/10 p-4 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_auto]"
+        className="workspace-card mt-10 grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_auto]"
       >
         <div className="md:col-span-2 lg:col-span-4">
           <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />

@@ -139,10 +139,10 @@
     "avyro": {
       "tagline": "Conversion de leads",
       "description": "Automatisation de la conversion de leads",
-      "longDescription": "Avyro aide les entreprises à relancer rapidement les nouveaux leads pour transformer plus de conversations en clients.",
-      "highlight1": "Répondez à chaque nouveau lead en quelques secondes, automatiquement",
-      "highlight2": "Planifiez des relances intelligentes pour que personne ne s'échappe",
-      "highlight3": "Voyez quels leads sont chauds et d'où ils viennent",
+      "longDescription": "Avyro capture un nouveau prospect depuis un formulaire, une pub, un DM ou le chat du site, puis lance un suivi personnalisé par e-mail ou SMS.",
+      "highlight1": "Capture et réponse instantanées",
+      "highlight2": "Séquences de relance en plusieurs étapes",
+      "highlight3": "Score des prospects et alerte quand un prospect est chaud",
       "nav": "Leads",
       "dashboardDescription": "Relancez rapidement les nouveaux leads pour transformer plus de conversations en clients.",
       "connectedValue": "Transformez un lead Avyro qualifié en réservation Velto sans ressaisir ses coordonnées, puis conservez le devis et la facture dans le même parcours client."
@@ -150,10 +150,10 @@
     "velto": {
       "tagline": "Réservations + rappels",
       "description": "Automatisation des réservations et rappels",
-      "longDescription": "Velto aide les entreprises à prendre des réservations et envoyer des rappels pour réduire les rendez-vous manqués.",
-      "highlight1": "Laissez vos clients réserver à toute heure",
-      "highlight2": "Envoyez des rappels automatiques avant chaque rendez-vous",
-      "highlight3": "Réduisez les absences sans allers-retours",
+      "longDescription": "Velto permet de réserver sans aller-retour, puis envoie une confirmation et des rappels par e-mail ou SMS, dont 24 h et 1 h avant.",
+      "highlight1": "Lien de réservation en libre-service",
+      "highlight2": "Messages de confirmation automatiques",
+      "highlight3": "Rappels 24 h et 1 h avant, et report automatique",
       "nav": "Réservations",
       "dashboardDescription": "Prenez des réservations et envoyez des rappels pour réduire les rendez-vous manqués.",
       "connectedValue": "Créez une réservation depuis un lead Avyro, puis transmettez le rendez-vous terminé à Rovyn avec le client et le service déjà renseignés."
@@ -161,10 +161,10 @@
     "rovyn": {
       "tagline": "Relance de devis",
       "description": "Automatisation du suivi des devis",
-      "longDescription": "Rovyn relance les devis envoyés pour conclure plus de missions sans courir après chaque prospect à la main.",
-      "highlight1": "Relancez chaque devis automatiquement",
-      "highlight2": "Relancez les prospects indécis au bon moment",
-      "highlight3": "Concluez plus de missions sans relancer à la main",
+      "longDescription": "Rovyn relance un devis envoyé selon un calendrier, par exemple jour 2, jour 5 et jour 10, jusqu’à la réponse, puis s’arrête.",
+      "highlight1": "Séquences de relance de devis",
+      "highlight2": "Calendrier de relance réglable et suivi des réponses",
+      "highlight3": "La relance s’arrête dès que le client répond",
       "nav": "Devis",
       "dashboardDescription": "Relancez les devis envoyés pour transformer plus de propositions en missions.",
       "connectedValue": "Créez un devis depuis une réservation Velto et transformez une affaire gagnée en facture Orvyn sans ressaisir le client."
@@ -172,10 +172,10 @@
     "orvyn": {
       "tagline": "Paiements + relance de factures",
       "description": "Automatisation du suivi des paiements et factures",
-      "longDescription": "Orvyn rappelle les factures impayées pour encaisser plus vite et oublier moins de créances.",
-      "highlight1": "Envoyez des rappels automatiques sur les factures impayées",
-      "highlight2": "Soyez payé plus vite, avec moins de relances gênantes",
-      "highlight3": "Suivez l'encours d'un coup d'œil",
+      "longDescription": "Orvyn envoie des rappels de facture avant et après l’échéance, durcit le ton si le paiement est en retard, et signale quand c’est payé.",
+      "highlight1": "Rappels de facture automatiques",
+      "highlight2": "Relance plus ferme pour les retards",
+      "highlight3": "Notification quand le paiement arrive",
       "nav": "Paiements",
       "dashboardDescription": "Suivez les factures impayées et planifiez les rappels pour être payé plus vite.",
       "connectedValue": "Créez une facture depuis un devis Rovyn gagné et conservez le contexte du lead, de la réservation et du devis avec le paiement."
@@ -183,20 +183,20 @@
     "nexro": {
       "tagline": "Réactivation + parrainage",
       "description": "Automatisation de la réactivation et du parrainage",
-      "longDescription": "Nexro aide les entreprises à faire revenir d'anciens clients et à transformer les clients satisfaits en recommandations.",
-      "highlight1": "Récupérez d'anciens clients avec des campagnes cadencées",
-      "highlight2": "Transformez les clients satisfaits en un flux régulier de parrainages",
-      "highlight3": "Réactivez votre base en pilote automatique",
+      "longDescription": "Nexro contacte les clients inactifs avec une offre de retour ou un message, et demande un parrainage aux clients contents.",
+      "highlight1": "Campagnes de reconquête des clients inactifs",
+      "highlight2": "Demandes de parrainage automatiques",
+      "highlight3": "Suivi de l’incitation au parrainage",
       "nav": "Parrainages",
       "dashboardDescription": "La réactivation clients et les parrainages arrivent bientôt."
     },
     "ravelo": {
       "tagline": "Automatisation des avis",
       "description": "Automatisation des avis",
-      "longDescription": "Ravelo demande des avis aux clients satisfaits au bon moment, pour bâtir la confiance sans relance gênante.",
-      "highlight1": "Demandez un avis au moment idéal",
-      "highlight2": "Gagnez en confiance avec plus d'avis 5 étoiles",
-      "highlight3": "Développez votre réputation sans la demande gênante",
+      "longDescription": "Ravelo demande un avis après la prestation, envoie les clients contents vers un site d’avis public, et garde d’abord le mécontentement en privé.",
+      "highlight1": "Demandes d’avis après la prestation",
+      "highlight2": "Avis public ou retour privé",
+      "highlight3": "Liens vers plusieurs plateformes d’avis",
       "nav": "Avis",
       "dashboardDescription": "L'automatisation des avis arrive bientôt."
     }

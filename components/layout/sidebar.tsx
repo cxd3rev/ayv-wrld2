@@ -47,7 +47,7 @@ export function Sidebar({
     <>
       <button
         type="button"
-        className="fixed top-4 left-4 z-40 border border-foreground/10 bg-background p-2 lg:hidden"
+        className="workspace-card fixed top-4 left-4 z-40 p-2 lg:hidden"
         onClick={() => setOpen(true)}
         aria-label={t("common.openMenu")}
       >
@@ -65,7 +65,7 @@ export function Sidebar({
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-foreground/10 bg-background p-6 transition-transform lg:static lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/10 bg-[#121212] p-5 transition-transform lg:static lg:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -100,20 +100,20 @@ export function Sidebar({
                 href={href}
                 onClick={() => setOpen(false)}
                 className={cn(
-                  "flex items-center gap-3 border-l px-3 py-2.5 text-sm transition-colors",
+                  "flex items-center gap-3 rounded-full px-3 py-2.5 text-sm transition-colors",
                   active
-                    ? "border-accent text-foreground"
-                    : "border-transparent text-muted hover:border-foreground/20 hover:text-foreground",
+                    ? "bg-accent-soft text-foreground"
+                    : "text-muted hover:bg-white/5 hover:text-foreground",
                 )}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className={cn("h-4 w-4", active && "text-accent")} />
                 {productLabel}
               </Link>
             );
           })}
         </nav>
 
-        <div className="flex items-center gap-3 border-t border-foreground/10 pt-5">
+        <div className="flex items-center gap-3 border-t border-white/10 pt-5">
           <ProductIcon product={activeProduct} size={32} className="h-8 w-8" />
           <div>
             <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">{t("common.currentProduct")}</p>

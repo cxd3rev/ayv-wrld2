@@ -1,5 +1,5 @@
 import { automationBrand } from "@/config/brands";
-import { bundlePricing, formatPrice, products } from "@/config/products";
+import { formatPrice, products } from "@/config/products";
 import { getStackCopy, stackMarketing } from "@/config/stack-marketing";
 import type { AppLocale } from "@/i18n/config";
 import { CalendarClock, Check, MessageSquareText, Receipt, RefreshCw, Sparkles, Star, UserRoundPlus } from "lucide-react";
@@ -17,8 +17,14 @@ const moduleIcons = {
 
 export function StackHome({ locale }: { locale: AppLocale }) {
   const c = getStackCopy(locale);
-  const fromPrice = formatPrice(Math.min(...products.map((product) => product.pricing.monthly ?? 0)), locale);
-  const stackPrice = formatPrice(bundlePricing.discountedMonthly, locale);
+  // Display prices only. Stripe checkout still bills the existing per-module
+  // prices (Avyro and Velto €40, Rovyn and Orvyn €70). There is no Stripe
+  // price for Starter €39, Growth €79, or Full Stack €149.
+  const tiers = [
+    { key: "starter" as const, name: c.pricing.starter, body: c.pricing.starterBody, price: formatPrice(39, locale), features: c.pricing.starterFeatures, href: "/signup", cta: c.pricing.starterCta, featured: false },
+    { key: "growth" as const, name: c.pricing.growth, body: c.pricing.growthBody, price: formatPrice(79, locale), features: c.pricing.growthFeatures, href: "/signup", cta: c.pricing.growthCta, featured: true },
+    { key: "full" as const, name: c.pricing.stack, body: c.pricing.stackBody, price: formatPrice(149, locale), features: c.pricing.stackFeatures, href: "/signup", cta: c.pricing.stackCta, featured: false },
+  ];
 
   return (
     <main id="main-content">
@@ -87,15 +93,20 @@ export function StackHome({ locale }: { locale: AppLocale }) {
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => {
             const Icon = moduleIcons[product.id];
-            const marketing = stackMarketing[product.id];
+            const marketing = c.moduleCopy[product.id];
             return (
               <article key={product.id} className="glass-card flex min-h-64 flex-col justify-between rounded-3xl p-6">
                 <div>
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="mt-6 text-2xl font-semibold">{marketing.name}</h3>
+                  <h3 className="mt-6 text-2xl font-semibold">{stackMarketing[product.id].name}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/65">{marketing.line}</p>
+                  <ul className="mt-4 space-y-2 text-sm text-white/75">
+                    {marketing.features.slice(0, 3).map((feature) => (
+                      <li key={feature} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0" />{feature}</li>
+                    ))}
+                  </ul>
                 </div>
                 <Link href={product.marketingRoute} className="mt-8 inline-flex text-sm font-medium text-white/90 hover:text-white">
                   {c.modules.learn}
@@ -115,42 +126,22 @@ export function StackHome({ locale }: { locale: AppLocale }) {
             <p className="mt-4 text-lg leading-relaxed text-white/65">{c.pricing.body}</p>
           </div>
           <div className="mt-12 grid items-stretch gap-4 lg:grid-cols-3">
-            <article className="glass-card flex flex-col rounded-3xl p-7">
-              <h3 className="text-lg text-white/70">{c.pricing.starter}</h3>
-              <p className="display mt-4 text-5xl">{c.pricing.starterPrice}</p>
-              <p className="mt-3 text-sm leading-relaxed text-white/60">{c.pricing.starterBody}</p>
-              <ul className="mt-8 space-y-3 text-sm">
-                {c.pricing.starterFeatures.map((feature) => (
-                  <li key={feature} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0" />{feature}</li>
-                ))}
-              </ul>
-              <Link href="/signup" className="button-secondary mt-8">{c.nav.start}</Link>
-            </article>
-            <article className="glass-card relative z-10 flex -translate-y-1 flex-col rounded-3xl border-white/30 p-7 shadow-[0_30px_80px_rgba(180,80,170,0.18)] lg:-translate-y-3">
-              <p className="text-xs font-medium uppercase tracking-[0.16em] text-white/70">{c.pricing.best}</p>
-              <h3 className="mt-3 text-lg">{c.pricing.stack}</h3>
-              <p className="display mt-4 text-5xl">{stackPrice}<span className="ml-1 text-lg font-medium text-white/50">{c.pricing.month}</span></p>
-              <p className="mt-3 text-sm leading-relaxed text-white/60">{c.pricing.stackBody}</p>
-              <ul className="mt-8 space-y-3 text-sm">
-                {c.pricing.stackFeatures.map((feature) => (
-                  <li key={feature} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0" />{feature}</li>
-                ))}
-              </ul>
-              <Link href="/automation/stack" className="button-primary mt-8">{c.pricing.seeStack}</Link>
-              <p className="mt-4 text-xs leading-relaxed text-white/50">{c.pricing.stackNote}</p>
-            </article>
-            <article className="glass-card flex flex-col rounded-3xl p-7">
-              <h3 className="text-lg text-white/70">{c.pricing.module}</h3>
-              <p className="display mt-4 text-5xl">{fromPrice}<span className="ml-1 text-lg font-medium text-white/50">{c.pricing.month}</span></p>
-              <p className="mt-3 text-sm leading-relaxed text-white/60">{c.pricing.moduleBody}</p>
-              <ul className="mt-8 space-y-3 text-sm">
-                {c.pricing.moduleFeatures.map((feature) => (
-                  <li key={feature} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0" />{feature}</li>
-                ))}
-              </ul>
-              <Link href="#modules" className="button-secondary mt-8">{c.pricing.choose}</Link>
-            </article>
+            {tiers.map((tier) => (
+              <article key={tier.key} className={tier.featured ? "glass-card is-featured relative z-10 flex flex-col rounded-3xl p-7" : "glass-card flex flex-col rounded-3xl p-7"}>
+                {tier.featured ? <p className="text-xs font-medium uppercase tracking-[0.16em] text-white">{c.pricing.growthBadge}</p> : null}
+                <h3 className="mt-3 text-lg text-white">{tier.name}</h3>
+                <p className="display mt-4 text-5xl text-white">{tier.price}<span className="ml-1 text-lg font-medium text-white/50">{c.pricing.month}</span></p>
+                <p className="mt-3 text-sm leading-relaxed text-white/60">{tier.body}</p>
+                <ul className="mt-8 space-y-3 text-sm text-white/60">
+                  {tier.features.map((feature) => (
+                    <li key={feature} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-white" />{feature}</li>
+                  ))}
+                </ul>
+                <Link href={tier.href} className={tier.featured ? "button-primary mt-8" : "button-secondary mt-8"}>{tier.cta}</Link>
+              </article>
+            ))}
           </div>
+          <p className="mx-auto mt-10 max-w-2xl text-center text-sm leading-relaxed text-white/60">{c.pricing.note}</p>
         </div>
       </section>
 
