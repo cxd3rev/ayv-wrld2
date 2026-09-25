@@ -72,6 +72,7 @@ export default async function ProjectsPage() {
       id: "automation",
       name: ecosystems.automation.name,
       typeLabel: c.ecosystem.ecosystemType,
+      logo: ecosystems.automation.logo,
       description: c.automation.body,
       does: c.automation.productsBody,
       problem: c.home.pathsBody,

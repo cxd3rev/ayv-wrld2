@@ -1,9 +1,10 @@
 import { AutomationProductCard, CTASection, PageHero, PublicShell, SectionHeading } from "@/components/marketing/public-site";
 import { BundlePricingCard } from "@/components/marketing/bundle-pricing-card";
 import { formatPrice, products } from "@/config/products";
-import { getPublicCopy } from "@/config/public-site";
+import { ecosystems, getPublicCopy } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -18,7 +19,9 @@ export default async function AutomationPage() {
   return (
     <PublicShell>
       <main id="main-content">
-        <PageHero eyebrow={c.automation.eyebrow} title={c.automation.title} body={c.automation.body} />
+        <PageHero eyebrow={c.automation.eyebrow} title={c.automation.title} body={c.automation.body}>
+          <Image src={ecosystems.automation.logo} alt="AYV Automation logo" width={320} height={320} sizes="160px" priority className="h-32 w-32 object-contain sm:h-40 sm:w-40" />
+        </PageHero>
         <section className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
           <SectionHeading eyebrow="AYV AUTOMATION / PRODUCTS" title={c.automation.productsTitle} body={c.automation.productsBody} />
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

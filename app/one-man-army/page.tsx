@@ -7,7 +7,13 @@ import { getLocale } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const c = getPublicCopy(resolveLocale(await getLocale()));
-  return { title: c.metadata.army[0], description: c.metadata.army[1], alternates: { canonical: "/one-man-army" }, openGraph: { title: c.metadata.army[0], description: c.metadata.army[1], url: "/one-man-army" } };
+  return {
+    title: c.metadata.army[0],
+    description: c.metadata.army[1],
+    alternates: { canonical: "/one-man-army" },
+    openGraph: { title: c.metadata.army[0], description: c.metadata.army[1], url: "/one-man-army" },
+    icons: { icon: "/brands/one-man-army/icon.png" },
+  };
 }
 
 export default async function OneManArmyPage() {
@@ -24,9 +30,7 @@ export default async function OneManArmyPage() {
       <main id="main-content">
         <PageHero eyebrow={c.army.eyebrow} title={c.army.title} body={c.army.body}>
           <div className="flex flex-wrap items-center gap-6">
-            <div className="flex h-32 w-32 items-center justify-center border border-border bg-card p-5 sm:h-40 sm:w-40">
-              <Image src={ecosystems.oneManArmy.logo} alt="One Man Army Stack logo" width={320} height={320} sizes="160px" loading="eager" className="h-full w-full object-contain" />
-            </div>
+            <Image src={ecosystems.oneManArmy.nameMark} alt="One Man Army" width={829} height={228} sizes="(max-width: 640px) 80vw, 420px" priority className="h-auto w-full max-w-md object-contain" />
             <span className="inline-flex border border-border bg-card px-3 py-2 font-mono text-xs uppercase tracking-[0.16em] text-muted">{c.army.status}</span>
           </div>
         </PageHero>

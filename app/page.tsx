@@ -93,7 +93,7 @@ export default async function HomePage() {
               <article className="flex min-h-[390px] flex-col justify-between border border-border bg-background p-8 lg:p-10">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">AYV WRLD → {c.common.individual}</p>
                 <div>
-                  <Image src={ecosystems.oneManArmy.logo} alt="One Man Army Stack logo" width={240} height={240} sizes="160px" className="mb-8 h-24 w-24 object-contain" />
+                  <Image src={ecosystems.oneManArmy.icon} alt="" width={240} height={240} sizes="96px" className="mb-8 h-20 w-20 object-contain" />
                   <h3 className="display text-4xl lg:text-5xl">{c.home.armyTitle}</h3>
                   <p className="mt-5 max-w-lg leading-relaxed text-muted">{c.home.armyBody}</p>
                   <Link href="/one-man-army" className="button-secondary mt-8">{c.home.armyCta}<ArrowRight className="h-4 w-4" /></Link>
@@ -102,6 +102,7 @@ export default async function HomePage() {
               <article className="flex min-h-[390px] flex-col justify-between border border-border bg-background p-8 lg:p-10">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">AYV WRLD → {c.nav.automation}</p>
                 <div>
+                  <Image src={ecosystems.automation.logo} alt="AYV Automation logo" width={240} height={240} sizes="160px" className="mb-8 h-24 w-24 object-contain" />
                   <h3 className="display text-4xl lg:text-5xl">{c.home.automationTitle}</h3>
                   <p className="mt-5 max-w-lg leading-relaxed text-muted">{c.home.automationBody}</p>
                   <Link href="/automation" className="button-primary mt-8">{c.home.automationCta}<ArrowRight className="h-4 w-4" /></Link>
@@ -143,7 +144,7 @@ export default async function HomePage() {
             <SectionHeading eyebrow="06 / ONE MAN ARMY STACK" title={c.home.armyTitle} body={c.home.armyBody} />
             <div className="grid gap-px border border-border bg-border sm:grid-cols-[0.65fr_1fr]">
               <div className="flex min-h-64 items-center justify-center bg-background p-8">
-                <Image src={ecosystems.oneManArmy.logo} alt="One Man Army Stack logo" width={320} height={320} sizes="(max-width: 640px) 180px, 240px" className="h-44 w-44 object-contain sm:h-52 sm:w-52" />
+                <Image src={ecosystems.oneManArmy.nameMark} alt="One Man Army" width={829} height={228} sizes="(max-width: 640px) 80vw, 360px" className="h-auto w-full max-w-sm object-contain" />
               </div>
               <div className="grid grid-cols-2 gap-px bg-border">
                 {["Research", "Build", "Deploy", "Monetize", "Improve"].map((step, index) => <div key={step} className="bg-background p-5 font-mono text-xs uppercase tracking-[0.14em]"><span className="text-muted">0{index + 1} / </span>{step}</div>)}

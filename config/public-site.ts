@@ -1,5 +1,5 @@
 import type { AppLocale } from "@/i18n/config";
-import { kleuroBrand, oneManArmyBrand, ratedBrand } from "@/config/brands";
+import { automationBrand, kleuroBrand, oneManArmyBrand, ratedBrand } from "@/config/brands";
 
 export const projects = [
   {
@@ -38,6 +38,8 @@ export const ecosystems = {
     productType: "standalone_commercial_product",
     status: "in_development",
     logo: oneManArmyBrand.logo,
+    icon: oneManArmyBrand.icon,
+    nameMark: oneManArmyBrand.nameMark,
   },
   automation: {
     name: "AYV Automation",
@@ -46,6 +48,7 @@ export const ecosystems = {
     audience: "Businesses",
     productType: "product_ecosystem",
     status: "active",
+    logo: automationBrand.logo,
   },
   automationStack: {
     name: "AYV Automation Stack",

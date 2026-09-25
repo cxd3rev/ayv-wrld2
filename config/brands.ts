@@ -8,7 +8,14 @@ export const ayvBrand = {
 
 export const oneManArmyBrand = {
   name: "One Man Army Stack",
-  logo: "/brands/one-man-army/mark-transparent-v3.webp",
+  icon: "/brands/one-man-army/icon.webp",
+  logo: "/brands/one-man-army/logo.webp",
+  nameMark: "/brands/one-man-army/name.webp",
+} as const;
+
+export const automationBrand = {
+  name: "AYV Automation",
+  logo: "/brands/automation/mark-transparent-v3.webp",
 } as const;
 
 export const kleuroBrand = {
