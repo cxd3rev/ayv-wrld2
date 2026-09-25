@@ -2,6 +2,7 @@ import { Atmosphere } from "@/components/atmosphere";
 import { ProductLogo } from "@/components/product-icon";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/header";
 import type { ProductConfig } from "@/config/products";
+import { stackMarketing } from "@/config/stack-marketing";
 import type { Project } from "@/config/public-site";
 import { getPublicCopy } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
@@ -80,7 +81,7 @@ export function AutomationProductCard({
           <span className="border border-border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">{status}</span>
         </div>
         <p className="mt-8 font-mono text-[10px] uppercase tracking-[0.18em]" style={{ color: product.accent }}>{category ?? product.category}</p>
-        <h3 className="display mt-2 text-2xl">{product.name}</h3>
+        <h3 className="display mt-2 text-2xl">{stackMarketing[product.id].name}</h3>
         <p className="mt-3 text-sm leading-relaxed text-muted">{description}</p>
       </div>
       <div className="mt-7 flex items-end justify-between gap-4">

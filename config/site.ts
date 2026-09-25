@@ -3,10 +3,10 @@
  * Product-specific names and colors live in config/products.ts.
  */
 export const siteConfig = {
-  name: "AYV WRLD",
+  name: "AYV Automation Stack",
   shortName: "AYV",
-  tagline: "Build systems. Automate work. Create what’s next.",
+  tagline: "Automate how you win and keep clients.",
   description:
-    "AYV WRLD builds practical software, business automation systems, and independent digital products.",
+    "Six automation modules for leads, bookings, quotes, invoices, reactivation, and reviews. Buy one, or run the full stack.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ayv-wrld2.vercel.app",
 } as const;

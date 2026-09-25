@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Instrument_Sans, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { Instrument_Sans, Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -17,6 +17,11 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-serif",
   subsets: ["latin", "latin-ext"],
   weight: "400",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin", "latin-ext"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -44,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: siteConfig.description,
       url: "/",
       type: "website",
-      images: [{ url: ayvBrand.logo, width: 512, height: 512, alt: "AYV WRLD" }],
+      images: [{ url: ayvBrand.logo, width: 512, height: 512, alt: "AYV Automation Stack" }],
     },
     twitter: {
       card: "summary_large_image",
@@ -61,7 +66,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={locale}
-      className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-background font-sans text-foreground">
         <NextIntlClientProvider>

@@ -1,6 +1,7 @@
 import { AutomationProductCard, CTASection, PageHero, PublicShell, SectionHeading } from "@/components/marketing/public-site";
 import { BundlePricingCard } from "@/components/marketing/bundle-pricing-card";
 import { formatPrice, products } from "@/config/products";
+import { stackMarketing } from "@/config/stack-marketing";
 import { ecosystems, getPublicCopy } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
 import type { Metadata } from "next";
@@ -37,7 +38,7 @@ export default async function AutomationPage() {
               {products.map((product, index) => (
                 <li key={product.id} className="bg-background p-5">
                   <span className="font-mono text-[10px] text-muted">0{index + 1}</span>
-                  <p className="display mt-8 text-xl">{product.name}</p>
+                  <p className="display mt-8 text-xl">{stackMarketing[product.id].name}</p>
                   <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em]" style={{ color: product.accent }}>{c.common.categories[product.category]}</p>
                 </li>
               ))}
@@ -53,7 +54,7 @@ export default async function AutomationPage() {
             cta={{ href: "/automation/stack", label: c.automation.stackCta }}
           />
         </section>
-        <CTASection title={c.home.finalTitle} body={c.home.finalBody} links={[{ label: "One Man Army Stack", href: "/one-man-army" }, { label: c.nav.projects, href: "/projects" }]} />
+        <CTASection title={c.home.finalTitle} body={c.home.finalBody} links={[{ label: "Get started", href: "/signup", primary: true }, { label: "Pricing", href: "/#pricing" }]} />
       </main>
     </PublicShell>
   );

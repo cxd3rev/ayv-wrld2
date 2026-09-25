@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         destination: "/automation/:slug",
         permanent: true,
       },
+      { source: "/projects", destination: "/", permanent: true },
+      { source: "/projects/:slug", destination: "/", permanent: true },
+      { source: "/one-man-army", destination: "/", permanent: true },
+      { source: "/about", destination: "/#contact", permanent: true },
     ];
   },
 };
