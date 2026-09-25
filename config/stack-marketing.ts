@@ -107,7 +107,7 @@ const en: StackCopy = {
   nav: { modules: "Modules", pricing: "Pricing", how: "How it works", contact: "Contact", start: "Get started", login: "Log in", menu: "Open menu", close: "Close menu" },
   hero: {
     eyebrow: "AYV Automation Stack",
-    title: "Automate how you win and keep clients.",
+    title: "Turn Leads into Clients.",
     body: "Avyro, Velto, Rovyn, Orvyn, Nexro, and Ravelo cover the work from a new lead to the next review. Start with Avyro, add the live modules, or take the full stack.",
     primary: "Get started",
     secondary: "View modules",
@@ -192,7 +192,7 @@ const en: StackCopy = {
 const fr: StackCopy = {
   ...en,
   nav: { ...en.nav, pricing: "Tarifs", how: "Fonctionnement", start: "Commencer", login: "Connexion", menu: "Ouvrir le menu", close: "Fermer le menu" },
-  hero: { ...en.hero, title: "Automatisez la façon dont vous gagnez et gardez vos clients.", body: "Avyro, Velto, Rovyn, Orvyn, Nexro et Ravelo couvrent le travail du nouveau prospect jusqu’à l’avis. Commencez par Avyro, ajoutez les modules en ligne, ou prenez toute la stack.", primary: "Commencer", secondary: "Voir les modules" },
+  hero: { ...en.hero, title: "Transformez les prospects en clients.", body: "Avyro, Velto, Rovyn, Orvyn, Nexro et Ravelo couvrent le travail du nouveau prospect jusqu’à l’avis. Commencez par Avyro, ajoutez les modules en ligne, ou prenez toute la stack.", primary: "Commencer", secondary: "Voir les modules" },
   modules: { eyebrow: "La stack", title: "Six modules. Un parcours client.", body: "Chaque module fait un travail. Ensemble, ils mènent un client de la demande au rendez-vous, au devis, au paiement, au retour et à l’avis.", learn: "En savoir plus" },
   moduleCopy: {
     avyro: { line: "Capture un nouveau prospect depuis un formulaire, une pub, un DM ou le chat du site, puis lance un suivi personnalisé par e-mail ou SMS.", features: ["Capture et réponse instantanées", "Séquences de relance en plusieurs étapes", "Score des prospects", "Alerte quand un prospect est chaud", "Connexion aux formulaires, pubs et chat du site"] },
@@ -212,7 +212,7 @@ const fr: StackCopy = {
 const de: StackCopy = {
   ...en,
   nav: { ...en.nav, modules: "Module", pricing: "Preise", how: "So funktioniert’s", contact: "Kontakt", start: "Loslegen", login: "Anmelden", menu: "Menü öffnen", close: "Menü schließen" },
-  hero: { ...en.hero, title: "Automatisieren Sie, wie Sie Kunden gewinnen und halten.", body: "Avyro, Velto, Rovyn, Orvyn, Nexro und Ravelo decken den Weg von der Anfrage bis zur Bewertung ab. Starten Sie mit Avyro, ergänzen Sie die verfügbaren Module oder nehmen Sie den ganzen Stack.", primary: "Loslegen", secondary: "Module ansehen" },
+  hero: { ...en.hero, title: "Verwandeln Sie Leads in Kunden.", body: "Avyro, Velto, Rovyn, Orvyn, Nexro und Ravelo decken den Weg von der Anfrage bis zur Bewertung ab. Starten Sie mit Avyro, ergänzen Sie die verfügbaren Module oder nehmen Sie den ganzen Stack.", primary: "Loslegen", secondary: "Module ansehen" },
   modules: { eyebrow: "Der Stack", title: "Sechs Module. Ein Kundenweg.", body: "Jedes Modul erledigt eine Aufgabe. Zusammen führen sie von der Anfrage zu Termin, Angebot, Zahlung, Rückkehr und Bewertung.", learn: "Mehr erfahren" },
   moduleCopy: {
     avyro: { line: "Erfasst eine neue Anfrage aus Formular, Anzeige, DM oder Website-Chat und startet eine persönliche E-Mail- oder SMS-Nachfassung.", features: ["Sofortige Erfassung und Antwort", "Mehrstufige Nachfass-Sequenzen", "Lead-Bewertung", "Hinweis, wenn ein Lead heiß ist", "Anbindung an Formulare, Anzeigen und Website-Chat"] },
@@ -232,7 +232,7 @@ const de: StackCopy = {
 const nl: StackCopy = {
   ...en,
   nav: { ...en.nav, pricing: "Prijzen", how: "Hoe het werkt", start: "Aan de slag", login: "Inloggen", menu: "Menu openen", close: "Menu sluiten" },
-  hero: { ...en.hero, title: "Automatiseer hoe je klanten wint en houdt.", body: "Avyro, Velto, Rovyn, Orvyn, Nexro en Ravelo dekken het werk van een nieuwe lead tot de volgende review. Begin met Avyro, voeg de live modules toe, of neem de hele stack.", primary: "Aan de slag", secondary: "Bekijk modules" },
+  hero: { ...en.hero, title: "Zet leads om in klanten.", body: "Avyro, Velto, Rovyn, Orvyn, Nexro en Ravelo dekken het werk van een nieuwe lead tot de volgende review. Begin met Avyro, voeg de live modules toe, of neem de hele stack.", primary: "Aan de slag", secondary: "Bekijk modules" },
   modules: { eyebrow: "De stack", title: "Zes modules. Eén klantreis.", body: "Elke module doet één taak. Samen brengen ze een klant van de aanvraag naar een afspraak, een offerte, een betaling, een terugkomst en een review.", learn: "Meer info" },
   moduleCopy: {
     avyro: { line: "Vangt een nieuwe lead uit een formulier, advertentie, DM of websitechat en start een persoonlijke opvolging per e-mail of sms.", features: ["Direct een lead vangen en antwoorden", "Opvolgreeksen in meerdere stappen", "Leadscore", "Melding als een lead warm is", "Koppeling met formulieren, advertenties en websitechat"] },

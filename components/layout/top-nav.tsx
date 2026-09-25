@@ -8,7 +8,6 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 export function TopNav({
-  organization,
   profile,
   email,
   productId,
@@ -20,15 +19,13 @@ export function TopNav({
   productId: ProductId;
   notifications: Notification[];
 }) {
-  const t = useTranslations("common");
   const tDashboard = useTranslations("dashboard");
 
   return (
     <header className="flex h-16 items-center justify-between gap-3 border-b border-white/10 bg-black/20 px-4 pl-16 backdrop-blur-md lg:px-10 lg:pl-10">
       <div className="flex min-w-0 items-center gap-4">
         <div className="hidden min-w-0 sm:block">
-          <p className="truncate text-sm font-medium">{organization.name}</p>
-          <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">{t("workspace")}</p>
+          <p className="truncate text-sm font-medium">AYV workspace</p>
         </div>
         <ProductSwitcher activeProductId={productId} />
       </div>

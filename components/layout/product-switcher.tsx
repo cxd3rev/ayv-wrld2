@@ -32,7 +32,7 @@ export function ProductSwitcher({ activeProductId }: { activeProductId: ProductI
         </button>
       }
     >
-      <div className="px-3 py-2 text-xs tracking-[0.16em] text-muted uppercase">AYV WRLD</div>
+      <div className="px-3 py-2 text-xs tracking-[0.16em] text-muted uppercase">AYV workspace</div>
       {products.map((product) => (
         <DropdownItem
           key={product.id}

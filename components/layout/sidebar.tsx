@@ -5,9 +5,10 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { automationBrand } from "@/config/brands";
 import { dashboardNav } from "@/config/navigation";
-import { Logo } from "@/components/logo";
 import { ProductIcon } from "@/components/product-icon";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { Organization } from "@/types/database";
 import { products, type ProductConfig } from "@/config/products";
@@ -32,7 +33,6 @@ const navKeys: Record<
 };
 
 export function Sidebar({
-  organization,
   product,
 }: {
   organization: Organization;
@@ -70,7 +70,10 @@ export function Sidebar({
         )}
       >
         <div className="mb-10 flex items-center justify-between">
-          <Logo />
+          <Link href="/dashboard" className="inline-flex items-center gap-2.5">
+            <Image src={automationBrand.logo} alt="" width={32} height={32} className="h-8 w-8 object-contain" />
+            <span className="text-sm font-semibold tracking-tight">AYV workspace</span>
+          </Link>
           <button
             type="button"
             className="p-1 lg:hidden"
@@ -80,8 +83,6 @@ export function Sidebar({
             <X className="h-4 w-4" />
           </button>
         </div>
-
-        <p className="kicker mb-6">{organization.name}</p>
 
         <nav className="flex flex-1 flex-col gap-1">
           {dashboardNav.map((item) => {
