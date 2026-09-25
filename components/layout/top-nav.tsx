@@ -22,17 +22,12 @@ export function TopNav({
   const tDashboard = useTranslations("dashboard");
 
   return (
-    <header className="flex h-16 items-center justify-between gap-3 border-b border-white/10 bg-black/20 px-4 pl-16 backdrop-blur-md lg:px-10 lg:pl-10">
+    <header className="relative z-30 flex h-16 items-center justify-between gap-3 border-b border-white/10 bg-black/20 px-4 pl-16 backdrop-blur-md lg:px-10 lg:pl-10">
       <div className="flex min-w-0 items-center gap-4">
         <div className="hidden min-w-0 sm:block">
           <p className="truncate text-sm font-medium">AYV workspace</p>
         </div>
-        <div className="hidden lg:block">
-          <ProductSwitcher activeProductId={productId} layout="rail" />
-        </div>
-        <div className="lg:hidden">
-          <ProductSwitcher activeProductId={productId} />
-        </div>
+        <ProductSwitcher activeProductId={productId} />
       </div>
       <div className="flex items-center gap-2">
         <Link
