@@ -88,6 +88,23 @@ export function welcomeEmail(opts: { name: string }) {
   `;
 }
 
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+export function nexroOutreachEmail(opts: { organizationName: string; message: string }) {
+  return `
+    <div style="font-family:sans-serif;background:#0a0a0a;color:#ededed;padding:32px">
+      <p style="margin:0 0 8px;letter-spacing:0.14em;text-transform:uppercase;font-size:12px;color:#9a9a9a">${escapeHtml(opts.organizationName)}</p>
+      <p style="margin:0;font-size:16px;line-height:1.6">${escapeHtml(opts.message)}</p>
+    </div>
+  `;
+}
+
 async function logEmailEvent(input: SendEmailInput & {
   status: "queued" | "sent" | "failed";
   providerId?: string | null;

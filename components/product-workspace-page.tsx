@@ -15,6 +15,7 @@ import { listReviews } from "@/products/ravelo/actions";
 import { VeltoBookingsWorkspace } from "@/products/velto/bookings-workspace";
 import { listBookings } from "@/products/velto/actions";
 import { listRecordLinks } from "@/services/record-links";
+import { requireWorkspace } from "@/lib/auth/session";
 import { getTranslations } from "next-intl/server";
 
 function firstParam(value: string | string[] | undefined) {
@@ -29,6 +30,7 @@ export async function ProductWorkspacePage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const product = getProduct(productId)!;
+  const { organization } = await requireWorkspace();
   const t = await getTranslations();
   const params = await searchParams;
   const [leads, bookings, quotes, invoices, reactivations, reviews, links] = await Promise.all([
@@ -75,7 +77,7 @@ export async function ProductWorkspacePage({
       ) : productId === "orvyn" ? (
         <OrvynInvoicesWorkspace {...shared} focusInvoiceId={firstParam(params.invoice)} />
       ) : productId === "nexro" ? (
-        <NexroReactivationsWorkspace {...shared} focusReactivationId={firstParam(params.reactivation)} />
+        <NexroReactivationsWorkspace {...shared} organizationName={organization.name} focusReactivationId={firstParam(params.reactivation)} />
       ) : (
         <RaveloReviewsWorkspace {...shared} focusReviewId={firstParam(params.review)} />
       )}
