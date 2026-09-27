@@ -1,4 +1,13 @@
-import type { Booking, Invoice, Lead, Quote, RecordLink, RecordProduct } from "@/types/database";
+import type {
+  Booking,
+  Invoice,
+  Lead,
+  Quote,
+  Reactivation,
+  RecordLink,
+  RecordProduct,
+  Review,
+} from "@/types/database";
 
 export type ConversionMetric = {
   numerator: number;
@@ -32,9 +41,13 @@ export type ClientHealth = {
   bookingCount: number;
   quoteCount: number;
   invoiceCount: number;
+  reactivationCount: number;
+  reviewCount: number;
   bookings: Booking[];
   quotes: Quote[];
   invoices: Invoice[];
+  reactivations: Reactivation[];
+  reviews: Review[];
 };
 
 export type DashboardMetrics = {
@@ -44,6 +57,8 @@ export type DashboardMetrics = {
     quotes: number;
     wonQuotes: number;
     invoices: number;
+    reactivations: number;
+    reviews: number;
   };
   funnel: {
     leads: number;
@@ -127,6 +142,8 @@ function classifyClient(
   lead: Lead,
   bookings: Booking[],
   quotes: Quote[],
+  reactivations: Reactivation[],
+  reviews: Review[],
   today: string,
 ): Pick<ClientHealth, "status" | "reason"> {
   const overdueDays = [
@@ -137,6 +154,12 @@ function classifyClient(
     ...quotes
       .filter((quote) => quote.status === "sent" || quote.status === "followed_up")
       .map((quote) => quote.follow_up_on),
+    ...reactivations
+      .filter((item) => item.status === "scheduled" || item.status === "sent")
+      .map((item) => item.next_touch_on),
+    ...reviews
+      .filter((item) => item.status === "scheduled" || item.status === "requested" || item.status === "private")
+      .map((item) => item.next_follow_up_on),
   ]
     .filter((date): date is string => Boolean(date))
     .map((date) => daysBetween(date, today))
@@ -174,6 +197,8 @@ export function calculateDashboardMetrics(
   bookings: Booking[],
   quotes: Quote[],
   invoices: Invoice[],
+  reactivations: Reactivation[],
+  reviews: Review[],
   links: RecordLink[],
   today: string,
 ): DashboardMetrics {
@@ -295,6 +320,44 @@ export function calculateDashboardMetrics(
       }
     }
   }
+  for (const reactivation of reactivations) {
+    if (
+      reactivation.next_touch_on &&
+      (reactivation.status === "scheduled" || reactivation.status === "sent")
+    ) {
+      const days = daysBetween(reactivation.next_touch_on, today);
+      if (days <= 7) {
+        attention.push({
+          id: `nexro:${reactivation.id}`,
+          product: "nexro",
+          recordId: reactivation.id,
+          name: reactivation.customer_name,
+          date: reactivation.next_touch_on,
+          timing: days < 0 ? "overdue" : days === 0 ? "today" : "upcoming",
+          days,
+        });
+      }
+    }
+  }
+  for (const review of reviews) {
+    if (
+      review.next_follow_up_on &&
+      (review.status === "scheduled" || review.status === "requested" || review.status === "private")
+    ) {
+      const days = daysBetween(review.next_follow_up_on, today);
+      if (days <= 7) {
+        attention.push({
+          id: `ravelo:${review.id}`,
+          product: "ravelo",
+          recordId: review.id,
+          name: review.customer_name,
+          date: review.next_follow_up_on,
+          timing: days < 0 ? "overdue" : days === 0 ? "today" : "upcoming",
+          days,
+        });
+      }
+    }
+  }
   attention.sort((a, b) => a.days - b.days || a.name.localeCompare(b.name));
 
   const clientOrder = { at_risk: 0, needs_attention: 1, on_track: 2 };
@@ -310,15 +373,25 @@ export function calculateDashboardMetrics(
       const connectedInvoices = invoices.filter((invoice) =>
         component.has(nodeKey("orvyn", invoice.id)),
       );
+      const connectedReactivations = reactivations.filter((item) =>
+        component.has(nodeKey("nexro", item.id)),
+      );
+      const connectedReviews = reviews.filter((item) =>
+        component.has(nodeKey("ravelo", item.id)),
+      );
       return {
         lead,
-        ...classifyClient(lead, connectedBookings, connectedQuotes, today),
+        ...classifyClient(lead, connectedBookings, connectedQuotes, connectedReactivations, connectedReviews, today),
         bookingCount: connectedBookings.length,
         quoteCount: connectedQuotes.length,
         invoiceCount: connectedInvoices.length,
+        reactivationCount: connectedReactivations.length,
+        reviewCount: connectedReviews.length,
         bookings: connectedBookings,
         quotes: connectedQuotes,
         invoices: connectedInvoices,
+        reactivations: connectedReactivations,
+        reviews: connectedReviews,
       };
     })
     .sort(
@@ -339,6 +412,8 @@ export function calculateDashboardMetrics(
       quotes: quotes.length,
       wonQuotes: wonQuotes.length,
       invoices: invoices.length,
+      reactivations: reactivations.length,
+      reviews: reviews.length,
     },
     funnel: {
       leads: leads.length,

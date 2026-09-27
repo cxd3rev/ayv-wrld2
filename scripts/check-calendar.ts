@@ -25,6 +25,9 @@ assert.equal(september[0], "2026-08-31");
 assert.equal(september[6], "2026-09-06");
 assert.equal(september[41], "2026-10-11");
 
-assert.deepEqual(buildCalendarEvents({ leads: [], bookings: [], quotes: [], invoices: [] }), []);
+assert.deepEqual(
+  buildCalendarEvents({ leads: [], bookings: [], quotes: [], invoices: [], reactivations: [], reviews: [] }),
+  [],
+);
 
 console.log("Calendar helper checks passed.");

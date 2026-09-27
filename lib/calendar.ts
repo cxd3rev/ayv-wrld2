@@ -1,5 +1,5 @@
 import type { ProductId } from "@/config/products";
-import type { Booking, Invoice, Lead, Quote } from "@/types/database";
+import type { Booking, Invoice, Lead, Quote, Reactivation, Review } from "@/types/database";
 
 export type CalendarEventType =
   | "lead_follow_up"
@@ -7,7 +7,10 @@ export type CalendarEventType =
   | "booking_reminder"
   | "quote_follow_up"
   | "invoice_due"
-  | "invoice_reminder";
+  | "invoice_reminder"
+  | "reactivation_touch"
+  | "review_request"
+  | "review_follow_up";
 
 export type CalendarEvent = {
   id: string;
@@ -25,7 +28,7 @@ export type CalendarEvent = {
 export type CalendarProductDefinition = {
   slug: ProductId;
   name: string;
-  tone: "stone" | "violet" | "green" | "red";
+  tone: "stone" | "violet" | "green" | "red" | "navy" | "sky";
 };
 
 export type CalendarSourceMap = {
@@ -33,6 +36,8 @@ export type CalendarSourceMap = {
   bookings: Booking[];
   quotes: Quote[];
   invoices: Invoice[];
+  reactivations: Reactivation[];
+  reviews: Review[];
 };
 
 export type CalendarEventAdapter = {
@@ -170,6 +175,65 @@ const orvynAdapter = defineCalendarAdapter({
   },
 });
 
+const nexroAdapter = defineCalendarAdapter({
+  source: "reactivations",
+  product: { slug: "nexro", name: "Nexro", tone: "navy" },
+  map: (reactivation) => {
+    if (!reactivation.next_touch_on) return [];
+    if (reactivation.status !== "scheduled" && reactivation.status !== "sent") return [];
+    return [{
+      id: `nexro:${reactivation.id}:touch`,
+      product: "nexro",
+      type: "reactivation_touch",
+      recordId: reactivation.id,
+      focusParam: "reactivation",
+      title: reactivation.customer_name,
+      detail: reactivation.message,
+      date: reactivation.next_touch_on,
+      time: null,
+      allDay: true,
+    }];
+  },
+});
+
+const raveloAdapter = defineCalendarAdapter({
+  source: "reviews",
+  product: { slug: "ravelo", name: "Ravelo", tone: "sky" },
+  map: (review) => {
+    const open = review.status === "scheduled" || review.status === "requested";
+    const events: CalendarEvent[] = [];
+    if (open) {
+      events.push({
+        id: `ravelo:${review.id}:request`,
+        product: "ravelo",
+        type: "review_request",
+        recordId: review.id,
+        focusParam: "review",
+        title: review.customer_name,
+        detail: review.channel,
+        date: review.requested_on,
+        time: null,
+        allDay: true,
+      });
+    }
+    if (review.next_follow_up_on && (open || review.status === "private")) {
+      events.push({
+        id: `ravelo:${review.id}:follow-up`,
+        product: "ravelo",
+        type: "review_follow_up",
+        recordId: review.id,
+        focusParam: "review",
+        title: review.customer_name,
+        detail: review.feedback,
+        date: review.next_follow_up_on,
+        time: null,
+        allDay: true,
+      });
+    }
+    return events;
+  },
+});
+
 /**
  * Register one adapter per product. The interactive calendar only consumes
  * normalized CalendarEvent values and does not know product record shapes.
@@ -179,6 +243,8 @@ export const calendarEventAdapters = [
   veltoAdapter,
   rovynAdapter,
   orvynAdapter,
+  nexroAdapter,
+  raveloAdapter,
 ] as const;
 
 export const calendarProducts = calendarEventAdapters.map((adapter) => adapter.product);

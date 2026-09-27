@@ -2,7 +2,7 @@ import { getProduct, type ProductId } from "@/config/products";
 import { isUsableSecret } from "@/lib/billing-status";
 
 /** Products that can be purchased as their own Stripe subscription. */
-export const BILLABLE_PRODUCTS = ["avyro", "velto", "rovyn", "orvyn"] as const;
+export const BILLABLE_PRODUCTS = ["avyro", "velto", "rovyn", "orvyn", "nexro", "ravelo"] as const;
 export type BillableProductId = (typeof BILLABLE_PRODUCTS)[number];
 
 const PRICE_ENV: Record<BillableProductId, string> = {
@@ -10,6 +10,8 @@ const PRICE_ENV: Record<BillableProductId, string> = {
   velto: "STRIPE_VELTO_PRICE_ID",
   rovyn: "STRIPE_ROVYN_PRICE_ID",
   orvyn: "STRIPE_ORVYN_PRICE_ID",
+  nexro: "STRIPE_NEXRO_PRICE_ID",
+  ravelo: "STRIPE_RAVELO_PRICE_ID",
 };
 
 const LEGACY_PRICE_IDS: Record<BillableProductId, readonly string[]> = {
@@ -29,6 +31,8 @@ const LEGACY_PRICE_IDS: Record<BillableProductId, readonly string[]> = {
     "price_1UGnkrV05bHNwI4W2UBrFrKc",
     "price_1UGoAcV05bHNwI4W7qgb9GzE",
   ],
+  nexro: ["price_1UKMOWV05bHNwI4WpBB2w9mc"],
+  ravelo: ["price_1UKMOXV05bHNwI4Wwwxs33wT"],
 };
 
 export function isBillableProductId(value: string): value is BillableProductId {

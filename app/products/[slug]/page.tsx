@@ -30,7 +30,9 @@ export default async function ProductPage({
     | "catalog.avyro.connectedValue"
     | "catalog.velto.connectedValue"
     | "catalog.rovyn.connectedValue"
-    | "catalog.orvyn.connectedValue";
+    | "catalog.orvyn.connectedValue"
+    | "catalog.nexro.connectedValue"
+    | "catalog.ravelo.connectedValue";
   const others = products.filter((p) => p.id !== product.id).slice(0, 3);
   const highlights = [
     t(`catalog.${product.id}.highlight1`),

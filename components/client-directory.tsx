@@ -49,6 +49,8 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
   const tVelto = useTranslations("velto");
   const tRovyn = useTranslations("rovyn");
   const tOrvyn = useTranslations("orvyn");
+  const tNexro = useTranslations("nexro");
+  const tRavelo = useTranslations("ravelo");
   const locale = useLocale();
   const [query, setQuery] = useState("");
   const [health, setHealth] = useState<HealthFilter>("all");
@@ -204,6 +206,20 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
                   date: invoice.next_reminder_on!,
                   label: t("nextInvoiceReminder"),
                 })),
+              ...client.reactivations
+                .filter((item) => item.status === "scheduled" || item.status === "sent")
+                .filter((item) => Boolean(item.next_touch_on))
+                .map((item) => ({
+                  date: item.next_touch_on!,
+                  label: t("nextReactivation"),
+                })),
+              ...client.reviews
+                .filter((item) => item.status === "scheduled" || item.status === "requested" || item.status === "private")
+                .filter((item) => Boolean(item.next_follow_up_on))
+                .map((item) => ({
+                  date: item.next_follow_up_on!,
+                  label: t("nextReview"),
+                })),
             ]
               .filter((item): item is { date: string; label: string } => Boolean(item))
               .sort((a, b) => a.date.localeCompare(b.date))[0];
@@ -212,12 +228,20 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
               ...client.bookings.map((booking) => booking.updated_at),
               ...client.quotes.map((quote) => quote.updated_at),
               ...client.invoices.map((invoice) => invoice.updated_at),
+              ...client.reactivations.map((item) => item.updated_at),
+              ...client.reviews.map((item) => item.updated_at),
             ].sort((a, b) => b.localeCompare(a))[0];
-            const stage = client.quotes.length
-              ? t("stageQuote")
-              : client.bookings.length
-                ? t("stageBooking")
-                : t("stageLead");
+            const stage = client.reviews.length
+              ? t("stageReview")
+              : client.reactivations.length
+                ? t("stageReactivation")
+                : client.invoices.length
+                  ? t("stageInvoice")
+                  : client.quotes.length
+                    ? t("stageQuote")
+                    : client.bookings.length
+                      ? t("stageBooking")
+                      : t("stageLead");
 
             return (
               <details key={client.lead.id} className="group">
@@ -250,6 +274,8 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
                         bookings: client.bookingCount,
                         quotes: client.quoteCount,
                         invoices: client.invoiceCount,
+                        reactivations: client.reactivationCount,
+                        reviews: client.reviewCount,
                       })}
                     </span>
                     <ChevronDown
@@ -259,7 +285,7 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
                   </div>
                 </summary>
 
-                <div className="grid gap-6 bg-card px-4 py-5 sm:px-6 lg:grid-cols-4">
+                <div className="grid gap-6 bg-card px-4 py-5 sm:px-6 lg:grid-cols-3">
                   <div>
                     <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">
                       {t("clientDetails")}
@@ -367,6 +393,42 @@ export function ClientDirectory({ clients }: { clients: ClientHealth[] }) {
                           </p>
                         </div>
                       )) : <p className="text-sm text-muted">{t("noInvoices")}</p>}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">
+                      Nexro · {t("reactivations")}
+                    </p>
+                    <div className="mt-3 space-y-3">
+                      {client.reactivations.length ? client.reactivations.map((item) => (
+                        <div key={item.id}>
+                          <DashboardRecordButton product="nexro" recordId={item.id}>
+                            {item.customer_name}
+                          </DashboardRecordButton>
+                          <p className="mt-1 text-xs text-muted">
+                            {tNexro(item.kind === "referral" ? "kindReferral" : "kindWinback")}
+                            {" · "}
+                            {tNexro(item.status === "scheduled" ? "statusScheduled" : item.status === "sent" ? "statusSent" : item.status === "replied" ? "statusReplied" : item.status === "won" ? "statusWon" : "statusPassed")}
+                          </p>
+                        </div>
+                      )) : <p className="text-sm text-muted">{t("noReactivations")}</p>}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">
+                      Ravelo · {t("reviews")}
+                    </p>
+                    <div className="mt-3 space-y-3">
+                      {client.reviews.length ? client.reviews.map((item) => (
+                        <div key={item.id}>
+                          <DashboardRecordButton product="ravelo" recordId={item.id}>
+                            {item.customer_name}
+                          </DashboardRecordButton>
+                          <p className="mt-1 text-xs text-muted">
+                            {tRavelo(item.status === "scheduled" ? "statusScheduled" : item.status === "requested" ? "statusRequested" : item.status === "public" ? "statusPublic" : item.status === "private" ? "statusPrivate" : "statusResponded")}
+                          </p>
+                        </div>
+                      )) : <p className="text-sm text-muted">{t("noReviews")}</p>}
                     </div>
                   </div>
                 </div>

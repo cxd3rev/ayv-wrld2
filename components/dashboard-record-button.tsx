@@ -9,6 +9,8 @@ const focusParams: Record<RecordProduct, string> = {
   velto: "booking",
   rovyn: "quote",
   orvyn: "invoice",
+  nexro: "reactivation",
+  ravelo: "review",
 };
 
 export function DashboardRecordButton({

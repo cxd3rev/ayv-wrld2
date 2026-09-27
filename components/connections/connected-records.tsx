@@ -19,12 +19,12 @@ import {
 } from "@/services/record-links";
 import { openLinkedWorkspace } from "@/services/product-switch";
 import { cn } from "@/lib/utils";
-import type { Booking, Invoice, Lead, Quote, RecordLink } from "@/types/database";
+import type { Booking, Invoice, Lead, Quote, Reactivation, RecordLink, Review } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
-const journeyProducts: RecordProduct[] = ["avyro", "velto", "rovyn", "orvyn"];
+const journeyProducts: RecordProduct[] = ["avyro", "velto", "rovyn", "orvyn", "nexro", "ravelo"];
 
 function formatDay(value: string | null, locale: string) {
   if (!value) return "";
@@ -43,8 +43,17 @@ function recordLabel(
   bookings: Booking[],
   quotes: Quote[],
   invoices: Invoice[],
+  reactivations: Reactivation[],
+  reviews: Review[],
   locale: string,
-  fallbacks: { lead: string; booking: string; quote: string; invoice: string },
+  fallbacks: {
+    lead: string;
+    booking: string;
+    quote: string;
+    invoice: string;
+    reactivation: string;
+    review: string;
+  },
 ) {
   if (product === "avyro") {
     const lead = leads.find((item) => item.id === id);
@@ -60,8 +69,14 @@ function recordLabel(
     const quote = quotes.find((item) => item.id === id);
     return quote?.title ?? fallbacks.quote;
   }
-  const invoice = invoices.find((item) => item.id === id);
-  return invoice ? `${invoice.invoice_number} · ${invoice.customer_name}` : fallbacks.invoice;
+  if (product === "orvyn") {
+    const invoice = invoices.find((item) => item.id === id);
+    return invoice ? `${invoice.invoice_number} · ${invoice.customer_name}` : fallbacks.invoice;
+  }
+  if (product === "nexro") {
+    return reactivations.find((item) => item.id === id)?.customer_name ?? fallbacks.reactivation;
+  }
+  return reviews.find((item) => item.id === id)?.customer_name ?? fallbacks.review;
 }
 
 function recordHint(
@@ -71,6 +86,8 @@ function recordHint(
   bookings: Booking[],
   quotes: Quote[],
   invoices: Invoice[],
+  reactivations: Reactivation[],
+  reviews: Review[],
 ) {
   if (product === "avyro") {
     return leads.find((item) => item.id === id)?.email ?? "";
@@ -79,7 +96,9 @@ function recordHint(
     return bookings.find((item) => item.id === id)?.customer_name ?? "";
   }
   if (product === "rovyn") return quotes.find((item) => item.id === id)?.customer_name ?? "";
-  return invoices.find((item) => item.id === id)?.description ?? "";
+  if (product === "orvyn") return invoices.find((item) => item.id === id)?.description ?? "";
+  if (product === "nexro") return reactivations.find((item) => item.id === id)?.message ?? "";
+  return reviews.find((item) => item.id === id)?.feedback ?? "";
 }
 
 export function IncomingLinkFields({
@@ -106,6 +125,8 @@ export function ConnectedRecords({
   bookings,
   quotes,
   invoices = [],
+  reactivations = [],
+  reviews = [],
 }: {
   product: RecordProduct;
   recordId: string;
@@ -114,6 +135,8 @@ export function ConnectedRecords({
   bookings: Booking[];
   quotes: Quote[];
   invoices?: Invoice[];
+  reactivations?: Reactivation[];
+  reviews?: Review[];
 }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -170,7 +193,13 @@ export function ConnectedRecords({
         ? bookings.find((booking) => booking.id === recordId)?.status === "completed"
         : product === "rovyn"
           ? quotes.find((quote) => quote.id === recordId)?.status === "won"
-          : false;
+          : product === "orvyn"
+            ? invoices.find((invoice) => invoice.id === recordId)?.status === "paid"
+            : product === "nexro"
+              ? ["won", "replied"].includes(
+                  reactivations.find((item) => item.id === recordId)?.status ?? "",
+                )
+              : false;
 
   const attachOptions = useMemo(() => {
     const entity = getRecordEntity(attachProduct);
@@ -196,10 +225,20 @@ export function ConnectedRecords({
         .filter((quote) => !linkedKeys.has(`rovyn:${quote.id}`))
         .map((quote) => ({ id: quote.id, label: `${quote.customer_name} · ${quote.title}` }));
     }
-    return invoices
-      .filter((invoice) => !linkedKeys.has(`orvyn:${invoice.id}`))
-      .map((invoice) => ({ id: invoice.id, label: `${invoice.invoice_number} · ${invoice.customer_name}` }));
-  }, [attachProduct, bookings, invoices, leads, linkedKeys, quotes]);
+    if (entity.product === "orvyn") {
+      return invoices
+        .filter((invoice) => !linkedKeys.has(`orvyn:${invoice.id}`))
+        .map((invoice) => ({ id: invoice.id, label: `${invoice.invoice_number} · ${invoice.customer_name}` }));
+    }
+    if (entity.product === "nexro") {
+      return reactivations
+        .filter((item) => !linkedKeys.has(`nexro:${item.id}`))
+        .map((item) => ({ id: item.id, label: `${item.customer_name} · ${item.message}` }));
+    }
+    return reviews
+      .filter((item) => !linkedKeys.has(`ravelo:${item.id}`))
+      .map((item) => ({ id: item.id, label: item.customer_name }));
+  }, [attachProduct, bookings, invoices, leads, linkedKeys, quotes, reactivations, reviews]);
 
   const canAttach = targets.some((target) => {
     if (target.product === "avyro") return leads.some((lead) => !linkedKeys.has(`avyro:${lead.id}`));
@@ -209,7 +248,13 @@ export function ConnectedRecords({
     if (target.product === "rovyn") {
       return quotes.some((quote) => !linkedKeys.has(`rovyn:${quote.id}`));
     }
-    return invoices.some((invoice) => !linkedKeys.has(`orvyn:${invoice.id}`));
+    if (target.product === "orvyn") {
+      return invoices.some((invoice) => !linkedKeys.has(`orvyn:${invoice.id}`));
+    }
+    if (target.product === "nexro") {
+      return reactivations.some((item) => !linkedKeys.has(`nexro:${item.id}`));
+    }
+    return reviews.some((item) => !linkedKeys.has(`ravelo:${item.id}`));
   });
 
   const createLabel = {
@@ -217,18 +262,24 @@ export function ConnectedRecords({
     velto: t("bookInVelto"),
     rovyn: t("quoteInRovyn"),
     orvyn: t("invoiceInOrvyn"),
+    nexro: t("reachOutInNexro"),
+    ravelo: t("askInRavelo"),
   } as const;
   const nounLabel = {
     avyro: t("nounLead"),
     velto: t("nounBooking"),
     rovyn: t("nounQuote"),
     orvyn: t("nounInvoice"),
+    nexro: t("nounReactivation"),
+    ravelo: t("nounReview"),
   } as const;
   const fallbacks = {
     lead: t("fallbackLead"),
     booking: t("fallbackBooking"),
     quote: t("fallbackQuote"),
     invoice: t("fallbackInvoice"),
+    reactivation: t("fallbackReactivation"),
+    review: t("fallbackReview"),
   };
 
   return (
@@ -281,12 +332,12 @@ export function ConnectedRecords({
                   openLinkedWorkspace(side.product, { [entity.focusParam]: side.id })
                 }
               >
-                {recordLabel(side.product, side.id, leads, bookings, quotes, invoices, locale, fallbacks)}
+                {recordLabel(side.product, side.id, leads, bookings, quotes, invoices, reactivations, reviews, locale, fallbacks)}
               </button>
               <p className="text-xs text-muted">
                 {name}
-                {recordHint(side.product, side.id, leads, bookings, quotes, invoices)
-                  ? ` · ${recordHint(side.product, side.id, leads, bookings, quotes, invoices)}`
+                {recordHint(side.product, side.id, leads, bookings, quotes, invoices, reactivations, reviews)
+                  ? ` · ${recordHint(side.product, side.id, leads, bookings, quotes, invoices, reactivations, reviews)}`
                   : ""}
               </p>
               <div className="flex flex-wrap gap-2">

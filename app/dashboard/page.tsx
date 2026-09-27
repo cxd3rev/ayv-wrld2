@@ -8,7 +8,9 @@ import {
   calculateDashboardMetrics,
   type ConversionMetric,
 } from "@/lib/dashboard-metrics";
+import { getProduct } from "@/config/products";
 import { getDashboardRecords } from "@/services/dashboard";
+import type { RecordProduct } from "@/types/database";
 import { openProductWorkspace } from "@/services/product-switch";
 import { ArrowRight, CalendarClock, CircleDollarSign, Link2 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -29,11 +31,20 @@ export default async function DashboardPage() {
     records.bookings,
     records.quotes,
     records.invoices,
+    records.reactivations,
+    records.reviews,
     records.links,
     today,
   );
   const firstName = profile?.full_name?.split(" ")[0];
-  const hasRecords = metrics.raw.leads + metrics.raw.bookings + metrics.raw.quotes + metrics.raw.invoices > 0;
+  const hasRecords =
+    metrics.raw.leads +
+      metrics.raw.bookings +
+      metrics.raw.quotes +
+      metrics.raw.invoices +
+      metrics.raw.reactivations +
+      metrics.raw.reviews >
+    0;
   const number = new Intl.NumberFormat(locale);
   const date = new Intl.DateTimeFormat(locale, { month: "short", day: "numeric" });
   const funnelMax = Math.max(...Object.values(metrics.funnel), 1);
@@ -42,12 +53,16 @@ export default async function DashboardPage() {
     { product: "velto", count: metrics.raw.bookings, label: t("command.bookings") },
     { product: "rovyn", count: metrics.raw.quotes, label: t("command.quotes") },
     { product: "orvyn", count: metrics.raw.invoices, label: t("command.invoices") },
+    { product: "nexro", count: metrics.raw.reactivations, label: t("command.reactivations") },
+    { product: "ravelo", count: metrics.raw.reviews, label: t("command.reviews") },
   ] as const;
-  const attentionLabels = {
+  const attentionLabels: Record<RecordProduct, string> = {
     avyro: t("command.attentionavyro"),
     velto: t("command.attentionvelto"),
     rovyn: t("command.attentionrovyn"),
     orvyn: t("command.attentionorvyn"),
+    nexro: t("command.attentionnexro"),
+    ravelo: t("command.attentionravelo"),
   };
 
   return (
@@ -251,7 +266,7 @@ export default async function DashboardPage() {
             {t("command.productActivity")}
           </p>
         </div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-4">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {productActivity.map((item) => (
             <form
               key={item.product}
@@ -265,7 +280,7 @@ export default async function DashboardPage() {
               >
                 <div>
                   <p className="font-mono text-xs tracking-[0.14em] text-muted uppercase">
-                    {item.product === "avyro" ? "Avyro" : item.product === "velto" ? "Velto" : item.product === "rovyn" ? "Rovyn" : "Orvyn"}
+                    {getProduct(item.product)?.name}
                   </p>
                   <p className="display mt-2 text-3xl">{number.format(item.count)}</p>
                   <p className="text-sm text-muted">{item.label}</p>

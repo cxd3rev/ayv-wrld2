@@ -4,10 +4,14 @@ import { getProduct } from "@/config/products";
 import { resolveRecordPrefill, type RecordProduct } from "@/lib/record-entities";
 import { AvyroLeadsWorkspace } from "@/products/avyro/leads-workspace";
 import { listLeads } from "@/products/avyro/actions";
+import { NexroReactivationsWorkspace } from "@/products/nexro/reactivations-workspace";
+import { listReactivations } from "@/products/nexro/actions";
 import { RovynQuotesWorkspace } from "@/products/rovyn/quotes-workspace";
 import { listQuotes } from "@/products/rovyn/actions";
 import { OrvynInvoicesWorkspace } from "@/products/orvyn/invoices-workspace";
 import { listInvoices } from "@/products/orvyn/actions";
+import { RaveloReviewsWorkspace } from "@/products/ravelo/reviews-workspace";
+import { listReviews } from "@/products/ravelo/actions";
 import { VeltoBookingsWorkspace } from "@/products/velto/bookings-workspace";
 import { listBookings } from "@/products/velto/actions";
 import { listRecordLinks } from "@/services/record-links";
@@ -27,11 +31,13 @@ export async function ProductWorkspacePage({
   const product = getProduct(productId)!;
   const t = await getTranslations();
   const params = await searchParams;
-  const [leads, bookings, quotes, invoices, links] = await Promise.all([
+  const [leads, bookings, quotes, invoices, reactivations, reviews, links] = await Promise.all([
     listLeads(),
     listBookings(),
     listQuotes(),
     listInvoices(),
+    listReactivations(),
+    listReviews(),
     listRecordLinks(),
   ]);
   const prefill = resolveRecordPrefill(
@@ -39,11 +45,16 @@ export async function ProductWorkspacePage({
     firstParam(params.fromBooking),
     firstParam(params.fromQuote),
     firstParam(params.fromInvoice),
+    firstParam(params.fromReactivation),
+    firstParam(params.fromReview),
     leads,
     bookings,
     quotes,
     invoices,
+    reactivations,
+    reviews,
   );
+  const shared = { leads, bookings, quotes, invoices, reactivations, reviews, links, prefill };
 
   return (
     <div style={{ "--product-accent": product.accent } as React.CSSProperties}>
@@ -56,45 +67,17 @@ export async function ProductWorkspacePage({
       </div>
 
       {productId === "avyro" ? (
-        <AvyroLeadsWorkspace
-          leads={leads}
-          bookings={bookings}
-          quotes={quotes}
-          invoices={invoices}
-          links={links}
-          prefill={prefill}
-          focusLeadId={firstParam(params.lead)}
-        />
+        <AvyroLeadsWorkspace {...shared} focusLeadId={firstParam(params.lead)} />
       ) : productId === "velto" ? (
-        <VeltoBookingsWorkspace
-          bookings={bookings}
-          leads={leads}
-          quotes={quotes}
-          invoices={invoices}
-          links={links}
-          prefill={prefill}
-          focusBookingId={firstParam(params.booking)}
-        />
+        <VeltoBookingsWorkspace {...shared} focusBookingId={firstParam(params.booking)} />
       ) : productId === "rovyn" ? (
-        <RovynQuotesWorkspace
-          quotes={quotes}
-          leads={leads}
-          bookings={bookings}
-          invoices={invoices}
-          links={links}
-          prefill={prefill}
-          focusQuoteId={firstParam(params.quote)}
-        />
+        <RovynQuotesWorkspace {...shared} focusQuoteId={firstParam(params.quote)} />
+      ) : productId === "orvyn" ? (
+        <OrvynInvoicesWorkspace {...shared} focusInvoiceId={firstParam(params.invoice)} />
+      ) : productId === "nexro" ? (
+        <NexroReactivationsWorkspace {...shared} focusReactivationId={firstParam(params.reactivation)} />
       ) : (
-        <OrvynInvoicesWorkspace
-          invoices={invoices}
-          leads={leads}
-          bookings={bookings}
-          quotes={quotes}
-          links={links}
-          prefill={prefill}
-          focusInvoiceId={firstParam(params.invoice)}
-        />
+        <RaveloReviewsWorkspace {...shared} focusReviewId={firstParam(params.review)} />
       )}
     </div>
   );

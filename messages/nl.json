@@ -188,7 +188,8 @@
       "highlight2": "Automatische referralverzoeken",
       "highlight3": "Bijhouden van de referralbonus",
       "nav": "Referrals",
-      "dashboardDescription": "Klantheractivering en referrals komen binnenkort."
+      "dashboardDescription": "Haal eerdere klanten terug en vraag tevreden klanten om een referral.",
+      "connectedValue": "Als een Orvyn-factuur betaald is, houdt Nexro die klant en start een terugwinactie of referralverzoek zonder de gegevens opnieuw te typen."
     },
     "ravelo": {
       "tagline": "Review-automatisering",
@@ -198,7 +199,8 @@
       "highlight2": "Openbare review of privéfeedback",
       "highlight3": "Links naar meer dan één reviewplatform",
       "nav": "Reviews",
-      "dashboardDescription": "Review-automatisering komt binnenkort."
+      "dashboardDescription": "Vraag na de klus om een review en houd ontevreden feedback eerst privé.",
+      "connectedValue": "Als het werk klaar is, vraagt Ravelo dezelfde klant om een review, stuurt tevreden klanten naar een openbaar platform en houdt negatieve feedback privé."
     }
   },
   "auth": {
@@ -312,6 +314,8 @@
       "bookings": "Boekingen",
       "quotes": "Offertes",
       "invoices": "Facturen",
+      "reactivations": "Terugwinacties",
+      "reviews": "Reviews",
       "linkedBookings": "Boekingen gekoppeld aan een lead",
       "linkedQuotes": "Offertes gekoppeld via een boeking",
       "wonCustomers": "Gewonnen offertes in de klantreis",
@@ -332,6 +336,8 @@
       "attentionvelto": "Boekingsherinnering",
       "attentionrovyn": "Offerteopvolging",
       "attentionorvyn": "Factuurherinnering",
+      "attentionnexro": "Terugwincontact",
+      "attentionravelo": "Reviewopvolging",
       "daysOverdue": "{count, plural, one {# dag te laat} other {# dagen te laat}}",
       "today": "Vandaag",
       "inDays": "Over {count, plural, one {# dag} other {# dagen}}",
@@ -342,7 +348,7 @@
       "directoryHelp": "Zoek en bekijk contactgegevens, status, volgende actie en gekoppelde dossiers van elke klant op één plek.",
       "howCalculated": "Hoe wordt dit berekend?",
       "healthRules": "Alleen vaste regels: verloren leads, no-shows, verloren offertes zonder winst of 7+ dagen achterstand zijn risicovol. Andere achterstallige of niet-gekoppelde leads vragen aandacht. Gewonnen of actief voortgaande klantreizen liggen op koers.",
-      "connectedCounts": "{bookings} boekingen · {quotes} offertes · {invoices} facturen",
+      "connectedCounts": "{bookings} boekingen · {quotes} offertes · {invoices} facturen · {reactivations} terugwinacties · {reviews} reviews",
       "health_on_track": "Op koers",
       "health_needs_attention": "Aandacht nodig",
       "health_at_risk": "Risicovol",
@@ -366,12 +372,17 @@
       "stageLead": "Lead",
       "stageBooking": "Boeking",
       "stageQuote": "Offerte",
+      "stageInvoice": "Factuur",
+      "stageReactivation": "Terugwinactie",
+      "stageReview": "Review",
       "noContact": "Geen contactgegevens",
       "nextLeadFollowUp": "Lead opvolgen",
       "nextBookingReminder": "Boekingsherinnering",
       "nextBooking": "Aankomende boeking",
       "nextQuoteFollowUp": "Offerte opvolgen",
       "nextInvoiceReminder": "Factuurherinnering",
+      "nextReactivation": "Terugwincontact",
+      "nextReview": "Reviewopvolging",
       "noNextAction": "Geen volgende actie",
       "clientDetails": "Klantgegevens",
       "lastActivity": "Laatste activiteit {date}",
@@ -380,6 +391,8 @@
       "noBookings": "Geen gekoppelde boekingen",
       "noQuotes": "Geen gekoppelde offertes",
       "noInvoices": "Geen gekoppelde facturen",
+      "noReactivations": "Geen gekoppelde terugwinacties",
+      "noReviews": "Geen gekoppelde reviews",
       "noResultsTitle": "Geen overeenkomende klanten",
       "noResultsBody": "Probeer een andere zoekterm of statusfilter.",
       "productActivity": "Productactiviteit"
@@ -388,7 +401,7 @@
   "calendar": {
     "kicker": "Gedeelde planning",
     "title": "Agenda",
-    "subtitle": "Alle opvolgingen van leads en offertes, afspraken en herinneringen op één plek.",
+    "subtitle": "Leadopvolging, afspraken, offertes, facturen, terugwinacties en reviewverzoeken op één plek.",
     "eventCount": "{count, plural, one {gebeurtenis} other {gebeurtenissen}}",
     "filterProducts": "Producten",
     "filterTypes": "Soorten gebeurtenissen",
@@ -413,12 +426,15 @@
       "booking_reminder": "Boekingsherinnering",
       "quote_follow_up": "Offerteopvolging"
       ,"invoice_due": "Factuur vervalt"
-      ,"invoice_reminder": "Factuurherinnering"
+      ,"invoice_reminder": "Factuurherinnering",
+      "reactivation_touch": "Terugwincontact",
+      "review_request": "Reviewverzoek",
+      "review_follow_up": "Reviewopvolging"
     }
   },
   "billing": {
     "title": "Facturatie",
-    "description": "Elk product is een eigen maandabonnement. Neem Avyro, Velto, Rovyn, Orvyn of elke combinatie.",
+    "description": "Elk product is een eigen maandabonnement. Neem Avyro, Velto, Rovyn, Orvyn, Nexro, Ravelo of elke combinatie.",
     "settingsDescription": "Start een AYV WRLD-product of beheer abonnementen in het Stripe-portaal.",
     "notSubscribed": "Geen abonnement",
     "nextBill": "{status} · volgende factuur {date}",
@@ -620,13 +636,46 @@
     "issuedShort": "Verzonden {date}", "dueShort": "Vervalt {date}", "remove": "Verwijderen", "removeTitle": "Deze factuur verwijderen?", "removeBody": "De factuur wordt verwijderd. Verbonden records blijven beschikbaar en worden niet verwijderd.", "added": "Factuur toegevoegd",
     "statusUpdated": "Status bijgewerkt", "reminderSaved": "Herinnering opgeslagen", "removed": "Factuur verwijderd"
   },
+  "nexro": {
+    "scheduled": "Gepland", "scheduledHint": "Nog niet verstuurd", "sent": "Verstuurd", "sentHint": "Wacht op een reactie",
+    "won": "Teruggewonnen", "wonHint": "Klant kwam terug of verwees door", "referrals": "Referrals", "referralsHint": "Referralverzoeken in deze lijst",
+    "addOutreach": "Contact toevoegen", "prefill": "{name} uit {product} wordt ingevuld. Je kunt ook contact toevoegen zonder koppeling.",
+    "customer": "Klant", "kind": "Type", "kindWinback": "Terugwinactie", "kindReferral": "Referral",
+    "message": "Bericht", "messagePlaceholder": "Aanbod of check-in", "incentive": "Bonus", "incentivePlaceholder": "Optionele referralbonus",
+    "lastSeenOn": "Laatst gezien", "nextTouchOn": "Volgend contact", "email": "E-mail", "phone": "Telefoon",
+    "notes": "Notities", "notesPlaceholder": "Waarom de klant stil werd", "searchPlaceholder": "Zoek op klant of bericht",
+    "add": "Toevoegen", "adding": "Toevoegen...", "emptyTitle": "Nog geen contact",
+    "emptyBody": "Voeg een eerdere klant toe om terug te winnen, of vraag een tevreden klant om een referral. Koppel de factuur of boeking.",
+    "colCustomer": "Klant", "colKind": "Type", "colStatus": "Status", "colTouch": "Volgend contact", "colConnected": "Gekoppeld",
+    "statusScheduled": "Gepland", "statusSent": "Verstuurd", "statusReplied": "Gereageerd", "statusWon": "Gewonnen", "statusPassed": "Voorbij",
+    "statusFor": "Status voor {name}", "touchFor": "Volgend contact voor {name}",
+    "remove": "Verwijderen", "removeTitle": "Dit contact verwijderen?", "removeBody": "Het contact wordt verwijderd. Gekoppelde records blijven beschikbaar.",
+    "added": "Contact toegevoegd", "statusUpdated": "Status bijgewerkt", "touchSaved": "Volgend contact opgeslagen", "removed": "Contact verwijderd"
+  },
+  "ravelo": {
+    "scheduled": "Gepland", "scheduledHint": "Nog niet gevraagd", "requested": "Gevraagd", "requestedHint": "Wacht op een review",
+    "publicReviews": "Openbaar", "publicHint": "Geplaatst op een reviewsite", "privateFeedback": "Privé", "privateHint": "Blijft binnen het bedrijf",
+    "addReview": "Reviewverzoek toevoegen", "prefill": "{name} uit {product} wordt ingevuld. Je kunt ook vragen zonder een record te koppelen.",
+    "customer": "Klant", "channel": "Waar reviewen", "channelGoogle": "Google", "channelTrustpilot": "Trustpilot",
+    "channelFacebook": "Facebook", "channelOther": "Anders", "channelPrivate": "Eerst privé",
+    "requestedOn": "Vragen op", "nextFollowUpOn": "Opvolgen op", "rating": "Score", "reviewUrl": "Reviewlink",
+    "feedback": "Feedback", "feedbackPlaceholder": "Wat de klant zei, als je het al hebt",
+    "email": "E-mail", "phone": "Telefoon", "notes": "Notities", "notesPlaceholder": "Klus die net klaar is",
+    "searchPlaceholder": "Zoek op klant of feedback", "add": "Toevoegen", "adding": "Toevoegen...",
+    "emptyTitle": "Nog geen reviewverzoek", "emptyBody": "Vraag na de klus. Tevreden klanten gaan naar een openbaar platform. Ontevreden feedback blijft eerst privé.",
+    "colCustomer": "Klant", "colChannel": "Kanaal", "colStatus": "Status", "colFollowUp": "Opvolging", "colConnected": "Gekoppeld",
+    "statusScheduled": "Gepland", "statusRequested": "Gevraagd", "statusPublic": "Openbaar", "statusPrivate": "Privé", "statusResponded": "Beantwoord",
+    "statusFor": "Status voor {name}", "followUpFor": "Opvolging voor {name}", "noRating": "Nog geen score", "openLink": "Link openen",
+    "remove": "Verwijderen", "removeTitle": "Dit verzoek verwijderen?", "removeBody": "Het verzoek wordt verwijderd. Gekoppelde records blijven beschikbaar.",
+    "added": "Verzoek toegevoegd", "statusUpdated": "Status bijgewerkt", "followUpSaved": "Opvolging opgeslagen", "removed": "Verzoek verwijderd"
+  },
   "connections": {
     "workflow": "Verbonden workflow",
-    "journeyProgress": "{count} van 4 stappen verbonden",
-    "stepsConnected": "{count}/4 stappen verbonden",
+    "journeyProgress": "{count} van 6 stappen verbonden",
+    "stepsConnected": "{count}/6 stappen verbonden",
     "nextBestAction": "Volgende: ga verder in {name}",
     "handoffPending": "Breng dit record verder vóór de volgende overdracht",
-    "finalStep": "Laatste stap: volg betaling en herinneringen hier",
+    "finalStep": "Laatste stap: vraag om de review en houd ontevreden feedback privé",
     "journeyComplete": "Klantreis voltooid",
     "connected": "Gekoppeld",
     "nothing": "Niets gekoppeld",
@@ -646,14 +695,20 @@
     "bookInVelto": "Boeken in Velto",
     "quoteInRovyn": "Offerte in Rovyn",
     "invoiceInOrvyn": "Factuur in Orvyn",
+    "reachOutInNexro": "Benaderen in Nexro",
+    "askInRavelo": "Vragen in Ravelo",
     "nounLead": "lead",
     "nounBooking": "boeking",
     "nounQuote": "offerte",
     "nounInvoice": "factuur",
+    "nounReactivation": "terugwinactie",
+    "nounReview": "review",
     "fallbackLead": "Lead",
     "fallbackBooking": "Boeking",
     "fallbackQuote": "Offerte",
-    "fallbackInvoice": "Factuur"
+    "fallbackInvoice": "Factuur",
+    "fallbackReactivation": "Terugwinactie",
+    "fallbackReview": "Review"
   },
   "errors": {
     "notFoundTitle": "Pagina niet gevonden",

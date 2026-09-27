@@ -13,7 +13,8 @@ import { calculatePricingSummary, formatEuroPrice } from "@/lib/pricing";
  * Avyro is the first live product: a small lead-conversion workspace.
  * Velto is the second: org-scoped bookings with reminder dates.
  * Rovyn is the third: org-scoped quote follow-up.
- * Other products stay coming_soon until they have their own tools.
+ * Orvyn tracks invoices. Nexro brings customers back and asks for referrals.
+ * Ravelo asks for reviews after the work is done.
  */
 
 export type ProductStatus = "active" | "coming_soon";
@@ -205,21 +206,21 @@ export const products: ProductConfig[] = [
       "Turn happy clients into a steady referral stream",
       "Re-engage your list on autopilot",
     ],
-    status: "coming_soon",
-    marketingStatus: "Coming soon",
+    status: "active",
+    marketingStatus: "Available",
     assets: productBrand("nexro"),
     accent: "#1E40AF",
     category: "Retain",
     productType: "automation",
     marketingRoute: "/automation/nexro",
     cta: { active: "Open Nexro", comingSoon: "In development" },
-    route: "/dashboard/product",
+    route: "/dashboard/nexro",
     pricing: { monthly: 90 },
-    navigation: [],
-    featureFlags: {},
+    navigation: [{ label: "Reactivation", href: "/dashboard/nexro" }],
+    featureFlags: { winback: true, referrals: true },
     dashboard: {
       title: "Nexro",
-      description: "Customer reactivation and referrals are coming soon.",
+      description: "Bring past customers back and ask happy clients for a referral.",
     },
   },
   {
@@ -235,21 +236,21 @@ export const products: ProductConfig[] = [
       "Build trust with more 5-star ratings",
       "Grow your reputation without the awkward ask",
     ],
-    status: "coming_soon",
-    marketingStatus: "Coming soon",
+    status: "active",
+    marketingStatus: "Available",
     assets: productBrand("ravelo"),
     accent: "#1D4ED8",
     category: "Reputation",
     productType: "automation",
     marketingRoute: "/automation/ravelo",
     cta: { active: "Open Ravelo", comingSoon: "In development" },
-    route: "/dashboard/product",
+    route: "/dashboard/ravelo",
     pricing: { monthly: 90 },
-    navigation: [],
-    featureFlags: {},
+    navigation: [{ label: "Reviews", href: "/dashboard/ravelo" }],
+    featureFlags: { reviews: true, privateFeedback: true },
     dashboard: {
       title: "Ravelo",
-      description: "Review automation is coming soon.",
+      description: "Ask for a review after the job and keep unhappy feedback private first.",
     },
   },
 ];

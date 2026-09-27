@@ -188,7 +188,8 @@
       "highlight2": "Referral request automation",
       "highlight3": "Referral incentive tracking",
       "nav": "Referrals",
-      "dashboardDescription": "Customer reactivation and referrals are coming soon."
+      "dashboardDescription": "Bring past customers back and ask happy clients for a referral.",
+      "connectedValue": "After an Orvyn invoice is paid, Nexro keeps that customer and starts a win-back or referral ask without retyping their details."
     },
     "ravelo": {
       "tagline": "Review automation",
@@ -198,7 +199,8 @@
       "highlight2": "Public review or private feedback routing",
       "highlight3": "Links for more than one review platform",
       "nav": "Reviews",
-      "dashboardDescription": "Review automation is coming soon."
+      "dashboardDescription": "Ask for a review after the job and keep unhappy feedback private first.",
+      "connectedValue": "When the job is done, Ravelo asks the same customer for a review, sends happy clients to a public site, and keeps unhappy feedback private."
     }
   },
   "auth": {
@@ -312,6 +314,8 @@
       "bookings": "Bookings",
       "quotes": "Quotes",
       "invoices": "Invoices",
+      "reactivations": "Win-backs",
+      "reviews": "Reviews",
       "linkedBookings": "Bookings linked to a lead",
       "linkedQuotes": "Quotes linked through a booking",
       "wonCustomers": "Won quotes in the journey",
@@ -332,6 +336,8 @@
       "attentionvelto": "Booking reminder",
       "attentionrovyn": "Quote follow-up",
       "attentionorvyn": "Invoice reminder",
+      "attentionnexro": "Win-back touch",
+      "attentionravelo": "Review follow-up",
       "daysOverdue": "{count, plural, one {# day overdue} other {# days overdue}}",
       "today": "Today",
       "inDays": "In {count, plural, one {# day} other {# days}}",
@@ -342,7 +348,7 @@
       "directoryHelp": "Search and review each client's contact details, health, next action, and connected records in one place.",
       "howCalculated": "How this is calculated",
       "healthRules": "Deterministic rules only: lost leads, no-shows, lost quotes without a win, or 7+ overdue days are at risk. Other overdue or unconnected leads need attention. Won or actively progressing journeys are on track.",
-      "connectedCounts": "{bookings} bookings · {quotes} quotes · {invoices} invoices",
+      "connectedCounts": "{bookings} bookings · {quotes} quotes · {invoices} invoices · {reactivations} win-backs · {reviews} reviews",
       "health_on_track": "On track",
       "health_needs_attention": "Needs attention",
       "health_at_risk": "At risk",
@@ -366,12 +372,17 @@
       "stageLead": "Lead",
       "stageBooking": "Booking",
       "stageQuote": "Quote",
+      "stageInvoice": "Invoice",
+      "stageReactivation": "Win-back",
+      "stageReview": "Review",
       "noContact": "No contact details",
       "nextLeadFollowUp": "Lead follow-up",
       "nextBookingReminder": "Booking reminder",
       "nextBooking": "Upcoming booking",
       "nextQuoteFollowUp": "Quote follow-up",
       "nextInvoiceReminder": "Invoice reminder",
+      "nextReactivation": "Win-back touch",
+      "nextReview": "Review follow-up",
       "noNextAction": "No next action",
       "clientDetails": "Client details",
       "lastActivity": "Last activity {date}",
@@ -380,6 +391,8 @@
       "noBookings": "No connected bookings",
       "noQuotes": "No connected quotes",
       "noInvoices": "No connected invoices",
+      "noReactivations": "No connected win-backs",
+      "noReviews": "No connected reviews",
       "noResultsTitle": "No matching clients",
       "noResultsBody": "Try another search or health filter.",
       "productActivity": "Product activity"
@@ -388,7 +401,7 @@
   "calendar": {
     "kicker": "Shared schedule",
     "title": "Calendar",
-    "subtitle": "Every lead follow-up, appointment, reminder, and quote follow-up in one place.",
+    "subtitle": "Lead follow-ups, appointments, quotes, invoices, win-backs, and review requests in one place.",
     "eventCount": "{count, plural, one {event} other {events}}",
     "filterProducts": "Products",
     "filterTypes": "Event types",
@@ -413,12 +426,15 @@
       "booking_reminder": "Booking reminder",
       "quote_follow_up": "Quote follow-up"
       ,"invoice_due": "Invoice due"
-      ,"invoice_reminder": "Invoice reminder"
+      ,"invoice_reminder": "Invoice reminder",
+      "reactivation_touch": "Win-back touch",
+      "review_request": "Review request",
+      "review_follow_up": "Review follow-up"
     }
   },
   "billing": {
     "title": "Billing",
-    "description": "Each product is its own monthly subscription. Buy Avyro, Velto, Rovyn, Orvyn, or any combination.",
+    "description": "Each product is its own monthly subscription. Buy Avyro, Velto, Rovyn, Orvyn, Nexro, Ravelo, or any combination.",
     "settingsDescription": "Start any AYV WRLD product or manage subscriptions in the Stripe portal.",
     "notSubscribed": "Not subscribed",
     "nextBill": "{status} · next bill {date}",
@@ -618,15 +634,48 @@
     "statusDraft": "Draft", "statusSent": "Sent", "statusOverdue": "Overdue", "statusPaid": "Paid", "statusVoid": "Void",
     "statusFor": "Status for invoice {number}", "reminderFor": "Reminder date for invoice {number}",
     "issuedShort": "Issued {date}", "dueShort": "Due {date}", "remove": "Remove", "removeTitle": "Remove this invoice?", "removeBody": "This removes the invoice. Connected records remain available and are not deleted.", "added": "Invoice added",
-    "statusUpdated": "Status updated", "reminderSaved": "Reminder saved", "removed": "Invoice removed"
+    "statusUpdated": "Status updated", "reminderSaved": "Reminder saved",     "removed": "Invoice removed"
+  },
+  "nexro": {
+    "scheduled": "Scheduled", "scheduledHint": "Not sent yet", "sent": "Sent", "sentHint": "Waiting on a reply",
+    "won": "Won back", "wonHint": "Customer returned or referred", "referrals": "Referrals", "referralsHint": "Referral asks in this list",
+    "addOutreach": "Add outreach", "prefill": "Prefilling {name} from {product}. You can still add outreach without connecting one.",
+    "customer": "Customer", "kind": "Type", "kindWinback": "Win-back", "kindReferral": "Referral",
+    "message": "Message", "messagePlaceholder": "Offer or check-in", "incentive": "Incentive", "incentivePlaceholder": "Optional referral reward",
+    "lastSeenOn": "Last seen", "nextTouchOn": "Next touch", "email": "Email", "phone": "Phone",
+    "notes": "Notes", "notesPlaceholder": "Why they went quiet", "searchPlaceholder": "Search by customer or message",
+    "add": "Add outreach", "adding": "Adding...", "emptyTitle": "No outreach yet",
+    "emptyBody": "Add a past customer to win back, or a happy client to ask for a referral. Connect them to the invoice or booking they came from.",
+    "colCustomer": "Customer", "colKind": "Type", "colStatus": "Status", "colTouch": "Next touch", "colConnected": "Connected",
+    "statusScheduled": "Scheduled", "statusSent": "Sent", "statusReplied": "Replied", "statusWon": "Won", "statusPassed": "Passed",
+    "statusFor": "Status for {name}", "touchFor": "Next touch for {name}",
+    "remove": "Remove", "removeTitle": "Remove this outreach?", "removeBody": "This removes the outreach. Connected records remain available and are not deleted.",
+    "added": "Outreach added", "statusUpdated": "Status updated", "touchSaved": "Next touch saved", "removed": "Outreach removed"
+  },
+  "ravelo": {
+    "scheduled": "Scheduled", "scheduledHint": "Not requested yet", "requested": "Requested", "requestedHint": "Waiting on a review",
+    "publicReviews": "Public", "publicHint": "Posted on a review site", "privateFeedback": "Private", "privateHint": "Kept inside the business",
+    "addReview": "Add a review request", "prefill": "Prefilling {name} from {product}. You can still ask without connecting a record.",
+    "customer": "Customer", "channel": "Where to review", "channelGoogle": "Google", "channelTrustpilot": "Trustpilot",
+    "channelFacebook": "Facebook", "channelOther": "Other", "channelPrivate": "Private first",
+    "requestedOn": "Ask on", "nextFollowUpOn": "Follow up on", "rating": "Rating", "reviewUrl": "Review link",
+    "feedback": "Feedback", "feedbackPlaceholder": "What they said, if you already have it",
+    "email": "Email", "phone": "Phone", "notes": "Notes", "notesPlaceholder": "Job that just finished",
+    "searchPlaceholder": "Search by customer or feedback", "add": "Add request", "adding": "Adding...",
+    "emptyTitle": "No review requests yet", "emptyBody": "Ask after the job is done. Happy customers go to a public site. Unhappy feedback stays private first.",
+    "colCustomer": "Customer", "colChannel": "Channel", "colStatus": "Status", "colFollowUp": "Follow up", "colConnected": "Connected",
+    "statusScheduled": "Scheduled", "statusRequested": "Requested", "statusPublic": "Public", "statusPrivate": "Private", "statusResponded": "Responded",
+    "statusFor": "Status for {name}", "followUpFor": "Follow-up for {name}", "noRating": "No rating yet", "openLink": "Open link",
+    "remove": "Remove", "removeTitle": "Remove this review request?", "removeBody": "This removes the request. Connected records remain available and are not deleted.",
+    "added": "Review request added", "statusUpdated": "Status updated", "followUpSaved": "Follow-up saved", "removed": "Review request removed"
   },
   "connections": {
     "workflow": "Connected workflow",
-    "journeyProgress": "{count} of 4 journey steps connected",
-    "stepsConnected": "{count}/4 steps connected",
+    "journeyProgress": "{count} of 6 journey steps connected",
+    "stepsConnected": "{count}/6 steps connected",
     "nextBestAction": "Next: continue in {name}",
     "handoffPending": "Keep this record moving before the next handoff",
-    "finalStep": "Final step: track payment and reminders here",
+    "finalStep": "Last step: ask for the review and keep unhappy feedback private",
     "journeyComplete": "Client journey complete",
     "connected": "Connected",
     "nothing": "Nothing connected",
@@ -646,14 +695,20 @@
     "bookInVelto": "Book in Velto",
     "quoteInRovyn": "Quote in Rovyn",
     "invoiceInOrvyn": "Invoice in Orvyn",
+    "reachOutInNexro": "Reach out in Nexro",
+    "askInRavelo": "Ask in Ravelo",
     "nounLead": "lead",
     "nounBooking": "booking",
     "nounQuote": "quote",
     "nounInvoice": "invoice",
+    "nounReactivation": "win-back",
+    "nounReview": "review",
     "fallbackLead": "Lead",
     "fallbackBooking": "Booking",
     "fallbackQuote": "Quote",
-    "fallbackInvoice": "Invoice"
+    "fallbackInvoice": "Invoice",
+    "fallbackReactivation": "Win-back",
+    "fallbackReview": "Review"
   },
   "errors": {
     "notFoundTitle": "Page not found",

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Booking, Invoice, Lead, Quote, RecordLink } from "@/types/database";
+import type { Booking, Invoice, Lead, Quote, Reactivation, RecordLink, Review } from "@/types/database";
 
 const leadColumns =
   "id, organization_id, name, email, phone, status, notes, follow_up_on, created_at, updated_at";
@@ -9,24 +9,33 @@ const quoteColumns =
   "id, organization_id, customer_name, email, phone, title, amount, currency, status, follow_up_on, notes, created_at, updated_at";
 const invoiceColumns =
   "id, organization_id, customer_name, email, phone, invoice_number, description, amount, currency, status, issued_on, due_on, next_reminder_on, notes, created_at, updated_at";
+const reactivationColumns =
+  "id, organization_id, customer_name, email, phone, kind, status, message, incentive, last_seen_on, next_touch_on, notes, created_at, updated_at";
+const reviewColumns =
+  "id, organization_id, customer_name, email, phone, status, channel, rating, feedback, review_url, requested_on, next_follow_up_on, notes, created_at, updated_at";
 const linkColumns =
   "id, organization_id, from_product, from_id, to_product, to_id, created_at";
 
 export async function getDashboardRecords(organizationId: string) {
   const supabase = await createClient();
-  const [leadsResult, bookingsResult, quotesResult, invoicesResult, linksResult] = await Promise.all([
-    supabase.from("leads").select(leadColumns).eq("organization_id", organizationId),
-    supabase.from("bookings").select(bookingColumns).eq("organization_id", organizationId),
-    supabase.from("quotes").select(quoteColumns).eq("organization_id", organizationId),
-    supabase.from("invoices").select(invoiceColumns).eq("organization_id", organizationId),
-    supabase.from("record_links").select(linkColumns).eq("organization_id", organizationId),
-  ]);
+  const [leadsResult, bookingsResult, quotesResult, invoicesResult, reactivationsResult, reviewsResult, linksResult] =
+    await Promise.all([
+      supabase.from("leads").select(leadColumns).eq("organization_id", organizationId),
+      supabase.from("bookings").select(bookingColumns).eq("organization_id", organizationId),
+      supabase.from("quotes").select(quoteColumns).eq("organization_id", organizationId),
+      supabase.from("invoices").select(invoiceColumns).eq("organization_id", organizationId),
+      supabase.from("reactivations").select(reactivationColumns).eq("organization_id", organizationId),
+      supabase.from("reviews").select(reviewColumns).eq("organization_id", organizationId),
+      supabase.from("record_links").select(linkColumns).eq("organization_id", organizationId),
+    ]);
 
   return {
     leads: (leadsResult.data as Lead[] | null) ?? [],
     bookings: (bookingsResult.data as Booking[] | null) ?? [],
     quotes: (quotesResult.data as Quote[] | null) ?? [],
     invoices: (invoicesResult.data as Invoice[] | null) ?? [],
+    reactivations: (reactivationsResult.data as Reactivation[] | null) ?? [],
+    reviews: (reviewsResult.data as Review[] | null) ?? [],
     links: (linksResult.data as RecordLink[] | null) ?? [],
   };
 }

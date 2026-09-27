@@ -1,5 +1,5 @@
 import { getProduct, type ProductId } from "@/config/products";
-import type { Booking, Invoice, Lead, Quote } from "@/types/database";
+import type { Booking, Invoice, Lead, Quote, Reactivation, Review } from "@/types/database";
 
 /**
  * Product record registry for org-scoped connections (`record_links`).
@@ -19,13 +19,13 @@ import type { Booking, Invoice, Lead, Quote } from "@/types/database";
  *
  * Only list products that have a live workspace so attach/open never 404.
  */
-export const recordProducts = ["avyro", "velto", "rovyn", "orvyn"] as const;
+export const recordProducts = ["avyro", "velto", "rovyn", "orvyn", "nexro", "ravelo"] as const;
 
 export type RecordProduct = (typeof recordProducts)[number];
 
 export type RecordEntityDef = {
   product: RecordProduct;
-  table: "leads" | "bookings" | "quotes" | "invoices";
+  table: "leads" | "bookings" | "quotes" | "invoices" | "reactivations" | "reviews";
   noun: string;
   createActionLabel: string;
   focusParam: string;
@@ -64,6 +64,22 @@ export const recordEntities: RecordEntityDef[] = [
     createActionLabel: "Invoice in Orvyn",
     focusParam: "invoice",
     fromParam: "fromInvoice",
+  },
+  {
+    product: "nexro",
+    table: "reactivations",
+    noun: "reactivation",
+    createActionLabel: "Reach out in Nexro",
+    focusParam: "reactivation",
+    fromParam: "fromReactivation",
+  },
+  {
+    product: "ravelo",
+    table: "reviews",
+    noun: "review",
+    createActionLabel: "Ask in Ravelo",
+    focusParam: "review",
+    fromParam: "fromReview",
   },
 ];
 
@@ -127,10 +143,14 @@ export function resolveRecordPrefill(
   fromBookingId: string | undefined,
   fromQuoteId: string | undefined,
   fromInvoiceId: string | undefined,
+  fromReactivationId: string | undefined,
+  fromReviewId: string | undefined,
   leads: Lead[],
   bookings: Booking[],
   quotes: Quote[],
   invoices: Invoice[],
+  reactivations: Reactivation[],
+  reviews: Review[],
 ): RecordPrefill | undefined {
   const lead = fromLeadId ? leads.find((item) => item.id === fromLeadId) : undefined;
   if (lead) {
@@ -180,6 +200,32 @@ export function resolveRecordPrefill(
       email: invoice.email,
       phone: invoice.phone,
       title: invoice.description,
+    };
+  }
+
+  const reactivation = fromReactivationId
+    ? reactivations.find((item) => item.id === fromReactivationId)
+    : undefined;
+  if (reactivation) {
+    return {
+      product: "nexro",
+      id: reactivation.id,
+      name: reactivation.customer_name,
+      email: reactivation.email,
+      phone: reactivation.phone,
+      title: reactivation.message,
+    };
+  }
+
+  const review = fromReviewId ? reviews.find((item) => item.id === fromReviewId) : undefined;
+  if (review) {
+    return {
+      product: "ravelo",
+      id: review.id,
+      name: review.customer_name,
+      email: review.email,
+      phone: review.phone,
+      title: review.feedback ?? undefined,
     };
   }
 

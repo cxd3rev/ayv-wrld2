@@ -26,7 +26,9 @@ import type {
   InvoiceStatus,
   Lead,
   Quote,
+  Reactivation,
   RecordLink,
+  Review,
 } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -69,6 +71,8 @@ function formatMoney(value: Invoice["amount"], currency: string, locale: string)
 
 export function OrvynInvoicesWorkspace({
   invoices,
+  reactivations,
+  reviews,
   leads,
   bookings,
   quotes,
@@ -77,6 +81,8 @@ export function OrvynInvoicesWorkspace({
   focusInvoiceId,
 }: {
   invoices: Invoice[];
+  reactivations: Reactivation[];
+  reviews: Review[];
   leads: Lead[];
   bookings: Booking[];
   quotes: Quote[];
@@ -254,7 +260,7 @@ export function OrvynInvoicesWorkspace({
                       if (result.ok) router.refresh();
                     }} />
                   </TD>
-                  <TD><ConnectedRecords product="orvyn" recordId={invoice.id} links={links} leads={leads} bookings={bookings} quotes={quotes} invoices={invoices} /></TD>
+                  <TD><ConnectedRecords product="orvyn" recordId={invoice.id} links={links} leads={leads} bookings={bookings} quotes={quotes} invoices={invoices} reactivations={reactivations} reviews={reviews} /></TD>
                   <TD className="text-right"><Button variant="ghost" size="sm" onClick={() => setDeleteId(invoice.id)}>{t("remove")}</Button></TD>
                 </TR>
               ))}

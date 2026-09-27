@@ -77,7 +77,7 @@ export type Subscription = {
   stripe_customer_id?: string | null;
   stripe_price_id?: string | null;
   /** Catalog slug joined from products, not a DB column. */
-  product_slug?: "avyro" | "velto" | "rovyn" | "orvyn" | null;
+  product_slug?: "avyro" | "velto" | "rovyn" | "orvyn" | "nexro" | "ravelo" | null;
   status: SubscriptionStatus;
   current_period_start: string | null;
   current_period_end: string | null;
@@ -196,7 +196,48 @@ export type Invoice = {
   updated_at: string;
 };
 
-export type RecordProduct = "avyro" | "velto" | "rovyn" | "orvyn";
+export type ReactivationKind = "winback" | "referral";
+export type ReactivationStatus = "scheduled" | "sent" | "replied" | "won" | "passed";
+
+export type Reactivation = {
+  id: string;
+  organization_id: string;
+  customer_name: string;
+  email: string | null;
+  phone: string | null;
+  kind: ReactivationKind;
+  status: ReactivationStatus;
+  message: string;
+  incentive: string | null;
+  last_seen_on: string | null;
+  next_touch_on: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ReviewStatus = "scheduled" | "requested" | "public" | "private" | "responded";
+export type ReviewChannel = "google" | "trustpilot" | "facebook" | "other" | "private";
+
+export type Review = {
+  id: string;
+  organization_id: string;
+  customer_name: string;
+  email: string | null;
+  phone: string | null;
+  status: ReviewStatus;
+  channel: ReviewChannel;
+  rating: number | null;
+  feedback: string | null;
+  review_url: string | null;
+  requested_on: string;
+  next_follow_up_on: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type RecordProduct = "avyro" | "velto" | "rovyn" | "orvyn" | "nexro" | "ravelo";
 
 export type RecordLink = {
   id: string;

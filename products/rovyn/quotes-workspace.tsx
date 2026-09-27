@@ -24,7 +24,7 @@ import {
   updateQuoteFollowUp,
   updateQuoteStatus,
 } from "@/products/rovyn/actions";
-import type { Booking, Invoice, Lead, Quote, QuoteStatus, RecordLink } from "@/types/database";
+import type { Booking, Invoice, Lead, Quote, QuoteStatus, Reactivation, RecordLink, Review } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -89,6 +89,8 @@ function formatQuoteAmount(value: Quote["amount"], currency: string, locale: str
 export function RovynQuotesWorkspace({
   quotes,
   invoices,
+  reactivations,
+  reviews,
   leads,
   bookings,
   links,
@@ -97,6 +99,8 @@ export function RovynQuotesWorkspace({
 }: {
   quotes: Quote[];
   invoices: Invoice[];
+  reactivations: Reactivation[];
+  reviews: Review[];
   leads: Lead[];
   bookings: Booking[];
   links: RecordLink[];
@@ -360,6 +364,8 @@ export function RovynQuotesWorkspace({
                         bookings={bookings}
                         quotes={quotes}
                         invoices={invoices}
+                        reactivations={reactivations}
+                        reviews={reviews}
                       />
                     </TD>
                     <TD className="max-w-xs text-muted">{quote.notes || "—"}</TD>

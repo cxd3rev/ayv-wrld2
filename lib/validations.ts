@@ -141,7 +141,7 @@ const optionalUuidField = (message: string) =>
 const requiredUuidField = (message: string) =>
   z.string().trim().refine((value) => uuidPattern.test(value), message);
 
-export const recordProductSchema = z.enum(["avyro", "velto", "rovyn", "orvyn"]);
+export const recordProductSchema = z.enum(["avyro", "velto", "rovyn", "orvyn", "nexro", "ravelo"]);
 
 export const optionalRecordLinkSchema = z.object({
   linkProduct: z
@@ -256,6 +256,56 @@ export const createInvoiceSchema = z
 
 export const updateInvoiceReminderSchema = z.object({
   nextReminderOn: optionalDateField("Please enter a valid reminder date."),
+});
+
+export const reactivationKinds = ["winback", "referral"] as const;
+export const reactivationStatuses = ["scheduled", "sent", "replied", "won", "passed"] as const;
+export const reactivationKindSchema = z.enum(reactivationKinds);
+export const reactivationStatusSchema = z.enum(reactivationStatuses);
+
+export const createReactivationSchema = z.object({
+  customerName: z.string().trim().min(2, "Please enter the customer's name."),
+  email: optionalEmailField,
+  phone: z.string().trim().optional().transform((value) => value || ""),
+  kind: reactivationKindSchema,
+  message: z.string().trim().min(2, "Please enter the message or offer."),
+  incentive: z.string().trim().optional().transform((value) => value || ""),
+  lastSeenOn: optionalDateField("Please enter a valid last-seen date."),
+  nextTouchOn: optionalDateField("Please enter a valid next-touch date."),
+  notes: z.string().trim().optional().transform((value) => value || ""),
+});
+
+export const updateReactivationTouchSchema = z.object({
+  nextTouchOn: optionalDateField("Please enter a valid next-touch date."),
+});
+
+export const reviewStatuses = ["scheduled", "requested", "public", "private", "responded"] as const;
+export const reviewChannels = ["google", "trustpilot", "facebook", "other", "private"] as const;
+export const reviewStatusSchema = z.enum(reviewStatuses);
+export const reviewChannelSchema = z.enum(reviewChannels);
+
+const optionalRatingField = z
+  .string()
+  .trim()
+  .optional()
+  .transform((value) => value || "")
+  .refine((value) => value === "" || /^[1-5]$/.test(value), "Please enter a rating from 1 to 5.");
+
+export const createReviewSchema = z.object({
+  customerName: z.string().trim().min(2, "Please enter the customer's name."),
+  email: optionalEmailField,
+  phone: z.string().trim().optional().transform((value) => value || ""),
+  channel: reviewChannelSchema,
+  rating: optionalRatingField,
+  feedback: z.string().trim().optional().transform((value) => value || ""),
+  reviewUrl: z.string().trim().optional().transform((value) => value || ""),
+  requestedOn: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/, "Please choose the request date."),
+  nextFollowUpOn: optionalDateField("Please enter a valid follow-up date."),
+  notes: z.string().trim().optional().transform((value) => value || ""),
+});
+
+export const updateReviewFollowUpSchema = z.object({
+  nextFollowUpOn: optionalDateField("Please enter a valid follow-up date."),
 });
 
 export function firstZodError(error: z.ZodError) {

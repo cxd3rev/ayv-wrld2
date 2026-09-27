@@ -188,7 +188,8 @@
       "highlight2": "Demandes de parrainage automatiques",
       "highlight3": "Suivi de l’incitation au parrainage",
       "nav": "Parrainages",
-      "dashboardDescription": "La réactivation clients et les parrainages arrivent bientôt."
+      "dashboardDescription": "Faites revenir d'anciens clients et demandez un parrainage aux clients contents.",
+      "connectedValue": "Quand une facture Orvyn est payée, Nexro garde ce client et lance une reconquête ou une demande de parrainage sans ressaisir ses coordonnées."
     },
     "ravelo": {
       "tagline": "Automatisation des avis",
@@ -198,7 +199,8 @@
       "highlight2": "Avis public ou retour privé",
       "highlight3": "Liens vers plusieurs plateformes d’avis",
       "nav": "Avis",
-      "dashboardDescription": "L'automatisation des avis arrive bientôt."
+      "dashboardDescription": "Demandez un avis après la prestation et gardez d'abord le mécontentement en privé.",
+      "connectedValue": "Une fois le travail terminé, Ravelo demande un avis au même client, envoie les clients contents vers un site public et garde le retour négatif en privé."
     }
   },
   "auth": {
@@ -312,6 +314,8 @@
       "bookings": "Réservations",
       "quotes": "Devis",
       "invoices": "Factures",
+      "reactivations": "Reconquêtes",
+      "reviews": "Avis",
       "linkedBookings": "Réservations liées à un lead",
       "linkedQuotes": "Devis liés via une réservation",
       "wonCustomers": "Devis gagnés dans le parcours",
@@ -332,6 +336,8 @@
       "attentionvelto": "Rappel de réservation",
       "attentionrovyn": "Relance du devis",
       "attentionorvyn": "Rappel de facture",
+      "attentionnexro": "Relance de reconquête",
+      "attentionravelo": "Relance d'avis",
       "daysOverdue": "{count, plural, one {# jour de retard} other {# jours de retard}}",
       "today": "Aujourd'hui",
       "inDays": "Dans {count, plural, one {# jour} other {# jours}}",
@@ -342,7 +348,7 @@
       "directoryHelp": "Recherchez et consultez les coordonnées, l'état, la prochaine action et les fiches liées de chaque client au même endroit.",
       "howCalculated": "Comment est-ce calculé ?",
       "healthRules": "Règles déterministes uniquement : lead perdu, absence, devis perdu sans gain ou retard de 7 jours et plus signifie à risque. Les autres retards ou leads non connectés demandent une attention. Les parcours gagnés ou actifs sont en bonne voie.",
-      "connectedCounts": "{bookings} réservations · {quotes} devis · {invoices} factures",
+      "connectedCounts": "{bookings} réservations · {quotes} devis · {invoices} factures · {reactivations} reconquêtes · {reviews} avis",
       "health_on_track": "En bonne voie",
       "health_needs_attention": "À surveiller",
       "health_at_risk": "À risque",
@@ -366,12 +372,17 @@
       "stageLead": "Lead",
       "stageBooking": "Réservation",
       "stageQuote": "Devis",
+      "stageInvoice": "Facture",
+      "stageReactivation": "Reconquête",
+      "stageReview": "Avis",
       "noContact": "Aucune coordonnée",
       "nextLeadFollowUp": "Relance du lead",
       "nextBookingReminder": "Rappel de réservation",
       "nextBooking": "Réservation à venir",
       "nextQuoteFollowUp": "Relance du devis",
       "nextInvoiceReminder": "Rappel de facture",
+      "nextReactivation": "Relance de reconquête",
+      "nextReview": "Relance d'avis",
       "noNextAction": "Aucune prochaine action",
       "clientDetails": "Coordonnées du client",
       "lastActivity": "Dernière activité le {date}",
@@ -380,6 +391,8 @@
       "noBookings": "Aucune réservation liée",
       "noQuotes": "Aucun devis lié",
       "noInvoices": "Aucune facture liée",
+      "noReactivations": "Aucune reconquête liée",
+      "noReviews": "Aucun avis lié",
       "noResultsTitle": "Aucun client correspondant",
       "noResultsBody": "Essayez une autre recherche ou un autre filtre d'état.",
       "productActivity": "Activité des produits"
@@ -388,7 +401,7 @@
   "calendar": {
     "kicker": "Planning partagé",
     "title": "Calendrier",
-    "subtitle": "Tous les suivis de prospects et de devis, rendez-vous et rappels au même endroit.",
+    "subtitle": "Suivis de prospects, rendez-vous, devis, factures, reconquêtes et demandes d'avis au même endroit.",
     "eventCount": "{count, plural, one {événement} other {événements}}",
     "filterProducts": "Produits",
     "filterTypes": "Types d'événement",
@@ -413,12 +426,15 @@
       "booking_reminder": "Rappel de réservation",
       "quote_follow_up": "Suivi de devis"
       ,"invoice_due": "Échéance de facture"
-      ,"invoice_reminder": "Rappel de facture"
+      ,"invoice_reminder": "Rappel de facture",
+      "reactivation_touch": "Relance de reconquête",
+      "review_request": "Demande d'avis",
+      "review_follow_up": "Relance d'avis"
     }
   },
   "billing": {
     "title": "Facturation",
-    "description": "Chaque produit a son propre abonnement mensuel. Prenez Avyro, Velto, Rovyn, Orvyn ou toute combinaison.",
+    "description": "Chaque produit a son propre abonnement mensuel. Prenez Avyro, Velto, Rovyn, Orvyn, Nexro, Ravelo ou toute combinaison.",
     "settingsDescription": "Démarrez un produit AYV WRLD ou gérez les abonnements dans le portail Stripe.",
     "notSubscribed": "Non abonné",
     "nextBill": "{status} · prochaine facture {date}",
@@ -620,13 +636,46 @@
     "issuedShort": "Émise {date}", "dueShort": "Échéance {date}", "remove": "Supprimer", "removeTitle": "Supprimer cette facture ?", "removeBody": "La facture sera supprimée. Les enregistrements connectés restent disponibles et ne sont pas supprimés.", "added": "Facture ajoutée",
     "statusUpdated": "Statut mis à jour", "reminderSaved": "Rappel enregistré", "removed": "Facture supprimée"
   },
+  "nexro": {
+    "scheduled": "Planifié", "scheduledHint": "Pas encore envoyé", "sent": "Envoyé", "sentHint": "En attente d'une réponse",
+    "won": "Reconquis", "wonHint": "Le client est revenu ou a parrainé", "referrals": "Parrainages", "referralsHint": "Demandes de parrainage dans cette liste",
+    "addOutreach": "Ajouter une relance", "prefill": "Prérempli avec {name} depuis {product}. Vous pouvez encore ajouter une relance sans lien.",
+    "customer": "Client", "kind": "Type", "kindWinback": "Reconquête", "kindReferral": "Parrainage",
+    "message": "Message", "messagePlaceholder": "Offre ou prise de nouvelles", "incentive": "Incitation", "incentivePlaceholder": "Récompense de parrainage, facultative",
+    "lastSeenOn": "Vu pour la dernière fois", "nextTouchOn": "Prochain contact", "email": "E-mail", "phone": "Téléphone",
+    "notes": "Notes", "notesPlaceholder": "Pourquoi il s'est tu", "searchPlaceholder": "Rechercher par client ou message",
+    "add": "Ajouter", "adding": "Ajout...", "emptyTitle": "Aucune relance",
+    "emptyBody": "Ajoutez un ancien client à reconquérir, ou un client content à qui demander un parrainage. Reliez-le à la facture ou à la réservation d'origine.",
+    "colCustomer": "Client", "colKind": "Type", "colStatus": "Statut", "colTouch": "Prochain contact", "colConnected": "Lié",
+    "statusScheduled": "Planifié", "statusSent": "Envoyé", "statusReplied": "A répondu", "statusWon": "Gagné", "statusPassed": "Passé",
+    "statusFor": "Statut pour {name}", "touchFor": "Prochain contact pour {name}",
+    "remove": "Supprimer", "removeTitle": "Supprimer cette relance ?", "removeBody": "La relance sera supprimée. Les enregistrements connectés restent disponibles.",
+    "added": "Relance ajoutée", "statusUpdated": "Statut mis à jour", "touchSaved": "Prochain contact enregistré", "removed": "Relance supprimée"
+  },
+  "ravelo": {
+    "scheduled": "Planifié", "scheduledHint": "Pas encore demandé", "requested": "Demandé", "requestedHint": "En attente d'un avis",
+    "publicReviews": "Public", "publicHint": "Publié sur un site d'avis", "privateFeedback": "Privé", "privateHint": "Gardé dans l'entreprise",
+    "addReview": "Ajouter une demande d'avis", "prefill": "Prérempli avec {name} depuis {product}. Vous pouvez encore demander sans lier un enregistrement.",
+    "customer": "Client", "channel": "Où laisser l'avis", "channelGoogle": "Google", "channelTrustpilot": "Trustpilot",
+    "channelFacebook": "Facebook", "channelOther": "Autre", "channelPrivate": "D'abord en privé",
+    "requestedOn": "Demander le", "nextFollowUpOn": "Relancer le", "rating": "Note", "reviewUrl": "Lien de l'avis",
+    "feedback": "Retour", "feedbackPlaceholder": "Ce qu'il a dit, si vous l'avez déjà",
+    "email": "E-mail", "phone": "Téléphone", "notes": "Notes", "notesPlaceholder": "Prestation qui vient de se terminer",
+    "searchPlaceholder": "Rechercher par client ou retour", "add": "Ajouter", "adding": "Ajout...",
+    "emptyTitle": "Aucune demande d'avis", "emptyBody": "Demandez après la prestation. Les clients contents vont sur un site public. Le mécontentement reste d'abord privé.",
+    "colCustomer": "Client", "colChannel": "Canal", "colStatus": "Statut", "colFollowUp": "Relance", "colConnected": "Lié",
+    "statusScheduled": "Planifié", "statusRequested": "Demandé", "statusPublic": "Public", "statusPrivate": "Privé", "statusResponded": "Répondu",
+    "statusFor": "Statut pour {name}", "followUpFor": "Relance pour {name}", "noRating": "Pas encore de note", "openLink": "Ouvrir le lien",
+    "remove": "Supprimer", "removeTitle": "Supprimer cette demande ?", "removeBody": "La demande sera supprimée. Les enregistrements connectés restent disponibles.",
+    "added": "Demande ajoutée", "statusUpdated": "Statut mis à jour", "followUpSaved": "Relance enregistrée", "removed": "Demande supprimée"
+  },
   "connections": {
     "workflow": "Parcours connecté",
-    "journeyProgress": "{count} étapes sur 4 connectées",
-    "stepsConnected": "{count}/4 étapes connectées",
+    "journeyProgress": "{count} étapes sur 6 connectées",
+    "stepsConnected": "{count}/6 étapes connectées",
     "nextBestAction": "Ensuite : continuer dans {name}",
     "handoffPending": "Faites avancer cet enregistrement avant la prochaine transmission",
-    "finalStep": "Dernière étape : suivez ici le paiement et les rappels",
+    "finalStep": "Dernière étape : demandez l'avis et gardez le mécontentement en privé",
     "journeyComplete": "Parcours client terminé",
     "connected": "Lié",
     "nothing": "Rien de lié",
@@ -646,14 +695,20 @@
     "bookInVelto": "Réserver dans Velto",
     "quoteInRovyn": "Devis dans Rovyn",
     "invoiceInOrvyn": "Facture dans Orvyn",
+    "reachOutInNexro": "Relancer dans Nexro",
+    "askInRavelo": "Demander dans Ravelo",
     "nounLead": "lead",
     "nounBooking": "réservation",
     "nounQuote": "devis",
     "nounInvoice": "facture",
+    "nounReactivation": "reconquête",
+    "nounReview": "avis",
     "fallbackLead": "Lead",
     "fallbackBooking": "Réservation",
     "fallbackQuote": "Devis",
-    "fallbackInvoice": "Facture"
+    "fallbackInvoice": "Facture",
+    "fallbackReactivation": "Reconquête",
+    "fallbackReview": "Avis"
   },
   "errors": {
     "notFoundTitle": "Page introuvable",

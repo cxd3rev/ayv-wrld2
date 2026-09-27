@@ -188,7 +188,8 @@
       "highlight2": "Automatische Empfehlungsanfragen",
       "highlight3": "Verfolgung des Empfehlungsanreizes",
       "nav": "Empfehlungen",
-      "dashboardDescription": "Kundenreaktivierung und Empfehlungen kommen bald."
+      "dashboardDescription": "Holen Sie frühere Kunden zurück und bitten Sie zufriedene Kunden um eine Empfehlung.",
+      "connectedValue": "Wenn eine Orvyn-Rechnung bezahlt ist, behält Nexro diesen Kunden und startet eine Rückgewinnung oder Empfehlungsanfrage, ohne die Daten neu einzutippen."
     },
     "ravelo": {
       "tagline": "Bewertungsautomatisierung",
@@ -198,7 +199,8 @@
       "highlight2": "Öffentliche Bewertung oder privates Feedback",
       "highlight3": "Links zu mehr als einer Bewertungsplattform",
       "nav": "Bewertungen",
-      "dashboardDescription": "Bewertungsautomatisierung kommt bald."
+      "dashboardDescription": "Bitten Sie nach dem Auftrag um eine Bewertung und halten Sie unzufriedenes Feedback zuerst privat.",
+      "connectedValue": "Wenn der Auftrag erledigt ist, bittet Ravelo denselben Kunden um eine Bewertung, schickt zufriedene Kunden auf eine öffentliche Seite und hält negatives Feedback privat."
     }
   },
   "auth": {
@@ -312,6 +314,8 @@
       "bookings": "Buchungen",
       "quotes": "Angebote",
       "invoices": "Rechnungen",
+      "reactivations": "Rückgewinnung",
+      "reviews": "Bewertungen",
       "linkedBookings": "Mit Lead verknüpfte Buchungen",
       "linkedQuotes": "Über Buchung verknüpfte Angebote",
       "wonCustomers": "Gewonnene Angebote in der Reise",
@@ -332,6 +336,8 @@
       "attentionvelto": "Buchungserinnerung",
       "attentionrovyn": "Angebots-Follow-up",
       "attentionorvyn": "Rechnungserinnerung",
+      "attentionnexro": "Rückgewinnungskontakt",
+      "attentionravelo": "Bewertungsnachfass",
       "daysOverdue": "{count, plural, one {# Tag überfällig} other {# Tage überfällig}}",
       "today": "Heute",
       "inDays": "In {count, plural, one {# Tag} other {# Tagen}}",
@@ -342,7 +348,7 @@
       "directoryHelp": "Suchen und prüfen Sie Kontaktdaten, Status, nächste Aktion und verknüpfte Datensätze jedes Kunden an einem Ort.",
       "howCalculated": "Wie wird das berechnet?",
       "healthRules": "Nur feste Regeln: Verlorene Leads, No-Shows, verlorene Angebote ohne Gewinn oder 7+ Tage Verzug gelten als gefährdet. Andere überfällige oder unverbundene Leads brauchen Aufmerksamkeit. Gewonnene oder aktiv fortschreitende Reisen sind auf Kurs.",
-      "connectedCounts": "{bookings} Buchungen · {quotes} Angebote · {invoices} Rechnungen",
+      "connectedCounts": "{bookings} Buchungen · {quotes} Angebote · {invoices} Rechnungen · {reactivations} Rückgewinnungen · {reviews} Bewertungen",
       "health_on_track": "Auf Kurs",
       "health_needs_attention": "Aufmerksamkeit nötig",
       "health_at_risk": "Gefährdet",
@@ -366,12 +372,17 @@
       "stageLead": "Lead",
       "stageBooking": "Buchung",
       "stageQuote": "Angebot",
+      "stageInvoice": "Rechnung",
+      "stageReactivation": "Rückgewinnung",
+      "stageReview": "Bewertung",
       "noContact": "Keine Kontaktdaten",
       "nextLeadFollowUp": "Lead nachfassen",
       "nextBookingReminder": "Buchungserinnerung",
       "nextBooking": "Bevorstehende Buchung",
       "nextQuoteFollowUp": "Angebot nachfassen",
       "nextInvoiceReminder": "Rechnungserinnerung",
+      "nextReactivation": "Rückgewinnungskontakt",
+      "nextReview": "Bewertungsnachfass",
       "noNextAction": "Keine nächste Aktion",
       "clientDetails": "Kundendetails",
       "lastActivity": "Letzte Aktivität am {date}",
@@ -380,6 +391,8 @@
       "noBookings": "Keine verknüpften Buchungen",
       "noQuotes": "Keine verknüpften Angebote",
       "noInvoices": "Keine verknüpften Rechnungen",
+      "noReactivations": "Keine verknüpfte Rückgewinnung",
+      "noReviews": "Keine verknüpften Bewertungen",
       "noResultsTitle": "Keine passenden Kunden",
       "noResultsBody": "Versuchen Sie eine andere Suche oder einen anderen Statusfilter.",
       "productActivity": "Produktaktivität"
@@ -388,7 +401,7 @@
   "calendar": {
     "kicker": "Gemeinsamer Zeitplan",
     "title": "Kalender",
-    "subtitle": "Alle Lead- und Angebotsnachfassungen, Termine und Erinnerungen an einem Ort.",
+    "subtitle": "Lead-Nachfass, Termine, Angebote, Rechnungen, Rückgewinnung und Bewertungsanfragen an einem Ort.",
     "eventCount": "{count, plural, one {Termin} other {Termine}}",
     "filterProducts": "Produkte",
     "filterTypes": "Ereignistypen",
@@ -413,12 +426,15 @@
       "booking_reminder": "Buchungserinnerung",
       "quote_follow_up": "Angebotsnachfassung"
       ,"invoice_due": "Rechnung fällig"
-      ,"invoice_reminder": "Rechnungserinnerung"
+      ,"invoice_reminder": "Rechnungserinnerung",
+      "reactivation_touch": "Rückgewinnungskontakt",
+      "review_request": "Bewertungsanfrage",
+      "review_follow_up": "Bewertungsnachfass"
     }
   },
   "billing": {
     "title": "Abrechnung",
-    "description": "Jedes Produkt hat ein eigenes Monatsabo. Nehmen Sie Avyro, Velto, Rovyn, Orvyn oder jede Kombination.",
+    "description": "Jedes Produkt hat ein eigenes Monatsabo. Nehmen Sie Avyro, Velto, Rovyn, Orvyn, Nexro, Ravelo oder jede Kombination.",
     "settingsDescription": "Starten Sie ein AYV WRLD-Produkt oder verwalten Sie Abonnements im Stripe-Portal.",
     "notSubscribed": "Kein Abo",
     "nextBill": "{status} · nächste Rechnung {date}",
@@ -620,13 +636,46 @@
     "issuedShort": "Ausgestellt {date}", "dueShort": "Fällig {date}", "remove": "Entfernen", "removeTitle": "Diese Rechnung entfernen?", "removeBody": "Die Rechnung wird entfernt. Verbundene Datensätze bleiben verfügbar und werden nicht gelöscht.", "added": "Rechnung hinzugefügt",
     "statusUpdated": "Status aktualisiert", "reminderSaved": "Erinnerung gespeichert", "removed": "Rechnung entfernt"
   },
+  "nexro": {
+    "scheduled": "Geplant", "scheduledHint": "Noch nicht gesendet", "sent": "Gesendet", "sentHint": "Wartet auf Antwort",
+    "won": "Zurückgewonnen", "wonHint": "Kunde kam zurück oder hat empfohlen", "referrals": "Empfehlungen", "referralsHint": "Empfehlungsanfragen in dieser Liste",
+    "addOutreach": "Kontakt hinzufügen", "prefill": "{name} aus {product} wird übernommen. Sie können den Kontakt auch ohne Verknüpfung anlegen.",
+    "customer": "Kunde", "kind": "Art", "kindWinback": "Rückgewinnung", "kindReferral": "Empfehlung",
+    "message": "Nachricht", "messagePlaceholder": "Angebot oder Nachfrage", "incentive": "Anreiz", "incentivePlaceholder": "Optionale Empfehlungsprämie",
+    "lastSeenOn": "Zuletzt gesehen", "nextTouchOn": "Nächster Kontakt", "email": "E-Mail", "phone": "Telefon",
+    "notes": "Notizen", "notesPlaceholder": "Warum der Kunde still wurde", "searchPlaceholder": "Nach Kunde oder Nachricht suchen",
+    "add": "Hinzufügen", "adding": "Wird hinzugefügt...", "emptyTitle": "Noch kein Kontakt",
+    "emptyBody": "Fügen Sie einen früheren Kunden zur Rückgewinnung hinzu oder bitten Sie einen zufriedenen Kunden um eine Empfehlung. Verknüpfen Sie die Rechnung oder Buchung.",
+    "colCustomer": "Kunde", "colKind": "Art", "colStatus": "Status", "colTouch": "Nächster Kontakt", "colConnected": "Verbunden",
+    "statusScheduled": "Geplant", "statusSent": "Gesendet", "statusReplied": "Geantwortet", "statusWon": "Gewonnen", "statusPassed": "Abgelehnt",
+    "statusFor": "Status für {name}", "touchFor": "Nächster Kontakt für {name}",
+    "remove": "Entfernen", "removeTitle": "Diesen Kontakt entfernen?", "removeBody": "Der Kontakt wird entfernt. Verbundene Datensätze bleiben erhalten.",
+    "added": "Kontakt hinzugefügt", "statusUpdated": "Status aktualisiert", "touchSaved": "Nächster Kontakt gespeichert", "removed": "Kontakt entfernt"
+  },
+  "ravelo": {
+    "scheduled": "Geplant", "scheduledHint": "Noch nicht angefragt", "requested": "Angefragt", "requestedHint": "Wartet auf eine Bewertung",
+    "publicReviews": "Öffentlich", "publicHint": "Auf einer Bewertungsseite", "privateFeedback": "Privat", "privateHint": "Bleibt im Unternehmen",
+    "addReview": "Bewertungsanfrage hinzufügen", "prefill": "{name} aus {product} wird übernommen. Sie können auch ohne Verknüpfung anfragen.",
+    "customer": "Kunde", "channel": "Wo bewerten", "channelGoogle": "Google", "channelTrustpilot": "Trustpilot",
+    "channelFacebook": "Facebook", "channelOther": "Andere", "channelPrivate": "Zuerst privat",
+    "requestedOn": "Anfragen am", "nextFollowUpOn": "Nachfassen am", "rating": "Bewertung", "reviewUrl": "Bewertungslink",
+    "feedback": "Feedback", "feedbackPlaceholder": "Was der Kunde gesagt hat, falls vorhanden",
+    "email": "E-Mail", "phone": "Telefon", "notes": "Notizen", "notesPlaceholder": "Gerade abgeschlossener Auftrag",
+    "searchPlaceholder": "Nach Kunde oder Feedback suchen", "add": "Hinzufügen", "adding": "Wird hinzugefügt...",
+    "emptyTitle": "Noch keine Bewertungsanfrage", "emptyBody": "Fragen Sie nach dem Auftrag. Zufriedene Kunden gehen auf eine öffentliche Seite. Unzufriedenes Feedback bleibt zuerst privat.",
+    "colCustomer": "Kunde", "colChannel": "Kanal", "colStatus": "Status", "colFollowUp": "Nachfass", "colConnected": "Verbunden",
+    "statusScheduled": "Geplant", "statusRequested": "Angefragt", "statusPublic": "Öffentlich", "statusPrivate": "Privat", "statusResponded": "Beantwortet",
+    "statusFor": "Status für {name}", "followUpFor": "Nachfass für {name}", "noRating": "Noch keine Bewertung", "openLink": "Link öffnen",
+    "remove": "Entfernen", "removeTitle": "Diese Anfrage entfernen?", "removeBody": "Die Anfrage wird entfernt. Verbundene Datensätze bleiben erhalten.",
+    "added": "Anfrage hinzugefügt", "statusUpdated": "Status aktualisiert", "followUpSaved": "Nachfass gespeichert", "removed": "Anfrage entfernt"
+  },
   "connections": {
     "workflow": "Verbundener Ablauf",
-    "journeyProgress": "{count} von 4 Schritten verbunden",
-    "stepsConnected": "{count}/4 Schritte verbunden",
+    "journeyProgress": "{count} von 6 Schritten verbunden",
+    "stepsConnected": "{count}/6 Schritte verbunden",
     "nextBestAction": "Als Nächstes: in {name} fortfahren",
     "handoffPending": "Bringen Sie diesen Datensatz vor der nächsten Übergabe weiter",
-    "finalStep": "Letzter Schritt: Zahlung und Erinnerungen hier verfolgen",
+    "finalStep": "Letzter Schritt: um die Bewertung bitten und unzufriedenes Feedback privat halten",
     "journeyComplete": "Kundenreise abgeschlossen",
     "connected": "Verknüpft",
     "nothing": "Nichts verknüpft",
@@ -646,14 +695,20 @@
     "bookInVelto": "In Velto buchen",
     "quoteInRovyn": "In Rovyn anbieten",
     "invoiceInOrvyn": "Rechnung in Orvyn",
+    "reachOutInNexro": "In Nexro kontaktieren",
+    "askInRavelo": "In Ravelo anfragen",
     "nounLead": "Lead",
     "nounBooking": "Buchung",
     "nounQuote": "Angebot",
     "nounInvoice": "Rechnung",
+    "nounReactivation": "Rückgewinnung",
+    "nounReview": "Bewertung",
     "fallbackLead": "Lead",
     "fallbackBooking": "Buchung",
     "fallbackQuote": "Angebot",
-    "fallbackInvoice": "Rechnung"
+    "fallbackInvoice": "Rechnung",
+    "fallbackReactivation": "Rückgewinnung",
+    "fallbackReview": "Bewertung"
   },
   "errors": {
     "notFoundTitle": "Seite nicht gefunden",

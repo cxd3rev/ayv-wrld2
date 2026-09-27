@@ -27,6 +27,9 @@ const eventTypes: CalendarEventType[] = [
   "quote_follow_up",
   "invoice_due",
   "invoice_reminder",
+  "reactivation_touch",
+  "review_request",
+  "review_follow_up",
 ];
 
 const toneClasses = {
@@ -45,6 +48,14 @@ const toneClasses = {
   red: {
     dot: "bg-[#f07178]",
     chip: "border-[#f07178]/30 bg-[#f07178]/15 text-[#ffc9cc]",
+  },
+  navy: {
+    dot: "bg-[#8ea4ff]",
+    chip: "border-[#1e40af]/40 bg-[#1e40af]/35 text-[#dbe4ff]",
+  },
+  sky: {
+    dot: "bg-[#93c5fd]",
+    chip: "border-[#93c5fd]/30 bg-[#1d4ed8]/30 text-[#dbeafe]",
   },
 } as const;
 
