@@ -85,7 +85,7 @@
     "secureTitle": "Secure by default",
     "secureBody": "Your customer data stays protected with modern authentication and per-account isolation from day one.",
     "pricingTitle": "Fair, simple pricing",
-    "pricingBody": "Each available app has one clear monthly price. The AYV Automation Stack comparison shows the planned 50% value; subscriptions are purchased individually today."
+    "pricingBody": "Each module is €39 per month. Growth is €79 for any three modules. The full stack is €149 for all six."
   },
   "how": {
     "kicker": "How it works",
@@ -101,11 +101,11 @@
   "bundle": {
     "kicker": "AYV Automation Stack",
     "title": "Build your connected automation stack.",
-    "body": "Start with any available app and add others as your workflow grows. AYV Automation Stack shows €400 catalog value and a planned price of €200.",
+    "body": "Start with any module and add others as your workflow grows. One module is €39 per month. The full stack is €149 per month.",
     "cta": "Start with one app",
     "explore": "Explore the bundle",
-    "productBody": "AYV Automation Stack is displayed at 50% off the €400 catalog total, saving €200 per month. Product subscriptions are purchased individually today.",
-    "availability": "AYV Automation Stack pricing is displayed for planning; there is no separate stack checkout yet."
+    "productBody": "The six modules add up to €234 per month. The full stack is €149 per month, which saves €85. You can also buy one module or Growth.",
+    "availability": "AYV Automation Stack pricing is displayed for planning; Growth and the full stack start from billing."
   },
   "cta": {
     "title": "Start turning work into revenue.",
@@ -434,12 +434,14 @@
   },
   "billing": {
     "title": "Billing",
-    "description": "Each product is its own monthly subscription. Buy Avyro, Velto, Rovyn, Orvyn, Nexro, Ravelo, or any combination.",
+    "description": "One module is €39 per month. Growth is €79 for any three. The full stack is €149 for all six.",
     "settingsDescription": "Start any AYV WRLD product or manage subscriptions in the Stripe portal.",
     "notSubscribed": "Not subscribed",
     "nextBill": "{status} · next bill {date}",
     "active": "{name} active",
     "start": "Start {name} subscription",
+    "growthHelp": "Pick exactly three modules, then start Growth.",
+    "fullStackHelp": "Includes Avyro, Velto, Rovyn, Orvyn, Nexro, and Ravelo.",
     "manage": "Manage subscriptions",
     "stripeHint": "Add Stripe keys to enable checkout. The customer portal is optional and does not block Start subscription.",
     "statusActive": "Active",

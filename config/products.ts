@@ -1,5 +1,5 @@
 import { productBrand, type BrandAssets } from "@/config/brands";
-import { calculatePricingSummary, formatEuroPrice } from "@/lib/pricing";
+import { formatEuroPrice } from "@/lib/pricing";
 
 /**
  * Central product catalog for every AYV WRLD product.
@@ -85,7 +85,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/avyro",
     cta: { active: "Open Avyro", comingSoon: "Coming soon" },
     route: "/dashboard/avyro",
-    pricing: { monthly: 40 },
+    pricing: { monthly: 39 },
     navigation: [{ label: "Leads", href: "/dashboard/avyro" }],
     featureFlags: {
       leadCapture: true,
@@ -119,7 +119,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/velto",
     cta: { active: "Open Velto", comingSoon: "Coming soon" },
     route: "/dashboard/velto",
-    pricing: { monthly: 40 },
+    pricing: { monthly: 39 },
     navigation: [{ label: "Bookings", href: "/dashboard/velto" }],
     featureFlags: {
       bookings: true,
@@ -152,7 +152,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/rovyn",
     cta: { active: "Open Rovyn", comingSoon: "Coming soon" },
     route: "/dashboard/rovyn",
-    pricing: { monthly: 70 },
+    pricing: { monthly: 39 },
     navigation: [{ label: "Quotes", href: "/dashboard/rovyn" }],
     featureFlags: {
       quotes: true,
@@ -185,7 +185,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/orvyn",
     cta: { active: "Open Orvyn", comingSoon: "Coming soon" },
     route: "/dashboard/orvyn",
-    pricing: { monthly: 70 },
+    pricing: { monthly: 39 },
     navigation: [{ label: "Invoices", href: "/dashboard/orvyn" }],
     featureFlags: { invoices: true, reminders: true },
     dashboard: {
@@ -215,7 +215,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/nexro",
     cta: { active: "Open Nexro", comingSoon: "In development" },
     route: "/dashboard/nexro",
-    pricing: { monthly: 90 },
+    pricing: { monthly: 39 },
     navigation: [{ label: "Reactivation", href: "/dashboard/nexro" }],
     featureFlags: { winback: true, referrals: true },
     dashboard: {
@@ -245,7 +245,7 @@ export const products: ProductConfig[] = [
     marketingRoute: "/automation/ravelo",
     cta: { active: "Open Ravelo", comingSoon: "In development" },
     route: "/dashboard/ravelo",
-    pricing: { monthly: 90 },
+    pricing: { monthly: 39 },
     navigation: [{ label: "Reviews", href: "/dashboard/ravelo" }],
     featureFlags: { reviews: true, privateFeedback: true },
     dashboard: {
@@ -257,15 +257,23 @@ export const products: ProductConfig[] = [
 
 export const defaultProductId: ProductId = "avyro";
 
-/** Fraction off the combined AYV Automation Stack catalog price. */
-export const BUNDLE_DISCOUNT = 0.5;
+/** One module, Growth (any three), and the full stack. These match the Stripe prices. */
+export const planPricing = {
+  module: 39,
+  growth: 79,
+  fullStack: 149,
+} as const;
 
-export const bundlePricing = calculatePricingSummary(
-  products.flatMap((product) =>
-    product.pricing.monthly === null ? [] : [product.pricing.monthly],
-  ),
-  BUNDLE_DISCOUNT,
-);
+const catalogMonthly = products.reduce((sum, product) => sum + (product.pricing.monthly ?? 0), 0);
+
+/** Shown where the old 50% bundle card still renders. The charged full-stack price is €149. */
+export const BUNDLE_DISCOUNT = catalogMonthly === 0 ? 0 : (catalogMonthly - planPricing.fullStack) / catalogMonthly;
+
+export const bundlePricing = {
+  fullMonthly: catalogMonthly,
+  discountedMonthly: planPricing.fullStack,
+  savingsMonthly: catalogMonthly - planPricing.fullStack,
+};
 
 export function formatPrice(amount: number, locale: string) {
   return formatEuroPrice(amount, locale);

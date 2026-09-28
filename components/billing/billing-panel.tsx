@@ -7,7 +7,7 @@ import { formatDate } from "@/lib/utils";
 import { openBillingPortal, startCheckout } from "@/services/billing-actions";
 import { isPaidStatus } from "@/lib/billing-status";
 import { formatEuroPrice } from "@/lib/pricing";
-import type { BillableProductId } from "@/lib/stripe-catalog";
+import type { BillablePlanId, BillableProductId } from "@/lib/stripe-catalog";
 import type { Subscription } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
@@ -19,13 +19,22 @@ export type BillableCatalogItem = {
   configured: boolean;
 };
 
+export type PlanCatalogItem = {
+  id: BillablePlanId;
+  name: string;
+  monthlyPrice: number;
+  configured: boolean;
+};
+
 export function BillingPanel({
   subscriptions,
   catalog,
+  plans,
   stripeReady,
 }: {
   subscriptions: Subscription[];
   catalog: BillableCatalogItem[];
+  plans: PlanCatalogItem[];
   stripeReady: boolean;
 }) {
   const t = useTranslations("billing");
@@ -39,12 +48,21 @@ export function BillingPanel({
     incomplete: t("statusIncomplete"),
   };
   const [error, setError] = useState("");
-  const [pending, setPending] = useState<"portal" | BillableProductId | null>(null);
+  const [pending, setPending] = useState<"portal" | BillableProductId | BillablePlanId | null>(null);
+  const [growthModules, setGrowthModules] = useState<BillableProductId[]>([]);
 
-  async function checkout(product: BillableProductId) {
+  function toggleGrowthModule(id: BillableProductId) {
+    setGrowthModules((current) => {
+      if (current.includes(id)) return current.filter((item) => item !== id);
+      if (current.length >= 3) return current;
+      return [...current, id];
+    });
+  }
+
+  async function checkout(product: BillableProductId | BillablePlanId, modules: BillableProductId[] = []) {
     setError("");
     setPending(product);
-    const result = await startCheckout(product);
+    const result = await startCheckout(product, modules);
     if (result?.error) setError(result.error);
     setPending(null);
   }
@@ -57,8 +75,74 @@ export function BillingPanel({
     setPending(null);
   }
 
+  const growth = plans.find((plan) => plan.id === "growth");
+  const fullStack = plans.find((plan) => plan.id === "full_stack");
+  const growthSubscription =
+    subscriptions.find((item) => item.product_slug === "growth" && isPaidStatus(item.status)) ??
+    subscriptions.find((item) => item.product_slug === "growth") ??
+    null;
+  const fullStackSubscription =
+    subscriptions.find((item) => item.product_slug === "full_stack" && isPaidStatus(item.status)) ??
+    subscriptions.find((item) => item.product_slug === "full_stack") ??
+    null;
+  const growthActive = Boolean(growthSubscription && isPaidStatus(growthSubscription.status));
+  const fullStackActive = Boolean(fullStackSubscription && isPaidStatus(fullStackSubscription.status));
+
   return (
-    <div className="grid gap-4 lg:grid-cols-3">
+    <div className="grid gap-4">
+      <div className="grid gap-4 lg:grid-cols-2">
+        {growth ? (
+          <Card id="growth">
+            <CardHeader>
+              <CardDescription>
+                {formatEuroPrice(growth.monthlyPrice, locale)} {tCommon("perMonth")}
+              </CardDescription>
+              <CardTitle>{growth.name}</CardTitle>
+              <p className="pt-2 text-sm text-muted">{t("growthHelp")}</p>
+            </CardHeader>
+            <div className="flex flex-wrap gap-2 pb-4">
+              {catalog.map((product) => {
+                const checked = growthModules.includes(product.id);
+                return (
+                  <label key={product.id} className="flex items-center gap-2 border border-foreground/15 px-3 py-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      disabled={growthActive || (!checked && growthModules.length >= 3)}
+                      onChange={() => toggleGrowthModule(product.id)}
+                    />
+                    {product.name}
+                  </label>
+                );
+              })}
+            </div>
+            <Button
+              onClick={() => checkout("growth", growthModules)}
+              disabled={pending !== null || !growth.configured || growthActive || growthModules.length !== 3}
+            >
+              {growthActive ? t("active", { name: growth.name }) : t("start", { name: growth.name })}
+            </Button>
+          </Card>
+        ) : null}
+        {fullStack ? (
+          <Card id="full-stack">
+            <CardHeader>
+              <CardDescription>
+                {formatEuroPrice(fullStack.monthlyPrice, locale)} {tCommon("perMonth")}
+              </CardDescription>
+              <CardTitle>{fullStack.name}</CardTitle>
+              <p className="pt-2 text-sm text-muted">{t("fullStackHelp")}</p>
+            </CardHeader>
+            <Button
+              onClick={() => checkout("full_stack")}
+              disabled={pending !== null || !fullStack.configured || fullStackActive}
+            >
+              {fullStackActive ? t("active", { name: fullStack.name }) : t("start", { name: fullStack.name })}
+            </Button>
+          </Card>
+        ) : null}
+      </div>
+      <div className="grid gap-4 lg:grid-cols-3">
       {catalog.map((product) => {
         const subscription =
           subscriptions.find((item) => item.product_slug === product.id && isPaidStatus(item.status)) ??
@@ -103,6 +187,7 @@ export function BillingPanel({
         {!stripeReady ? <p className="text-sm text-muted">{t("stripeHint")}</p> : null}
       </div>
       <FormError message={error} />
+    </div>
     </div>
   );
 }

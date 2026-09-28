@@ -17,13 +17,11 @@ const moduleIcons = {
 
 export function StackHome({ locale }: { locale: AppLocale }) {
   const c = getStackCopy(locale);
-  // Display prices only. Stripe checkout still bills the existing per-module
-  // prices (Avyro and Velto €40, Rovyn and Orvyn €70). There is no Stripe
-  // price for Starter €39, Growth €79, or Full Stack €149.
+  // Stripe bills one module at €39, Growth at €79, and the full stack at €149.
   const tiers = [
-    { key: "starter" as const, name: c.pricing.starter, body: c.pricing.starterBody, price: formatPrice(39, locale), features: c.pricing.starterFeatures, href: "/signup", cta: c.pricing.starterCta, featured: false },
-    { key: "growth" as const, name: c.pricing.growth, body: c.pricing.growthBody, price: formatPrice(79, locale), features: c.pricing.growthFeatures, href: "/signup", cta: c.pricing.growthCta, featured: true },
-    { key: "full" as const, name: c.pricing.stack, body: c.pricing.stackBody, price: formatPrice(149, locale), features: c.pricing.stackFeatures, href: "/signup", cta: c.pricing.stackCta, featured: false },
+    { key: "starter" as const, name: c.pricing.starter, body: c.pricing.starterBody, price: formatPrice(39, locale), features: c.pricing.starterFeatures, href: "/dashboard/billing", cta: c.pricing.starterCta, featured: false },
+    { key: "growth" as const, name: c.pricing.growth, body: c.pricing.growthBody, price: formatPrice(79, locale), features: c.pricing.growthFeatures, href: "/dashboard/billing#growth", cta: c.pricing.growthCta, featured: true },
+    { key: "full" as const, name: c.pricing.stack, body: c.pricing.stackBody, price: formatPrice(149, locale), features: c.pricing.stackFeatures, href: "/dashboard/billing#full-stack", cta: c.pricing.stackCta, featured: false },
   ];
 
   return (

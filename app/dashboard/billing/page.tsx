@@ -4,6 +4,7 @@ import { requireWorkspace } from "@/lib/auth/session";
 import {
   getBillableCatalog,
   getOrganizationSubscriptions,
+  getPlanCatalog,
   isStripeConfigured,
 } from "@/services/billing";
 import { getTranslations } from "next-intl/server";
@@ -19,6 +20,7 @@ export default async function BillingPage() {
       <BillingPanel
         subscriptions={subscriptions}
         catalog={getBillableCatalog()}
+        plans={getPlanCatalog()}
         stripeReady={isStripeConfigured()}
       />
     </div>

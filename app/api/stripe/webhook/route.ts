@@ -4,6 +4,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { mapStripeStatus, isUsableSecret } from "@/lib/billing-status";
 import {
   type BillableProductId,
+  BILLABLE_PRODUCTS,
+  isBillableProductId,
   productFromStripeMetadata,
   productFromStripePriceId,
 } from "@/lib/stripe-catalog";
@@ -39,6 +41,17 @@ function stripePriceIdFromSubscription(subscription: Stripe.Subscription) {
   return typeof price === "string" ? price : price.id;
 }
 
+function modulesFromSubscription(subscription: Stripe.Subscription, slug: string | null) {
+  if (slug === "full_stack") return [...BILLABLE_PRODUCTS];
+  const fromMetadata = (subscription.metadata?.modules ?? "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter((item): item is BillableProductId => isBillableProductId(item));
+  if (slug === "growth") return fromMetadata.slice(0, 3);
+  if (slug && isBillableProductId(slug)) return [slug];
+  return fromMetadata;
+}
+
 function productSlugFromSubscription(subscription: Stripe.Subscription, priceId: string | null) {
   return (
     productFromStripePriceId(priceId) ||
@@ -47,7 +60,7 @@ function productSlugFromSubscription(subscription: Stripe.Subscription, priceId:
   );
 }
 
-async function catalogIds(slug: BillableProductId | null, stripePriceId: string | null) {
+async function catalogIds(slug: string | null, stripePriceId: string | null) {
   if (!slug) return { productId: null as string | null, priceId: null as string | null };
   const admin = createAdminClient();
   const { data: product } = await admin.from("products").select("id").eq("slug", slug).maybeSingle();
@@ -114,6 +127,11 @@ async function upsertSubscription(subscription: Stripe.Subscription, organizatio
   );
 
   await syncEntitlement(organizationId, catalog.productId, status);
+  for (const moduleSlug of modulesFromSubscription(subscription, productSlug)) {
+    if (moduleSlug === productSlug) continue;
+    const moduleCatalog = await catalogIds(moduleSlug, null);
+    await syncEntitlement(organizationId, moduleCatalog.productId, status);
+  }
 }
 
 export async function POST(request: Request) {
@@ -162,12 +180,14 @@ export async function POST(request: Request) {
               ...subscription.metadata,
               organization_id: organizationId,
               product_slug: session.metadata.product_slug,
+              modules: session.metadata.modules ?? subscription.metadata?.modules ?? "",
             },
           });
           subscription.metadata = {
             ...subscription.metadata,
             organization_id: organizationId,
             product_slug: session.metadata.product_slug,
+            modules: session.metadata.modules ?? subscription.metadata?.modules ?? "",
           };
         }
         await upsertSubscription(subscription, organizationId);

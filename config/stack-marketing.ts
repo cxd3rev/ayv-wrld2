@@ -175,7 +175,7 @@ const en: StackCopy = {
     items: [
       { q: "What is in Starter, Growth, and the full stack?", a: "Starter is one module of your choice. Growth is any three modules. The full stack includes all six: Avyro, Velto, Rovyn, Orvyn, Nexro, and Ravelo." },
       { q: "Can I buy one module?", a: "Yes. Starter is one module of your choice: Avyro, Velto, Rovyn, Orvyn, Nexro, or Ravelo." },
-      { q: "Is the full stack checkout live?", a: "Not yet. You can subscribe to Avyro, Velto, Rovyn, and Orvyn one at a time." },
+      { q: "Is the full stack checkout live?", a: "Yes. One module is €39 per month. Growth is €79 per month for any three modules. The full stack is €149 per month for all six." },
       { q: "Can I upgrade later?", a: "Yes — you can add modules or move up a plan anytime, no lock-in contract." },
       { q: "What happens if I go over my contact limit?", a: "We'll notify you before any charges apply, and you can upgrade instantly." },
       { q: "Is there a free trial?", a: "Yes — every plan includes a 14-day free trial, no card required." },

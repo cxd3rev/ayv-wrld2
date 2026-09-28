@@ -5,16 +5,19 @@ import { getAppUrl } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
 import { isPaidStatus, isUsableSecret } from "@/lib/billing-status";
 import {
+  type BillablePlanId,
   type BillableProductId,
+  type CheckoutProductId,
   BILLABLE_PRODUCTS,
   billableProductName,
   getStripePriceId,
   isBillableProductId,
+  isCheckoutProductId,
   isProductCheckoutReady,
   isStripeSecretConfigured,
   productFromStripePriceId,
 } from "@/lib/stripe-catalog";
-import { getProduct } from "@/config/products";
+import { getProduct, planPricing } from "@/config/products";
 import type { Organization, Subscription } from "@/types/database";
 
 export { mapStripeStatus, isUsableSecret, isPaidStatus } from "@/lib/billing-status";
@@ -32,7 +35,7 @@ type SubscriptionRow = Subscription & {
 
 function withProductSlug(row: SubscriptionRow): Subscription {
   const related = Array.isArray(row.products) ? row.products[0] : row.products;
-  const slug = related?.slug && isBillableProductId(related.slug) ? related.slug : null;
+  const slug = related?.slug && isCheckoutProductId(related.slug) ? related.slug : null;
   const { products: _products, ...subscription } = row;
   void _products;
   return {
@@ -57,7 +60,7 @@ export async function getOrganizationSubscription(organizationId: string) {
   return subscriptions[0] ?? null;
 }
 
-export function subscriptionForProduct(subscriptions: Subscription[], product: BillableProductId) {
+export function subscriptionForProduct(subscriptions: Subscription[], product: CheckoutProductId) {
   return (
     subscriptions.find((item) => item.product_slug === product && isPaidStatus(item.status)) ??
     subscriptions.find((item) => item.product_slug === product) ??
@@ -66,7 +69,7 @@ export function subscriptionForProduct(subscriptions: Subscription[], product: B
 }
 
 export function paidProductSlugs(subscriptions: Subscription[]) {
-  const paid = new Set<BillableProductId>();
+  const paid = new Set<CheckoutProductId>();
   for (const item of subscriptions) {
     if (item.product_slug && isPaidStatus(item.status)) {
       paid.add(item.product_slug);
@@ -76,15 +79,34 @@ export function paidProductSlugs(subscriptions: Subscription[]) {
 }
 
 /**
- * Create a Stripe Checkout session for one AYV WRLD product.
- * Price ids stay on the server; the client only passes a billable product slug.
+ * Create a Stripe Checkout session for one module or for Growth / Full stack.
+ * Price ids stay on the server. Growth must name exactly three modules.
  */
-export async function createCheckoutSession(organization: Organization, product: BillableProductId) {
+export async function createCheckoutSession(
+  organization: Organization,
+  product: CheckoutProductId,
+  modules: BillableProductId[] = [],
+) {
   const stripe = getStripe();
   const resolvedPrice = getStripePriceId(product);
 
   if (!isStripeSecretConfigured() || !stripe || !resolvedPrice) {
     return { ok: false as const, error: "Billing is not configured yet." };
+  }
+
+  const uniqueModules = [...new Set(modules)];
+  const coveredModules: BillableProductId[] =
+    product === "full_stack"
+      ? [...BILLABLE_PRODUCTS]
+      : product === "growth"
+        ? uniqueModules
+        : [product];
+
+  if (product === "growth" && coveredModules.length !== 3) {
+    return { ok: false as const, error: "Choose exactly three modules for Growth." };
+  }
+  if (coveredModules.some((item) => !isBillableProductId(item))) {
+    return { ok: false as const, error: "Unknown product." };
   }
 
   const existing = subscriptionForProduct(await getOrganizationSubscriptions(organization.id), product);
@@ -107,11 +129,13 @@ export async function createCheckoutSession(organization: Organization, product:
       metadata: {
         organization_id: organization.id,
         product_slug: product,
+        modules: coveredModules.join(","),
       },
       subscription_data: {
         metadata: {
           organization_id: organization.id,
           product_slug: product,
+          modules: coveredModules.join(","),
         },
       },
     });
@@ -183,6 +207,23 @@ async function getOrCreateStripeCustomer(stripe: Stripe, organization: Organizat
   });
 
   return customer.id;
+}
+
+export function getPlanCatalog() {
+  return [
+    {
+      id: "growth" as const,
+      name: "Growth",
+      monthlyPrice: planPricing.growth,
+      configured: isProductCheckoutReady("growth"),
+    },
+    {
+      id: "full_stack" as const,
+      name: "Full stack",
+      monthlyPrice: planPricing.fullStack,
+      configured: isProductCheckoutReady("full_stack"),
+    },
+  ];
 }
 
 export function getBillableCatalog() {
