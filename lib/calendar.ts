@@ -28,7 +28,7 @@ export type CalendarEvent = {
 export type CalendarProductDefinition = {
   slug: ProductId;
   name: string;
-  tone: "stone" | "violet" | "green" | "red" | "navy" | "sky";
+  tone: "stone" | "violet" | "green" | "red" | "yellow" | "pink";
 };
 
 export type CalendarSourceMap = {
@@ -177,7 +177,7 @@ const orvynAdapter = defineCalendarAdapter({
 
 const nexroAdapter = defineCalendarAdapter({
   source: "reactivations",
-  product: { slug: "nexro", name: "Nexro", tone: "navy" },
+  product: { slug: "nexro", name: "Nexro", tone: "yellow" },
   map: (reactivation) => {
     if (!reactivation.next_touch_on) return [];
     if (reactivation.status !== "scheduled" && reactivation.status !== "sent") return [];
@@ -198,7 +198,7 @@ const nexroAdapter = defineCalendarAdapter({
 
 const raveloAdapter = defineCalendarAdapter({
   source: "reviews",
-  product: { slug: "ravelo", name: "Ravelo", tone: "sky" },
+  product: { slug: "ravelo", name: "Ravelo", tone: "pink" },
   map: (review) => {
     const open = review.status === "scheduled" || review.status === "requested";
     const events: CalendarEvent[] = [];

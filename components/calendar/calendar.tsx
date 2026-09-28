@@ -49,13 +49,13 @@ const toneClasses = {
     dot: "bg-[#f07178]",
     chip: "border-[#f07178]/30 bg-[#f07178]/15 text-[#ffc9cc]",
   },
-  navy: {
-    dot: "bg-[#8ea4ff]",
-    chip: "border-[#1e40af]/40 bg-[#1e40af]/35 text-[#dbe4ff]",
+  yellow: {
+    dot: "bg-[#f5c542]",
+    chip: "border-[#f5c542]/35 bg-[#f5c542]/15 text-[#ffe7a3]",
   },
-  sky: {
-    dot: "bg-[#93c5fd]",
-    chip: "border-[#93c5fd]/30 bg-[#1d4ed8]/30 text-[#dbeafe]",
+  pink: {
+    dot: "bg-[#e879c8]",
+    chip: "border-[#e879c8]/35 bg-[#e879c8]/15 text-[#ffd6f3]",
   },
 } as const;
 
