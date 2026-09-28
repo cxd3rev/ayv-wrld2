@@ -224,6 +224,7 @@
     "createAccount": "Account aanmaken",
     "creatingAccount": "Account aanmaken...",
     "hasAccount": "Al een account?",
+    "legalNotice": "Door een account te maken ga je akkoord met de <terms>voorwaarden</terms> en het <privacy>privacybeleid</privacy>.",
     "checkEmailTitle": "Check uw e-mail",
     "checkEmailBody": "We hebben een verificatielink gestuurd naar {email}.",
     "checkInbox": "Check uw inbox",

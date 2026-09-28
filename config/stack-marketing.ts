@@ -40,7 +40,7 @@ type StackCopy = {
   how: { eyebrow: string; title: string; steps: { title: string; body: string }[] };
   proof: { eyebrow: string; title: string };
   faq: { eyebrow: string; title: string; items: { q: string; a: string }[] };
-  footer: { blurb: string; modules: string; product: string; rights: string };
+  footer: { blurb: string; modules: string; product: string; rights: string; terms: string; privacy: string };
 };
 
 const modulesEn: Record<ProductId, ModuleCopy> = {
@@ -183,6 +183,8 @@ const en: StackCopy = {
     modules: "Modules",
     product: "Product",
     rights: "All rights reserved.",
+    terms: "Terms",
+    privacy: "Privacy",
   },
 };
 
@@ -203,7 +205,7 @@ const fr: StackCopy = {
   how: { eyebrow: "Fonctionnement", title: "Du premier prospect à l’avis.", steps: [{ title: "Avyro prend le prospect", body: "Vous ajoutez le prospect et choisissez une date de relance. Avyro lui envoie un e-mail ce jour-là." }, { title: "Velto, Rovyn et Orvyn font avancer le travail", body: "Velto enregistre la réservation et rappelle à la date choisie. Rovyn relance le devis à la date choisie. Orvyn rappelle la facture à la date choisie." }, { title: "Nexro et Ravelo les font revenir", body: "Nexro envoie le message de retour ou de parrainage à la date choisie. Ravelo envoie la demande d’avis à la date choisie." }] },
   proof: { eyebrow: "Espace réservé", title: "Ce que disent les équipes" },
   faq: { eyebrow: "FAQ", title: "Les questions, simplement.", items: [{ q: "Que contiennent Starter, Growth et la stack complète ?", a: "Starter, c’est un module au choix. Growth, ce sont trois modules au choix. La stack complète inclut les six : Avyro, Velto, Rovyn, Orvyn, Nexro et Ravelo." }, { q: "Puis-je acheter un seul module ?", a: "Oui. Starter, c’est un module au choix : Avyro, Velto, Rovyn, Orvyn, Nexro ou Ravelo." }, { q: "Le paiement de la stack est-il en ligne ?", a: "Oui. Un module coûte 39 € par mois. Growth coûte 79 € par mois pour trois modules. La stack complète coûte 149 € par mois pour les six." }, { q: "Puis-je changer de formule plus tard ?", a: "Oui — vous pouvez ajouter des modules ou monter de formule à tout moment, sans engagement." }, { q: "Que se passe-t-il si je dépasse ma limite de contacts ?", a: "Les nouveaux enregistrements s’arrêtent pour le reste du mois. Passez à Growth ou à la stack complète pour augmenter la limite. Il n’y a pas de frais en plus." }, { q: "Y a-t-il un essai gratuit ?", a: "Oui. Chaque formule commence par 7 jours gratuits. Une carte est demandée, et le paiement commence à la fin de l’essai." }] },
-  footer: { ...en.footer, blurb: "Avyro, Velto, Rovyn, Orvyn, Nexro et Ravelo suivent le client du premier prospect jusqu’à l’avis.", product: "Produit", rights: "Tous droits réservés." },
+  footer: { ...en.footer, blurb: "Avyro, Velto, Rovyn, Orvyn, Nexro et Ravelo suivent le client du premier prospect jusqu’à l’avis.", product: "Produit", rights: "Tous droits réservés.", terms: "Conditions", privacy: "Confidentialité" },
 };
 
 const de: StackCopy = {
@@ -223,7 +225,7 @@ const de: StackCopy = {
   how: { eyebrow: "So funktioniert’s", title: "Von der ersten Anfrage zur Bewertung.", steps: [{ title: "Avyro nimmt die Anfrage", body: "Sie legen den Lead an und wählen ein Nachfassdatum. Avyro schickt an dem Tag eine E-Mail." }, { title: "Velto, Rovyn und Orvyn führen den Auftrag", body: "Velto speichert die Buchung und erinnert am gewählten Datum. Rovyn fasst das Angebot am gewählten Datum nach. Orvyn erinnert am gewählten Datum an die Rechnung." }, { title: "Nexro und Ravelo holen sie zurück", body: "Nexro verschickt Rückgewinn oder Empfehlung am gewählten Datum. Ravelo verschickt die Bewertungsanfrage am gewählten Datum." }] },
   proof: { eyebrow: "Platzhalter", title: "Was Teams sagen" },
   faq: { eyebrow: "FAQ", title: "Fragen, beantwortet.", items: [{ q: "Was ist in Starter, Growth und dem vollen Stack?", a: "Starter ist ein Modul nach Wahl. Growth sind drei beliebige Module. Der volle Stack enthält alle sechs: Avyro, Velto, Rovyn, Orvyn, Nexro und Ravelo." }, { q: "Kann ich ein einzelnes Modul kaufen?", a: "Ja. Starter ist ein Modul nach Wahl: Avyro, Velto, Rovyn, Orvyn, Nexro oder Ravelo." }, { q: "Ist der Stack-Checkout live?", a: "Ja. Ein Modul kostet 39 € pro Monat. Growth kostet 79 € pro Monat für drei Module. Der volle Stack kostet 149 € pro Monat für alle sechs." }, { q: "Kann ich später wechseln?", a: "Ja — Sie können jederzeit Module ergänzen oder den Plan erhöhen, ohne Vertragsbindung." }, { q: "Was passiert, wenn ich das Kontaktlimit überschreite?", a: "Neue Einträge stoppen für den Rest des Monats. Wechseln Sie zu Growth oder zum vollen Stack, um das Limit zu erhöhen. Es gibt keine Zusatzkosten." }, { q: "Gibt es eine Testphase?", a: "Ja. Jeder Plan beginnt mit 7 kostenlosen Tagen. Eine Karte ist nötig, und die Abrechnung startet nach der Testphase." }] },
-  footer: { ...en.footer, blurb: "Avyro, Velto, Rovyn, Orvyn, Nexro und Ravelo begleiten den Kunden von der Anfrage bis zur Bewertung.", modules: "Module", product: "Produkt", rights: "Alle Rechte vorbehalten." },
+  footer: { ...en.footer, blurb: "Avyro, Velto, Rovyn, Orvyn, Nexro und Ravelo begleiten den Kunden von der Anfrage bis zur Bewertung.", modules: "Module", product: "Produkt", rights: "Alle Rechte vorbehalten.", terms: "AGB", privacy: "Datenschutz" },
 };
 
 const nl: StackCopy = {
@@ -243,7 +245,7 @@ const nl: StackCopy = {
   how: { eyebrow: "Hoe het werkt", title: "Van de eerste lead naar de review.", steps: [{ title: "Avyro pakt de lead", body: "Je voegt de lead toe en kiest een opvolgdatum. Avyro mailt die dag." }, { title: "Velto, Rovyn en Orvyn doen het werk", body: "Velto bewaart de boeking en herinnert op de gekozen datum. Rovyn volgt de offerte op de gekozen datum. Orvyn herinnert aan de factuur op de gekozen datum." }, { title: "Nexro en Ravelo brengen ze terug", body: "Nexro mailt het terugwin- of referralbericht op de gekozen datum. Ravelo mailt het reviewverzoek op de gekozen datum." }] },
   proof: { eyebrow: "Tijdelijk", title: "Wat teams zeggen" },
   faq: { eyebrow: "FAQ", title: "Vragen, beantwoord.", items: [{ q: "Wat zit er in Starter, Growth en de volledige stack?", a: "Starter is één module naar keuze. Growth is drie modules naar keuze. De volledige stack bevat alle zes: Avyro, Velto, Rovyn, Orvyn, Nexro en Ravelo." }, { q: "Kan ik één module kopen?", a: "Ja. Starter is één module naar keuze: Avyro, Velto, Rovyn, Orvyn, Nexro of Ravelo." }, { q: "Is de stack-checkout live?", a: "Ja. Eén module is €39 per maand. Growth is €79 per maand voor drie modules. De volledige stack is €149 per maand voor alle zes." }, { q: "Kan ik later upgraden?", a: "Ja — je kunt op elk moment modules toevoegen of een hoger plan nemen, zonder contract." }, { q: "Wat als ik over mijn contactlimiet ga?", a: "Nieuwe records stoppen voor de rest van de maand. Upgrade naar Growth of de volledige stack om de limiet te verhogen. Er komen geen extra kosten bij." }, { q: "Is er een proefperiode?", a: "Ja. Elk plan begint met 7 gratis dagen. Je koppelt een kaart, en de betaling start als de proef voorbij is." }] },
-  footer: { ...en.footer, blurb: "Avyro, Velto, Rovyn, Orvyn, Nexro en Ravelo volgen de klant van de eerste lead tot de review.", product: "Product", rights: "Alle rechten voorbehouden." },
+  footer: { ...en.footer, blurb: "Avyro, Velto, Rovyn, Orvyn, Nexro en Ravelo volgen de klant van de eerste lead tot de review.", product: "Product", rights: "Alle rechten voorbehouden.", terms: "Voorwaarden", privacy: "Privacy" },
 };
 
 const copy: Record<AppLocale, StackCopy> = { en, fr, de, nl };

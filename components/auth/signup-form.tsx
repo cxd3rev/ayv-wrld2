@@ -109,6 +109,20 @@ export function SignupForm() {
       <Button type="submit" className="w-full" disabled={pending}>
         {pending ? t("creatingAccount") : t("createAccount")}
       </Button>
+      <p className="text-center text-xs leading-relaxed text-muted">
+        {t.rich("legalNotice", {
+          terms: (chunks) => (
+            <Link href="/terms" className="underline underline-offset-4">
+              {chunks}
+            </Link>
+          ),
+          privacy: (chunks) => (
+            <Link href="/privacy" className="underline underline-offset-4">
+              {chunks}
+            </Link>
+          ),
+        })}
+      </p>
       <p className="text-center text-sm text-muted">
         {t("hasAccount")}{" "}
         <Link href="/login" className="text-accent hover:underline">

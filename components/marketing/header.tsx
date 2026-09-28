@@ -125,8 +125,12 @@ export function MarketingFooter() {
         </div>
       </div>
       {/* PLACEHOLDER: social profile links. */}
-      <div className="mx-auto mt-12 flex w-full max-w-6xl items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/45">
+      <div className="mx-auto mt-12 flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/45">
         <p>© {new Date().getFullYear()} AYV Automation Stack. {c.footer.rights}</p>
+        <div className="flex gap-4">
+          <Link href="/terms" className="hover:text-white">{c.footer.terms}</Link>
+          <Link href="/privacy" className="hover:text-white">{c.footer.privacy}</Link>
+        </div>
         <div className="flex gap-3" aria-hidden>
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15">in</span>
           <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15">x</span>

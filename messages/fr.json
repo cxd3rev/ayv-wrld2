@@ -224,6 +224,7 @@
     "createAccount": "Créer un compte",
     "creatingAccount": "Création du compte...",
     "hasAccount": "Déjà un compte ?",
+    "legalNotice": "En créant un compte, vous acceptez les <terms>conditions</terms> et la <privacy>politique de confidentialité</privacy>.",
     "checkEmailTitle": "Vérifiez votre e-mail",
     "checkEmailBody": "Nous avons envoyé un lien de vérification à {email}.",
     "checkInbox": "Consultez votre boîte de réception",

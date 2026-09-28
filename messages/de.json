@@ -224,6 +224,7 @@
     "createAccount": "Konto erstellen",
     "creatingAccount": "Konto wird erstellt...",
     "hasAccount": "Schon ein Konto?",
+    "legalNotice": "Mit dem Konto akzeptieren Sie die <terms>AGB</terms> und die <privacy>Datenschutzerklärung</privacy>.",
     "checkEmailTitle": "Prüfen Sie Ihre E-Mail",
     "checkEmailBody": "Wir haben einen Bestätigungslink an {email} gesendet.",
     "checkInbox": "Posteingang prüfen",
