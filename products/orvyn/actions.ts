@@ -10,6 +10,7 @@ import {
   updateInvoiceReminderSchema,
 } from "@/lib/validations";
 import { linkCreatedRecord } from "@/services/record-links";
+import { assertCanCreate } from "@/lib/plan-access";
 import type { Invoice } from "@/types/database";
 
 const invoiceColumns =
@@ -45,6 +46,9 @@ export async function createInvoice(formData: FormData) {
   });
 
   if (!parsed.success) return { ok: false as const, error: firstZodError(parsed.error) };
+
+  const gate = await assertCanCreate(organization, "orvyn");
+  if (!gate.ok) return gate;
 
   const supabase = await createClient();
   const { data, error } = await supabase

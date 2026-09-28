@@ -127,10 +127,30 @@ async function upsertSubscription(subscription: Stripe.Subscription, organizatio
   );
 
   await syncEntitlement(organizationId, catalog.productId, status);
-  for (const moduleSlug of modulesFromSubscription(subscription, productSlug)) {
-    if (moduleSlug === productSlug) continue;
-    const moduleCatalog = await catalogIds(moduleSlug, null);
-    await syncEntitlement(organizationId, moduleCatalog.productId, status);
+
+  if (productSlug === "growth" || productSlug === "full_stack") {
+    const selected = new Set(modulesFromSubscription(subscription, productSlug));
+    const { data: ownSubscriptions } = await admin
+      .from("subscriptions")
+      .select("status, products(slug)")
+      .eq("organization_id", organizationId);
+    const individuallyPaid = new Set<string>();
+    for (const row of ownSubscriptions ?? []) {
+      if (!PAID_STATUSES.has(row.status)) continue;
+      const related = Array.isArray(row.products) ? row.products[0] : row.products;
+      const slug = related && typeof related === "object" && "slug" in related ? String(related.slug) : "";
+      if (isBillableProductId(slug)) individuallyPaid.add(slug);
+    }
+
+    for (const moduleSlug of BILLABLE_PRODUCTS) {
+      if (!selected.has(moduleSlug) && individuallyPaid.has(moduleSlug)) continue;
+      const moduleCatalog = await catalogIds(moduleSlug, null);
+      await syncEntitlement(
+        organizationId,
+        moduleCatalog.productId,
+        selected.has(moduleSlug) ? status : "cancelled",
+      );
+    }
   }
 }
 

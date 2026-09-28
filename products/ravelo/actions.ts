@@ -10,6 +10,7 @@ import {
   updateReviewFollowUpSchema,
 } from "@/lib/validations";
 import { linkCreatedRecord } from "@/services/record-links";
+import { assertCanCreate } from "@/lib/plan-access";
 import type { Review } from "@/types/database";
 
 const reviewColumns =
@@ -44,6 +45,9 @@ export async function createReview(formData: FormData) {
   });
 
   if (!parsed.success) return { ok: false as const, error: firstZodError(parsed.error) };
+
+  const gate = await assertCanCreate(organization, "ravelo");
+  if (!gate.ok) return gate;
 
   const supabase = await createClient();
   const { data, error } = await supabase

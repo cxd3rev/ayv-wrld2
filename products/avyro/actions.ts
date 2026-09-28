@@ -10,6 +10,7 @@ import {
   updateLeadFollowUpSchema,
 } from "@/lib/validations";
 import { linkCreatedRecord } from "@/services/record-links";
+import { assertCanCreate } from "@/lib/plan-access";
 import type { Lead } from "@/types/database";
 
 export async function listLeads(): Promise<Lead[]> {
@@ -43,6 +44,9 @@ export async function createLead(formData: FormData) {
   if (!parsed.success) {
     return { ok: false, error: firstZodError(parsed.error) };
   }
+
+  const gate = await assertCanCreate(organization, "avyro");
+  if (!gate.ok) return gate;
 
   const supabase = await createClient();
   const { data, error } = await supabase

@@ -16,7 +16,9 @@ import { VeltoBookingsWorkspace } from "@/products/velto/bookings-workspace";
 import { listBookings } from "@/products/velto/actions";
 import { listRecordLinks } from "@/services/record-links";
 import { requireWorkspace } from "@/lib/auth/session";
+import { getPlanAccess } from "@/lib/plan-access";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 function firstParam(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
@@ -32,6 +34,22 @@ export async function ProductWorkspacePage({
   const product = getProduct(productId)!;
   const { organization } = await requireWorkspace();
   const t = await getTranslations();
+  const access = await getPlanAccess(organization);
+  if (!access.canUse(productId)) {
+    return (
+      <div style={{ "--product-accent": product.accent } as React.CSSProperties}>
+        <div className="mb-6 border-l-4 pl-5" style={{ borderColor: product.accent }}>
+          <PageHeader title={t("billing.lockedTitle")} description={t("billing.lockedBody")} />
+        </div>
+        <Link
+          href="/dashboard/billing"
+          className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-4 text-sm font-medium text-background"
+        >
+          {t("billing.lockedCta")}
+        </Link>
+      </div>
+    );
+  }
   const params = await searchParams;
   const [leads, bookings, quotes, invoices, reactivations, reviews, links] = await Promise.all([
     listLeads(),

@@ -1,7 +1,7 @@
 import "server-only";
 
 import { Resend } from "resend";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 type SendEmailInput = {
   to: string;
@@ -18,11 +18,17 @@ type SendEmailInput = {
  * Future products should call `sendEmail()` instead of talking to Resend
  * directly. That keeps API keys, logging, and templates in one place.
  */
+function configuredFromAddress() {
+  const from = process.env.RESEND_FROM_EMAIL?.trim();
+  if (!from || !from.includes("@") || from.toLowerCase().includes("example.com")) return null;
+  return from;
+}
+
 export async function sendEmail(input: SendEmailInput) {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM_EMAIL ?? "AYV WRLD <noreply@example.com>";
+  const from = configuredFromAddress();
 
-  if (!apiKey) {
+  if (!apiKey || !from) {
     await logEmailEvent({
       ...input,
       status: "failed",
@@ -34,7 +40,7 @@ export async function sendEmail(input: SendEmailInput) {
   try {
     const resend = new Resend(apiKey);
     const result = await resend.emails.send({
-      from,
+      from: from,
       to: input.to,
       subject: input.subject,
       html: input.html,
@@ -96,6 +102,15 @@ function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
+export function followUpEmail(opts: { organizationName: string; message: string }) {
+  return `
+    <div style="font-family:sans-serif;background:#0a0a0a;color:#ededed;padding:32px">
+      <p style="margin:0 0 8px;letter-spacing:0.14em;text-transform:uppercase;font-size:12px;color:#9a9a9a">${escapeHtml(opts.organizationName)}</p>
+      <p style="margin:0;font-size:16px;line-height:1.6">${escapeHtml(opts.message)}</p>
+    </div>
+  `;
+}
+
 export function nexroOutreachEmail(opts: { organizationName: string; message: string }) {
   return `
     <div style="font-family:sans-serif;background:#0a0a0a;color:#ededed;padding:32px">
@@ -111,7 +126,7 @@ async function logEmailEvent(input: SendEmailInput & {
   error?: string | null;
 }) {
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     await supabase.from("email_events").insert({
       organization_id: input.organizationId ?? null,
       user_id: input.userId ?? null,

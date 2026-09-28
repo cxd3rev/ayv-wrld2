@@ -10,6 +10,7 @@ import {
   updateReactivationTouchSchema,
 } from "@/lib/validations";
 import { nexroOutreachCopy } from "@/lib/nexro-customers";
+import { assertCanCreate } from "@/lib/plan-access";
 import { isRecordProduct } from "@/lib/record-entities";
 import { nexroOutreachEmail, sendEmail } from "@/services/email";
 import { createRecordLink, linkCreatedRecord } from "@/services/record-links";
@@ -77,6 +78,9 @@ export async function createReactivation(formData: FormData) {
   if (send && !parsed.data.email) {
     return { ok: false as const, error: "Add an email address to send this." };
   }
+
+  const gate = await assertCanCreate(organization, "nexro");
+  if (!gate.ok) return gate;
 
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -163,6 +167,8 @@ export async function startNexroOutreach(input: {
   }
 
   const { organization } = await requireWorkspace();
+  const gate = await assertCanCreate(organization, "nexro");
+  if (!gate.ok) return gate;
   const message = nexroOutreachCopy({
     kind: parsed.data.kind,
     name: parsed.data.customerName,

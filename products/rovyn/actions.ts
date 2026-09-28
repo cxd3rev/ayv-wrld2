@@ -10,6 +10,7 @@ import {
   updateQuoteFollowUpSchema,
 } from "@/lib/validations";
 import { linkCreatedRecord } from "@/services/record-links";
+import { assertCanCreate } from "@/lib/plan-access";
 import type { Quote } from "@/types/database";
 
 const quoteColumns =
@@ -47,6 +48,9 @@ export async function createQuote(formData: FormData) {
   if (!parsed.success) {
     return { ok: false, error: firstZodError(parsed.error) };
   }
+
+  const gate = await assertCanCreate(organization, "rovyn");
+  if (!gate.ok) return gate;
 
   const supabase = await createClient();
   const { data, error } = await supabase

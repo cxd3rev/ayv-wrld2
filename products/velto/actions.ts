@@ -11,6 +11,7 @@ import {
   updateBookingReminderSchema,
 } from "@/lib/validations";
 import { linkCreatedRecord } from "@/services/record-links";
+import { assertCanCreate } from "@/lib/plan-access";
 import type { Booking } from "@/types/database";
 
 const bookingColumns =
@@ -69,6 +70,9 @@ export async function createBooking(formData: FormData) {
   if (!parsed.success) {
     return { ok: false, error: firstZodError(parsed.error) };
   }
+
+  const gate = await assertCanCreate(organization, "velto");
+  if (!gate.ok) return gate;
 
   const supabase = await createClient();
   const leadId = parsed.data.leadId || null;
