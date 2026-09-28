@@ -137,7 +137,9 @@ export async function createCheckoutSession(
         product_slug: product,
         modules: coveredModules.join(","),
       },
+      payment_method_collection: "always",
       subscription_data: {
+        ...(current.length === 0 ? { trial_period_days: 7 } : {}),
         metadata: {
           organization_id: organization.id,
           product_slug: product,

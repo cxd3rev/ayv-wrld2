@@ -6,19 +6,7 @@ import { BILLABLE_PRODUCTS, isBillableProductId, type BillableProductId } from "
 import { getOrganizationSubscriptions } from "@/services/billing";
 import type { Organization } from "@/types/database";
 
-export const TRIAL_DAYS = 14;
-
 const CONTACT_TABLES = ["leads", "bookings", "quotes", "invoices", "reactivations", "reviews"] as const;
-
-export function trialEndsOn(createdAt: string) {
-  const start = new Date(createdAt);
-  start.setUTCDate(start.getUTCDate() + TRIAL_DAYS);
-  return start;
-}
-
-export function isTrialActive(createdAt: string, now = new Date()) {
-  return now.getTime() < trialEndsOn(createdAt).getTime();
-}
 
 export async function getPlanAccess(organization: Organization) {
   const subscriptions = await getOrganizationSubscriptions(organization.id);
@@ -43,11 +31,11 @@ export async function getPlanAccess(organization: Organization) {
     }
   }
 
-  const trial = isTrialActive(organization.created_at);
+  const trial = paid.some((item) => item.status === "trialing");
   const contactLimit = fullStack ? null : growth ? 1000 : 200;
 
   function canUse(product: BillableProductId) {
-    if (trial || fullStack || purchased.has(product)) return true;
+    if (fullStack || purchased.has(product)) return true;
     return growth && growthModules.has(product);
   }
 
@@ -57,7 +45,7 @@ export async function getPlanAccess(organization: Organization) {
 export async function assertCanCreate(organization: Organization, product: BillableProductId) {
   const access = await getPlanAccess(organization);
   if (!access.canUse(product)) {
-    return { ok: false as const, error: "Your 14-day trial has ended. Subscribe to use this app." };
+    return { ok: false as const, error: "Add a card to start the 7-day trial." };
   }
   if (access.contactLimit == null) return { ok: true as const };
 
