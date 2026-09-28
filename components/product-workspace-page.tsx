@@ -82,10 +82,12 @@ export async function ProductWorkspacePage({
         <PageHeader
           title={product.dashboard.title}
           description={t(`catalog.${product.id}.dashboardDescription`)}
+          helpTopic="follow-ups"
           action={<Badge tone="accent">{t(`catalog.${product.id}.tagline`)}</Badge>}
         />
       </div>
 
+      <div data-help-avoid>
       {productId === "avyro" ? (
         <AvyroLeadsWorkspace {...shared} focusLeadId={firstParam(params.lead)} />
       ) : productId === "velto" ? (
@@ -99,6 +101,7 @@ export async function ProductWorkspacePage({
       ) : (
         <RaveloReviewsWorkspace {...shared} focusReviewId={firstParam(params.review)} />
       )}
+      </div>
     </div>
   );
 }

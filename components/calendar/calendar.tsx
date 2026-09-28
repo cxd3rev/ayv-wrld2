@@ -187,7 +187,7 @@ export function Calendar({
   }
 
   return (
-    <div>
+    <div data-help-avoid>
       <div className="mt-8 flex flex-col gap-5 border-y border-foreground/10 py-5 xl:flex-row xl:items-center xl:justify-between">
         <fieldset>
           <legend className="font-mono text-[10px] tracking-[0.14em] text-muted uppercase">
