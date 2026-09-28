@@ -440,6 +440,8 @@
     "nextBill": "{status} · volgende factuur {date}",
     "active": "{name} actief",
     "start": "Start {name}-abonnement",
+    "switch": "Wissel naar {name}",
+    "switchHelp": "Je betaalt vanaf nu dit plan. Het vorige plan stopt met verlengen.",
     "growthHelp": "Kies precies drie modules en start daarna Growth.",
     "fullStackHelp": "Bevat Avyro, Velto, Rovyn, Orvyn, Nexro en Ravelo.",
     "lockedTitle": "Deze app is vergrendeld",

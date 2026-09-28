@@ -7,7 +7,7 @@ import { formatDate } from "@/lib/utils";
 import { openBillingPortal, startCheckout } from "@/services/billing-actions";
 import { isPaidStatus } from "@/lib/billing-status";
 import { formatEuroPrice } from "@/lib/pricing";
-import type { BillablePlanId, BillableProductId } from "@/lib/stripe-catalog";
+import { isBillableProductId, type BillablePlanId, type BillableProductId } from "@/lib/stripe-catalog";
 import type { Subscription } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
@@ -87,6 +87,11 @@ export function BillingPanel({
     null;
   const growthActive = Boolean(growthSubscription && isPaidStatus(growthSubscription.status));
   const fullStackActive = Boolean(fullStackSubscription && isPaidStatus(fullStackSubscription.status));
+  const paidModule = subscriptions.some(
+    (item) => item.product_slug && isBillableProductId(item.product_slug) && isPaidStatus(item.status),
+  );
+  const growthReplaces = paidModule && !growthActive && !fullStackActive;
+  const fullStackReplaces = (paidModule || growthActive) && !fullStackActive;
 
   return (
     <div className="grid gap-4">
@@ -99,6 +104,7 @@ export function BillingPanel({
               </CardDescription>
               <CardTitle>{growth.name}</CardTitle>
               <p className="pt-2 text-sm text-muted">{t("growthHelp")}</p>
+              {growthReplaces ? <p className="pt-2 text-sm text-muted">{t("switchHelp")}</p> : null}
             </CardHeader>
             <div className="flex flex-wrap gap-2 pb-4">
               {catalog.map((product) => {
@@ -118,9 +124,9 @@ export function BillingPanel({
             </div>
             <Button
               onClick={() => checkout("growth", growthModules)}
-              disabled={pending !== null || !growth.configured || growthActive || growthModules.length !== 3}
+              disabled={pending !== null || !growth.configured || growthActive || fullStackActive || growthModules.length !== 3}
             >
-              {growthActive ? t("active", { name: growth.name }) : t("start", { name: growth.name })}
+              {growthActive ? t("active", { name: growth.name }) : t(growthReplaces ? "switch" : "start", { name: growth.name })}
             </Button>
           </Card>
         ) : null}
@@ -132,12 +138,13 @@ export function BillingPanel({
               </CardDescription>
               <CardTitle>{fullStack.name}</CardTitle>
               <p className="pt-2 text-sm text-muted">{t("fullStackHelp")}</p>
+              {fullStackReplaces ? <p className="pt-2 text-sm text-muted">{t("switchHelp")}</p> : null}
             </CardHeader>
             <Button
               onClick={() => checkout("full_stack")}
               disabled={pending !== null || !fullStack.configured || fullStackActive}
             >
-              {fullStackActive ? t("active", { name: fullStack.name }) : t("start", { name: fullStack.name })}
+              {fullStackActive ? t("active", { name: fullStack.name }) : t(fullStackReplaces ? "switch" : "start", { name: fullStack.name })}
             </Button>
           </Card>
         ) : null}
@@ -172,7 +179,7 @@ export function BillingPanel({
             </CardHeader>
             <Button
               onClick={() => checkout(product.id)}
-              disabled={pending !== null || !product.configured || entitled}
+              disabled={pending !== null || !product.configured || entitled || fullStackActive}
             >
               {entitled ? t("active", { name: product.name }) : t("start", { name: product.name })}
             </Button>

@@ -93,7 +93,86 @@ async function syncEntitlement(
   );
 }
 
-async function upsertSubscription(subscription: Stripe.Subscription, organizationId: string) {
+async function moduleCoveredByCurrentPlan(
+  stripe: Stripe,
+  organizationId: string,
+  moduleSlug: BillableProductId,
+  ignoreSubscriptionId: string,
+) {
+  const admin = createAdminClient();
+  const { data } = await admin
+    .from("subscriptions")
+    .select("stripe_subscription_id, status, products(slug)")
+    .eq("organization_id", organizationId);
+
+  for (const row of data ?? []) {
+    const subscriptionId = row.stripe_subscription_id ? String(row.stripe_subscription_id) : "";
+    if (!subscriptionId || subscriptionId === ignoreSubscriptionId || !PAID_STATUSES.has(row.status)) continue;
+    const related = Array.isArray(row.products) ? row.products[0] : row.products;
+    const slug = related && typeof related === "object" && "slug" in related ? String(related.slug) : "";
+    if (slug === "full_stack") return true;
+    if (slug !== "growth") continue;
+    const current = await stripe.subscriptions.retrieve(subscriptionId);
+    if (current.status !== "active" && current.status !== "trialing" && current.status !== "past_due") continue;
+    if (modulesFromSubscription(current, "growth").includes(moduleSlug)) return true;
+  }
+  return false;
+}
+
+async function hasActiveFullStack(organizationId: string, ignoreSubscriptionId: string) {
+  const admin = createAdminClient();
+  const { data } = await admin
+    .from("subscriptions")
+    .select("stripe_subscription_id, stripe_price_id, status, products(slug)")
+    .eq("organization_id", organizationId);
+
+  for (const row of data ?? []) {
+    const subscriptionId = row.stripe_subscription_id ? String(row.stripe_subscription_id) : "";
+    if (!subscriptionId || subscriptionId === ignoreSubscriptionId || !PAID_STATUSES.has(row.status)) continue;
+    const related = Array.isArray(row.products) ? row.products[0] : row.products;
+    const joined = related && typeof related === "object" && "slug" in related ? String(related.slug) : "";
+    const slug = joined || productFromStripePriceId(row.stripe_price_id ? String(row.stripe_price_id) : null) || "";
+    if (slug === "full_stack") return true;
+  }
+  return false;
+}
+
+async function cancelReplacedPlans(
+  stripe: Stripe,
+  organizationId: string,
+  keepSubscriptionId: string,
+  target: string | undefined,
+) {
+  if (target !== "growth" && target !== "full_stack") return;
+  const admin = createAdminClient();
+  const { data } = await admin
+    .from("subscriptions")
+    .select("stripe_subscription_id, stripe_price_id, status, products(slug)")
+    .eq("organization_id", organizationId);
+
+  for (const row of data ?? []) {
+    const subscriptionId = row.stripe_subscription_id ? String(row.stripe_subscription_id) : "";
+    if (!subscriptionId || subscriptionId === keepSubscriptionId || !PAID_STATUSES.has(row.status)) continue;
+    const related = Array.isArray(row.products) ? row.products[0] : row.products;
+    const joined = related && typeof related === "object" && "slug" in related ? String(related.slug) : "";
+    const slug = joined || productFromStripePriceId(row.stripe_price_id ? String(row.stripe_price_id) : null) || "";
+    const replace =
+      target === "full_stack" ? slug === "growth" || isBillableProductId(slug) : isBillableProductId(slug);
+    if (!replace) continue;
+    try {
+      const cancelled = await stripe.subscriptions.cancel(subscriptionId);
+      await upsertSubscription(cancelled, organizationId, stripe);
+    } catch {
+      // Already cancelled, or Stripe will deliver the cancellation event.
+    }
+  }
+}
+
+async function upsertSubscription(
+  subscription: Stripe.Subscription,
+  organizationId: string,
+  stripe: Stripe,
+) {
   const admin = createAdminClient();
   const period = periodFromSubscription(subscription);
   const customerId =
@@ -108,6 +187,12 @@ async function upsertSubscription(subscription: Stripe.Subscription, organizatio
     .select("id")
     .eq("organization_id", organizationId)
     .maybeSingle();
+
+  const coveredElsewhere =
+    !PAID_STATUSES.has(status) &&
+    !!productSlug &&
+    isBillableProductId(productSlug) &&
+    (await moduleCoveredByCurrentPlan(stripe, organizationId, productSlug, subscription.id));
 
   await admin.from("subscriptions").upsert(
     {
@@ -126,9 +211,16 @@ async function upsertSubscription(subscription: Stripe.Subscription, organizatio
     { onConflict: "stripe_subscription_id" },
   );
 
-  await syncEntitlement(organizationId, catalog.productId, status);
+  if (!coveredElsewhere) {
+    await syncEntitlement(organizationId, catalog.productId, status);
+  }
 
-  if (productSlug === "growth" || productSlug === "full_stack") {
+  const growthReplacedByFullStack =
+    productSlug === "growth" &&
+    !PAID_STATUSES.has(status) &&
+    (await hasActiveFullStack(organizationId, subscription.id));
+
+  if ((productSlug === "growth" || productSlug === "full_stack") && !growthReplacedByFullStack) {
     const selected = new Set(modulesFromSubscription(subscription, productSlug));
     const { data: ownSubscriptions } = await admin
       .from("subscriptions")
@@ -210,7 +302,13 @@ export async function POST(request: Request) {
             modules: session.metadata.modules ?? subscription.metadata?.modules ?? "",
           };
         }
-        await upsertSubscription(subscription, organizationId);
+        await upsertSubscription(subscription, organizationId, stripe);
+        await cancelReplacedPlans(
+          stripe,
+          organizationId,
+          subscription.id,
+          session.metadata?.product_slug,
+        );
       }
     }
 
@@ -222,7 +320,7 @@ export async function POST(request: Request) {
       const subscription = event.data.object as Stripe.Subscription;
       const organizationId = subscription.metadata?.organization_id;
       if (organizationId) {
-        await upsertSubscription(subscription, organizationId);
+        await upsertSubscription(subscription, organizationId, stripe);
       }
     }
   } catch {

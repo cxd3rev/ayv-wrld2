@@ -109,7 +109,13 @@ export async function createCheckoutSession(
     return { ok: false as const, error: "Unknown product." };
   }
 
-  const existing = subscriptionForProduct(await getOrganizationSubscriptions(organization.id), product);
+  const current = await getOrganizationSubscriptions(organization.id);
+  const paid = current.filter((item) => item.product_slug && isPaidStatus(item.status));
+  if (product !== "full_stack" && paid.some((item) => item.product_slug === "full_stack")) {
+    return { ok: false as const, error: "The full stack already covers every module." };
+  }
+
+  const existing = subscriptionForProduct(current, product);
   if (existing && isPaidStatus(existing.status)) {
     return {
       ok: false as const,

@@ -440,6 +440,8 @@
     "nextBill": "{status} · prochaine facture {date}",
     "active": "{name} actif",
     "start": "Démarrer l''abonnement {name}",
+    "switch": "Passer à {name}",
+    "switchHelp": "Vous payez cette formule à partir de maintenant. L''ancienne formule ne se renouvelle plus.",
     "growthHelp": "Choisissez exactement trois modules, puis démarrez Growth.",
     "fullStackHelp": "Comprend Avyro, Velto, Rovyn, Orvyn, Nexro et Ravelo.",
     "lockedTitle": "Cette application est verrouillée",

@@ -440,6 +440,8 @@
     "nextBill": "{status} · nächste Rechnung {date}",
     "active": "{name} aktiv",
     "start": "{name}-Abo starten",
+    "switch": "Zu {name} wechseln",
+    "switchHelp": "Ab jetzt zahlen Sie diesen Plan. Der bisherige Plan verlängert sich nicht mehr.",
     "growthHelp": "Wählen Sie genau drei Module und starten Sie dann Growth.",
     "fullStackHelp": "Enthält Avyro, Velto, Rovyn, Orvyn, Nexro und Ravelo.",
     "lockedTitle": "Diese App ist gesperrt",
