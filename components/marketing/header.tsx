@@ -135,10 +135,13 @@ export function MarketingFooter() {
       </div>
       <div className="mx-auto mt-12 flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/45">
         <p>© {new Date().getFullYear()} {BUSINESS.name}. {c.footer.rights}</p>
-        <p className="inline-flex items-center gap-2 text-white/70">
+        <a
+          href="https://www.ayvwrld.com"
+          className="inline-flex items-center gap-2 text-white/70 hover:text-white"
+        >
           <Image src={ayvBrand.logo} alt="" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
           made by ayvwrld
-        </p>
+        </a>
         <div className="flex gap-4">
           <Link href="/terms" className="hover:text-white">{c.footer.terms}</Link>
           <Link href="/privacy" className="hover:text-white">{c.footer.privacy}</Link>
