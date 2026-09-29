@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import { getProduct } from "@/config/products";
 import { getActiveProductId } from "@/lib/product-cookie";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = { alternates: { canonical: "/dashboard/product" } };
 
 export default async function ProductDashboardPage({
   searchParams,

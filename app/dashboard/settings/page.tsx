@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { GeneralSettingsForm } from "@/components/settings/general-form";
 import { SettingsPage } from "@/components/settings/settings-page";
 import { requireWorkspace } from "@/lib/auth/session";
 import { getTranslations } from "next-intl/server";
+
+export const metadata: Metadata = { alternates: { canonical: "/dashboard/settings" } };
 
 export default async function GeneralSettingsPage() {
   const { organization } = await requireWorkspace();

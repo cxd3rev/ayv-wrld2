@@ -5,6 +5,8 @@ import { resolveLocale } from "@/i18n/config";
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 
+export const revalidate = 3600;
+
 export async function generateMetadata(): Promise<Metadata> {
   const c = getStackCopy(resolveLocale(await getLocale()));
   return {

@@ -8,5 +8,5 @@ export const siteConfig = {
   tagline: "Automate how you win and keep clients.",
   description:
     "Six automation modules for leads, bookings, quotes, invoices, reactivation, and reviews. Buy one, or run the full stack.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ayv-wrld2.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.ayvautomation.space",
 } as const;

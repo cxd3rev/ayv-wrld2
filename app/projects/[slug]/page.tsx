@@ -1,5 +1,6 @@
 import { Breadcrumbs, CTASection, PublicShell } from "@/components/marketing/public-site";
 import { getProject, getProjectDescription, getPublicCopy, projects } from "@/config/public-site";
+import { siteConfig } from "@/config/site";
 import { resolveLocale } from "@/i18n/config";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -40,8 +41,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     name: project.name,
     description,
     creator: { "@type": "Organization", name: "AYV WRLD" },
-    url: `https://ayv-wrld2.vercel.app${project.route}`,
-    image: `https://ayv-wrld2.vercel.app${project.logo}`,
+    url: `${siteConfig.url}${project.route}`,
+    image: `${siteConfig.url}${project.logo}`,
   };
 
   return (

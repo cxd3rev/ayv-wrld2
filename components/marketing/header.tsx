@@ -1,6 +1,7 @@
 "use client";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { BUSINESS, whatsappUrl } from "@/lib/business";
 import { automationBrand, ayvBrand } from "@/config/brands";
 import { products } from "@/config/products";
 import { getStackCopy, stackMarketing } from "@/config/stack-marketing";
@@ -94,23 +95,24 @@ export function MarketingFooter() {
     { href: "/#modules", label: c.nav.modules },
     { href: "/#pricing", label: c.nav.pricing },
     { href: "/#how", label: c.nav.how },
-    { href: "/signup", label: c.nav.start },
+    { href: "/#contact", label: c.nav.contact },
   ];
+  const whatsapp = whatsappUrl();
 
   return (
-    <footer id="contact" className="border-t border-white/10 px-6 py-16">
+    <footer className="border-t border-white/10 px-6 py-16">
       <div className="mx-auto grid w-full max-w-6xl gap-12 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
         <div>
           <BrandMark />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{c.footer.blurb}</p>
-          <a
-            href="https://wa.me/31468563364"
-            className="mt-4 inline-flex text-sm text-white/80 hover:text-white"
-            target="_blank"
-            rel="noreferrer"
-          >
-            WhatsApp 046 856 3364
+          <a href={`mailto:${BUSINESS.email}`} className="mt-4 inline-flex text-sm text-white/80 hover:text-white">
+            {BUSINESS.email}
           </a>
+          {whatsapp ? (
+            <a href={whatsapp} className="mt-2 inline-flex text-sm text-white/80 hover:text-white" target="_blank" rel="noreferrer">
+              WhatsApp
+            </a>
+          ) : null}
         </div>
         <div>
           <p className="text-xs uppercase tracking-[0.16em] text-white/45">{c.footer.product}</p>
@@ -132,7 +134,7 @@ export function MarketingFooter() {
         </div>
       </div>
       <div className="mx-auto mt-12 flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/45">
-        <p>© {new Date().getFullYear()} AYV Automation Stack. {c.footer.rights}</p>
+        <p>© {new Date().getFullYear()} {BUSINESS.name}. {c.footer.rights}</p>
         <p className="inline-flex items-center gap-2 text-white/70">
           <Image src={ayvBrand.logo} alt="" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
           made by ayvwrld

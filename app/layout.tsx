@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Instrument_Sans, Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { HelpRoot } from "@/components/help/help-root";
@@ -34,7 +33,7 @@ const jetbrainsMono = JetBrains_Mono({
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("meta");
   return {
-    metadataBase: new URL(siteConfig.url),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.ayvautomation.space"),
     title: {
       default: siteConfig.name,
       template: `%s · ${siteConfig.name}`,
@@ -77,9 +76,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           </HelpRoot>
         </NextIntlClientProvider>
         <Analytics />
-        <Script id="apollo-tracker" strategy="afterInteractive">
-          {`function initApollo(){var n=Math.random().toString(36).substring(7),o=document.createElement("script");o.src="https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache="+n,o.async=!0,o.defer=!0,o.onload=function(){window.trackingFunctions.onLoad({appId:"6aa6dbcdf405d7001c8d10cd"})},document.head.appendChild(o)}initApollo();`}
-        </Script>
       </body>
     </html>
   );

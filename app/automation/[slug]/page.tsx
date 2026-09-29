@@ -1,6 +1,7 @@
 import { AutomationProductCard, Breadcrumbs, CTASection, PublicShell, SectionHeading } from "@/components/marketing/public-site";
 import { AyvAutomationParentBadge, ProductLogo } from "@/components/product-icon";
 import { ayvBrand } from "@/config/brands";
+import { siteConfig } from "@/config/site";
 import { formatPrice, getProduct, products } from "@/config/products";
 import { getPublicCopy } from "@/config/public-site";
 import { resolveLocale } from "@/i18n/config";
@@ -47,7 +48,7 @@ export default async function AutomationProductPage({ params }: { params: Promis
     brand: {
       "@type": "Brand",
       name: "AYV WRLD",
-      logo: `https://ayv-wrld2.vercel.app${ayvBrand.automationParentMark}`,
+      logo: `${siteConfig.url}${ayvBrand.automationParentMark}`,
     },
     ...(active ? { offers: { "@type": "Offer", price: product.pricing.monthly, priceCurrency: "EUR", availability: "https://schema.org/InStock" } } : {}),
   };

@@ -5,7 +5,7 @@
   "common": {
     "home": "Start",
     "backHome": "← Start",
-    "loading": "AYV WRLD wird geladen...",
+    "loading": "Wird geladen...",
     "loadingWorkspace": "Arbeitsbereich wird geladen...",
     "perMonth": "/ Monat",
     "taxNote": "zzgl. MwSt.",

@@ -5,7 +5,7 @@
   "common": {
     "home": "Accueil",
     "backHome": "← Accueil",
-    "loading": "Chargement d'AYV WRLD...",
+    "loading": "Chargement...",
     "loadingWorkspace": "Chargement de l'espace de travail...",
     "perMonth": "/ mois",
     "taxNote": "Hors taxes",

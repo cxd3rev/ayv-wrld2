@@ -5,7 +5,7 @@
   "common": {
     "home": "Home",
     "backHome": "← Home",
-    "loading": "Loading AYV WRLD...",
+    "loading": "Loading...",
     "loadingWorkspace": "Loading workspace...",
     "perMonth": "/ month",
     "taxNote": "Tax not included",

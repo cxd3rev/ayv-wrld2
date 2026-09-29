@@ -154,7 +154,7 @@ Do **not** use GitHub Pages. GitHub Pages only hosts static `index.html` files. 
 3. Import the `ayv-wrld2` repo.
 4. Add the same environment variables from `.env.example`.
 5. Click Deploy.
-6. Set `NEXT_PUBLIC_APP_URL` to your Vercel URL, for example `https://ayv-wrld2.vercel.app`.
+6. Set `NEXT_PUBLIC_APP_URL` to your public site URL, for example `https://www.ayvautomation.space`.
 7. In Supabase, add that domain to Site URL and Redirect URLs.
 8. In Stripe, add a webhook pointing at `https://your-domain/api/stripe/webhook`.
 

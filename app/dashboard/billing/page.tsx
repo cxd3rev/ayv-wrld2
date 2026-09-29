@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { BillingPanel } from "@/components/billing/billing-panel";
 import { PageHeader } from "@/components/page-header";
 import { requireWorkspace } from "@/lib/auth/session";
@@ -8,6 +9,8 @@ import {
   isStripeConfigured,
 } from "@/services/billing";
 import { getTranslations } from "next-intl/server";
+
+export const metadata: Metadata = { alternates: { canonical: "/dashboard/billing" } };
 
 export default async function BillingPage() {
   const { organization } = await requireWorkspace();

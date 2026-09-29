@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Atmosphere } from "@/components/atmosphere";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { OnboardingForm } from "@/components/onboarding/onboarding-form";
@@ -8,6 +9,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = { alternates: { canonical: "/onboarding" } };
 
 export default async function OnboardingPage() {
   const workspace = await getWorkspace();

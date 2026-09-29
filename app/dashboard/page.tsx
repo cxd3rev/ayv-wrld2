@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { DashboardRecordButton } from "@/components/dashboard-record-button";
 import { ClientDirectory } from "@/components/client-directory";
 import { CalendarPreview } from "@/components/calendar/calendar";
@@ -18,6 +19,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 function formatPercent(metric: ConversionMetric, noData: string) {
   return metric.rate == null ? noData : `${metric.rate.toFixed(1)}%`;
 }
+
+export const metadata: Metadata = { alternates: { canonical: "/dashboard" } };
 
 export default async function DashboardPage() {
   const { organization, profile } = await requireWorkspace();

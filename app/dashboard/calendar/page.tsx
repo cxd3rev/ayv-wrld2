@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Calendar } from "@/components/calendar/calendar";
 import { HelpTrigger } from "@/components/help/help-trigger";
 import { buildCalendarEvents } from "@/lib/calendar";
@@ -5,6 +6,8 @@ import { requireWorkspace } from "@/lib/auth/session";
 import { getDashboardRecords } from "@/services/dashboard";
 import { CalendarDays } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+
+export const metadata: Metadata = { alternates: { canonical: "/dashboard/calendar" } };
 
 export default async function CalendarPage() {
   const { organization } = await requireWorkspace();

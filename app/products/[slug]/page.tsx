@@ -6,12 +6,22 @@ import { ProductLogo } from "@/components/product-icon";
 import { formatPrice, getProduct, products } from "@/config/products";
 import { openProductWorkspace } from "@/services/product-switch";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export function generateStaticParams() {
   return products.map((product) => ({ slug: product.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  return { alternates: { canonical: `/products/${slug}` } };
 }
 
 export default async function ProductPage({

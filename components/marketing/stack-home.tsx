@@ -2,6 +2,7 @@ import { HelpTrigger } from "@/components/help/help-trigger";
 import { automationBrand } from "@/config/brands";
 import { formatPrice, products } from "@/config/products";
 import { getStackCopy, stackMarketing } from "@/config/stack-marketing";
+import { BUSINESS, whatsappUrl } from "@/lib/business";
 import type { AppLocale } from "@/i18n/config";
 import { CalendarClock, Check, MessageSquareText, Receipt, RefreshCw, Sparkles, Star, UserRoundPlus } from "lucide-react";
 import Image from "next/image";
@@ -162,18 +163,22 @@ export function StackHome({ locale }: { locale: AppLocale }) {
         </ol>
       </section>
 
-      {/* PLACEHOLDER: replace these quotes with real customer testimonials. */}
-      <section className="border-y border-white/10 py-20">
-        <div className="mx-auto w-full max-w-6xl px-6 lg:px-10">
-          <p className="text-sm text-white/50">{c.proof.eyebrow}</p>
-          <h2 className="display mt-3 text-4xl">{c.proof.title}</h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {["A", "B", "C"].map((slot) => (
-              <article key={slot} className="glass-card rounded-3xl p-6 text-sm leading-relaxed text-white/55">
-                Testimonial {slot}
-              </article>
-            ))}
-          </div>
+      <section id="contact" className="border-y border-white/10 py-20">
+        <div className="mx-auto w-full max-w-3xl px-6 text-center lg:px-10">
+          <p className="text-lg text-white/80">{c.early}</p>
+          <h2 className="display mt-8 text-3xl">{c.nav.contact}</h2>
+          <p className="mt-4">
+            <a href={`mailto:${BUSINESS.email}`} className="text-sm text-white/80 underline decoration-white/30 underline-offset-4 hover:text-white">
+              {BUSINESS.email}
+            </a>
+          </p>
+          {whatsappUrl() ? (
+            <p className="mt-3">
+              <a href={whatsappUrl()} className="text-sm text-white/80 hover:text-white" target="_blank" rel="noreferrer">
+                WhatsApp
+              </a>
+            </p>
+          ) : null}
         </div>
       </section>
 
