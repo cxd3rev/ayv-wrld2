@@ -111,13 +111,13 @@ const en: LegalCopy = {
         title: "Cookies and analytics",
         paragraphs: [
           "A cookie named ayv_locale remembers the language you pick. Sign-in uses session cookies so you stay logged in.",
-          "The site uses Vercel Analytics, which records page views. It does not use that data to advertise to you.",
+          "The site uses Vercel Analytics, which records page views. It does not use that data to advertise to you. The site also uses Apollo to see which companies visit the pages.",
         ],
       },
       {
         title: "Who else processes data",
         paragraphs: [
-          "Supabase stores the account and the records. Stripe processes payments. Resend sends the emails. Vercel hosts the site. These providers may process data outside your country.",
+          "Supabase stores the account and the records. Stripe processes payments. Resend sends the emails. Vercel hosts the site. Apollo sees which companies visit. These providers may process data outside your country.",
         ],
       },
       {
@@ -234,13 +234,13 @@ const fr: LegalCopy = {
         title: "Cookies et mesure d’audience",
         paragraphs: [
           "Un cookie nommé ayv_locale retient la langue choisie. La connexion utilise des cookies de session pour vous garder connecté.",
-          "Le site utilise Vercel Analytics, qui enregistre les pages vues. Ces données ne servent pas à vous adresser de la publicité.",
+          "Le site utilise Vercel Analytics, qui enregistre les pages vues. Ces données ne servent pas à vous adresser de la publicité. Le site utilise aussi Apollo pour voir quelles entreprises consultent les pages.",
         ],
       },
       {
         title: "Qui d’autre traite les données",
         paragraphs: [
-          "Supabase conserve le compte et les fiches. Stripe traite les paiements. Resend envoie les e-mails. Vercel héberge le site. Ces prestataires peuvent traiter des données en dehors de votre pays.",
+          "Supabase conserve le compte et les fiches. Stripe traite les paiements. Resend envoie les e-mails. Vercel héberge le site. Apollo voit quelles entreprises visitent le site. Ces prestataires peuvent traiter des données en dehors de votre pays.",
         ],
       },
       {
@@ -355,13 +355,13 @@ const de: LegalCopy = {
         title: "Cookies und Auswertung",
         paragraphs: [
           "Ein Cookie namens ayv_locale merkt sich die gewählte Sprache. Die Anmeldung nutzt Sitzungs-Cookies, damit Sie angemeldet bleiben.",
-          "Die Website nutzt Vercel Analytics und zeichnet Seitenaufrufe auf. Diese Daten dienen nicht dazu, Sie zu bewerben.",
+          "Die Website nutzt Vercel Analytics und zeichnet Seitenaufrufe auf. Diese Daten dienen nicht dazu, Sie zu bewerben. Die Website nutzt außerdem Apollo, um zu sehen, welche Unternehmen die Seiten besuchen.",
         ],
       },
       {
         title: "Wer Daten sonst verarbeitet",
         paragraphs: [
-          "Supabase speichert Konto und Einträge. Stripe verarbeitet Zahlungen. Resend sendet die E-Mails. Vercel betreibt die Website. Diese Anbieter können Daten außerhalb Ihres Landes verarbeiten.",
+          "Supabase speichert Konto und Einträge. Stripe verarbeitet Zahlungen. Resend sendet die E-Mails. Vercel betreibt die Website. Apollo erkennt, welche Unternehmen die Seiten besuchen. Diese Anbieter können Daten außerhalb Ihres Landes verarbeiten.",
         ],
       },
       {
@@ -476,13 +476,13 @@ const nl: LegalCopy = {
         title: "Cookies en statistiek",
         paragraphs: [
           "Een cookie met de naam ayv_locale onthoudt de taal die je kiest. Inloggen gebruikt sessiecookies zodat je ingelogd blijft.",
-          "De site gebruikt Vercel Analytics, dat paginaweergaven bijhoudt. Die gegevens worden niet gebruikt om je reclame te sturen.",
+          "De site gebruikt Vercel Analytics, dat paginaweergaven bijhoudt. Die gegevens worden niet gebruikt om je reclame te sturen. De site gebruikt ook Apollo om te zien welke bedrijven de pagina’s bezoeken.",
         ],
       },
       {
         title: "Wie gegevens verder verwerkt",
         paragraphs: [
-          "Supabase bewaart het account en de records. Stripe verwerkt betalingen. Resend verstuurt de mails. Vercel host de site. Deze partijen kunnen gegevens buiten je land verwerken.",
+          "Supabase bewaart het account en de records. Stripe verwerkt betalingen. Resend verstuurt de mails. Vercel host de site. Apollo ziet welke bedrijven de site bezoeken. Deze partijen kunnen gegevens buiten je land verwerken.",
         ],
       },
       {
