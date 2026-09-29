@@ -1,7 +1,7 @@
 "use client";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { automationBrand } from "@/config/brands";
+import { automationBrand, ayvBrand } from "@/config/brands";
 import { products } from "@/config/products";
 import { getStackCopy, stackMarketing } from "@/config/stack-marketing";
 import { resolveLocale } from "@/i18n/config";
@@ -103,7 +103,14 @@ export function MarketingFooter() {
         <div>
           <BrandMark />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{c.footer.blurb}</p>
-          {/* PLACEHOLDER: add a real contact email here. */}
+          <a
+            href="https://wa.me/31468563364"
+            className="mt-4 inline-flex text-sm text-white/80 hover:text-white"
+            target="_blank"
+            rel="noreferrer"
+          >
+            WhatsApp 046 856 3364
+          </a>
         </div>
         <div>
           <p className="text-xs uppercase tracking-[0.16em] text-white/45">{c.footer.product}</p>
@@ -124,16 +131,15 @@ export function MarketingFooter() {
           </ul>
         </div>
       </div>
-      {/* PLACEHOLDER: social profile links. */}
       <div className="mx-auto mt-12 flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/45">
         <p>© {new Date().getFullYear()} AYV Automation Stack. {c.footer.rights}</p>
+        <p className="inline-flex items-center gap-2 text-white/70">
+          <Image src={ayvBrand.logo} alt="" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
+          made by ayvwrld
+        </p>
         <div className="flex gap-4">
           <Link href="/terms" className="hover:text-white">{c.footer.terms}</Link>
           <Link href="/privacy" className="hover:text-white">{c.footer.privacy}</Link>
-        </div>
-        <div className="flex gap-3" aria-hidden>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15">in</span>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15">x</span>
         </div>
       </div>
     </footer>
