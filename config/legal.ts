@@ -41,7 +41,7 @@ const en: LegalCopy = {
       {
         title: "Plans and prices",
         paragraphs: [
-          "Prices are in euro and billed monthly. One module is €39. Growth is €79 and includes exactly three modules. The full stack is €149 and includes all six.",
+          "Prices are in euro, exclude tax, and are billed monthly. One module is €39. Growth is €79 and includes exactly three modules. The full stack is €149 and includes all six.",
           "One module allows 200 new records in a calendar month. Growth allows 1,000. The full stack has no cap. When a limit is reached, new records stop until the next month or you move to a higher plan. There is no extra charge for going over the limit.",
         ],
       },
@@ -166,7 +166,7 @@ const fr: LegalCopy = {
       {
         title: "Formules et prix",
         paragraphs: [
-          "Les prix sont en euros et facturés chaque mois. Un module coûte 39 €. Growth coûte 79 € et comprend exactement trois modules. La stack complète coûte 149 € et comprend les six.",
+          "Les prix sont en euros, hors taxes, et facturés chaque mois. Un module coûte 39 €. Growth coûte 79 € et comprend exactement trois modules. La stack complète coûte 149 € et comprend les six.",
           "Un module autorise 200 nouveaux enregistrements par mois calendaire. Growth en autorise 1 000. La stack complète n’a pas de plafond. Une fois la limite atteinte, les nouveaux enregistrements s’arrêtent jusqu’au mois suivant ou jusqu’à un changement de formule. Il n’y a pas de frais en plus.",
         ],
       },
@@ -287,7 +287,7 @@ const de: LegalCopy = {
       {
         title: "Pläne und Preise",
         paragraphs: [
-          "Die Preise sind in Euro und werden monatlich berechnet. Ein Modul kostet 39 €. Growth kostet 79 € und umfasst genau drei Module. Der volle Stack kostet 149 € und umfasst alle sechs.",
+          "Die Preise sind in Euro, verstehen sich zuzüglich MwSt. und werden monatlich berechnet. Ein Modul kostet 39 €. Growth kostet 79 € und umfasst genau drei Module. Der volle Stack kostet 149 € und umfasst alle sechs.",
           "Ein Modul erlaubt 200 neue Einträge in einem Kalendermonat. Growth erlaubt 1.000. Der volle Stack hat keine Grenze. Ist das Limit erreicht, stoppen neue Einträge bis zum nächsten Monat oder bis zu einem höheren Plan. Es gibt keine Zusatzkosten.",
         ],
       },
@@ -408,7 +408,7 @@ const nl: LegalCopy = {
       {
         title: "Plannen en prijzen",
         paragraphs: [
-          "Prijzen zijn in euro en worden maandelijks gefactureerd. Eén module is €39. Growth is €79 en bevat precies drie modules. De volledige stack is €149 en bevat alle zes.",
+          "Prijzen zijn in euro, exclusief btw, en worden maandelijks gefactureerd. Eén module is €39. Growth is €79 en bevat precies drie modules. De volledige stack is €149 en bevat alle zes.",
           "Eén module staat 200 nieuwe records toe in een kalendermaand. Growth staat 1.000 toe. De volledige stack heeft geen limiet. Als de limiet bereikt is, stoppen nieuwe records tot de volgende maand of tot je een hoger plan neemt. Er komen geen extra kosten bij.",
         ],
       },

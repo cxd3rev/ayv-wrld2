@@ -62,6 +62,7 @@ export function AutomationProductCard({
   status,
   cta,
   price,
+  taxNote,
   category,
 }: {
   product: ProductConfig;
@@ -69,6 +70,7 @@ export function AutomationProductCard({
   status: string;
   cta: string;
   price: string;
+  taxNote?: string;
   category?: string;
 }) {
   return (
@@ -85,7 +87,10 @@ export function AutomationProductCard({
         <p className="mt-3 text-sm leading-relaxed text-muted">{description}</p>
       </div>
       <div className="mt-7 flex items-end justify-between gap-4">
-        <p className="display text-xl">{price}</p>
+        <div>
+          <p className="display text-xl">{price}</p>
+          {taxNote ? <p className="mt-1 text-xs text-muted">{taxNote}</p> : null}
+        </div>
         <Link href={product.marketingRoute} className="inline-flex items-center gap-1.5 text-sm font-medium">
           {cta}<ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>

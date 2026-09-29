@@ -102,6 +102,7 @@ export function BillingPanel({
             <CardHeader>
               <CardDescription>
                 {formatEuroPrice(growth.monthlyPrice, locale)} {tCommon("perMonth")}
+                <span className="mt-1 block text-xs">{tCommon("taxNote")}</span>
               </CardDescription>
               <CardTitle className="flex items-center gap-3">
                 {growth.name}
@@ -139,6 +140,7 @@ export function BillingPanel({
             <CardHeader>
               <CardDescription>
                 {formatEuroPrice(fullStack.monthlyPrice, locale)} {tCommon("perMonth")}
+                <span className="mt-1 block text-xs">{tCommon("taxNote")}</span>
               </CardDescription>
               <CardTitle>{fullStack.name}</CardTitle>
               <p className="pt-2 text-sm text-muted">{t("fullStackHelp")}</p>
@@ -165,9 +167,14 @@ export function BillingPanel({
           <Card key={product.id}>
             <CardHeader>
               <CardDescription>
-                {product.monthlyPrice === null
-                  ? t("notSubscribed")
-                  : `${formatEuroPrice(product.monthlyPrice, locale)} ${tCommon("perMonth")}`}
+                {product.monthlyPrice === null ? (
+                  t("notSubscribed")
+                ) : (
+                  <>
+                    {formatEuroPrice(product.monthlyPrice, locale)} {tCommon("perMonth")}
+                    <span className="mt-1 block text-xs">{tCommon("taxNote")}</span>
+                  </>
+                )}
               </CardDescription>
               <CardTitle>{product.name}</CardTitle>
               <p className="pt-2 text-sm text-muted">

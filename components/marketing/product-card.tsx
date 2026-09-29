@@ -42,6 +42,7 @@ export function ProductCard({
             <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
               {t("common.perMonthShort")}
             </span>
+            <span className="text-xs text-muted">{t("common.taxNote")}</span>
           </p>
         )}
         <span className="mt-6 inline-flex items-center gap-1.5 text-sm text-foreground/80 transition-colors group-hover:text-accent">

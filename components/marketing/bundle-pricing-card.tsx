@@ -15,6 +15,7 @@ type BundlePricingCardProps = {
     plannedPrice: string;
     save: string;
     perMonth: string;
+    excludingTax: string;
     includes: string;
     individualNote: string;
   };
@@ -53,6 +54,7 @@ export function BundlePricingCard({
             <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted">
               {labels.perMonth}
             </span>
+            <span className="text-xs text-muted">{labels.excludingTax}</span>
           </p>
 
           <p className="mt-8 font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
@@ -91,6 +93,7 @@ export function BundlePricingCard({
               <span className="pb-1 font-mono text-xs uppercase tracking-[0.12em] text-muted">
                 {labels.perMonth}
               </span>
+              <span className="pb-1 text-xs text-muted">{labels.excludingTax}</span>
             </p>
           </div>
 

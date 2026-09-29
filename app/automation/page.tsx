@@ -27,7 +27,7 @@ export default async function AutomationPage() {
           <SectionHeading eyebrow="AYV AUTOMATION / PRODUCTS" title={c.automation.productsTitle} body={c.automation.productsBody} />
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
-              <AutomationProductCard key={product.id} product={product} description={t(`catalog.${product.id}.description`)} status={product.status === "active" ? c.common.available : c.common.soon} cta={c.common.view} price={`${formatPrice(product.pricing.monthly ?? 0, locale)} ${c.common.perMonth}`} category={c.common.categories[product.category]} />
+              <AutomationProductCard key={product.id} product={product} description={t(`catalog.${product.id}.description`)} status={product.status === "active" ? c.common.available : c.common.soon} cta={c.common.view} price={`${formatPrice(product.pricing.monthly ?? 0, locale)} ${c.common.perMonth}`} taxNote={c.common.excludingTax} category={c.common.categories[product.category]} />
             ))}
           </div>
         </section>
@@ -50,7 +50,7 @@ export default async function AutomationPage() {
           <BundlePricingCard
             locale={locale}
             className="mt-10"
-            labels={{ bundle: c.common.bundle, purchasedSeparately: c.common.purchasedSeparately, plannedPrice: c.common.plannedPrice, save: c.common.save, perMonth: c.common.perMonth, includes: c.common.includes, individualNote: c.common.individualNote }}
+            labels={{ bundle: c.common.bundle, purchasedSeparately: c.common.purchasedSeparately, plannedPrice: c.common.plannedPrice, save: c.common.save, perMonth: c.common.perMonth, excludingTax: c.common.excludingTax, includes: c.common.includes, individualNote: c.common.individualNote }}
             cta={{ href: "/automation/stack", label: c.automation.stackCta }}
           />
         </section>

@@ -184,6 +184,7 @@ export function BundleOffer() {
         plannedPrice: tCommon("plannedPrice"),
         save: tCommon("save"),
         perMonth: tCommon("perMonth"),
+        excludingTax: tCommon("taxNote"),
         includes: tCommon("includes"),
         individualNote: t("availability"),
       }}

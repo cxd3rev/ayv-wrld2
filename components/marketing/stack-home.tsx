@@ -133,6 +133,7 @@ export function StackHome({ locale }: { locale: AppLocale }) {
                 {tier.featured ? <p className="text-xs font-medium uppercase tracking-[0.16em] text-white">{c.pricing.growthBadge}</p> : null}
                 <h3 className="mt-3 text-lg text-white">{tier.name}</h3>
                 <p className="display mt-4 text-5xl text-white">{tier.price}<span className="ml-1 text-lg font-medium text-white/50">{c.pricing.month}</span></p>
+                <p className="mt-1 text-xs text-white/45">{c.pricing.excludingTax}</p>
                 <p className="mt-3 text-sm leading-relaxed text-white/60">{tier.body}</p>
                 <ul className="mt-8 space-y-3 text-sm text-white/60">
                   {tier.features.map((feature) => (

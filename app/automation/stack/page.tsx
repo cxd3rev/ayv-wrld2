@@ -39,7 +39,7 @@ export default async function AutomationStackPage() {
         <section className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
           <BundlePricingCard
             locale={locale}
-            labels={{ bundle: c.common.bundle, purchasedSeparately: c.common.purchasedSeparately, plannedPrice: c.common.plannedPrice, save: c.common.save, perMonth: c.common.perMonth, includes: c.common.includes, individualNote: c.stack.truth }}
+            labels={{ bundle: c.common.bundle, purchasedSeparately: c.common.purchasedSeparately, plannedPrice: c.common.plannedPrice, save: c.common.save, perMonth: c.common.perMonth, excludingTax: c.common.excludingTax, includes: c.common.includes, individualNote: c.stack.truth }}
             cta={{ href: "/automation", label: c.stack.cta }}
           />
         </section>
@@ -48,7 +48,7 @@ export default async function AutomationStackPage() {
             <SectionHeading eyebrow="AYV AUTOMATION STACK" title={c.stack.connected} body={c.stack.connectedBody} />
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {products.map((product) => (
-                <AutomationProductCard key={product.id} product={product} description={t(`catalog.${product.id}.description`)} status={product.status === "active" ? c.common.available : c.common.soon} cta={c.common.view} price={`${formatPrice(product.pricing.monthly ?? 0, locale)} ${c.common.perMonth}`} category={c.common.categories[product.category]} />
+                <AutomationProductCard key={product.id} product={product} description={t(`catalog.${product.id}.description`)} status={product.status === "active" ? c.common.available : c.common.soon} cta={c.common.view} price={`${formatPrice(product.pricing.monthly ?? 0, locale)} ${c.common.perMonth}`} taxNote={c.common.excludingTax} category={c.common.categories[product.category]} />
               ))}
             </div>
           </div>

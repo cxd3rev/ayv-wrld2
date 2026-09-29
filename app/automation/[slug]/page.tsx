@@ -71,6 +71,7 @@ export default async function AutomationProductPage({ params }: { params: Promis
                 <p className="mt-7 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">{description}</p>
                 <div className="mt-9 flex flex-wrap items-center gap-4">
                   <p className="display text-5xl">{formatPrice(product.pricing.monthly ?? 0, locale)}<span className="ml-2 font-mono text-xs font-normal uppercase tracking-[0.12em] text-muted">{c.common.perMonth}</span></p>
+                  <p className="mt-2 text-xs text-muted">{c.common.excludingTax}</p>
                   {active ? (
                     <Link href={product.route} className="button-primary">{c.product.open} {product.name}<ArrowRight className="h-4 w-4" /></Link>
                   ) : (
@@ -114,7 +115,7 @@ export default async function AutomationProductPage({ params }: { params: Promis
           <SectionHeading eyebrow="AYV AUTOMATION" title={c.product.other} />
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {others.map((other) => (
-              <AutomationProductCard key={other.id} product={other} description={t(`catalog.${other.id}.description`)} status={other.status === "active" ? c.common.available : c.common.soon} cta={c.common.view} price={`${formatPrice(other.pricing.monthly ?? 0, locale)} ${c.common.perMonth}`} category={c.common.categories[other.category]} />
+              <AutomationProductCard key={other.id} product={other} description={t(`catalog.${other.id}.description`)} status={other.status === "active" ? c.common.available : c.common.soon} cta={c.common.view} price={`${formatPrice(other.pricing.monthly ?? 0, locale)} ${c.common.perMonth}`} taxNote={c.common.excludingTax} category={c.common.categories[other.category]} />
             ))}
           </div>
         </section>

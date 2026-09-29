@@ -77,6 +77,7 @@ export default async function ProductPage({
                       <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
                         {t("common.perMonth")}
                       </span>
+                      <span className="text-xs text-muted">{t("common.taxNote")}</span>
                     </p>
                   ) : (
                     <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
@@ -189,6 +190,7 @@ export default async function ProductPage({
                       <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
                         {t("common.perMonth")}
                       </span>
+                      <span className="text-xs text-muted">{t("common.taxNote")}</span>
                     </>
                   ) : (
                     <span className="font-mono text-sm uppercase tracking-[0.14em] text-muted">
@@ -217,6 +219,7 @@ export default async function ProductPage({
                 plannedPrice: t("common.plannedPrice"),
                 save: t("common.save"),
                 perMonth: t("common.perMonth"),
+                excludingTax: t("common.taxNote"),
                 includes: t("common.includes"),
                 individualNote: t("bundle.availability"),
               }}

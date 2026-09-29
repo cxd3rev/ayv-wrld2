@@ -29,7 +29,7 @@ export const helpTopics: Record<
         text: "Growth is €79 a month and includes exactly three of those modules.",
       },
       {
-        text: "The full stack is €149 a month and includes all six.",
+        text: "The full stack is €149 a month and includes all six. These prices do not include tax.",
       },
       {
         text: "The first plan starts with 7 days free. A card is required, and billing starts when the trial ends.",
