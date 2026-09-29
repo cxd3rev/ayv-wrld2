@@ -1,4 +1,3 @@
-import { HelpTrigger } from "@/components/help/help-trigger";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { NotificationsMenu } from "@/components/layout/notifications-menu";
 import { ProductSwitcher } from "@/components/layout/product-switcher";
@@ -28,12 +27,9 @@ export function TopNav({
         <div className="hidden min-w-0 sm:block">
           <p className="truncate text-sm font-medium">AYV workspace</p>
         </div>
-        <div className="flex items-center gap-2">
-          <ProductSwitcher activeProductId={productId} />
-          <HelpTrigger topicId="product-switch" />
-        </div>
+        <ProductSwitcher activeProductId={productId} />
       </div>
-      <div data-help-avoid className="flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <Link
           href="/dashboard/billing"
           className="hidden rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-foreground/80 hover:bg-white/5 sm:inline-flex"

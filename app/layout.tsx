@@ -3,7 +3,6 @@ import { Instrument_Sans, Instrument_Serif, Inter, JetBrains_Mono } from "next/f
 import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
-import { HelpRoot } from "@/components/help/help-root";
 import { ToastProvider } from "@/components/ui/toast";
 import { ayvBrand } from "@/config/brands";
 import { siteConfig } from "@/config/site";
@@ -71,9 +70,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full bg-background font-sans text-foreground">
         <NextIntlClientProvider>
-          <HelpRoot>
-            <ToastProvider>{children}</ToastProvider>
-          </HelpRoot>
+          <ToastProvider>{children}</ToastProvider>
         </NextIntlClientProvider>
         <Analytics />
       </body>

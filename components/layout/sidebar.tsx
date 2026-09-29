@@ -64,7 +64,6 @@ export function Sidebar({
       ) : null}
 
       <aside
-        data-help-avoid
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/10 bg-[#121212] p-5 transition-transform lg:static lg:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full",

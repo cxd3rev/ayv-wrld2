@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Calendar } from "@/components/calendar/calendar";
-import { HelpTrigger } from "@/components/help/help-trigger";
 import { buildCalendarEvents } from "@/lib/calendar";
 import { requireWorkspace } from "@/lib/auth/session";
 import { getDashboardRecords } from "@/services/dashboard";
@@ -21,10 +20,7 @@ export default async function CalendarPage() {
       <div className="flex flex-wrap items-start justify-between gap-5">
         <div>
           <p className="kicker">{t("kicker")}</p>
-          <h1 className="display mt-4 flex items-center gap-3 text-4xl tracking-tight sm:text-6xl">
-            {t("title")}
-            <HelpTrigger topicId="calendar" />
-          </h1>
+          <h1 className="display mt-4 text-4xl tracking-tight sm:text-6xl">{t("title")}</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">{t("subtitle")}</p>
         </div>
         <div className="border border-foreground/10 bg-card p-4 text-right">

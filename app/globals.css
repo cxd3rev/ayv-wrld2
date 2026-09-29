@@ -554,18 +554,6 @@ main > section:not(:first-child) {
   border-bottom: 1px solid;
 }
 
-@keyframes help-blob-squash {
-  0% { transform: scale(1, 1); }
-  35% { transform: scale(1.05, 0.96); }
-  70% { transform: scale(0.97, 1.04); }
-  100% { transform: scale(1, 1); }
-}
-
-.help-blob-live {
-  animation: help-blob-squash 2.1s ease-in-out infinite;
-  transform-origin: 50% 60%;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .marquee-track,
   .hero-burst::before,

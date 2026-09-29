@@ -41,7 +41,7 @@ export function MarketingHeader() {
   }, [open]);
 
   return (
-    <header data-help-avoid className="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-xl">
       <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 lg:px-8" aria-label="Primary navigation">
         <Link href="/" aria-label="AYV Automation Stack home">
           <BrandMark />

@@ -1,6 +1,5 @@
 "use client";
 
-import { HelpTrigger } from "@/components/help/help-trigger";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormError } from "@/components/ui/form-error";
@@ -95,7 +94,7 @@ export function BillingPanel({
   const fullStackReplaces = (paidModule || growthActive) && !fullStackActive;
 
   return (
-    <div data-help-avoid className="grid gap-4">
+    <div className="grid gap-4">
       <div className="grid gap-4 lg:grid-cols-2">
         {growth ? (
           <Card id="growth">
@@ -104,10 +103,7 @@ export function BillingPanel({
                 {formatEuroPrice(growth.monthlyPrice, locale)} {tCommon("perMonth")}
                 <span className="mt-1 block text-xs">{tCommon("taxNote")}</span>
               </CardDescription>
-              <CardTitle className="flex items-center gap-3">
-                {growth.name}
-                <HelpTrigger topicId="growth-modules" />
-              </CardTitle>
+              <CardTitle>{growth.name}</CardTitle>
               <p className="pt-2 text-sm text-muted">{t("growthHelp")}</p>
               {growthReplaces ? <p className="pt-2 text-sm text-muted">{t("switchHelp")}</p> : null}
             </CardHeader>

@@ -1,4 +1,3 @@
-import { HelpTrigger } from "@/components/help/help-trigger";
 import { automationBrand } from "@/config/brands";
 import { formatPrice, products } from "@/config/products";
 import { getStackCopy, stackMarketing } from "@/config/stack-marketing";
@@ -122,13 +121,10 @@ export function StackHome({ locale }: { locale: AppLocale }) {
         <div className="relative mx-auto w-full max-w-6xl px-6 lg:px-10">
           <div className="max-w-2xl">
             <p className="inline-flex items-center gap-2 text-sm text-white/60"><Sparkles className="h-4 w-4" />{c.pricing.eyebrow}</p>
-            <h2 className="display mt-4 flex items-center gap-3 text-4xl sm:text-5xl">
-              {c.pricing.title}
-              <HelpTrigger topicId="pricing" />
-            </h2>
+            <h2 className="display mt-4 text-4xl sm:text-5xl">{c.pricing.title}</h2>
             <p className="mt-4 text-lg leading-relaxed text-white/65">{c.pricing.body}</p>
           </div>
-          <div data-help-avoid className="mt-12 grid items-stretch gap-4 lg:grid-cols-3">
+          <div className="mt-12 grid items-stretch gap-4 lg:grid-cols-3">
             {tiers.map((tier) => (
               <article key={tier.key} className={tier.featured ? "glass-card is-featured relative z-10 flex flex-col rounded-3xl p-7" : "glass-card flex flex-col rounded-3xl p-7"}>
                 {tier.featured ? <p className="text-xs font-medium uppercase tracking-[0.16em] text-white">{c.pricing.growthBadge}</p> : null}
