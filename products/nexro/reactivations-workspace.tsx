@@ -14,10 +14,11 @@ import { useToast } from "@/hooks/use-toast";
 import { buildNexroPeople, type NexroDetail } from "@/lib/nexro-customers";
 import { recordProductName, type RecordPrefill } from "@/lib/record-entities";
 import { cn } from "@/lib/utils";
-import { reactivationKinds, reactivationStatuses } from "@/lib/validations";
+import { contactRelationships, reactivationKinds, reactivationStatuses } from "@/lib/validations";
 import {
   createReactivation,
   deleteReactivation,
+  saveContactRelationship,
   sendSavedReactivation,
   startNexroOutreach,
   updateReactivationStatus,
@@ -25,6 +26,7 @@ import {
 } from "@/products/nexro/actions";
 import type {
   Booking,
+  Contact,
   Invoice,
   Lead,
   Quote,
@@ -69,6 +71,7 @@ function isOpen(record: Reactivation) {
 export function NexroReactivationsWorkspace({
   reactivations,
   reviews,
+  contacts,
   leads,
   bookings,
   quotes,
@@ -80,6 +83,7 @@ export function NexroReactivationsWorkspace({
 }: {
   reactivations: Reactivation[];
   reviews: Review[];
+  contacts: Contact[];
   leads: Lead[];
   bookings: Booking[];
   quotes: Quote[];
@@ -101,6 +105,10 @@ export function NexroReactivationsWorkspace({
   const [offer, setOffer] = useState("");
   const [reward, setReward] = useState("");
   const [pendingKey, setPendingKey] = useState<string | null>(null);
+  const [kind, setKind] = useState<ReactivationKind>("winback");
+  const [relationship, setRelationship] = useState<Record<string, string>>({});
+  const [consentSource, setConsentSource] = useState<Record<string, string>>({});
+  const [consentDate, setConsentDate] = useState<Record<string, string>>({});
   const today = new Date().toISOString().slice(0, 10);
 
   const counts = useMemo(
@@ -147,6 +155,66 @@ export function NexroReactivationsWorkspace({
     openLead: "detailOpenLead",
   };
 
+  function knownContact(email: string | null) {
+    if (!email) return null;
+    return contacts.find((item) => item.email === email.trim().toLowerCase()) ?? null;
+  }
+
+  async function saveRelationship(personKey: string) {
+    const person = [...people.ready, ...people.waiting].find((item) => item.key === personKey);
+    if (!person) return;
+    setPendingKey(`save:${person.key}`);
+    const result = await saveContactRelationship({
+      name: person.name,
+      email: person.email ?? "",
+      phone: person.phone ?? "",
+      relationship: relationship[person.key] ?? "",
+      consentSource: consentSource[person.key] ?? "",
+      consentDate: consentDate[person.key] ?? "",
+    });
+    setPendingKey(null);
+    toast({ title: result.ok ? t("relationshipSaved") : result.error, tone: result.ok ? "success" : "error" });
+    if (result.ok) router.refresh();
+  }
+
+  function relationshipFields(personKey: string) {
+    return (
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        <select
+          aria-label={t("relationship")}
+          value={relationship[personKey] ?? ""}
+          onChange={(event) => setRelationship((current) => ({ ...current, [personKey]: event.target.value }))}
+          className="h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm"
+        >
+          <option value="">{t("relationship")}</option>
+          {contactRelationships.map((value) => (
+            <option key={value} value={value}>{t(value === "existing_customer" ? "existingCustomer" : "consent")}</option>
+          ))}
+        </select>
+        {relationship[personKey] === "consent" ? (
+          <>
+            <Input
+              value={consentSource[personKey] ?? ""}
+              onChange={(event) => setConsentSource((current) => ({ ...current, [personKey]: event.target.value }))}
+              placeholder={t("consentSource")}
+              className="h-9 max-w-48"
+            />
+            <Input
+              type="date"
+              aria-label={t("consentDate")}
+              value={consentDate[personKey] ?? ""}
+              onChange={(event) => setConsentDate((current) => ({ ...current, [personKey]: event.target.value }))}
+              className="h-9 max-w-40"
+            />
+          </>
+        ) : null}
+        <Button type="button" size="sm" variant="secondary" disabled={pendingKey === `save:${personKey}`} onClick={() => saveRelationship(personKey)}>
+          {t("saveRelationship")}
+        </Button>
+      </div>
+    );
+  }
+
   async function contactPerson(personKey: string, kind: "winback" | "referral") {
     const person = [...people.ready, ...people.waiting].find((item) => item.key === personKey);
     if (!person) return;
@@ -161,6 +229,9 @@ export function NexroReactivationsWorkspace({
       lastSeenOn: person.lastSeenOn,
       linkProduct: person.sourceProduct,
       linkId: person.sourceId,
+      relationship: relationship[person.key] ?? "",
+      consentSource: consentSource[person.key] ?? "",
+      consentDate: consentDate[person.key] ?? "",
     });
     setPendingKey(null);
     toast({
@@ -218,7 +289,9 @@ export function NexroReactivationsWorkspace({
                   <p className="text-xs text-muted">
                     {t(detailKey[person.detail])} · {t("quietDays", { count: person.daysQuiet })}
                     {person.email ? "" : ` · ${t("noEmail")}`}
+                    {knownContact(person.email) ? ` · ${t("relationshipReady")}` : ""}
                   </p>
+                  {relationshipFields(person.key)}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {person.situation === "winback" ? (
@@ -226,7 +299,7 @@ export function NexroReactivationsWorkspace({
                       {pendingKey === `winback:${person.key}` ? t("sending") : t("sendWinback")}
                     </Button>
                   ) : null}
-                  <Button size="sm" variant="secondary" disabled={pendingKey === `referral:${person.key}`} onClick={() => contactPerson(person.key, "referral")}>
+                  <Button size="sm" variant="secondary" disabled={!knownContact(person.email) || pendingKey === `referral:${person.key}`} onClick={() => contactPerson(person.key, "referral")}>
                     {pendingKey === `referral:${person.key}` ? t("sending") : t("askReferral")}
                   </Button>
                 </div>
@@ -249,6 +322,7 @@ export function NexroReactivationsWorkspace({
                     {t(detailKey[person.detail])} · {t("quietDays", { count: person.daysQuiet })}
                     {person.email ? "" : ` · ${t("noEmail")}`}
                   </p>
+                  {relationshipFields(person.key)}
                 </div>
                 <Button size="sm" disabled={pendingKey === `winback:${person.key}`} onClick={() => contactPerson(person.key, "winback")}>
                   {pendingKey === `winback:${person.key}` ? t("sending") : t("sendWinback")}
@@ -269,13 +343,26 @@ export function NexroReactivationsWorkspace({
             </p>
           ) : null}
         </div>
+        {kind === "referral" ? (
+          <div className="md:col-span-2">
+            <Label htmlFor="contactId">{t("existingContact")}</Label>
+            <select id="contactId" name="contactId" required className="h-10 w-full rounded-md border border-foreground/15 bg-card px-2 text-sm">
+              <option value="">{t("chooseContact")}</option>
+              {contacts.map((contact) => (
+                <option key={contact.id} value={contact.id}>{contact.name} · {contact.email}</option>
+              ))}
+            </select>
+            <p className="mt-2 text-xs text-muted">{t("referralOnlyExisting")}</p>
+          </div>
+        ) : (
         <div>
           <Label htmlFor="customerName">{t("customer")}</Label>
           <Input id="customerName" name="customerName" required defaultValue={prefill?.name ?? ""} />
         </div>
+        )}
         <div>
           <Label htmlFor="kind">{t("kind")}</Label>
-          <select id="kind" name="kind" defaultValue="winback" className="h-10 w-full rounded-md border border-foreground/15 bg-card px-2 text-sm">
+          <select id="kind" name="kind" value={kind} onChange={(event) => setKind(event.target.value as ReactivationKind)} className="h-10 w-full rounded-md border border-foreground/15 bg-card px-2 text-sm">
             {reactivationKinds.map((kind) => (
               <option key={kind} value={kind}>{t(kindKeys[kind])}</option>
             ))}
@@ -297,14 +384,39 @@ export function NexroReactivationsWorkspace({
           <Label htmlFor="nextTouchOn">{t("nextTouchOn")}</Label>
           <Input id="nextTouchOn" name="nextTouchOn" type="date" />
         </div>
-        <div>
-          <Label htmlFor="email">{t("email")}</Label>
-          <Input id="email" name="email" type="email" defaultValue={prefill?.email ?? ""} />
-        </div>
-        <div>
-          <Label htmlFor="phone">{t("phone")}</Label>
-          <Input id="phone" name="phone" type="tel" placeholder={tCommon("optional")} defaultValue={prefill?.phone ?? ""} />
-        </div>
+        {kind === "winback" ? (
+          <>
+            <div>
+              <Label htmlFor="email">{t("email")}</Label>
+              <Input id="email" name="email" type="email" defaultValue={prefill?.email ?? ""} />
+            </div>
+            <div>
+              <Label htmlFor="relationship">{t("relationship")}</Label>
+              <select id="relationship" name="relationship" className="h-10 w-full rounded-md border border-foreground/15 bg-card px-2 text-sm" defaultValue="">
+                <option value="">{t("relationship")}</option>
+                {contactRelationships.map((value) => (
+                  <option key={value} value={value}>{t(value === "existing_customer" ? "existingCustomer" : "consent")}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <Label htmlFor="consentSource">{t("consentSource")}</Label>
+              <Input id="consentSource" name="consentSource" placeholder={t("consentSource")} />
+            </div>
+            <div>
+              <Label htmlFor="consentDate">{t("consentDate")}</Label>
+              <Input id="consentDate" name="consentDate" type="date" />
+            </div>
+          </>
+        ) : (
+          <input type="hidden" name="customerName" value="Existing contact" />
+        )}
+        {kind === "winback" ? (
+          <div>
+            <Label htmlFor="phone">{t("phone")}</Label>
+            <Input id="phone" name="phone" type="tel" placeholder={tCommon("optional")} defaultValue={prefill?.phone ?? ""} />
+          </div>
+        ) : null}
         <div className="md:col-span-2">
           <Label htmlFor="notes">{t("notes")}</Label>
           <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />

@@ -263,6 +263,9 @@ export const reactivationStatuses = ["scheduled", "sent", "replied", "won", "pas
 export const reactivationKindSchema = z.enum(reactivationKinds);
 export const reactivationStatusSchema = z.enum(reactivationStatuses);
 
+export const contactRelationships = ["existing_customer", "consent"] as const;
+export const contactRelationshipSchema = z.enum(contactRelationships);
+
 export const createReactivationSchema = z.object({
   customerName: z.string().trim().min(2, "Please enter the customer's name."),
   email: optionalEmailField,
@@ -273,6 +276,13 @@ export const createReactivationSchema = z.object({
   lastSeenOn: optionalDateField("Please enter a valid last-seen date."),
   nextTouchOn: optionalDateField("Please enter a valid next-touch date."),
   notes: z.string().trim().optional().transform((value) => value || ""),
+  contactId: z.preprocess((value) => (typeof value === "string" ? value.trim() : ""), z.string()),
+  relationship: z.preprocess(
+    (value) => (value === "existing_customer" || value === "consent" ? value : ""),
+    z.union([contactRelationshipSchema, z.literal("")]),
+  ),
+  consentSource: z.string().trim().optional().transform((value) => value || ""),
+  consentDate: optionalDateField("Please enter a valid consent date."),
 });
 
 export const updateReactivationTouchSchema = z.object({

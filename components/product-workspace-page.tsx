@@ -5,7 +5,7 @@ import { resolveRecordPrefill, type RecordProduct } from "@/lib/record-entities"
 import { AvyroLeadsWorkspace } from "@/products/avyro/leads-workspace";
 import { listLeads } from "@/products/avyro/actions";
 import { NexroReactivationsWorkspace } from "@/products/nexro/reactivations-workspace";
-import { listReactivations } from "@/products/nexro/actions";
+import { listContacts, listReactivations } from "@/products/nexro/actions";
 import { RovynQuotesWorkspace } from "@/products/rovyn/quotes-workspace";
 import { listQuotes } from "@/products/rovyn/actions";
 import { OrvynInvoicesWorkspace } from "@/products/orvyn/invoices-workspace";
@@ -74,6 +74,7 @@ export async function ProductWorkspacePage({
     reactivations,
     reviews,
   );
+  const contacts = productId === "nexro" ? await listContacts() : [];
   const shared = { leads, bookings, quotes, invoices, reactivations, reviews, links, prefill };
 
   return (
@@ -97,7 +98,7 @@ export async function ProductWorkspacePage({
       ) : productId === "orvyn" ? (
         <OrvynInvoicesWorkspace {...shared} focusInvoiceId={firstParam(params.invoice)} />
       ) : productId === "nexro" ? (
-        <NexroReactivationsWorkspace {...shared} organizationName={organization.name} focusReactivationId={firstParam(params.reactivation)} />
+        <NexroReactivationsWorkspace {...shared} contacts={contacts} organizationName={organization.name} focusReactivationId={firstParam(params.reactivation)} />
       ) : (
         <RaveloReviewsWorkspace {...shared} focusReviewId={firstParam(params.review)} />
       )}

@@ -196,6 +196,21 @@ export type Invoice = {
   updated_at: string;
 };
 
+export type ContactRelationship = "existing_customer" | "consent";
+
+export type Contact = {
+  id: string;
+  organization_id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  relationship: ContactRelationship;
+  consent_source: string | null;
+  consent_date: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type ReactivationKind = "winback" | "referral";
 export type ReactivationStatus = "scheduled" | "sent" | "replied" | "won" | "passed";
 

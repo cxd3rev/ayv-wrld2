@@ -10,6 +10,7 @@ type SendEmailInput = {
   template: string;
   organizationId?: string | null;
   userId?: string | null;
+  headers?: Record<string, string>;
 };
 
 /**
@@ -44,6 +45,7 @@ export async function sendEmail(input: SendEmailInput) {
       to: input.to,
       subject: input.subject,
       html: input.html,
+      headers: input.headers,
     });
 
     if (result.error) {

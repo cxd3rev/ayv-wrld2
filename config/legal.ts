@@ -105,6 +105,7 @@ const en: LegalCopy = {
         title: "Email",
         paragraphs: [
           "Follow-up emails are sent by Resend from noreply@ayvautomation.space to the address on the record. We store whether the send succeeded.",
+          "Nexro and Ravelo emails include the business name, its contact details, and a one-click unsubscribe link. An unsubscribed address is not emailed again by those two modules.",
         ],
       },
       {
@@ -228,6 +229,7 @@ const fr: LegalCopy = {
         title: "E-mail",
         paragraphs: [
           "Les e-mails de relance sont envoyés par Resend depuis noreply@ayvautomation.space vers l’adresse de la fiche. Nous conservons si l’envoi a réussi.",
+          "Les e-mails Nexro et Ravelo indiquent le nom de l’entreprise, ses coordonnées et un lien de désinscription en un clic. Une adresse désinscrite ne reçoit plus d’e-mail de ces deux modules.",
         ],
       },
       {
@@ -349,6 +351,7 @@ const de: LegalCopy = {
         title: "E-Mail",
         paragraphs: [
           "Nachfass-E-Mails sendet Resend von noreply@ayvautomation.space an die Adresse im Eintrag. Wir speichern, ob der Versand gelungen ist.",
+          "Nexro- und Ravelo-E-Mails enthalten den Firmennamen, die Kontaktdaten und einen Abmeldelink mit einem Klick. Eine abgemeldete Adresse wird von diesen beiden Modulen nicht erneut angeschrieben.",
         ],
       },
       {
@@ -470,6 +473,7 @@ const nl: LegalCopy = {
         title: "E-mail",
         paragraphs: [
           "Opvolgmails worden verstuurd door Resend vanaf noreply@ayvautomation.space naar het adres op het record. We bewaren of de verzending gelukt is.",
+          "Nexro- en Ravelo-mails bevatten de bedrijfsnaam, de contactgegevens en een afmeldlink met één klik. Een afgemeld adres krijgt geen mail meer van die twee modules.",
         ],
       },
       {

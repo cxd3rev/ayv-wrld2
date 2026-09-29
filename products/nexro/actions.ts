@@ -10,14 +10,18 @@ import {
   updateReactivationTouchSchema,
 } from "@/lib/validations";
 import { nexroOutreachCopy } from "@/lib/nexro-customers";
+import { normalizeEmail, sendOutreachEmail } from "@/lib/outreach-mail";
 import { assertCanCreate } from "@/lib/plan-access";
 import { isRecordProduct } from "@/lib/record-entities";
-import { nexroOutreachEmail, sendEmail } from "@/services/email";
 import { createRecordLink, linkCreatedRecord } from "@/services/record-links";
-import type { Reactivation, ReactivationKind } from "@/types/database";
+import type { Contact, ContactRelationship, Organization, Reactivation, ReactivationKind } from "@/types/database";
+import { getLocale } from "next-intl/server";
 
 const reactivationColumns =
   "id, organization_id, customer_name, email, phone, kind, status, message, incentive, last_seen_on, next_touch_on, notes, created_at, updated_at";
+
+const contactColumns =
+  "id, organization_id, name, email, phone, relationship, consent_source, consent_date, created_at, updated_at";
 
 function plusDays(days: number) {
   const now = new Date();
@@ -29,20 +33,133 @@ async function emailOutreach(opts: {
   to: string;
   kind: ReactivationKind;
   message: string;
-  organizationId: string;
-  organizationName: string;
+  organization: Organization;
+  locale: string;
 }) {
   const subject =
     opts.kind === "winback"
-      ? `${opts.organizationName} — we would like you back`
-      : `${opts.organizationName} — a quick favor`;
-  return sendEmail({
+      ? `${opts.organization.name} — we would like you back`
+      : `${opts.organization.name} — a quick favor`;
+  return sendOutreachEmail({
     to: opts.to,
     subject,
-    html: nexroOutreachEmail({ organizationName: opts.organizationName, message: opts.message }),
+    message: opts.message,
     template: opts.kind === "winback" ? "nexro-winback" : "nexro-referral",
-    organizationId: opts.organizationId,
+    organizationId: opts.organization.id,
+    organizationName: opts.organization.name,
+    contactEmail: opts.organization.email,
+    contactPhone: opts.organization.phone,
+    website: opts.organization.website,
+    locale: opts.locale,
   });
+}
+
+async function loadContactByEmail(organizationId: string, email: string) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("contacts")
+    .select(contactColumns)
+    .eq("organization_id", organizationId)
+    .eq("email", normalizeEmail(email))
+    .maybeSingle();
+  return (data as Contact | null) ?? null;
+}
+
+async function loadContactById(organizationId: string, id: string) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("contacts")
+    .select(contactColumns)
+    .eq("organization_id", organizationId)
+    .eq("id", id)
+    .maybeSingle();
+  return (data as Contact | null) ?? null;
+}
+
+async function saveContact(opts: {
+  organizationId: string;
+  name: string;
+  email: string;
+  phone: string;
+  relationship: ContactRelationship;
+  consentSource: string;
+  consentDate: string;
+}) {
+  if (opts.relationship === "consent" && (!opts.consentSource || !opts.consentDate)) {
+    return { ok: false as const, error: "Consent needs a source and a date." };
+  }
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("contacts")
+    .upsert(
+      {
+        organization_id: opts.organizationId,
+        name: opts.name,
+        email: normalizeEmail(opts.email),
+        phone: opts.phone || null,
+        relationship: opts.relationship,
+        consent_source: opts.relationship === "consent" ? opts.consentSource : null,
+        consent_date: opts.relationship === "consent" ? opts.consentDate : null,
+      },
+      { onConflict: "organization_id,email" },
+    )
+    .select(contactColumns)
+    .single();
+  if (error || !data) return { ok: false as const, error: "Could not save this contact." };
+  return { ok: true as const, contact: data as Contact };
+}
+
+async function contactReadyToMail(organizationId: string, email: string, kind: ReactivationKind) {
+  const contact = await loadContactByEmail(organizationId, email);
+  if (!contact?.relationship) {
+    return {
+      ok: false as const,
+      error:
+        kind === "referral"
+          ? "Referral emails can only go to an existing contact with a relationship."
+          : "Choose existing customer or consent before sending a Nexro email.",
+    };
+  }
+  return { ok: true as const, contact };
+}
+
+export async function saveContactRelationship(input: {
+  name: string;
+  email: string;
+  phone: string;
+  relationship: string;
+  consentSource: string;
+  consentDate: string;
+}) {
+  if (input.relationship !== "existing_customer" && input.relationship !== "consent") {
+    return { ok: false as const, error: "Choose existing customer or consent." };
+  }
+  if (!input.email.trim()) return { ok: false as const, error: "Add an email address on this customer first." };
+  const { organization } = await requireWorkspace();
+  const saved = await saveContact({
+    organizationId: organization.id,
+    name: input.name,
+    email: input.email,
+    phone: input.phone,
+    relationship: input.relationship,
+    consentSource: input.consentSource,
+    consentDate: input.consentDate,
+  });
+  if (!saved.ok) return saved;
+  revalidatePath("/dashboard/nexro");
+  return { ok: true as const, message: "Contact saved." };
+}
+
+export async function listContacts(): Promise<Contact[]> {
+  const { organization } = await requireWorkspace();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("contacts")
+    .select(contactColumns)
+    .eq("organization_id", organization.id)
+    .order("name", { ascending: true });
+  if (error) return [];
+  return (data as Contact[] | null) ?? [];
 }
 
 export async function listReactivations(): Promise<Reactivation[]> {
@@ -61,22 +178,55 @@ export async function listReactivations(): Promise<Reactivation[]> {
 export async function createReactivation(formData: FormData) {
   const { organization } = await requireWorkspace();
   const parsed = createReactivationSchema.safeParse({
-    customerName: formData.get("customerName"),
-    email: formData.get("email"),
-    phone: formData.get("phone"),
+    customerName: String(formData.get("customerName") ?? ""),
+    email: String(formData.get("email") ?? ""),
+    phone: String(formData.get("phone") ?? ""),
     kind: formData.get("kind"),
     message: formData.get("message"),
     incentive: formData.get("incentive"),
     lastSeenOn: formData.get("lastSeenOn"),
     nextTouchOn: formData.get("nextTouchOn"),
     notes: formData.get("notes"),
+    contactId: String(formData.get("contactId") ?? ""),
+    relationship: String(formData.get("relationship") ?? ""),
+    consentSource: String(formData.get("consentSource") ?? ""),
+    consentDate: String(formData.get("consentDate") ?? ""),
   });
 
   if (!parsed.success) return { ok: false as const, error: firstZodError(parsed.error) };
 
   const send = formData.get("intent") === "send";
-  if (send && !parsed.data.email) {
-    return { ok: false as const, error: "Add an email address to send this." };
+  const locale = await getLocale();
+  let customerName = parsed.data.customerName;
+  let email = parsed.data.email;
+  let phone = parsed.data.phone;
+
+  if (parsed.data.kind === "referral") {
+    if (!parsed.data.contactId) {
+      return { ok: false as const, error: "Choose an existing contact for a referral. Do not enter a new address." };
+    }
+    const contact = await loadContactById(organization.id, parsed.data.contactId);
+    if (!contact?.relationship) {
+      return { ok: false as const, error: "Referral emails can only go to an existing contact with a relationship." };
+    }
+    customerName = contact.name;
+    email = contact.email;
+    phone = contact.phone ?? "";
+  } else if (send) {
+    if (!email) return { ok: false as const, error: "Add an email address to send this." };
+    if (parsed.data.relationship !== "existing_customer" && parsed.data.relationship !== "consent") {
+      return { ok: false as const, error: "Choose existing customer or consent before sending a Nexro email." };
+    }
+    const saved = await saveContact({
+      organizationId: organization.id,
+      name: customerName,
+      email,
+      phone,
+      relationship: parsed.data.relationship,
+      consentSource: parsed.data.consentSource,
+      consentDate: parsed.data.consentDate,
+    });
+    if (!saved.ok) return saved;
   }
 
   const gate = await assertCanCreate(organization, "nexro");
@@ -87,9 +237,9 @@ export async function createReactivation(formData: FormData) {
     .from("reactivations")
     .insert({
       organization_id: organization.id,
-      customer_name: parsed.data.customerName,
-      email: parsed.data.email || null,
-      phone: parsed.data.phone || null,
+      customer_name: customerName,
+      email: email || null,
+      phone: phone || null,
       kind: parsed.data.kind,
       message: parsed.data.message,
       incentive: parsed.data.incentive || null,
@@ -107,13 +257,15 @@ export async function createReactivation(formData: FormData) {
 
   await linkCreatedRecord(formData, "nexro", data.id);
 
-  if (send && parsed.data.email) {
+  if (send && email) {
+    const ready = await contactReadyToMail(organization.id, email, parsed.data.kind);
+    if (!ready.ok) return ready;
     const delivered = await emailOutreach({
-      to: parsed.data.email,
+      to: email,
       kind: parsed.data.kind,
       message: parsed.data.message,
-      organizationId: organization.id,
-      organizationName: organization.name,
+      organization,
+      locale,
     });
     if (!delivered.ok) {
       revalidatePath("/dashboard/nexro");
@@ -149,6 +301,9 @@ export async function startNexroOutreach(input: {
   lastSeenOn: string;
   linkProduct: string;
   linkId: string;
+  relationship: string;
+  consentSource: string;
+  consentDate: string;
 }) {
   const parsed = createReactivationSchema.safeParse({
     customerName: input.customerName,
@@ -167,6 +322,25 @@ export async function startNexroOutreach(input: {
   }
 
   const { organization } = await requireWorkspace();
+  const locale = await getLocale();
+  if (parsed.data.kind === "referral") {
+    const ready = await contactReadyToMail(organization.id, parsed.data.email, "referral");
+    if (!ready.ok) return ready;
+  } else {
+    if (input.relationship !== "existing_customer" && input.relationship !== "consent") {
+      return { ok: false as const, error: "Choose existing customer or consent before sending a Nexro email." };
+    }
+    const saved = await saveContact({
+      organizationId: organization.id,
+      name: parsed.data.customerName,
+      email: parsed.data.email,
+      phone: parsed.data.phone,
+      relationship: input.relationship,
+      consentSource: input.consentSource,
+      consentDate: input.consentDate,
+    });
+    if (!saved.ok) return saved;
+  }
   const gate = await assertCanCreate(organization, "nexro");
   if (!gate.ok) return gate;
   const message = nexroOutreachCopy({
@@ -207,8 +381,8 @@ export async function startNexroOutreach(input: {
     to: parsed.data.email,
     kind: parsed.data.kind,
     message,
-    organizationId: organization.id,
-    organizationName: organization.name,
+    organization,
+    locale,
   });
   if (!delivered.ok) {
     revalidatePath("/dashboard/nexro");
@@ -243,13 +417,16 @@ export async function sendSavedReactivation(reactivationId: string) {
   if (row.status === "won" || row.status === "passed") {
     return { ok: false as const, error: "This outreach is already finished." };
   }
+  const ready = await contactReadyToMail(organization.id, row.email, row.kind);
+  if (!ready.ok) return ready;
+  const locale = await getLocale();
 
   const delivered = await emailOutreach({
     to: row.email,
     kind: row.kind,
     message: row.message,
-    organizationId: organization.id,
-    organizationName: organization.name,
+    organization,
+    locale,
   });
   if (!delivered.ok) return { ok: false as const, error: delivered.error ?? "Could not send email." };
 

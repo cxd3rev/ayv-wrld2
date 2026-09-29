@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { normalizeEmail, sendOutreachEmail } from "@/lib/outreach-mail";
 import { followUpEmail, sendEmail } from "@/services/email";
 
 export const runtime = "nodejs";
@@ -37,10 +38,19 @@ export async function GET(request: Request) {
 
   const admin = createAdminClient();
   const today = amsterdamToday();
-  const { data: organizations } = await admin.from("organizations").select("id, name");
-  const names = new Map(
-    (organizations ?? []).map((org) => [String(org.id), typeof org.name === "string" && org.name ? org.name : "AYV WRLD"]),
+  const { data: organizations } = await admin.from("organizations").select("id, name, email, phone, website");
+  const orgs = new Map(
+    (organizations ?? []).map((org) => [
+      String(org.id),
+      {
+        name: typeof org.name === "string" && org.name ? org.name : "AYV WRLD",
+        email: typeof org.email === "string" ? org.email : null,
+        phone: typeof org.phone === "string" ? org.phone : null,
+        website: typeof org.website === "string" ? org.website : null,
+      },
+    ]),
   );
+  const names = new Map([...orgs.entries()].map(([id, org]) => [id, org.name]));
 
   let sent = 0;
   let failed = 0;
@@ -150,6 +160,63 @@ export async function GET(request: Request) {
     );
   }
 
+  async function deliverOutreach(
+    row: DueRow,
+    subject: string,
+    message: string,
+    templateName: string,
+    after?: () => Promise<void>,
+    requireRelationship = false,
+  ) {
+    const email = row.email?.trim();
+    if (!email) {
+      skipped += 1;
+      return;
+    }
+    const template = `follow-up:${templateName}:${row.id}:${today}`;
+    if (await alreadySent(template)) {
+      skipped += 1;
+      return;
+    }
+    if (requireRelationship) {
+      const { data: contact } = await admin
+        .from("contacts")
+        .select("relationship")
+        .eq("organization_id", row.organization_id)
+        .eq("email", normalizeEmail(email))
+        .maybeSingle();
+      if (!contact?.relationship) {
+        skipped += 1;
+        return;
+      }
+    }
+    const org = orgs.get(row.organization_id) ?? {
+      name: "AYV WRLD",
+      email: null,
+      phone: null,
+      website: null,
+    };
+    const result = await sendOutreachEmail({
+      to: email,
+      subject,
+      message,
+      template,
+      organizationId: row.organization_id,
+      organizationName: org.name,
+      contactEmail: org.email,
+      contactPhone: org.phone,
+      website: org.website,
+      locale: "en",
+    });
+    if (!result.ok) {
+      if (result.error === "This address is unsubscribed.") skipped += 1;
+      else failed += 1;
+      return;
+    }
+    sent += 1;
+    if (after) await after();
+  }
+
   const { data: scheduledReviews } = await admin
     .from("reviews")
     .select("id, organization_id, customer_name, email, status")
@@ -158,11 +225,11 @@ export async function GET(request: Request) {
   for (const review of scheduledReviews ?? []) {
     const organizationName = names.get(review.organization_id) ?? "AYV WRLD";
     const person = review.customer_name || "there";
-    await deliver(
+    await deliverOutreach(
       review,
-      "reviews",
       `Review request from ${organizationName}`,
       `Hi ${person}, ${organizationName} would like to hear how the work went.`,
+      "reviews",
       async () => {
         await admin.from("reviews").update({ status: "requested" }).eq("id", review.id);
       },
@@ -177,11 +244,11 @@ export async function GET(request: Request) {
   for (const review of reviewFollowUps ?? []) {
     const organizationName = names.get(review.organization_id) ?? "AYV WRLD";
     const person = review.customer_name || "there";
-    await deliver(
+    await deliverOutreach(
       review,
-      "reviews-follow-up",
       `Review follow-up from ${organizationName}`,
       `Hi ${person}, a short follow-up from ${organizationName} about your review.`,
+      "reviews-follow-up",
     );
   }
 
@@ -194,15 +261,16 @@ export async function GET(request: Request) {
     const organizationName = names.get(reactivation.organization_id) ?? "AYV WRLD";
     const person = reactivation.customer_name || "there";
     const message = reactivation.message?.trim() || `Hi ${person}, a note from ${organizationName}.`;
-    await deliver(
+    await deliverOutreach(
       reactivation,
-      "reactivations",
       `A note from ${organizationName}`,
       message,
+      "reactivations",
       async () => {
         if (reactivation.status !== "scheduled") return;
         await admin.from("reactivations").update({ status: "sent" }).eq("id", reactivation.id);
       },
+      true,
     );
   }
 
