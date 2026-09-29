@@ -4,7 +4,7 @@ export const BUSINESS = {
   country: "Belgium",
   address: "",
   enterpriseNumber: "",
-  email: "privacy@ayvautomation.space",
+  email: "info@ayvwrld.com",
   whatsapp: "",
 } as const;
 
