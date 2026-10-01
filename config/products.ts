@@ -10,10 +10,9 @@ import { formatEuroPrice } from "@/lib/pricing";
  * 3. Add product-specific pages under app/dashboard later — do not mix
  *    product business logic into the shared foundation.
  *
- * Avyro is the first live product: a small lead-conversion workspace.
- * Velto is the second: org-scoped bookings with reminder dates.
- * Rovyn is the third: org-scoped quote follow-up.
- * Orvyn tracks invoices. Nexro brings customers back and asks for referrals.
+ * Public copy: Avyro checks in, Velto watches renewals, Rovyn flags quiet clients,
+ * Orvyn recognises loyal clients, Nexro wins them back, Ravelo asks for reviews.
+ * The workspace still stores the older lead, booking, quote, and invoice records.
  * Ravelo asks for reviews after the work is done.
  */
 
@@ -67,14 +66,14 @@ export const products: ProductConfig[] = [
     id: "avyro",
     name: "Avyro",
     slug: "avyro",
-    tagline: "Lead conversion",
-    description: "Lead conversion automation",
+    tagline: "Post-service check-in",
+    description: "Post-service check-in",
     longDescription:
-      "Avyro helps businesses follow up with new leads quickly so more conversations turn into customers.",
+      "Shortly after a client's appointment or purchase, Avyro sends a short check-in. A positive reply triggers a Ravelo review request. A negative or neutral reply notifies the owner.",
     highlights: [
-      "Reply to every new lead in seconds, automatically",
-      "Schedule smart follow-ups so nobody slips away",
-      "See which leads are hot and where they came from",
+      "A short check-in after the appointment or purchase",
+      "A positive reply starts a Ravelo review request",
+      "A negative or neutral reply comes to you first",
     ],
     status: "active",
     marketingStatus: "Available",
@@ -101,14 +100,14 @@ export const products: ProductConfig[] = [
     id: "velto",
     name: "Velto",
     slug: "velto",
-    tagline: "Booking + reminders",
-    description: "Booking and reminder automation",
+    tagline: "Renewal and subscription reminders",
+    description: "Renewal and subscription reminders",
     longDescription:
-      "Velto helps businesses take bookings and send reminders so fewer appointments are missed.",
+      "Velto reminds a client before a renewal date so a membership or contract does not lapse by accident. If they still do not renew, Velto flags Rovyn.",
     highlights: [
-      "Let customers book you around the clock",
-      "Send automatic reminders before every appointment",
-      "Cut no-shows without the back-and-forth",
+      "A reminder before the renewal date",
+      "Built for memberships, contracts, and recurring services",
+      "A missed renewal is flagged to Rovyn",
     ],
     status: "active",
     marketingStatus: "Available",
@@ -134,14 +133,14 @@ export const products: ProductConfig[] = [
     id: "rovyn",
     name: "Rovyn",
     slug: "rovyn",
-    tagline: "Quote follow-up",
-    description: "Quote follow-up automation",
+    tagline: "Churn-risk detection",
+    description: "Churn-risk detection",
     longDescription:
-      "Rovyn follows up on sent quotes so businesses close more work without chasing every lead by hand.",
+      "Rovyn compares each client with their own visit or purchase pattern and flags anyone who has gone quiet. A flag starts a Nexro win-back.",
     highlights: [
-      "Follow up on every quote automatically",
-      "Nudge undecided prospects at the right moment",
-      "Close more work without chasing by hand",
+      "Each client is compared with their own usual rhythm",
+      "Quiet clients are flagged before they are gone",
+      "A flag starts a Nexro win-back",
     ],
     status: "active",
     marketingStatus: "Available",
@@ -167,14 +166,14 @@ export const products: ProductConfig[] = [
     id: "orvyn",
     name: "Orvyn",
     slug: "orvyn",
-    tagline: "Payment + invoice follow-up",
-    description: "Payment and invoice follow-up automation",
+    tagline: "Loyalty and repeat-client recognition",
+    description: "Loyalty and repeat-client recognition",
     longDescription:
-      "Orvyn does not issue the invoice. It stores the invoice you already sent and emails a reminder that names that invoice, the amount, and the due date.",
+      "Orvyn finds repeat clients and can send a small thank-you or reward. That loyal group is passed to Nexro for referral requests.",
     highlights: [
-      "Reminder for the invoice you already sent",
-      "Get paid faster with less awkward chasing",
-      "Keep track of what's outstanding at a glance",
+      "Repeat clients are recognised automatically",
+      "A thank-you or a small reward",
+      "Loyal clients are passed to Nexro for referrals",
     ],
     status: "active",
     marketingStatus: "Available",
@@ -200,11 +199,11 @@ export const products: ProductConfig[] = [
     tagline: "Customer reactivation + referrals",
     description: "Customer reactivation and referral automation",
     longDescription:
-      "Nexro helps businesses bring past customers back and turn happy clients into referrals.",
+      "Nexro sends win-backs to clients Rovyn has flagged and referral requests to loyal clients from Orvyn, plus messages the owner sends by hand.",
     highlights: [
-      "Win back past customers with timed campaigns",
-      "Turn happy clients into a steady referral stream",
-      "Re-engage your list on autopilot",
+      "Win-backs for clients Rovyn has flagged",
+      "Referral requests for loyal clients from Orvyn",
+      "Messages you send yourself still go out",
     ],
     status: "active",
     marketingStatus: "Available",
@@ -230,11 +229,11 @@ export const products: ProductConfig[] = [
     tagline: "Review automation",
     description: "Review automation",
     longDescription:
-      "Ravelo asks happy customers for reviews at the right time so businesses build trust without awkward follow-up.",
+      "Ravelo sends a review request when Avyro's check-in is positive, and when the owner sends a request by hand.",
     highlights: [
-      "Ask for reviews at the perfect moment",
-      "Build trust with more 5-star ratings",
-      "Grow your reputation without the awkward ask",
+      "A review request after a positive Avyro check-in",
+      "Requests you send yourself",
+      "Unhappy check-ins stay with you",
     ],
     status: "active",
     marketingStatus: "Available",

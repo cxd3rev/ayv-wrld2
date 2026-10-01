@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "AYV Automation bouwt gerichte software waarmee bedrijven leads binnenhalen, klanten boeken, offertes sluiten, betalingen innen en klanten laten terugkomen."
+    "description": "AYV Automation helpt bedrijven de klanten te houden die ze al hebben: check-ins, verlengingen, stille klanten, loyaliteit, terugwinning en reviews."
   },
   "common": {
     "home": "Home",
@@ -52,7 +52,7 @@
   },
   "home": {
     "kicker": "Het platform voor moderne bedrijven",
-    "headline": "Zet dagelijks werk om in <muted>omzet.</muted>",
+    "headline": "Houd de klanten die je <muted>al hebt.</muted>",
     "startFree": "Gratis starten",
     "seeProducts": "Bekijk producten",
     "statTools": "Gerichte tools",
@@ -61,16 +61,16 @@
     "statAutomations": "Automatiseringen na setup",
     "productsKicker": "De producten",
     "productsTitle": "Zes gerichte tools. <muted>Eén voor elke klus.</muted>",
-    "productsBody": "Begin met één gerichte app. Avyro, Velto, Rovyn en Orvyn zijn beschikbaar en verbinden in één werkruimte; Nexro en Ravelo komen binnenkort."
+    "productsBody": "Avyro checkt in, Velto let op verlengingen, Rovyn ziet wie stil wordt, Orvyn beloont trouwe klanten, Nexro haalt ze terug en Ravelo vraagt de review."
   },
   "together": {
     "kicker": "Beter samen",
-    "title": "Eén klantreis. Vier gerichte apps.",
-    "body": "Elke app werkt zelfstandig. Verbind ze wanneer u wilt, zodat klantgegevens, context, datums en volgende acties met het werk meegaan.",
-    "step1": "Een lead vastleggen en opvolgen",
-    "step2": "De afspraak en herinneringen plannen",
-    "step3": "De offerte sturen en opvolgen",
-    "step4": "De factuur en betaling volgen",
+    "title": "Eén klantreis. Zes gerichte apps.",
+    "body": "Elke app werkt zelfstandig. Verbind ze en een check-in, een verlenging, een stille periode en een trouwe klant gaan vanzelf naar de volgende module.",
+    "step1": "Check in na de afspraak",
+    "step2": "Herinner vóór een verlenging vervalt",
+    "step3": "Zie wie stil is geworden",
+    "step4": "Bedank trouwe klanten en vraag een referral",
     "outcome": "Voer gegevens één keer in, behoud één klantgeschiedenis en zie de hele reis in het commandocentrum en de gedeelde agenda."
   },
   "features": {
@@ -97,7 +97,7 @@
     "step2Title": "Zet uw bedrijf op",
     "step2Body": "Vertel wie u bedient en hoe u werkt. Wij stemmen elke tool af op uw branche en werkwijze.",
     "step3Title": "Laat het lopen",
-    "step3Body": "Zet de automatiseringen aan die bij u passen. Leads, boekingen, offertes en betalingen regelen zichzelf.",
+    "step3Body": "Zet de modules aan die bij je passen. Check-ins, verlengingen, stille klanten en reviews regelen zichzelf.",
     "ready": "Klaar"
   },
   "bundle": {
@@ -110,11 +110,11 @@
     "availability": "De prijs van AYV Automation Stack wordt ter planning getoond; er is nog geen aparte stackcheckout."
   },
   "cta": {
-    "title": "Begin werk om te zetten in omzet.",
+    "title": "Begin de klanten te houden die je al hebt.",
     "body": "Maak vandaag uw AYV Automation-account en wees klaar zodra elke tool live gaat."
   },
   "footer": {
-    "blurb": "Gerichte software die dagelijkse taken omzet in geautomatiseerde omzet.",
+    "blurb": "Zes modules die de klanten houden die je al hebt, en de blije vragen om terug te komen.",
     "products": "Producten",
     "platform": "Platform",
     "account": "Account",
@@ -139,70 +139,70 @@
   },
   "catalog": {
     "avyro": {
-      "tagline": "Leadconversie",
-      "description": "Automatisering van leadconversie",
-      "longDescription": "Avyro bewaart elke lead en mailt op de opvolgdatum die je kiest.",
-      "highlight1": "Leadkaarten met een status",
-      "highlight2": "Opvolgmail op de gekozen datum",
-      "highlight3": "Een lead doorgeven aan Velto, Rovyn of Orvyn",
+      "tagline": "Check-in na de afspraak",
+      "description": "Check-in na de afspraak",
+      "longDescription": "Kort na een afspraak of aankoop stuurt Avyro een korte check-in: hoe is het gegaan? Een positief antwoord start een reviewverzoek in Ravelo. Een negatief of neutraal antwoord komt bij jou, zodat je het privé kunt oplossen.",
+      "highlight1": "Een korte check-in na de afspraak of aankoop",
+      "highlight2": "Een positief antwoord start een Ravelo-reviewverzoek",
+      "highlight3": "Een negatief of neutraal antwoord komt eerst bij jou",
       "nav": "Leads",
       "dashboardDescription": "Volg nieuwe leads snel op zodat meer gesprekken klanten worden.",
-      "connectedValue": "Maak van een gekwalificeerde Avyro-lead een Velto-boeking zonder contactgegevens opnieuw in te voeren en houd offerte en factuur in dezelfde klantreis."
+      "connectedValue": "Een goede check-in geeft dezelfde klant door aan Ravelo. Een slechte blijft bij jou."
     },
     "velto": {
-      "tagline": "Boekingen + herinneringen",
-      "description": "Automatisering van boekingen en herinneringen",
-      "longDescription": "Velto bewaart elke boeking en mailt een herinnering op de datum die je kiest.",
-      "highlight1": "Boekingen met datum en tijd",
-      "highlight2": "Herinneringsmail op de gekozen datum",
-      "highlight3": "Een boeking maken vanuit een Avyro-lead",
+      "tagline": "Verleng- en abonnementsherinneringen",
+      "description": "Verleng- en abonnementsherinneringen",
+      "longDescription": "Voor een terugkerende dienst, lidmaatschap of contract herinnert Velto de klant vóór de verlengdatum, zodat die niet per ongeluk vervalt. Blijft de verlenging uit, dan seint Velto dat als churnsignaal naar Rovyn.",
+      "highlight1": "Een herinnering vóór de verlengdatum",
+      "highlight2": "Voor lidmaatschappen, contracten en terugkerende diensten",
+      "highlight3": "Een gemiste verlenging wordt gemarkeerd voor Rovyn",
       "nav": "Boekingen",
       "dashboardDescription": "Neem boekingen aan en stuur herinneringen zodat minder afspraken worden gemist.",
-      "connectedValue": "Maak een boeking vanuit een Avyro-lead en draag een afgeronde afspraak over aan Rovyn met klant- en dienstcontext al ingevuld."
+      "connectedValue": "Als een herinnering niemand terugbrengt, heeft Rovyn het signaal al."
     },
     "rovyn": {
-      "tagline": "Offerte-opvolging",
-      "description": "Automatisering van offerte-opvolging",
-      "longDescription": "Rovyn bewaart elke offerte en mailt een opvolging op de datum die je kiest.",
-      "highlight1": "Offertes met een bedrag",
-      "highlight2": "Opvolgmail op de gekozen datum",
-      "highlight3": "De status wordt na de mail opgevolgd",
+      "tagline": "Churnrisico herkennen",
+      "description": "Churnrisico herkennen",
+      "longDescription": "Rovyn volgt hoe vaak elke klant normaal komt of koopt, en markeert wie opvallend stil is vergeleken met het eigen patroon. Een gemarkeerde klant start automatisch een Nexro-terugwinning.",
+      "highlight1": "Elke klant wordt vergeleken met het eigen ritme",
+      "highlight2": "Stille klanten worden gemarkeerd voordat ze weg zijn",
+      "highlight3": "Een markering start een Nexro-terugwinning",
       "nav": "Offertes",
       "dashboardDescription": "Volg verzonden offertes op zodat meer voorstellen tot werk leiden.",
-      "connectedValue": "Maak een offerte vanuit een Velto-boeking en verander gewonnen werk in een Orvyn-factuur zonder de klant opnieuw in te voeren."
+      "connectedValue": "Je houdt geen handmatige lijst bij. Rovyn ziet de stilte en Nexro schrijft."
     },
     "orvyn": {
-      "tagline": "Betaling + factuuropvolging",
-      "description": "Automatisering van betalings- en factuuropvolging",
-      "longDescription": "Orvyn maakt de factuur niet. Het bewaart de factuur die je al stuurde en mailt een herinnering met dat factuurnummer, het bedrag en de vervaldatum.",
-      "highlight1": "Factuurnummer, bedrag en vervaldatum",
-      "highlight2": "Herinneringsmail op de gekozen datum",
-      "highlight3": "Start vanuit een gewonnen Rovyn-offerte",
+      "tagline": "Loyaliteit en terugkerende klanten",
+      "description": "Loyaliteit en terugkerende klanten",
+      "longDescription": "Orvyn herkent terugkerende klanten, bijvoorbeeld vanaf drie bezoeken of aankopen, en kan een klein bedankje of een beloning sturen. Diezelfde trouwe groep gaat naar Nexro voor referralverzoeken.",
+      "highlight1": "Terugkerende klanten worden automatisch herkend",
+      "highlight2": "Een bedankje of een kleine beloning",
+      "highlight3": "Trouwe klanten gaan naar Nexro voor referrals",
       "nav": "Betalingen",
       "dashboardDescription": "Volg openstaande facturen en plan herinneringen zodat betalingen sneller binnenkomen.",
-      "connectedValue": "Maak een factuur vanuit een gewonnen Rovyn-offerte en behoud lead-, boekings- en offertecontext naast betaling en herinneringen."
+      "connectedValue": "De mensen die al terugkomen zijn degenen aan wie Nexro een referral vraagt."
     },
     "nexro": {
       "tagline": "Heractivering + referrals",
       "description": "Automatisering van klantheractivering en referrals",
-      "longDescription": "Nexro bewaart een terugwin- of referralbericht en mailt het op de gekozen datum, of meteen.",
-      "highlight1": "Terugwin- en referralmails",
-      "highlight2": "Meteen versturen, of op een gekozen datum",
-      "highlight3": "Starten vanuit een klant die al in de stack staat",
+      "longDescription": "Nexro stuurt terugwinberichten naar klanten die risico lopen, automatisch aangeleverd door Rovyn, en referralverzoeken naar trouwe klanten, automatisch aangeleverd door Orvyn. Je kunt nog steeds zelf een bericht sturen.",
+      "highlight1": "Terugwinning voor klanten die Rovyn markeerde",
+      "highlight2": "Referralverzoeken voor trouwe klanten van Orvyn",
+      "highlight3": "Berichten die je zelf stuurt gaan ook uit",
       "nav": "Referrals",
       "dashboardDescription": "Haal eerdere klanten terug en vraag tevreden klanten om een referral.",
-      "connectedValue": "Als een Orvyn-factuur betaald is, houdt Nexro die klant en start een terugwinactie of referralverzoek zonder de gegevens opnieuw te typen."
+      "connectedValue": "Rovyn levert de stille klanten. Orvyn levert de trouwe. Nexro schrijft naar beide."
     },
     "ravelo": {
       "tagline": "Review-automatisering",
       "description": "Review-automatisering",
-      "longDescription": "Ravelo bewaart een reviewverzoek en mailt het op de datum die je kiest.",
-      "highlight1": "Reviewverzoeken",
-      "highlight2": "Mail op de gekozen datum",
-      "highlight3": "Een latere opvolgdatum als er geen reactie is",
+      "longDescription": "Ravelo stuurt een reviewverzoek als de check-in van Avyro positief is, en als je zelf een verzoek stuurt.",
+      "highlight1": "Een reviewverzoek na een positieve Avyro-check-in",
+      "highlight2": "Verzoeken die je zelf stuurt",
+      "highlight3": "Ontevreden check-ins blijven bij jou in plaats van een publieke review",
       "nav": "Reviews",
       "dashboardDescription": "Vraag na de klus om een review en houd ontevreden feedback eerst privé.",
-      "connectedValue": "Als het werk klaar is, vraagt Ravelo dezelfde klant om een review, stuurt tevreden klanten naar een openbaar platform en houdt negatieve feedback privé."
+      "connectedValue": "Avyro bepaalt wanneer het moment klopt. Ravelo vraagt alleen de klanten die zeiden dat het goed ging."
     }
   },
   "auth": {

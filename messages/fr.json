@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "AYV Automation crée des outils logiciels ciblés pour capter des leads, réserver des clients, conclure des devis, encaisser les paiements et faire revenir les clients."
+    "description": "AYV Automation aide les entreprises à garder les clients qu'elles ont déjà : suivi, renouvellements, clients silencieux, fidélité, reconquête et avis."
   },
   "common": {
     "home": "Accueil",
@@ -52,7 +52,7 @@
   },
   "home": {
     "kicker": "La plateforme pour les entreprises modernes",
-    "headline": "Transformez le quotidien en <muted>chiffre d''affaires.</muted>",
+    "headline": "Gardez les clients que vous <muted>avez déjà.</muted>",
     "startFree": "Commencer gratuitement",
     "seeProducts": "Voir les produits",
     "statTools": "Outils ciblés",
@@ -61,16 +61,16 @@
     "statAutomations": "Automatisations une fois réglées",
     "productsKicker": "Les produits",
     "productsTitle": "Six outils ciblés. <muted>Un pour chaque métier.</muted>",
-    "productsBody": "Commencez avec une application spécialisée. Avyro, Velto, Rovyn et Orvyn sont disponibles et se connectent dans un même espace ; Nexro et Ravelo arrivent bientôt."
+    "productsBody": "Avyro prend des nouvelles, Velto surveille les renouvellements, Rovyn repère qui se fait rare, Orvyn remercie les fidèles, Nexro les ramène et Ravelo demande l'avis."
   },
   "together": {
     "kicker": "Encore mieux ensemble",
-    "title": "Un parcours client. Quatre applications spécialisées.",
-    "body": "Chaque application fonctionne seule. Connectez-les quand vous le souhaitez : les coordonnées, le contexte, les dates et les prochaines actions suivent le travail.",
-    "step1": "Capturer et relancer un lead",
-    "step2": "Planifier le rendez-vous et les rappels",
-    "step3": "Envoyer et relancer le devis",
-    "step4": "Suivre la facture et le paiement",
+    "title": "Un parcours client. Six applications spécialisées.",
+    "body": "Chaque application fonctionne seule. Connectez-les et un suivi, un renouvellement, un silence et un client fidèle passent seuls au module suivant.",
+    "step1": "Prendre des nouvelles après la prestation",
+    "step2": "Rappeler avant qu'un renouvellement n'expire",
+    "step3": "Repérer qui se fait rare",
+    "step4": "Remercier les fidèles et demander un parrainage",
     "outcome": "Saisissez les informations une fois, conservez un historique client unique et suivez tout le parcours dans le centre de commande et le calendrier partagé."
   },
   "features": {
@@ -97,7 +97,7 @@
     "step2Title": "Paramétrez votre activité",
     "step2Body": "Dites-nous qui vous servez et comment vous travaillez. Nous adaptons chaque outil à votre secteur et à votre flux.",
     "step3Title": "Laissez tourner",
-    "step3Body": "Activez les automatisations qui vous conviennent. Leads, réservations, devis et paiements se gèrent tout seuls.",
+    "step3Body": "Activez les modules qui vous conviennent. Suivis, renouvellements, clients silencieux et avis se gèrent tout seuls.",
     "ready": "Prêt"
   },
   "bundle": {
@@ -110,11 +110,11 @@
     "availability": "Le tarif AYV Automation Stack est présenté à titre indicatif ; il n'existe pas encore de paiement séparé pour la stack."
   },
   "cta": {
-    "title": "Commencez à transformer le travail en chiffre d'affaires.",
+    "title": "Commencez à garder les clients que vous avez déjà.",
     "body": "Créez votre compte AYV Automation aujourd'hui et soyez prêt dès qu'un outil est lancé."
   },
   "footer": {
-    "blurb": "Des outils logiciels ciblés qui transforment les tâches quotidiennes en chiffre d'affaires automatisé.",
+    "blurb": "Six modules qui gardent les clients que vous avez déjà, et demandent aux clients contents de revenir.",
     "products": "Produits",
     "platform": "Plateforme",
     "account": "Compte",
@@ -139,70 +139,70 @@
   },
   "catalog": {
     "avyro": {
-      "tagline": "Conversion de leads",
-      "description": "Automatisation de la conversion de leads",
-      "longDescription": "Avyro enregistre chaque prospect et lui envoie un e-mail à la date de relance que vous choisissez.",
-      "highlight1": "Fiches prospect avec un statut",
-      "highlight2": "E-mail de relance à la date choisie",
-      "highlight3": "Transmettre un prospect à Velto, Rovyn ou Orvyn",
+      "tagline": "Suivi après la prestation",
+      "description": "Suivi après la prestation",
+      "longDescription": "Peu après un rendez-vous ou un achat, Avyro envoie un court message pour demander comment ça s’est passé. Une réponse positive déclenche une demande d’avis dans Ravelo. Une réponse négative ou neutre vous est notifiée, pour la traiter en privé d’abord.",
+      "highlight1": "Un court suivi après le rendez-vous ou l’achat",
+      "highlight2": "Une réponse positive lance une demande d’avis Ravelo",
+      "highlight3": "Une réponse négative ou neutre vous arrive d’abord",
       "nav": "Leads",
       "dashboardDescription": "Relancez rapidement les nouveaux leads pour transformer plus de conversations en clients.",
-      "connectedValue": "Transformez un lead Avyro qualifié en réservation Velto sans ressaisir ses coordonnées, puis conservez le devis et la facture dans le même parcours client."
+      "connectedValue": "Un bon suivi transmet le même client à Ravelo. Un mauvais reste chez vous."
     },
     "velto": {
-      "tagline": "Réservations + rappels",
-      "description": "Automatisation des réservations et rappels",
-      "longDescription": "Velto enregistre chaque réservation et envoie un e-mail de rappel à la date que vous choisissez.",
-      "highlight1": "Fiches de réservation avec date et heure",
-      "highlight2": "E-mail de rappel à la date choisie",
-      "highlight3": "Créer une réservation depuis un prospect Avyro",
+      "tagline": "Rappels de renouvellement et d’abonnement",
+      "description": "Rappels de renouvellement et d’abonnement",
+      "longDescription": "Pour un service récurrent, un abonnement ou un contrat, Velto rappelle le client avant la date de renouvellement afin qu’il ne l’oublie pas. S’il ne renouvelle pas, Velto le signale à Rovyn comme risque de départ.",
+      "highlight1": "Un rappel avant la date de renouvellement",
+      "highlight2": "Pensé pour les abonnements, contrats et services récurrents",
+      "highlight3": "Un renouvellement manqué est signalé à Rovyn",
       "nav": "Réservations",
       "dashboardDescription": "Prenez des réservations et envoyez des rappels pour réduire les rendez-vous manqués.",
-      "connectedValue": "Créez une réservation depuis un lead Avyro, puis transmettez le rendez-vous terminé à Rovyn avec le client et le service déjà renseignés."
+      "connectedValue": "Quand un rappel ne ramène personne, Rovyn a déjà le signal."
     },
     "rovyn": {
-      "tagline": "Relance de devis",
-      "description": "Automatisation du suivi des devis",
-      "longDescription": "Rovyn enregistre chaque devis et envoie un e-mail de relance à la date que vous choisissez.",
-      "highlight1": "Fiches de devis avec un montant",
-      "highlight2": "E-mail de relance à la date choisie",
-      "highlight3": "Le statut passe à relancé après l’envoi",
+      "tagline": "Détection du risque de départ",
+      "description": "Détection du risque de départ",
+      "longDescription": "Rovyn suit la fréquence habituelle de visite ou d’achat de chaque client et signale ceux qui se font rares par rapport à leur propre rythme. Un client signalé lance automatiquement une reconquête Nexro.",
+      "highlight1": "Chaque client est comparé à son propre rythme",
+      "highlight2": "Les clients silencieux sont signalés avant qu’ils ne partent",
+      "highlight3": "Un signal lance une reconquête Nexro",
       "nav": "Devis",
       "dashboardDescription": "Relancez les devis envoyés pour transformer plus de propositions en missions.",
-      "connectedValue": "Créez un devis depuis une réservation Velto et transformez une affaire gagnée en facture Orvyn sans ressaisir le client."
+      "connectedValue": "Pas de liste à tenir à la main. Rovyn voit le silence et Nexro écrit."
     },
     "orvyn": {
-      "tagline": "Paiements + relance de factures",
-      "description": "Automatisation du suivi des paiements et factures",
-      "longDescription": "Orvyn n'émet pas la facture. Il garde la facture déjà envoyée et envoie un rappel qui cite ce numéro, le montant et l'échéance.",
-      "highlight1": "Numéro, montant et échéance de la facture",
-      "highlight2": "E-mail de rappel à la date choisie",
-      "highlight3": "Partir d'un devis Rovyn gagné",
+      "tagline": "Fidélité et clients réguliers",
+      "description": "Fidélité et clients réguliers",
+      "longDescription": "Orvyn repère les clients réguliers, par exemple après trois visites ou achats, et peut leur envoyer un petit remerciement ou une récompense. Ce même groupe fidèle est transmis à Nexro pour des demandes de parrainage.",
+      "highlight1": "Les clients réguliers sont reconnus automatiquement",
+      "highlight2": "Un remerciement ou une petite récompense",
+      "highlight3": "Les clients fidèles sont transmis à Nexro pour des parrainages",
       "nav": "Paiements",
       "dashboardDescription": "Suivez les factures impayées et planifiez les rappels pour être payé plus vite.",
-      "connectedValue": "Créez une facture depuis un devis Rovyn gagné et conservez le contexte du lead, de la réservation et du devis avec le paiement."
+      "connectedValue": "Les personnes qui reviennent déjà sont celles à qui Nexro demande un parrainage."
     },
     "nexro": {
       "tagline": "Réactivation + parrainage",
       "description": "Automatisation de la réactivation et du parrainage",
-      "longDescription": "Nexro enregistre un message de reconquête ou de parrainage et l’envoie par e-mail à la date choisie, ou tout de suite.",
-      "highlight1": "E-mails de reconquête et de parrainage",
-      "highlight2": "Envoi immédiat ou à une date choisie",
-      "highlight3": "Partir d’un client déjà dans la stack",
+      "longDescription": "Nexro envoie des messages de reconquête aux clients à risque, alimentés automatiquement par Rovyn, et des demandes de parrainage aux clients fidèles, alimentées automatiquement par Orvyn. Vous pouvez encore envoyer un message vous-même.",
+      "highlight1": "Reconquêtes pour les clients signalés par Rovyn",
+      "highlight2": "Demandes de parrainage pour les clients fidèles d’Orvyn",
+      "highlight3": "Les messages que vous envoyez vous-même partent aussi",
       "nav": "Parrainages",
       "dashboardDescription": "Faites revenir d'anciens clients et demandez un parrainage aux clients contents.",
-      "connectedValue": "Quand une facture Orvyn est payée, Nexro garde ce client et lance une reconquête ou une demande de parrainage sans ressaisir ses coordonnées."
+      "connectedValue": "Rovyn fournit les clients silencieux. Orvyn fournit les fidèles. Nexro écrit aux deux."
     },
     "ravelo": {
       "tagline": "Automatisation des avis",
       "description": "Automatisation des avis",
-      "longDescription": "Ravelo enregistre une demande d’avis et l’envoie par e-mail à la date que vous choisissez.",
-      "highlight1": "Fiches de demande d’avis",
-      "highlight2": "E-mail à la date choisie",
-      "highlight3": "Une date de relance si la personne n’a pas répondu",
+      "longDescription": "Ravelo envoie une demande d’avis quand le suivi d’Avyro est positif, et quand vous envoyez une demande vous-même.",
+      "highlight1": "Une demande d’avis après un suivi Avyro positif",
+      "highlight2": "Les demandes que vous envoyez vous-même",
+      "highlight3": "Les suivis négatifs restent chez vous au lieu de devenir un avis public",
       "nav": "Avis",
       "dashboardDescription": "Demandez un avis après la prestation et gardez d'abord le mécontentement en privé.",
-      "connectedValue": "Une fois le travail terminé, Ravelo demande un avis au même client, envoie les clients contents vers un site public et garde le retour négatif en privé."
+      "connectedValue": "Avyro décide du bon moment. Ravelo ne demande qu’aux clients qui ont dit que ça s’était bien passé."
     }
   },
   "auth": {

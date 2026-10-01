@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "AYV Automation creates focused software tools that help businesses capture leads, book customers, close quotes, collect payments, and bring customers back."
+    "description": "AYV Automation helps businesses keep the clients they already have: check-ins, renewals, quiet clients, loyalty, win-backs, and reviews."
   },
   "common": {
     "home": "Home",
@@ -52,7 +52,7 @@
   },
   "home": {
     "kicker": "The platform for modern business",
-    "headline": "Turn everyday work into <muted>revenue.</muted>",
+    "headline": "Keep the clients you <muted>already have.</muted>",
     "startFree": "Start free",
     "seeProducts": "See products",
     "statTools": "Focused tools",
@@ -61,16 +61,16 @@
     "statAutomations": "Automations once set",
     "productsKicker": "The products",
     "productsTitle": "Six focused tools. <muted>One for every job.</muted>",
-    "productsBody": "Start with one focused app. Avyro, Velto, Rovyn, and Orvyn are available now and connect in one workspace; Nexro and Ravelo are coming soon."
+    "productsBody": "Avyro checks in, Velto watches renewals, Rovyn spots who is going quiet, Orvyn rewards loyal clients, Nexro wins them back, and Ravelo asks for the review."
   },
   "together": {
     "kicker": "Better together",
-    "title": "One client journey. Four focused apps.",
-    "body": "Each app works on its own. Connect them when you are ready and customer details, context, dates, and next actions move with the work.",
-    "step1": "Capture and follow up with a lead",
-    "step2": "Book the appointment and reminders",
-    "step3": "Send and follow up on the quote",
-    "step4": "Track the invoice and payment",
+    "title": "One client journey. Six focused apps.",
+    "body": "Each app works on its own. Connect them and a check-in, a renewal, a quiet spell, and a loyal client move to the next module on their own.",
+    "step1": "Check in after the service",
+    "step2": "Remind them before a renewal lapses",
+    "step3": "Spot who has gone quiet",
+    "step4": "Thank loyal clients and ask them to refer",
     "outcome": "Enter details once, keep one client history, and see the full journey in the command center and shared calendar."
   },
   "features": {
@@ -97,7 +97,7 @@
     "step2Title": "Set up your business",
     "step2Body": "Tell us who you serve and how you work. We tailor each tool to your industry and workflow.",
     "step3Title": "Let it run",
-    "step3Body": "Turn on the automations that fit you. Leads, bookings, quotes, and payments handle themselves.",
+    "step3Body": "Turn on the modules that fit you. Check-ins, renewals, quiet clients, and reviews handle themselves.",
     "ready": "Ready"
   },
   "bundle": {
@@ -110,11 +110,11 @@
     "availability": "AYV Automation Stack pricing is displayed for planning; Growth and the full stack start from billing."
   },
   "cta": {
-    "title": "Start turning work into revenue.",
+    "title": "Start keeping the clients you already have.",
     "body": "Create your AYV Automation account today and be ready the moment each tool goes live."
   },
   "footer": {
-    "blurb": "Focused software tools that turn everyday business tasks into automated revenue.",
+    "blurb": "Six modules that keep the clients you already have, and ask the happy ones to come back.",
     "products": "Products",
     "platform": "Platform",
     "account": "Account",
@@ -139,70 +139,70 @@
   },
   "catalog": {
     "avyro": {
-      "tagline": "Lead conversion",
-      "description": "Lead conversion automation",
-      "longDescription": "Avyro stores each lead and emails them on the follow-up date you set.",
-      "highlight1": "Lead records with a status you can update",
-      "highlight2": "Follow-up email on the date you choose",
-      "highlight3": "Hand a lead to Velto, Rovyn, or Orvyn",
+      "tagline": "Post-service check-in",
+      "description": "Post-service check-in",
+      "longDescription": "Shortly after a client's appointment or purchase, Avyro sends a short check-in asking how it went. A positive response triggers Ravelo to ask for a review. A negative or neutral response notifies you, so you can handle it privately first.",
+      "highlight1": "A short check-in after the appointment or purchase",
+      "highlight2": "A positive reply starts a Ravelo review request",
+      "highlight3": "A negative or neutral reply comes to you first",
       "nav": "Leads",
       "dashboardDescription": "Follow up with new leads quickly so more conversations become customers.",
-      "connectedValue": "Turn a qualified Avyro lead into a Velto booking without re-entering contact details, then keep the later quote and invoice in the same client journey."
+      "connectedValue": "A good check-in hands the same client to Ravelo. A poor one stays with you."
     },
     "velto": {
-      "tagline": "Booking + reminders",
-      "description": "Booking and reminder automation",
-      "longDescription": "Velto stores each booking and emails a reminder on the date you set.",
-      "highlight1": "Booking records with date and time",
-      "highlight2": "Reminder email on the date you choose",
-      "highlight3": "Create a booking from an Avyro lead",
+      "tagline": "Renewal and subscription reminders",
+      "description": "Renewal and subscription reminders",
+      "longDescription": "For any recurring service, membership, or contract, Velto reminds the client before the renewal date so they do not lapse by accident. If they still do not renew, Velto flags that to Rovyn as a churn signal.",
+      "highlight1": "A reminder before the renewal date",
+      "highlight2": "Built for memberships, contracts, and recurring services",
+      "highlight3": "A missed renewal is flagged to Rovyn",
       "nav": "Bookings",
       "dashboardDescription": "Take bookings and send reminders so fewer appointments are missed.",
-      "connectedValue": "Create a booking from an Avyro lead, then hand a completed appointment to Rovyn with the customer and service context already filled."
+      "connectedValue": "When a reminder does not bring them back, Rovyn already has the signal."
     },
     "rovyn": {
-      "tagline": "Quote follow-up",
-      "description": "Quote follow-up automation",
-      "longDescription": "Rovyn stores each quote and emails a follow-up on the date you set.",
-      "highlight1": "Quote records with an amount",
-      "highlight2": "Follow-up email on the date you choose",
-      "highlight3": "Status moves to followed up after the email sends",
+      "tagline": "Churn-risk detection",
+      "description": "Churn-risk detection",
+      "longDescription": "Rovyn tracks how often each client normally visits or buys, and flags anyone who has gone quiet compared with their own pattern. A flagged client automatically starts a Nexro win-back.",
+      "highlight1": "Each client is compared with their own usual rhythm",
+      "highlight2": "Quiet clients are flagged before they are gone",
+      "highlight3": "A flag starts a Nexro win-back",
       "nav": "Quotes",
       "dashboardDescription": "Follow up on sent quotes so more proposals turn into booked work.",
-      "connectedValue": "Build a quote from a Velto booking, keep its service context, and turn won work into an Orvyn invoice without typing the customer again."
+      "connectedValue": "You do not keep a manual list. Rovyn notices the gap and Nexro writes."
     },
     "orvyn": {
-      "tagline": "Payment + invoice follow-up",
-      "description": "Payment and invoice follow-up automation",
-      "longDescription": "Orvyn does not issue the invoice. It stores the invoice you already sent and emails a reminder that names that invoice, the amount, and the due date.",
-      "highlight1": "The invoice number, amount, and due date",
-      "highlight2": "A reminder email on the date you choose",
-      "highlight3": "Start from a won Rovyn quote",
+      "tagline": "Loyalty and repeat-client recognition",
+      "description": "Loyalty and repeat-client recognition",
+      "longDescription": "Orvyn finds repeat clients, for example after three or more visits or purchases, and can send a small thank-you or reward. That same loyal group is passed to Nexro for referral requests.",
+      "highlight1": "Repeat clients are recognised automatically",
+      "highlight2": "A thank-you or a small reward",
+      "highlight3": "Loyal clients are passed to Nexro for referrals",
       "nav": "Payments",
       "dashboardDescription": "Track unpaid invoices and schedule reminders so money arrives sooner.",
-      "connectedValue": "Create an invoice from a won Rovyn quote and retain the lead, booking, and quote context beside payment status and reminders."
+      "connectedValue": "The people who already come back are the ones Nexro asks for a referral."
     },
     "nexro": {
       "tagline": "Customer reactivation + referrals",
       "description": "Customer reactivation and referral automation",
-      "longDescription": "Nexro stores a win-back or referral message and emails it on the date you set, or when you send it now.",
-      "highlight1": "Win-back and referral emails",
-      "highlight2": "Send now, or on a date you choose",
-      "highlight3": "Start from a customer already in the stack",
+      "longDescription": "Nexro sends win-back messages to at-risk clients, fed automatically by Rovyn, and referral requests to loyal clients, fed automatically by Orvyn. You can still send a message yourself.",
+      "highlight1": "Win-backs for clients Rovyn has flagged",
+      "highlight2": "Referral requests for loyal clients from Orvyn",
+      "highlight3": "Messages you send yourself still go out",
       "nav": "Referrals",
       "dashboardDescription": "Bring past customers back and ask happy clients for a referral.",
-      "connectedValue": "After an Orvyn invoice is paid, Nexro keeps that customer and starts a win-back or referral ask without retyping their details."
+      "connectedValue": "Rovyn supplies the quiet clients. Orvyn supplies the loyal ones. Nexro writes to both."
     },
     "ravelo": {
       "tagline": "Review automation",
       "description": "Review automation",
-      "longDescription": "Ravelo stores a review request and emails it on the date you set.",
-      "highlight1": "Review request records",
-      "highlight2": "Request email on the date you choose",
-      "highlight3": "A later follow-up date if they have not replied",
+      "longDescription": "Ravelo sends a review request when Avyro's check-in comes back positive, and when you send a request yourself.",
+      "highlight1": "A review request after a positive Avyro check-in",
+      "highlight2": "Requests you send yourself",
+      "highlight3": "Unhappy check-ins stay with you instead of becoming a public review",
       "nav": "Reviews",
       "dashboardDescription": "Ask for a review after the job and keep unhappy feedback private first.",
-      "connectedValue": "When the job is done, Ravelo asks the same customer for a review, sends happy clients to a public site, and keeps unhappy feedback private."
+      "connectedValue": "Avyro decides when the moment is right. Ravelo only asks the clients who said it went well."
     }
   },
   "auth": {

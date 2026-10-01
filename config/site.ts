@@ -5,8 +5,8 @@
 export const siteConfig = {
   name: "AYV Automation Stack",
   shortName: "AYV",
-  tagline: "Automate how you win and keep clients.",
+  tagline: "Keep the clients you already have.",
   description:
-    "Six automation modules for leads, bookings, quotes, invoices, reactivation, and reviews. Buy one, or run the full stack.",
+    "Six modules that check in after a service, catch renewal lapses, spot quiet clients, reward loyal ones, win them back, and ask happy clients for reviews.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.ayvautomation.space",
 } as const;

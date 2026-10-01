@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "AYV Automation entwickelt fokussierte Software, mit der Unternehmen Leads gewinnen, Termine buchen, Angebote abschließen, Zahlungen einziehen und Kunden zurückholen."
+    "description": "AYV Automation hilft Unternehmen, die Kunden zu behalten, die sie schon haben: Nachfrage, Verlängerungen, stille Kunden, Treue, Rückgewinnung und Bewertungen."
   },
   "common": {
     "home": "Start",
@@ -52,7 +52,7 @@
   },
   "home": {
     "kicker": "Die Plattform für moderne Unternehmen",
-    "headline": "Machen Sie aus Alltag <muted>Umsatz.</muted>",
+    "headline": "Behalten Sie die Kunden, die Sie <muted>schon haben.</muted>",
     "startFree": "Kostenlos starten",
     "seeProducts": "Produkte ansehen",
     "statTools": "Fokussierte Tools",
@@ -61,16 +61,16 @@
     "statAutomations": "Automatisierungen nach dem Setup",
     "productsKicker": "Die Produkte",
     "productsTitle": "Sechs fokussierte Tools. <muted>Eins für jede Aufgabe.</muted>",
-    "productsBody": "Starten Sie mit einer spezialisierten App. Avyro, Velto, Rovyn und Orvyn sind verfügbar und in einem Arbeitsbereich verbunden; Nexro und Ravelo folgen bald."
+    "productsBody": "Avyro fragt nach, Velto achtet auf Verlängerungen, Rovyn erkennt wer still wird, Orvyn dankt treuen Kunden, Nexro holt sie zurück und Ravelo bittet um die Bewertung."
   },
   "together": {
     "kicker": "Gemeinsam besser",
-    "title": "Eine Kundenreise. Vier spezialisierte Apps.",
-    "body": "Jede App funktioniert allein. Verbinden Sie sie bei Bedarf, damit Kontaktdaten, Kontext, Termine und nächste Schritte mit der Arbeit weiterfließen.",
-    "step1": "Lead erfassen und nachfassen",
-    "step2": "Termin und Erinnerungen planen",
-    "step3": "Angebot senden und nachfassen",
-    "step4": "Rechnung und Zahlung verfolgen",
+    "title": "Eine Kundenreise. Sechs spezialisierte Apps.",
+    "body": "Jede App funktioniert allein. Verbinden Sie sie, und eine Nachfrage, eine Verlängerung, eine stille Phase und ein treuer Kunde gehen von selbst zum nächsten Modul.",
+    "step1": "Nach der Leistung nachfragen",
+    "step2": "Erinnern, bevor eine Verlängerung ausläuft",
+    "step3": "Erkennen, wer still geworden ist",
+    "step4": "Treuen Kunden danken und um eine Empfehlung bitten",
     "outcome": "Daten einmal eingeben, einen Kundenverlauf behalten und die gesamte Reise in Kommandozentrale und Kalender sehen."
   },
   "features": {
@@ -97,7 +97,7 @@
     "step2Title": "Ihr Geschäft einrichten",
     "step2Body": "Sagen Sie uns, wen Sie bedienen und wie Sie arbeiten. Wir passen jedes Tool an Branche und Ablauf an.",
     "step3Title": "Laufen lassen",
-    "step3Body": "Schalten Sie die Automatisierungen ein, die zu Ihnen passen. Leads, Buchungen, Angebote und Zahlungen erledigen sich selbst.",
+    "step3Body": "Schalten Sie die Module ein, die zu Ihnen passen. Nachfragen, Verlängerungen, stille Kunden und Bewertungen erledigen sich selbst.",
     "ready": "Bereit"
   },
   "bundle": {
@@ -110,11 +110,11 @@
     "availability": "Der Preis für AYV Automation Stack dient zur Planung; einen separaten Stack-Checkout gibt es noch nicht."
   },
   "cta": {
-    "title": "Machen Sie aus Arbeit Umsatz.",
+    "title": "Behalten Sie die Kunden, die Sie schon haben.",
     "body": "Legen Sie heute Ihr AYV-Automation-Konto an und sind startklar, sobald jedes Tool live geht."
   },
   "footer": {
-    "blurb": "Fokussierte Software, die alltägliche Aufgaben in automatisierten Umsatz verwandelt.",
+    "blurb": "Sechs Module, die die Kunden behalten, die Sie schon haben, und die zufriedenen um eine Rückkehr bitten.",
     "products": "Produkte",
     "platform": "Plattform",
     "account": "Konto",
@@ -139,70 +139,70 @@
   },
   "catalog": {
     "avyro": {
-      "tagline": "Lead-Conversion",
-      "description": "Automatisierung der Lead-Conversion",
-      "longDescription": "Avyro speichert jeden Lead und schickt am gewählten Nachfassdatum eine E-Mail.",
-      "highlight1": "Lead-Einträge mit Status",
-      "highlight2": "Nachfass-E-Mail am gewählten Datum",
-      "highlight3": "Einen Lead an Velto, Rovyn oder Orvyn übergeben",
+      "tagline": "Nachfrage nach der Leistung",
+      "description": "Nachfrage nach der Leistung",
+      "longDescription": "Kurz nach einem Termin oder Kauf schickt Avyro eine kurze Nachfrage, wie es gelaufen ist. Eine positive Antwort startet eine Bewertungsanfrage in Ravelo. Eine negative oder neutrale Antwort geht an Sie, damit Sie sie zuerst privat klären.",
+      "highlight1": "Eine kurze Nachfrage nach Termin oder Kauf",
+      "highlight2": "Eine positive Antwort startet eine Ravelo-Bewertungsanfrage",
+      "highlight3": "Eine negative oder neutrale Antwort erreicht zuerst Sie",
       "nav": "Leads",
       "dashboardDescription": "Neue Leads schnell nachfassen, damit aus mehr Gesprächen Kunden werden.",
-      "connectedValue": "Machen Sie aus einem qualifizierten Avyro-Lead eine Velto-Buchung, ohne Kontaktdaten erneut einzugeben, und behalten Sie Angebot und Rechnung in derselben Kundenreise."
+      "connectedValue": "Eine gute Nachfrage gibt denselben Kunden an Ravelo. Eine schlechte bleibt bei Ihnen."
     },
     "velto": {
-      "tagline": "Buchung + Erinnerungen",
-      "description": "Automatisierung von Buchungen und Erinnerungen",
-      "longDescription": "Velto speichert jede Buchung und schickt am gewählten Datum eine Erinnerung per E-Mail.",
-      "highlight1": "Buchungseinträge mit Datum und Uhrzeit",
-      "highlight2": "Erinnerungs-E-Mail am gewählten Datum",
-      "highlight3": "Eine Buchung aus einem Avyro-Lead anlegen",
+      "tagline": "Verlängerungs- und Abo-Erinnerungen",
+      "description": "Verlängerungs- und Abo-Erinnerungen",
+      "longDescription": "Bei einem wiederkehrenden Service, einer Mitgliedschaft oder einem Vertrag erinnert Velto vor dem Verlängerungsdatum, damit nichts versehentlich ausläuft. Wenn nicht verlängert wird, meldet Velto das an Rovyn als Abwanderungssignal.",
+      "highlight1": "Eine Erinnerung vor dem Verlängerungsdatum",
+      "highlight2": "Für Mitgliedschaften, Verträge und wiederkehrende Services",
+      "highlight3": "Eine verpasste Verlängerung wird an Rovyn gemeldet",
       "nav": "Buchungen",
       "dashboardDescription": "Buchungen annehmen und Erinnerungen senden, damit weniger Termine ausfallen.",
-      "connectedValue": "Erstellen Sie eine Buchung aus einem Avyro-Lead und übergeben Sie den abgeschlossenen Termin mit vorausgefülltem Kunden- und Leistungskontext an Rovyn."
+      "connectedValue": "Wenn eine Erinnerung niemanden zurückholt, hat Rovyn das Signal schon."
     },
     "rovyn": {
-      "tagline": "Angebots-Follow-up",
-      "description": "Automatisierung des Angebots-Follow-ups",
-      "longDescription": "Rovyn speichert jedes Angebot und schickt am gewählten Datum eine Nachfass-E-Mail.",
-      "highlight1": "Angebotseinträge mit Betrag",
-      "highlight2": "Nachfass-E-Mail am gewählten Datum",
-      "highlight3": "Der Status wird nach dem Versand auf nachgefasst gesetzt",
+      "tagline": "Abwanderungsrisiko erkennen",
+      "description": "Abwanderungsrisiko erkennen",
+      "longDescription": "Rovyn merkt sich, wie oft jeder Kunde normalerweise kommt oder kauft, und markiert, wer im Vergleich zum eigenen Muster still geworden ist. Ein markierter Kunde startet automatisch eine Nexro-Rückgewinnung.",
+      "highlight1": "Jeder Kunde wird mit dem eigenen Rhythmus verglichen",
+      "highlight2": "Stille Kunden werden markiert, bevor sie weg sind",
+      "highlight3": "Eine Markierung startet eine Nexro-Rückgewinnung",
       "nav": "Angebote",
       "dashboardDescription": "Versendete Angebote nachfassen, damit mehr Vorschläge zu Aufträgen werden.",
-      "connectedValue": "Erstellen Sie ein Angebot aus einer Velto-Buchung und machen Sie gewonnene Arbeit zur Orvyn-Rechnung, ohne den Kunden erneut einzugeben."
+      "connectedValue": "Keine Liste von Hand. Rovyn sieht die Lücke und Nexro schreibt."
     },
     "orvyn": {
-      "tagline": "Zahlung + Rechnungs-Follow-up",
-      "description": "Automatisierung von Zahlungs- und Rechnungserinnerungen",
-      "longDescription": "Orvyn stellt die Rechnung nicht aus. Es speichert die bereits gesendete Rechnung und schickt eine Erinnerung mit dieser Nummer, dem Betrag und dem Fälligkeitsdatum.",
-      "highlight1": "Rechnungsnummer, Betrag und Fälligkeitsdatum",
-      "highlight2": "Erinnerungs-E-Mail am gewählten Datum",
-      "highlight3": "Start aus einem gewonnenen Rovyn-Angebot",
+      "tagline": "Treue und Stammkunden",
+      "description": "Treue und Stammkunden",
+      "longDescription": "Orvyn erkennt Stammkunden, zum Beispiel ab drei Besuchen oder Käufen, und kann ein kleines Dankeschön oder eine Belohnung schicken. Dieselbe treue Gruppe geht an Nexro für Empfehlungsanfragen.",
+      "highlight1": "Stammkunden werden automatisch erkannt",
+      "highlight2": "Ein Dankeschön oder eine kleine Belohnung",
+      "highlight3": "Treue Kunden gehen an Nexro für Empfehlungen",
       "nav": "Zahlungen",
       "dashboardDescription": "Offene Rechnungen verfolgen und Erinnerungen planen, damit Zahlungen schneller eingehen.",
-      "connectedValue": "Erstellen Sie eine Rechnung aus einem gewonnenen Rovyn-Angebot und behalten Sie Lead-, Buchungs- und Angebotskontext neben Zahlung und Erinnerungen."
+      "connectedValue": "Die Menschen, die schon wiederkommen, sind die, die Nexro um eine Empfehlung bittet."
     },
     "nexro": {
       "tagline": "Reaktivierung + Empfehlungen",
       "description": "Automatisierung von Kundenreaktivierung und Empfehlungen",
-      "longDescription": "Nexro speichert eine Rückgewinn- oder Empfehlungsnachricht und verschickt sie am gewählten Datum oder sofort per E-Mail.",
-      "highlight1": "E-Mails zur Rückgewinnung und Empfehlung",
-      "highlight2": "Sofort senden oder an einem gewählten Datum",
-      "highlight3": "Von einem Kunden starten, der schon im Stack ist",
+      "longDescription": "Nexro schickt Rückgewinn-Nachrichten an gefährdete Kunden, automatisch von Rovyn geliefert, und Empfehlungsanfragen an treue Kunden, automatisch von Orvyn geliefert. Sie können weiterhin selbst eine Nachricht schicken.",
+      "highlight1": "Rückgewinnung für Kunden, die Rovyn markiert hat",
+      "highlight2": "Empfehlungsanfragen für treue Kunden von Orvyn",
+      "highlight3": "Nachrichten, die Sie selbst schicken, gehen ebenfalls raus",
       "nav": "Empfehlungen",
       "dashboardDescription": "Holen Sie frühere Kunden zurück und bitten Sie zufriedene Kunden um eine Empfehlung.",
-      "connectedValue": "Wenn eine Orvyn-Rechnung bezahlt ist, behält Nexro diesen Kunden und startet eine Rückgewinnung oder Empfehlungsanfrage, ohne die Daten neu einzutippen."
+      "connectedValue": "Rovyn liefert die stillen Kunden. Orvyn liefert die treuen. Nexro schreibt an beide."
     },
     "ravelo": {
       "tagline": "Bewertungsautomatisierung",
       "description": "Bewertungsautomatisierung",
-      "longDescription": "Ravelo speichert eine Bewertungsanfrage und verschickt sie am gewählten Datum per E-Mail.",
-      "highlight1": "Einträge für Bewertungsanfragen",
-      "highlight2": "E-Mail am gewählten Datum",
-      "highlight3": "Ein späteres Nachfassdatum, wenn keine Antwort kommt",
+      "longDescription": "Ravelo schickt eine Bewertungsanfrage, wenn Avyros Nachfrage positiv ausfällt, und wenn Sie selbst eine Anfrage schicken.",
+      "highlight1": "Eine Bewertungsanfrage nach einer positiven Avyro-Nachfrage",
+      "highlight2": "Anfragen, die Sie selbst schicken",
+      "highlight3": "Unzufriedene Nachfragen bleiben bei Ihnen statt eine öffentliche Bewertung zu werden",
       "nav": "Bewertungen",
       "dashboardDescription": "Bitten Sie nach dem Auftrag um eine Bewertung und halten Sie unzufriedenes Feedback zuerst privat.",
-      "connectedValue": "Wenn der Auftrag erledigt ist, bittet Ravelo denselben Kunden um eine Bewertung, schickt zufriedene Kunden auf eine öffentliche Seite und hält negatives Feedback privat."
+      "connectedValue": "Avyro entscheidet, wann der Moment stimmt. Ravelo fragt nur die Kunden, die sagten, es sei gut gelaufen."
     }
   },
   "auth": {

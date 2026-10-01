@@ -65,12 +65,12 @@ export function StackHome({ locale }: { locale: AppLocale }) {
               </div>
             </div>
             <div className="absolute -left-2 bottom-10 z-10 hidden min-w-40 rounded-2xl border border-white/15 bg-black/85 px-4 py-3 text-sm whitespace-nowrap shadow-xl sm:block">
-              <p className="text-white/50">New lead</p>
-              <p className="font-medium">Follow-up sent</p>
+              <p className="text-white/50">Check-in</p>
+              <p className="font-medium">Positive reply</p>
             </div>
             <div className="absolute -right-1 top-8 z-10 hidden min-w-40 rounded-2xl border border-white/15 bg-black/85 px-4 py-3 text-sm whitespace-nowrap shadow-xl md:block">
-              <p className="text-white/50">Invoice</p>
-              <p className="font-medium">Reminder queued</p>
+              <p className="text-white/50">Quiet client</p>
+              <p className="font-medium">Win-back queued</p>
             </div>
           </div>
         </div>
