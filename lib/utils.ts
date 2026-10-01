@@ -41,20 +41,28 @@ export function isSupabaseConfigured() {
   );
 }
 
+const CANONICAL_APP_URL = "https://www.ayvautomation.space";
+
 export function getAppUrl() {
   const configured = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "") ?? "";
-  const isLocal = !configured || /localhost|127\.0\.0\.1/i.test(configured);
-
-  if (!isLocal) return configured;
-
-  if (typeof window !== "undefined" && window.location?.origin) {
-    return window.location.origin;
+  if (configured && !/localhost|127\.0\.0\.1|\.vercel\.app/i.test(configured)) {
+    return configured;
   }
 
-  const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
-  if (vercelHost) {
-    return `https://${vercelHost.replace(/^https?:\/\//, "")}`;
+  if (typeof window !== "undefined") {
+    const { hostname, origin } = window.location;
+    if (hostname === "localhost" || hostname === "127.0.0.1") return origin;
+    if (hostname.endsWith(".vercel.app") && hostname !== "ayv-wrld2.vercel.app") return origin;
+    return CANONICAL_APP_URL;
   }
 
-  return configured || "http://localhost:3000";
+  if (process.env.VERCEL_ENV === "preview" && process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL.replace(/^https?:\/\//, "")}`;
+  }
+
+  if (process.env.NODE_ENV === "development") {
+    return configured || "http://localhost:3000";
+  }
+
+  return CANONICAL_APP_URL;
 }
