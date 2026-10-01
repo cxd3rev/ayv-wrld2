@@ -1,10 +1,13 @@
+import { CONTACT_EMAIL, CONTACT_PHONE, PRODUCT_NAME } from "@/config/site";
+
 export const BUSINESS = {
-  name: "AYV Automation Stack",
+  name: PRODUCT_NAME,
   owner: "Aron Vasolli",
   country: "Belgium",
   address: "",
   enterpriseNumber: "",
-  email: "info@ayvwrld.com",
+  email: CONTACT_EMAIL,
+  phone: CONTACT_PHONE,
   whatsapp: "",
 } as const;
 

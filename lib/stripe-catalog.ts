@@ -10,8 +10,9 @@ export type BillableProductId = (typeof BILLABLE_PRODUCTS)[number];
 export const BILLABLE_PLANS = ["growth", "full_stack"] as const;
 export type BillablePlanId = (typeof BILLABLE_PLANS)[number];
 export type CheckoutProductId = BillableProductId | BillablePlanId | "onderhoud";
+export type OnderhoudInterval = "monthly" | "yearly" | "founder";
 
-const PRICE_ENV: Record<CheckoutProductId, string> = {
+const PRICE_ENV: Record<Exclude<CheckoutProductId, "onderhoud">, string> = {
   avyro: "STRIPE_PRICE_ID",
   velto: "STRIPE_VELTO_PRICE_ID",
   rovyn: "STRIPE_ROVYN_PRICE_ID",
@@ -20,10 +21,15 @@ const PRICE_ENV: Record<CheckoutProductId, string> = {
   ravelo: "STRIPE_RAVELO_PRICE_ID",
   growth: "STRIPE_GROWTH_PRICE_ID",
   full_stack: "STRIPE_FULL_STACK_PRICE_ID",
-  onderhoud: "STRIPE_ONDERHOUD_PRICE_ID",
 };
 
-const LEGACY_PRICE_IDS: Record<CheckoutProductId, readonly string[]> = {
+const ONDERHOUD_PRICE_ENV: Record<OnderhoudInterval, string> = {
+  monthly: "STRIPE_PRICE_MONTHLY",
+  yearly: "STRIPE_PRICE_YEARLY",
+  founder: "STRIPE_PRICE_FOUNDER",
+};
+
+const LEGACY_PRICE_IDS: Record<Exclude<CheckoutProductId, "onderhoud">, readonly string[]> = {
   avyro: [
     "price_1UKTxqV05bHNwI4WjQFWlErq",
     "price_1UHBw8V05bHNwI4W6itaFohv",
@@ -49,7 +55,6 @@ const LEGACY_PRICE_IDS: Record<CheckoutProductId, readonly string[]> = {
   ravelo: ["price_1UKMOXV05bHNwI4Wwwxs33wT"],
   growth: ["price_1UKUL5V05bHNwI4WIRPbmhSa"],
   full_stack: ["price_1UKUL6V05bHNwI4WOgsgdJEX"],
-  onderhoud: [],
 };
 
 export function isBillableProductId(value: string): value is BillableProductId {
@@ -64,13 +69,22 @@ export function isCheckoutProductId(value: string): value is CheckoutProductId {
   return value === "onderhoud" || isBillableProductId(value) || isBillablePlanId(value);
 }
 
+export function getOnderhoudPriceId(interval: OnderhoudInterval = "monthly") {
+  const value = process.env[ONDERHOUD_PRICE_ENV[interval]];
+  return isUsableSecret(value, ["price_"]) ? value : null;
+}
+
 export function getStripePriceId(product: CheckoutProductId) {
+  if (product === "onderhoud") return getOnderhoudPriceId("monthly");
   const value = process.env[PRICE_ENV[product]];
   return isUsableSecret(value, ["price_"]) ? value : null;
 }
 
 export function productFromStripePriceId(priceId: string | null | undefined): CheckoutProductId | null {
   if (!priceId) return null;
+  if ((["monthly", "yearly", "founder"] as const).some((interval) => getOnderhoudPriceId(interval) === priceId)) {
+    return "onderhoud";
+  }
   const products = [...BILLABLE_PRODUCTS, ...BILLABLE_PLANS];
   for (const product of products) {
     if (

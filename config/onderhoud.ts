@@ -1,11 +1,8 @@
-/**
- * One plan for AYV Onderhoud.
- * TODO: set the monthly price before launch. Null means it is not decided.
- * Do not invent an amount here.
- */
-export const ONDERHOUD_MONTHLY_PRICE_EUR: number | null = null;
+import { PRICING } from "@/config/site";
 
-/** Same 7-day trial the foundation already starts on the first subscription. */
-export const ONDERHOUD_TRIAL_DAYS = 7;
-
+/** One plan. Amounts come from config/site.ts. */
+export const ONDERHOUD_MONTHLY_PRICE_EUR: number = PRICING.monthlyEur;
+export const ONDERHOUD_YEARLY_PRICE_EUR: number = PRICING.yearlyEur;
+export const ONDERHOUD_FOUNDER_PRICE_EUR: number = PRICING.founderMonthlyEur;
+export const ONDERHOUD_TRIAL_DAYS = PRICING.trialDays;
 export const ONDERHOUD_PLAN_ID = "onderhoud" as const;

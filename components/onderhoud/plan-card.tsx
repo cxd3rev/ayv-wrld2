@@ -8,18 +8,17 @@ import { useState } from "react";
 export function OnderhoudPlanCard({ stripeReady }: { stripeReady: boolean }) {
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
-  const price = ONDERHOUD_MONTHLY_PRICE_EUR == null ? "Prijs volgt" : `€${ONDERHOUD_MONTHLY_PRICE_EUR} / maand`;
+  const price = `€${ONDERHOUD_MONTHLY_PRICE_EUR} / maand`;
 
   return (
     <article className="workspace-card max-w-lg p-6">
       <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">{PRODUCT_NAME}</p>
       <p className="display mt-4 text-4xl">{price}</p>
-      <p className="mt-3 text-sm text-muted">Eén plan. Eerste abonnement start met {ONDERHOUD_TRIAL_DAYS} dagen proef.</p>
-      <p className="mt-2 text-xs text-muted">Het maandbedrag wordt nog vastgelegd.</p>
+      <p className="mt-3 text-sm text-muted">Eén plan, excl. btw. Eerste abonnement start met {ONDERHOUD_TRIAL_DAYS} dagen proef.</p>
       {error ? <p className="mt-3 text-sm text-danger">{error}</p> : null}
       <Button
         className="mt-6"
-        disabled={!stripeReady || pending || ONDERHOUD_MONTHLY_PRICE_EUR == null}
+        disabled={!stripeReady || pending}
         onClick={async () => {
           setPending(true);
           setError("");
@@ -37,7 +36,7 @@ export function OnderhoudPlanCard({ stripeReady }: { stripeReady: boolean }) {
           window.location.href = body.url;
         }}
       >
-        {stripeReady && ONDERHOUD_MONTHLY_PRICE_EUR != null ? "Start de proef" : "Nog niet te koop"}
+        {stripeReady ? "Start de proef" : "Nog niet te koop"}
       </Button>
     </article>
   );
