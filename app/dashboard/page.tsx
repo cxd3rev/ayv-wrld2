@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { legacyModulesEnabled } from "@/config/features";
+import { DueBoilers } from "@/components/onderhoud/due-boilers";
+import { listBoilers } from "@/lib/onderhoud/data";
 import { DashboardRecordButton } from "@/components/dashboard-record-button";
 import { ClientDirectory } from "@/components/client-directory";
 import { CalendarPreview } from "@/components/calendar/calendar";
@@ -81,8 +84,27 @@ function journeyAttention(
 
 export const metadata: Metadata = { alternates: { canonical: "/dashboard" } };
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ window?: string; municipality?: string }>;
+}) {
   const { organization, profile } = await requireWorkspace();
+  if (!legacyModulesEnabled) {
+    const query = await searchParams;
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Brussels" }).format(new Date());
+    const items = await listBoilers(organization.id, today);
+    const window = query.window === "30" || query.window === "60" ? query.window : "90";
+    const municipalities = [...new Set(items.map((item) => item.municipality))].sort((a, b) => a.localeCompare(b, "nl"));
+    return (
+      <DueBoilers
+        items={items}
+        municipalities={municipalities}
+        window={window}
+        municipality={municipalities.includes(query.municipality ?? "") ? query.municipality ?? "" : ""}
+      />
+    );
+  }
   const t = await getTranslations("dashboard");
   const locale = await getLocale();
   const records = await getDashboardRecords(organization.id);

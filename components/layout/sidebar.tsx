@@ -93,11 +93,26 @@ export function Sidebar({
         </div>
 
         <nav className="flex flex-1 flex-col gap-1">
-          {dashboardNav.filter((item) => legacyModulesEnabled || item.href !== "/dashboard/product").map((item) => {
+          {(legacyModulesEnabled
+            ? dashboardNav.map((item) => ({
+                href: item.href === "/dashboard/product" ? activeProduct.route : item.href,
+                icon: item.icon,
+                label:
+                  item.href === "/dashboard/product"
+                    ? t(`catalog.${activeProduct.id}.nav`)
+                    : t(`dashboard.${navKeys[item.href]}`),
+              }))
+            : [
+                { href: "/dashboard", icon: "layout" as const, label: "Overzicht" },
+                { href: "/dashboard/klanten", icon: "box" as const, label: "Klanten" },
+                { href: "/dashboard/afspraken", icon: "calendar" as const, label: "Afspraken" },
+                { href: "/dashboard/settings", icon: "settings" as const, label: "Instellingen" },
+                { href: "/dashboard/billing", icon: "card" as const, label: "Facturatie" },
+              ]
+          ).map((item) => {
             const Icon = icons[item.icon];
-            const href = item.href === "/dashboard/product" ? activeProduct.route : item.href;
-            const productLabel =
-              item.href === "/dashboard/product" ? t(`catalog.${activeProduct.id}.nav`) : t(`dashboard.${navKeys[item.href]}`);
+            const href = item.href;
+            const productLabel = item.label;
             const active =
               href === "/dashboard"
                 ? pathname === "/dashboard"
