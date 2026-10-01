@@ -178,8 +178,12 @@ export async function createBillingPortalSession(organization: Organization) {
   }
 
   try {
+    const customerId = await usableCustomerId(stripe, organization, customer.stripe_customer_id);
+    if (!customerId) {
+      return { ok: false as const, error: "No billing customer exists yet. Start a subscription first." };
+    }
     const session = await stripe.billingPortal.sessions.create({
-      customer: customer.stripe_customer_id,
+      customer: customerId,
       return_url: `${getAppUrl()}/dashboard/billing`,
     });
 
@@ -191,6 +195,20 @@ export async function createBillingPortalSession(organization: Organization) {
   }
 }
 
+async function usableCustomerId(stripe: Stripe, organization: Organization, customerId: string) {
+  try {
+    const customer = await stripe.customers.retrieve(customerId);
+    if (!("deleted" in customer && customer.deleted)) return customerId;
+  } catch (error) {
+    const missing = error instanceof Stripe.errors.StripeError && error.code === "resource_missing";
+    if (!missing) throw error;
+  }
+
+  const supabase = await createClient();
+  await supabase.from("billing_customers").delete().eq("organization_id", organization.id).eq("stripe_customer_id", customerId);
+  return null;
+}
+
 async function getOrCreateStripeCustomer(stripe: Stripe, organization: Organization) {
   const supabase = await createClient();
   const { data: existing } = await supabase
@@ -200,7 +218,8 @@ async function getOrCreateStripeCustomer(stripe: Stripe, organization: Organizat
     .maybeSingle();
 
   if (existing?.stripe_customer_id) {
-    return existing.stripe_customer_id;
+    const usable = await usableCustomerId(stripe, organization, existing.stripe_customer_id);
+    if (usable) return usable;
   }
 
   const customer = await stripe.customers.create({
