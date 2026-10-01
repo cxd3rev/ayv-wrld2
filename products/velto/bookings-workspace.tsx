@@ -1,415 +1,166 @@
 "use client";
 
-import {
-  ConnectedRecords,
-  IncomingLinkFields,
-} from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
-import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction, TrashButton } from "@/components/workspace/simple-action";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
+import { ActionFeedback, AdvancedPanel, PrimaryAction, TrashButton } from "@/components/workspace/simple-action";
 import { useToast } from "@/hooks/use-toast";
-import type { RecordPrefill } from "@/lib/record-entities";
-import { recordProductName } from "@/lib/record-entities";
-import { cn } from "@/lib/utils";
-import { bookingStatuses } from "@/lib/validations";
-import {
-  createBooking,
-  deleteBooking,
-  updateBookingReminder,
-  updateBookingStatus,
-} from "@/products/velto/actions";
-import type { Booking, BookingStatus, Invoice, Lead, Quote, Reactivation, RecordLink, Review } from "@/types/database";
-import { useLocale, useTranslations } from "next-intl";
+import { confirmRenewal, createRenewal, deleteRenewal, lapseRenewal, saveVeltoSettings } from "@/products/velto/actions";
+import type { ModuleSettings, Renewal, RenewalStatus } from "@/types/database";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 
-const statusTone: Record<BookingStatus, "accent" | "warning" | "success" | "danger" | "neutral"> = {
+const tone: Record<RenewalStatus, "accent" | "warning" | "success" | "danger"> = {
   scheduled: "accent",
-  confirmed: "warning",
-  completed: "success",
-  cancelled: "neutral",
-  no_show: "danger",
+  reminded: "warning",
+  renewed: "success",
+  lapsed: "danger",
 };
 
-const statusKeys: Record<
-  BookingStatus,
-  "statusScheduled" | "statusConfirmed" | "statusCompleted" | "statusCancelled" | "statusNoShow"
-> = {
-  scheduled: "statusScheduled",
-  confirmed: "statusConfirmed",
-  completed: "statusCompleted",
-  cancelled: "statusCancelled",
-  no_show: "statusNoShow",
-};
-
-function todayIsoDate() {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${now.getFullYear()}-${month}-${day}`;
-}
-
-function formatDay(value: string | null, locale: string) {
-  if (!value) return "—";
-  const [year, month, day] = value.split("-").map(Number);
-  if (!year || !month || !day) return value;
-  return new Intl.DateTimeFormat(locale, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  }).format(new Date(year, month - 1, day));
-}
-
-function formatTime(value: string, locale: string) {
-  const [hour, minute] = value.split(":").map(Number);
-  if (Number.isNaN(hour) || Number.isNaN(minute)) return value.slice(0, 5);
-  return new Intl.DateTimeFormat(locale, {
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(2000, 0, 1, hour, minute));
-}
-
-function isOpenBooking(booking: Booking) {
-  return booking.status === "scheduled" || booking.status === "confirmed";
-}
-
-function isUpcoming(booking: Booking) {
-  if (!isOpenBooking(booking)) return false;
-  return booking.starts_on >= todayIsoDate();
-}
-
-function isReminderDue(booking: Booking) {
-  if (!booking.reminder_on) return false;
-  if (!isOpenBooking(booking)) return false;
-  return booking.reminder_on <= todayIsoDate();
-}
-
-function fillLeadFields(form: HTMLFormElement, lead: Lead | undefined) {
-  const name = form.elements.namedItem("customerName");
-  const email = form.elements.namedItem("email");
-  const phone = form.elements.namedItem("phone");
-  if (name instanceof HTMLInputElement) name.value = lead?.name ?? "";
-  if (email instanceof HTMLInputElement) email.value = lead?.email ?? "";
-  if (phone instanceof HTMLInputElement) phone.value = lead?.phone ?? "";
+function person(row: Renewal) {
+  return Array.isArray(row.clients) ? row.clients[0] : row.clients;
 }
 
 export function VeltoBookingsWorkspace({
-  bookings,
-  leads,
-  quotes,
-  invoices,
-  reactivations,
-  reviews,
-  links,
-  prefill,
-  focusBookingId,
+  renewals,
+  settings,
+  focusId,
 }: {
-  bookings: Booking[];
-  leads: Lead[];
-  quotes: Quote[];
-  invoices: Invoice[];
-  reactivations: Reactivation[];
-  reviews: Review[];
-  links: RecordLink[];
-  prefill?: RecordPrefill;
-  focusBookingId?: string;
+  renewals: Renewal[];
+  settings: ModuleSettings;
+  focusId?: string;
 }) {
   const t = useTranslations("velto");
   const tCommon = useTranslations("common");
-  const locale = useLocale();
   const { toast } = useToast();
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
   const [saved, setSaved] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [query, setQuery] = useState("");
-
-  const fromLead = useMemo(
-    () => (prefill?.product === "avyro" ? leads.find((lead) => lead.id === prefill.id) : undefined),
-    [leads, prefill],
-  );
-
-  const counts = useMemo(() => {
-    return {
-      upcoming: bookings.filter(isUpcoming).length,
-      reminders: bookings.filter(isReminderDue).length,
-      completed: bookings.filter((booking) => booking.status === "completed").length,
-      missed: bookings.filter((booking) => booking.status === "no_show").length,
-    };
-  }, [bookings]);
-  const visibleBookings = useMemo(() => {
-    const needle = query.trim().toLocaleLowerCase(locale);
-    if (!needle) return bookings;
-    return bookings.filter((booking) =>
-      [booking.customer_name, booking.service, booking.email, booking.phone, booking.notes].some((value) =>
-        value?.toLocaleLowerCase(locale).includes(needle),
-      ),
-    );
-  }, [bookings, locale, query]);
-
-  useEffect(() => {
-    if (!focusBookingId) return;
-    document.getElementById(`booking-${focusBookingId}`)?.scrollIntoView({
-      block: "center",
-      behavior: "smooth",
-    });
-  }, [focusBookingId]);
 
   async function onAdd(formData: FormData) {
     setError("");
     setPending(true);
-    const result = await createBooking(formData);
+    const result = await createRenewal(formData);
     setPending(false);
     if (!result.ok) {
-      setError(result.error ?? "Could not add this booking.");
+      setError(result.error ?? t("emptyTitle"));
       return;
     }
     setSaved(t("added"));
     toast({ title: t("added"), tone: "success" });
-    (document.getElementById("velto-add-booking") as HTMLFormElement | null)?.reset();
+    (document.getElementById("velto-add") as HTMLFormElement | null)?.reset();
     router.refresh();
   }
 
   return (
     <div>
-      <form
-        id="velto-add-booking"
-        action={onAdd}
-        className="workspace-card grid gap-4 p-5 sm:p-6 md:grid-cols-3"
-      >
+      <form id="velto-add" action={onAdd} className="workspace-card grid gap-4 p-5 sm:p-6 md:grid-cols-3">
         <div className="md:col-span-3">
-          <IncomingLinkFields
-            prefillProduct={prefill?.product === "avyro" ? undefined : prefill?.product}
-            prefillId={prefill?.product === "avyro" ? undefined : prefill?.id}
-          />
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("addBooking")}</p>
-          {prefill ? (
-            <p className="mt-2 text-sm text-muted">
-              {t("prefill", { name: prefill.name, product: recordProductName(prefill.product) })}
-            </p>
-          ) : null}
         </div>
         <div>
-          <Label htmlFor="customerName">{t("customer")}</Label>
-          <Input
-            id="customerName"
-            name="customerName"
-            placeholder="Alex Rivera"
-            required
-            defaultValue={prefill?.name ?? ""}
-          />
-        </div>
-        <div>
-          <Label htmlFor="service">{t("service")}</Label>
-          <Input
-            id="service"
-            name="service"
-            placeholder="Consultation"
-            required
-            defaultValue={prefill?.product === "rovyn" ? (prefill.title ?? "") : ""}
-          />
-        </div>
-        <div>
-          <Label htmlFor="startsOn">{t("date")}</Label>
-          <Input id="startsOn" name="startsOn" type="date" required />
-        </div>
-        <div>
-          <Label htmlFor="startTime">{t("time")}</Label>
-          <Input id="startTime" name="startTime" type="time" required />
+          <Label htmlFor="name">{t("customer")}</Label>
+          <Input id="name" name="name" required />
         </div>
         <div>
           <Label htmlFor="email">{t("email")}</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="alex@business.com"
-            defaultValue={prefill?.email ?? ""}
-          />
+          <Input id="email" name="email" type="email" />
         </div>
         <div>
-          <Label htmlFor="reminderOn">{t("remindOn")}</Label>
-          <Input id="reminderOn" name="reminderOn" type="date" />
+          <Label htmlFor="planName">{t("planName")}</Label>
+          <Input id="planName" name="planName" required />
+        </div>
+        <div>
+          <Label htmlFor="renewsOn">{t("renewsOn")}</Label>
+          <Input id="renewsOn" name="renewsOn" type="date" required />
         </div>
         <div className="flex flex-col gap-3 md:col-span-3">
           <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
           <ActionFeedback message={saved} />
           <FormError message={error} />
         </div>
-        <div className="md:col-span-3">
-          <AdvancedPanel label={tCommon("advanced")}>
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div>
-                <Label htmlFor="phone">
-                  {t("phone")}
-                  <span className="ml-2 font-normal tracking-normal text-muted/80">{tCommon("optional")}</span>
-                </Label>
-                <Input id="phone" name="phone" type="tel" autoComplete="tel" defaultValue={prefill?.phone ?? ""} />
-              </div>
-              <div>
-                <Label htmlFor="leadId">{t("avyroLead")}</Label>
-                <Select
-                  id="leadId"
-                  name="leadId"
-                  defaultValue={fromLead?.id ?? ""}
-                  onChange={(event) => {
-                    const form = event.currentTarget.form;
-                    const lead = leads.find((item) => item.id === event.target.value);
-                    if (!form || !lead) return;
-                    fillLeadFields(form, lead);
-                  }}
-                >
-                  <option value="">{t("noLinkedLead")}</option>
-                  {leads.map((lead) => (
-                    <option key={lead.id} value={lead.id}>{lead.name}</option>
-                  ))}
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="notes">{t("notes")}</Label>
-                <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
-              </div>
-            </div>
-            <AdvancedStats
-              items={[
-                { label: t("upcoming"), value: String(counts.upcoming), hint: t("upcomingHint") },
-                { label: t("reminders"), value: String(counts.reminders), hint: t("remindersHint") },
-                { label: t("completed"), value: String(counts.completed), hint: t("completedHint") },
-                { label: t("missed"), value: String(counts.missed), hint: t("missedHint") },
-              ]}
-            />
-            {bookings.length ? (
-              <div>
-                <Label htmlFor="velto-search">{tCommon("searchRecords")}</Label>
-                <Input id="velto-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
-              </div>
-            ) : null}
-          </AdvancedPanel>
-        </div>
       </form>
 
       <div className="mt-12">
-        {bookings.length === 0 ? (
+        {renewals.length === 0 ? (
           <EmptyState className="py-20" title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <Table>
             <THead>
               <TR>
                 <TH>{t("colCustomer")}</TH>
-                <TH>{t("colWhen")}</TH>
-                <TH>{t("colStatus")}</TH>
+                <TH>{t("planName")}</TH>
+                <TH>{t("renewsOn")}</TH>
                 <TH>{t("colReminder")}</TH>
-                <TH>{t("colNotes")}</TH>
+                <TH>{t("colStatus")}</TH>
                 <TH className="text-right"> </TH>
               </TR>
             </THead>
             <TBody>
-              {visibleBookings.map((booking) => {
-                const focused = focusBookingId === booking.id;
+              {renewals.map((row) => {
+                const client = person(row);
                 return (
-                  <Fragment key={booking.id}>
-                  <TR
-                    id={`booking-${booking.id}`}
-                    className={cn(focused && "bg-accent-soft")}
-                  >
+                  <TR key={row.id} className={focusId === row.id ? "bg-accent-soft" : undefined}>
                     <TD>
-                      <p className="font-medium">{booking.customer_name}</p>
-                      <p className="mt-1 text-muted">{booking.service}</p>
-                      {booking.email ? <p className="mt-1 text-xs text-muted">{booking.email}</p> : null}
-                      {booking.phone ? <p className="mt-1 text-xs text-muted">{booking.phone}</p> : null}
-                      {isReminderDue(booking) ? (
-                        <p className="mt-1 font-mono text-[11px] tracking-[0.12em] text-warning uppercase">
-                          {t("reminderDue")}
-                        </p>
+                      <p className="font-medium">{client?.name ?? "—"}</p>
+                      <p className="mt-1 text-muted">{client?.email || "—"}</p>
+                    </TD>
+                    <TD>{row.plan_name}</TD>
+                    <TD>{row.renews_on}</TD>
+                    <TD>{row.reminder_on}</TD>
+                    <TD>
+                      <Badge tone={tone[row.status]}>{t(`status_${row.status}`)}</Badge>
+                      {row.status !== "renewed" ? (
+                        <div className="mt-2 flex gap-2">
+                          <button type="button" className="text-xs text-muted underline" onClick={async () => {
+                            const result = await confirmRenewal(row.id);
+                            toast({ title: result.ok ? t("renewed") : (result.error ?? t("colStatus")), tone: result.ok ? "success" : "error" });
+                            if (result.ok) router.refresh();
+                          }}>{t("markRenewed")}</button>
+                          {row.status !== "lapsed" ? (
+                            <button type="button" className="text-xs text-muted underline" onClick={async () => {
+                              const result = await lapseRenewal(row.id);
+                              toast({ title: result.ok ? t("lapsed") : (result.error ?? t("colStatus")), tone: result.ok ? "success" : "error" });
+                              if (result.ok) router.refresh();
+                            }}>{t("markLapsed")}</button>
+                          ) : null}
+                        </div>
                       ) : null}
                     </TD>
-                    <TD>
-                      <p>{formatDay(booking.starts_on, locale)}</p>
-                      <p className="mt-1 text-muted">{formatTime(booking.start_time, locale)}</p>
-                    </TD>
-                    <TD>
-                      <div className="flex items-center gap-2">
-                        <Badge tone={statusTone[booking.status]}>{t(statusKeys[booking.status])}</Badge>
-                        <select
-                          aria-label={t("statusFor", { name: booking.customer_name })}
-                          className="h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm"
-                          defaultValue={booking.status}
-                          onChange={async (event) => {
-                            const result = await updateBookingStatus(booking.id, event.target.value);
-                            if (!result.ok) {
-                              toast({ title: result.error ?? "Could not update status", tone: "error" });
-                              return;
-                            }
-                            toast({ title: t("statusUpdated"), tone: "success" });
-                            router.refresh();
-                          }}
-                        >
-                          {bookingStatuses.map((status) => (
-                            <option key={status} value={status}>
-                              {t(statusKeys[status])}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </TD>
-                    <TD>
-                      <input
-                        type="date"
-                        aria-label={t("reminderFor", { name: booking.customer_name })}
-                        defaultValue={booking.reminder_on ?? ""}
-                        className={cn(
-                          "h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm",
-                          isReminderDue(booking) && "border-warning/40 text-warning",
-                        )}
-                        onChange={async (event) => {
-                          const result = await updateBookingReminder(booking.id, event.target.value);
-                          if (!result.ok) {
-                            toast({ title: result.error ?? "Could not save reminder", tone: "error" });
-                            return;
-                          }
-                          toast({ title: t("reminderSaved"), tone: "success" });
-                          router.refresh();
-                        }}
-                      />
-                      {booking.reminder_on ? (
-                        <p className="mt-1 text-xs text-muted">{formatDay(booking.reminder_on, locale)}</p>
-                      ) : null}
-                    </TD>
-                    <TD className="max-w-xs text-muted">{booking.notes || "—"}</TD>
                     <TD className="text-right">
-                      <TrashButton label={t("remove")} onClick={() => setDeleteId(booking.id)} />
+                      <TrashButton label={t("remove")} onClick={() => setDeleteId(row.id)} />
                     </TD>
                   </TR>
-                  <TR className="record-links hover:bg-transparent">
-                    <TD colSpan={6} className="pt-0">
-                      <ConnectedRecords
-                        className="mt-0"
-                        product="velto"
-                        recordId={booking.id}
-                        links={links}
-                        leads={leads}
-                        bookings={bookings}
-                        quotes={quotes}
-                        invoices={invoices}
-                        reactivations={reactivations}
-                        reviews={reviews}
-                      />
-                    </TD>
-                  </TR>
-                  </Fragment>
                 );
               })}
             </TBody>
           </Table>
         )}
       </div>
+
+      <div className="mt-8">
+        <AdvancedPanel label={t("settingsTitle")}>
+          <form action={async (formData) => {
+            const result = await saveVeltoSettings(formData);
+            toast({ title: result.ok ? t("settingsSaved") : (result.error ?? t("settingsTitle")), tone: result.ok ? "success" : "error" });
+            if (result.ok) router.refresh();
+          }} className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
+            <div>
+              <Label htmlFor="leadDays">{t("leadDays")}</Label>
+              <Input id="leadDays" name="leadDays" type="number" min={1} max={90} defaultValue={settings.renewal_lead_days} />
+            </div>
+            <PrimaryAction>{t("saveSettings")}</PrimaryAction>
+          </form>
+        </AdvancedPanel>
+      </div>
+
       <ConfirmationDialog
         open={Boolean(deleteId)}
         title={t("removeTitle")}
@@ -420,7 +171,7 @@ export function VeltoBookingsWorkspace({
         onClose={() => setDeleteId(null)}
         onConfirm={async () => {
           if (!deleteId) return;
-          const result = await deleteBooking(deleteId);
+          const result = await deleteRenewal(deleteId);
           setDeleteId(null);
           toast({ title: result.ok ? t("removed") : (result.error ?? t("removeBody")), tone: result.ok ? "success" : "error" });
           if (result.ok) router.refresh();

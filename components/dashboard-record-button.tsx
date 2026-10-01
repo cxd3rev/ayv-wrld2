@@ -5,10 +5,10 @@ import type { RecordProduct } from "@/types/database";
 import { ArrowUpRight } from "lucide-react";
 
 const focusParams: Record<RecordProduct, string> = {
-  avyro: "lead",
-  velto: "booking",
-  rovyn: "quote",
-  orvyn: "invoice",
+  avyro: "checkin",
+  velto: "renewal",
+  rovyn: "watch",
+  orvyn: "loyalty",
   nexro: "reactivation",
   ravelo: "review",
 };

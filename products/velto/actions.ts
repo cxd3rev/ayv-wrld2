@@ -2,197 +2,125 @@
 
 import { revalidatePath } from "next/cache";
 import { requireWorkspace } from "@/lib/auth/session";
-import { createClient } from "@/lib/supabase/server";
-import {
-  bookingStatusSchema,
-  createBookingSchema,
-  firstZodError,
-  updateBookingLeadSchema,
-  updateBookingReminderSchema,
-} from "@/lib/validations";
-import { linkCreatedRecord } from "@/services/record-links";
 import { assertCanCreate } from "@/lib/plan-access";
-import type { Booking } from "@/types/database";
+import { createClient } from "@/lib/supabase/server";
+import { ensureClient, flagChurn, getModuleSettings, noteActivity, reminderDate } from "@/services/journey";
+import type { ModuleSettings, Renewal } from "@/types/database";
 
-const bookingColumns =
-  "id, organization_id, lead_id, customer_name, email, phone, service, starts_on, start_time, status, reminder_on, notes, created_at, updated_at";
+const columns =
+  "id, organization_id, client_id, plan_name, renews_on, reminder_on, status, created_at, updated_at, clients(name, email, phone)";
 
-async function assertLeadInOrg(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  organizationId: string,
-  leadId: string | null,
-) {
-  if (!leadId) return { ok: true as const };
-  const { data } = await supabase
-    .from("leads")
-    .select("id")
-    .eq("id", leadId)
-    .eq("organization_id", organizationId)
-    .maybeSingle();
-
-  if (!data) {
-    return { ok: false as const, error: "That lead is not in this workspace." };
-  }
-  return { ok: true as const };
+function text(value: FormDataEntryValue | null) {
+  return typeof value === "string" ? value.trim() : "";
 }
 
-export async function listBookings(): Promise<Booking[]> {
+export async function listRenewals(): Promise<Renewal[]> {
   const { organization } = await requireWorkspace();
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("bookings")
-    .select(bookingColumns)
-    .eq("organization_id", organization.id)
-    .order("starts_on", { ascending: true })
-    .order("start_time", { ascending: true });
-
-  if (error) {
-    return [];
-  }
-
-  return (data as Booking[] | null) ?? [];
+  const { data } = await supabase.from("renewals").select(columns).eq("organization_id", organization.id).order("renews_on", { ascending: true });
+  return (data as Renewal[] | null) ?? [];
 }
 
-export async function createBooking(formData: FormData) {
+export async function veltoSettings(): Promise<ModuleSettings> {
   const { organization } = await requireWorkspace();
-  const parsed = createBookingSchema.safeParse({
-    customerName: formData.get("customerName"),
-    email: formData.get("email"),
-    phone: formData.get("phone"),
-    service: formData.get("service"),
-    startsOn: formData.get("startsOn"),
-    startTime: formData.get("startTime"),
-    reminderOn: formData.get("reminderOn"),
-    notes: formData.get("notes"),
-    leadId: formData.get("leadId"),
-  });
+  return getModuleSettings(await createClient(), organization.id, "velto");
+}
 
-  if (!parsed.success) {
-    return { ok: false, error: firstZodError(parsed.error) };
+export async function saveVeltoSettings(formData: FormData) {
+  const days = Number(text(formData.get("leadDays")));
+  if (!Number.isInteger(days) || days < 1 || days > 90) {
+    return { ok: false as const, error: "Choose a lead time between 1 and 90 days." };
   }
+  const { organization } = await requireWorkspace();
+  const supabase = await createClient();
+  await getModuleSettings(supabase, organization.id, "velto");
+  const { error } = await supabase
+    .from("module_settings")
+    .update({ renewal_lead_days: days })
+    .eq("organization_id", organization.id)
+    .eq("product", "velto");
+  if (error) return { ok: false as const, error: "Could not save these settings." };
+  revalidatePath("/dashboard/velto");
+  return { ok: true as const, message: "Settings saved." };
+}
 
+export async function createRenewal(formData: FormData) {
+  const name = text(formData.get("name"));
+  const email = text(formData.get("email")).toLowerCase();
+  const phone = text(formData.get("phone"));
+  const planName = text(formData.get("planName"));
+  const renewsOn = text(formData.get("renewsOn"));
+  if (!name || !planName) return { ok: false as const, error: "Add the client and the plan." };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(renewsOn)) return { ok: false as const, error: "Add the renewal date." };
+  const { organization } = await requireWorkspace();
   const gate = await assertCanCreate(organization, "velto");
   if (!gate.ok) return gate;
-
   const supabase = await createClient();
-  const leadId = parsed.data.leadId || null;
-  const leadCheck = await assertLeadInOrg(supabase, organization.id, leadId);
-  if (!leadCheck.ok) {
-    return leadCheck;
-  }
-
-  const { data, error } = await supabase
-    .from("bookings")
-    .insert({
-      organization_id: organization.id,
-      lead_id: leadId,
-      customer_name: parsed.data.customerName,
-      email: parsed.data.email || null,
-      phone: parsed.data.phone || null,
-      service: parsed.data.service,
-      starts_on: parsed.data.startsOn,
-      start_time: parsed.data.startTime,
-      reminder_on: parsed.data.reminderOn || null,
-      notes: parsed.data.notes || null,
-      status: "scheduled",
-    })
-    .select("id")
-    .single();
-
-  if (error || !data) {
-    return { ok: false, error: "Could not add this booking. Please try again." };
-  }
-
-  await linkCreatedRecord(formData, "velto", data.id);
+  const settings = await getModuleSettings(supabase, organization.id, "velto");
+  const clientId = await ensureClient(supabase, organization.id, { name, email, phone });
+  if (!clientId) return { ok: false as const, error: "Could not save this client." };
+  const { error } = await supabase.from("renewals").insert({
+    organization_id: organization.id,
+    client_id: clientId,
+    plan_name: planName,
+    renews_on: renewsOn,
+    reminder_on: reminderDate(renewsOn, settings.renewal_lead_days),
+    status: "scheduled",
+  });
+  if (error) return { ok: false as const, error: "Could not add this renewal." };
   revalidatePath("/dashboard/velto");
-  return { ok: true, message: "Booking added." };
+  return { ok: true as const, message: "Renewal added." };
 }
 
-export async function updateBookingStatus(bookingId: string, status: string) {
-  const parsed = bookingStatusSchema.safeParse(status);
-  if (!parsed.success) {
-    return { ok: false, error: "That status is not valid." };
-  }
-
+export async function confirmRenewal(id: string) {
   const { organization } = await requireWorkspace();
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("bookings")
-    .update({ status: parsed.data })
-    .eq("id", bookingId)
-    .eq("organization_id", organization.id);
-
-  if (error) {
-    return { ok: false, error: "Could not update this booking." };
-  }
-
+  const { data } = await supabase
+    .from("renewals")
+    .select("id, client_id, renews_on")
+    .eq("id", id)
+    .eq("organization_id", organization.id)
+    .maybeSingle();
+  if (!data) return { ok: false as const, error: "Could not find this renewal." };
+  await supabase.from("renewals").update({ status: "renewed" }).eq("id", id);
+  await noteActivity(supabase, data.client_id, data.renews_on, 0);
   revalidatePath("/dashboard/velto");
-  return { ok: true, message: "Status updated." };
+  return { ok: true as const, message: "Renewal confirmed." };
 }
 
-export async function updateBookingReminder(bookingId: string, reminderOn: string) {
-  const parsed = updateBookingReminderSchema.safeParse({ reminderOn });
-  if (!parsed.success) {
-    return { ok: false, error: firstZodError(parsed.error) };
-  }
-
+export async function lapseRenewal(id: string) {
   const { organization } = await requireWorkspace();
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("bookings")
-    .update({ reminder_on: parsed.data.reminderOn || null })
-    .eq("id", bookingId)
-    .eq("organization_id", organization.id);
-
-  if (error) {
-    return { ok: false, error: "Could not save the reminder date." };
-  }
-
+  const { data } = await supabase
+    .from("renewals")
+    .select("id, client_id, renews_on, clients(name, email, phone)")
+    .eq("id", id)
+    .eq("organization_id", organization.id)
+    .maybeSingle();
+  if (!data) return { ok: false as const, error: "Could not find this renewal." };
+  const client = Array.isArray(data.clients) ? data.clients[0] : data.clients;
+  await supabase.from("renewals").update({ status: "lapsed" }).eq("id", id);
+  await flagChurn(supabase, {
+    organizationId: organization.id,
+    clientId: data.client_id,
+    name: client?.name || "Client",
+    email: client?.email ?? null,
+    phone: client?.phone ?? null,
+    lastActivityOn: data.renews_on,
+    frequencyDays: 30,
+    origin: "velto",
+  });
   revalidatePath("/dashboard/velto");
-  return { ok: true, message: "Reminder date saved." };
+  revalidatePath("/dashboard/rovyn");
+  revalidatePath("/dashboard/nexro");
+  return { ok: true as const, message: "Marked as lapsed and flagged in Rovyn." };
 }
 
-export async function updateBookingLead(bookingId: string, leadId: string) {
-  const parsed = updateBookingLeadSchema.safeParse({ bookingId, leadId });
-  if (!parsed.success) {
-    return { ok: false, error: firstZodError(parsed.error) };
-  }
-
+export async function deleteRenewal(id: string) {
   const { organization } = await requireWorkspace();
   const supabase = await createClient();
-  const nextLeadId = parsed.data.leadId || null;
-  const leadCheck = await assertLeadInOrg(supabase, organization.id, nextLeadId);
-  if (!leadCheck.ok) {
-    return leadCheck;
-  }
-
-  const { error } = await supabase
-    .from("bookings")
-    .update({ lead_id: nextLeadId })
-    .eq("id", parsed.data.bookingId)
-    .eq("organization_id", organization.id);
-
-  if (error) {
-    return { ok: false, error: "Could not link that lead." };
-  }
-
+  const { error } = await supabase.from("renewals").delete().eq("id", id).eq("organization_id", organization.id);
+  if (error) return { ok: false as const, error: "Could not remove this renewal." };
   revalidatePath("/dashboard/velto");
-  return { ok: true, message: nextLeadId ? "Lead linked." : "Lead unlinked." };
-}
-
-export async function deleteBooking(bookingId: string) {
-  const { organization } = await requireWorkspace();
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("bookings")
-    .delete()
-    .eq("id", bookingId)
-    .eq("organization_id", organization.id);
-
-  if (error) {
-    return { ok: false, error: "Could not remove this booking." };
-  }
-
-  revalidatePath("/dashboard/velto");
-  return { ok: true, message: "Booking removed." };
+  return { ok: true as const, message: "Renewal removed." };
 }

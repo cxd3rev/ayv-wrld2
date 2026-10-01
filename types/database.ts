@@ -212,7 +212,88 @@ export type Contact = {
   updated_at: string;
 };
 
+export type SharedClient = {
+  id: string;
+  organization_id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  last_activity_on: string | null;
+  visit_count: number;
+  loyalty_status: "none" | "loyal";
+  churn_status: "none" | "at_risk";
+  created_at: string;
+  updated_at: string;
+};
+
+export type ModuleSettings = {
+  organization_id: string;
+  product: "avyro" | "velto" | "rovyn" | "orvyn";
+  check_in_delay_days: number;
+  renewal_lead_days: number;
+  churn_margin_days: number;
+  loyalty_threshold: number;
+  send_thank_you: boolean;
+};
+
+export type CheckInStatus = "scheduled" | "sent" | "positive" | "neutral" | "negative";
+
+export type CheckIn = {
+  id: string;
+  organization_id: string;
+  client_id: string;
+  served_on: string;
+  check_in_on: string;
+  status: CheckInStatus;
+  reply_token: string;
+  created_at: string;
+  updated_at: string;
+  clients: Pick<SharedClient, "name" | "email" | "phone" | "visit_count" | "loyalty_status" | "churn_status"> | null;
+};
+
+export type RenewalStatus = "scheduled" | "reminded" | "renewed" | "lapsed";
+
+export type Renewal = {
+  id: string;
+  organization_id: string;
+  client_id: string;
+  plan_name: string;
+  renews_on: string;
+  reminder_on: string;
+  status: RenewalStatus;
+  created_at: string;
+  updated_at: string;
+  clients: Pick<SharedClient, "name" | "email" | "phone"> | null;
+};
+
+export type ChurnWatch = {
+  id: string;
+  organization_id: string;
+  client_id: string;
+  frequency_days: number;
+  last_activity_on: string;
+  status: "watching" | "at_risk";
+  origin: "manual" | "velto";
+  created_at: string;
+  updated_at: string;
+  clients: Pick<SharedClient, "name" | "email" | "phone"> | null;
+};
+
+export type LoyaltyRecord = {
+  id: string;
+  organization_id: string;
+  client_id: string;
+  visit_count: number;
+  status: "tracking" | "loyal";
+  origin: "manual" | "avyro";
+  thank_you_on: string | null;
+  created_at: string;
+  updated_at: string;
+  clients: Pick<SharedClient, "name" | "email" | "phone"> | null;
+};
+
 export type ReactivationKind = "winback" | "referral";
+export type ReactivationOrigin = "manual" | "rovyn" | "orvyn";
 export type ReactivationStatus = "scheduled" | "sent" | "replied" | "won" | "passed";
 
 export type Reactivation = {
@@ -222,6 +303,8 @@ export type Reactivation = {
   email: string | null;
   phone: string | null;
   kind: ReactivationKind;
+  origin: ReactivationOrigin;
+  client_id: string | null;
   status: ReactivationStatus;
   message: string;
   incentive: string | null;
@@ -232,6 +315,7 @@ export type Reactivation = {
   updated_at: string;
 };
 
+export type ReviewOrigin = "manual" | "avyro";
 export type ReviewStatus = "scheduled" | "requested" | "public" | "private" | "responded";
 export type ReviewChannel = "google" | "trustpilot" | "facebook" | "other" | "private";
 
@@ -242,6 +326,8 @@ export type Review = {
   email: string | null;
   phone: string | null;
   status: ReviewStatus;
+  origin: ReviewOrigin;
+  client_id: string | null;
   channel: ReviewChannel;
   rating: number | null;
   feedback: string | null;

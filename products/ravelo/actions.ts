@@ -14,7 +14,7 @@ import { assertCanCreate } from "@/lib/plan-access";
 import type { Review } from "@/types/database";
 
 const reviewColumns =
-  "id, organization_id, customer_name, email, phone, status, channel, rating, feedback, review_url, requested_on, next_follow_up_on, notes, created_at, updated_at";
+  "id, organization_id, customer_name, email, phone, status, origin, client_id, channel, rating, feedback, review_url, requested_on, next_follow_up_on, notes, created_at, updated_at";
 
 export async function listReviews(): Promise<Review[]> {
   const { organization } = await requireWorkspace();

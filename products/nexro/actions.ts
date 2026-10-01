@@ -18,7 +18,7 @@ import type { Contact, ContactRelationship, Organization, Reactivation, Reactiva
 import { getLocale } from "next-intl/server";
 
 const reactivationColumns =
-  "id, organization_id, customer_name, email, phone, kind, status, message, incentive, last_seen_on, next_touch_on, notes, created_at, updated_at";
+  "id, organization_id, customer_name, email, phone, kind, origin, client_id, status, message, incentive, last_seen_on, next_touch_on, notes, created_at, updated_at";
 
 const contactColumns =
   "id, organization_id, name, email, phone, relationship, consent_source, consent_date, created_at, updated_at";

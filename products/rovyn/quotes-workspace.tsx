@@ -1,389 +1,144 @@
 "use client";
 
-import {
-  ConnectedRecords,
-  IncomingLinkFields,
-} from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
-import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction, TrashButton } from "@/components/workspace/simple-action";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
+import { ActionFeedback, AdvancedPanel, PrimaryAction, TrashButton } from "@/components/workspace/simple-action";
 import { useToast } from "@/hooks/use-toast";
-import type { RecordPrefill } from "@/lib/record-entities";
-import { recordProductName } from "@/lib/record-entities";
-import { cn } from "@/lib/utils";
-import { quoteCurrencies, quoteStatuses } from "@/lib/validations";
-import {
-  createQuote,
-  deleteQuote,
-  updateQuoteFollowUp,
-  updateQuoteStatus,
-} from "@/products/rovyn/actions";
-import type { Booking, Invoice, Lead, Quote, QuoteStatus, Reactivation, RecordLink, Review } from "@/types/database";
-import { useLocale, useTranslations } from "next-intl";
+import { createChurnWatch, deleteChurnWatch, saveRovynSettings } from "@/products/rovyn/actions";
+import type { ChurnWatch, ModuleSettings } from "@/types/database";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 
-const statusTone: Record<QuoteStatus, "accent" | "warning" | "success" | "danger"> = {
-  sent: "accent",
-  followed_up: "warning",
-  won: "success",
-  lost: "danger",
-};
-
-const statusKeys: Record<QuoteStatus, "statusSent" | "statusFollowedUp" | "statusWon" | "statusLost"> = {
-  sent: "statusSent",
-  followed_up: "statusFollowedUp",
-  won: "statusWon",
-  lost: "statusLost",
-};
-
-function todayIsoDate() {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${now.getFullYear()}-${month}-${day}`;
-}
-
-function formatFollowUp(value: string | null, locale: string) {
-  if (!value) return "—";
-  const [year, month, day] = value.split("-").map(Number);
-  if (!year || !month || !day) return value;
-  return new Intl.DateTimeFormat(locale, {
-    month: "short",
-    day: "numeric",
-  }).format(new Date(year, month - 1, day));
-}
-
-function isOpenQuote(quote: Quote) {
-  return quote.status === "sent" || quote.status === "followed_up";
-}
-
-function isFollowUpDue(quote: Quote) {
-  if (!quote.follow_up_on) return false;
-  if (!isOpenQuote(quote)) return false;
-  return quote.follow_up_on <= todayIsoDate();
-}
-
-function quoteAmount(value: Quote["amount"]) {
-  if (value == null || value === "") return null;
-  const amount = typeof value === "number" ? value : Number(value);
-  return Number.isFinite(amount) ? amount : null;
-}
-
-function formatQuoteAmount(value: Quote["amount"], currency: string, locale: string) {
-  const amount = quoteAmount(value);
-  if (amount == null) return "—";
-  try {
-    return new Intl.NumberFormat(locale, { style: "currency", currency }).format(amount);
-  } catch {
-    return `${currency} ${amount.toFixed(2)}`;
-  }
+function person(row: ChurnWatch) {
+  return Array.isArray(row.clients) ? row.clients[0] : row.clients;
 }
 
 export function RovynQuotesWorkspace({
-  quotes,
-  invoices,
-  reactivations,
-  reviews,
-  leads,
-  bookings,
-  links,
-  prefill,
-  focusQuoteId,
+  watches,
+  settings,
+  focusId,
 }: {
-  quotes: Quote[];
-  invoices: Invoice[];
-  reactivations: Reactivation[];
-  reviews: Review[];
-  leads: Lead[];
-  bookings: Booking[];
-  links: RecordLink[];
-  prefill?: RecordPrefill;
-  focusQuoteId?: string;
+  watches: ChurnWatch[];
+  settings: ModuleSettings;
+  focusId?: string;
 }) {
   const t = useTranslations("rovyn");
   const tCommon = useTranslations("common");
-  const locale = useLocale();
   const { toast } = useToast();
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
   const [saved, setSaved] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [query, setQuery] = useState("");
-
-  const counts = useMemo(() => {
-    return {
-      sent: quotes.filter((quote) => quote.status === "sent").length,
-      followedUp: quotes.filter((quote) => quote.status === "followed_up").length,
-      won: quotes.filter((quote) => quote.status === "won").length,
-      due: quotes.filter(isFollowUpDue).length,
-    };
-  }, [quotes]);
-  const visibleQuotes = useMemo(() => {
-    const needle = query.trim().toLocaleLowerCase(locale);
-    if (!needle) return quotes;
-    return quotes.filter((quote) =>
-      [quote.customer_name, quote.title, quote.email, quote.phone, quote.notes].some((value) =>
-        value?.toLocaleLowerCase(locale).includes(needle),
-      ),
-    );
-  }, [locale, query, quotes]);
-
-  useEffect(() => {
-    if (!focusQuoteId) return;
-    document.getElementById(`quote-${focusQuoteId}`)?.scrollIntoView({
-      block: "center",
-      behavior: "smooth",
-    });
-  }, [focusQuoteId]);
 
   async function onAdd(formData: FormData) {
     setError("");
     setPending(true);
-    const result = await createQuote(formData);
+    const result = await createChurnWatch(formData);
     setPending(false);
     if (!result.ok) {
-      setError(result.error ?? "Could not add this quote.");
+      setError(result.error ?? t("emptyTitle"));
       return;
     }
     setSaved(t("added"));
-    toast({ title: t("added"), tone: "success" });
-    (document.getElementById("rovyn-add-quote") as HTMLFormElement | null)?.reset();
+    toast({ title: result.message ?? t("added"), tone: "success" });
+    (document.getElementById("rovyn-add") as HTMLFormElement | null)?.reset();
     router.refresh();
   }
 
   return (
     <div>
-      <form
-        id="rovyn-add-quote"
-        action={onAdd}
-        className="workspace-card grid gap-6 p-6 sm:p-8 md:grid-cols-2"
-      >
-        <div className="md:col-span-2 lg:col-span-4">
-          <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
+      <form id="rovyn-add" action={onAdd} className="workspace-card grid gap-4 p-5 sm:p-6 md:grid-cols-3">
+        <div className="md:col-span-3">
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("addQuote")}</p>
-          {prefill ? (
-            <p className="mt-2 text-sm text-muted">
-              {t("prefill", { name: prefill.name, product: recordProductName(prefill.product) })}
-            </p>
-          ) : null}
         </div>
         <div>
-          <Label htmlFor="customerName">{t("customer")}</Label>
-          <Input
-            id="customerName"
-            name="customerName"
-            placeholder="Sam Ortiz"
-            required
-            defaultValue={prefill?.name ?? ""}
-          />
-        </div>
-        <div>
-          <Label htmlFor="title">{t("quoteFor")}</Label>
-          <Input
-            id="title"
-            name="title"
-            placeholder="Kitchen remodel"
-            required
-            defaultValue={prefill?.title ?? ""}
-          />
-        </div>
-        <div>
-          <Label htmlFor="amount">{t("amount")}</Label>
-          <div className="flex gap-2">
-            <Input id="amount" name="amount" inputMode="decimal" placeholder="2400" />
-            <select
-              id="currency"
-              name="currency"
-              aria-label={t("currency")}
-              defaultValue="EUR"
-              className="h-10 rounded-md border border-foreground/15 bg-card px-2 text-sm"
-            >
-              {quoteCurrencies.map((currency) => (
-                <option key={currency} value={currency}>
-                  {currency}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div>
-          <Label htmlFor="followUpOn">{t("followUpOn")}</Label>
-          <Input id="followUpOn" name="followUpOn" type="date" />
+          <Label htmlFor="name">{t("customer")}</Label>
+          <Input id="name" name="name" required />
         </div>
         <div>
           <Label htmlFor="email">{t("email")}</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="sam@business.com"
-            defaultValue={prefill?.email ?? ""}
-          />
+          <Input id="email" name="email" type="email" />
         </div>
         <div>
-          <Label htmlFor="phone">{t("phone")}</Label>
-          <Input
-            id="phone"
-            name="phone"
-            type="tel"
-            placeholder={tCommon("optional")}
-            defaultValue={prefill?.phone ?? ""}
-          />
+          <Label htmlFor="frequencyDays">{t("frequencyDays")}</Label>
+          <Input id="frequencyDays" name="frequencyDays" type="number" min={1} max={365} required />
         </div>
-        <div className="md:col-span-2 lg:col-span-3">
-          <Label htmlFor="notes">{t("notes")}</Label>
-          <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
+        <div>
+          <Label htmlFor="lastActivityOn">{t("lastActivity")}</Label>
+          <Input id="lastActivityOn" name="lastActivityOn" type="date" required />
         </div>
-        <div className="md:col-span-2">
-          <AdvancedPanel label={tCommon("advanced")}>
-            <AdvancedStats
-              items={[
-                { label: t("sent"), value: String(counts.sent), hint: t("sentHint") },
-                { label: t("followedUp"), value: String(counts.followedUp), hint: t("followedUpHint") },
-                { label: t("won"), value: String(counts.won), hint: t("wonHint") },
-                { label: t("due"), value: String(counts.due), hint: t("dueHint") },
-              ]}
-            />
-            {quotes.length ? (
-              <div className="max-w-sm">
-                <Label htmlFor="rovyn-search">{tCommon("searchRecords")}</Label>
-                <Input id="rovyn-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
-              </div>
-            ) : null}
-          </AdvancedPanel>
-        </div>
-        <div className="flex flex-col gap-4 md:col-span-2">
+        <div className="flex flex-col gap-3 md:col-span-3">
           <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
           <ActionFeedback message={saved} />
-        </div>
-        <div className="md:col-span-2 lg:col-span-4">
           <FormError message={error} />
         </div>
       </form>
 
       <div className="mt-12">
-        {quotes.length === 0 ? (
+        {watches.length === 0 ? (
           <EmptyState className="py-20" title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <Table>
             <THead>
               <TR>
                 <TH>{t("colCustomer")}</TH>
-                <TH>{t("colQuote")}</TH>
+                <TH>{t("frequencyDays")}</TH>
+                <TH>{t("lastActivity")}</TH>
                 <TH>{t("colStatus")}</TH>
-                <TH>{t("colFollowUp")}</TH>
-                <TH>{t("colNotes")}</TH>
                 <TH className="text-right"> </TH>
               </TR>
             </THead>
             <TBody>
-              {visibleQuotes.map((quote) => {
-                const focused = focusQuoteId === quote.id;
+              {watches.map((row) => {
+                const client = person(row);
                 return (
-                  <Fragment key={quote.id}>
-                  <TR
-                    id={`quote-${quote.id}`}
-                    className={cn(focused && "bg-accent-soft")}
-                  >
+                  <TR key={row.id} className={focusId === row.id ? "bg-accent-soft" : undefined}>
                     <TD>
-                      <p className="font-medium">{quote.customer_name}</p>
-                      {quote.email ? <p className="mt-1 text-muted">{quote.email}</p> : null}
-                      {quote.phone ? <p className="mt-1 text-xs text-muted">{quote.phone}</p> : null}
-                      {isFollowUpDue(quote) ? (
-                        <p className="mt-1 font-mono text-[11px] tracking-[0.12em] text-warning uppercase">
-                          {t("followUpToday")}
-                        </p>
-                      ) : null}
+                      <p className="font-medium">{client?.name ?? "—"}</p>
+                      <p className="mt-1 text-muted">{client?.email || "—"}</p>
                     </TD>
+                    <TD>{row.frequency_days}</TD>
+                    <TD>{row.last_activity_on}</TD>
                     <TD>
-                      <p>{quote.title}</p>
-                      <p className="mt-1 text-muted">
-                        {formatQuoteAmount(quote.amount, quote.currency, locale)}
-                      </p>
-                    </TD>
-                    <TD>
-                      <div className="flex items-center gap-2">
-                        <Badge tone={statusTone[quote.status]}>{t(statusKeys[quote.status])}</Badge>
-                        <select
-                          aria-label={t("statusFor", { name: quote.customer_name })}
-                          className="h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm"
-                          defaultValue={quote.status}
-                          onChange={async (event) => {
-                            const result = await updateQuoteStatus(quote.id, event.target.value);
-                            if (!result.ok) {
-                              toast({ title: result.error ?? "Could not update status", tone: "error" });
-                              return;
-                            }
-                            toast({ title: t("statusUpdated"), tone: "success" });
-                            router.refresh();
-                          }}
-                        >
-                          {quoteStatuses.map((status) => (
-                            <option key={status} value={status}>
-                              {t(statusKeys[status])}
-                            </option>
-                          ))}
-                        </select>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge tone={row.status === "at_risk" ? "danger" : "accent"}>{t(`status_${row.status}`)}</Badge>
+                        {row.origin === "velto" ? <Badge tone="warning">{t("fromVelto")}</Badge> : null}
                       </div>
                     </TD>
-                    <TD>
-                      <input
-                        type="date"
-                        aria-label={t("followUpFor", { name: quote.customer_name })}
-                        defaultValue={quote.follow_up_on ?? ""}
-                        className={cn(
-                          "h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm",
-                          isFollowUpDue(quote) && "border-warning/40 text-warning",
-                        )}
-                        onChange={async (event) => {
-                          const result = await updateQuoteFollowUp(quote.id, event.target.value);
-                          if (!result.ok) {
-                            toast({ title: result.error ?? "Could not save follow-up", tone: "error" });
-                            return;
-                          }
-                          toast({ title: t("followUpSaved"), tone: "success" });
-                          router.refresh();
-                        }}
-                      />
-                      {quote.follow_up_on ? (
-                        <p className="mt-1 text-xs text-muted">{formatFollowUp(quote.follow_up_on, locale)}</p>
-                      ) : null}
-                    </TD>
-                    <TD className="max-w-xs text-muted">{quote.notes || "—"}</TD>
                     <TD className="text-right">
-                      <TrashButton label={t("remove")} onClick={() => setDeleteId(quote.id)} />
+                      <TrashButton label={t("remove")} onClick={() => setDeleteId(row.id)} />
                     </TD>
                   </TR>
-                  <TR className="record-links hover:bg-transparent">
-                    <TD colSpan={6} className="pt-0">
-                      <ConnectedRecords
-                        className="mt-0"
-                        product="rovyn"
-                        recordId={quote.id}
-                        links={links}
-                        leads={leads}
-                        bookings={bookings}
-                        quotes={quotes}
-                        invoices={invoices}
-                        reactivations={reactivations}
-                        reviews={reviews}
-                      />
-                    </TD>
-                  </TR>
-                  </Fragment>
                 );
               })}
             </TBody>
           </Table>
         )}
       </div>
+
+      <div className="mt-8">
+        <AdvancedPanel label={t("settingsTitle")}>
+          <form action={async (formData) => {
+            const result = await saveRovynSettings(formData);
+            toast({ title: result.ok ? t("settingsSaved") : (result.error ?? t("settingsTitle")), tone: result.ok ? "success" : "error" });
+            if (result.ok) router.refresh();
+          }} className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
+            <div>
+              <Label htmlFor="marginDays">{t("marginDays")}</Label>
+              <Input id="marginDays" name="marginDays" type="number" min={0} max={180} defaultValue={settings.churn_margin_days} />
+            </div>
+            <PrimaryAction>{t("saveSettings")}</PrimaryAction>
+          </form>
+        </AdvancedPanel>
+      </div>
+
       <ConfirmationDialog
         open={Boolean(deleteId)}
         title={t("removeTitle")}
@@ -394,7 +149,7 @@ export function RovynQuotesWorkspace({
         onClose={() => setDeleteId(null)}
         onConfirm={async () => {
           if (!deleteId) return;
-          const result = await deleteQuote(deleteId);
+          const result = await deleteChurnWatch(deleteId);
           setDeleteId(null);
           toast({ title: result.ok ? t("removed") : (result.error ?? t("removeBody")), tone: result.ok ? "success" : "error" });
           if (result.ok) router.refresh();

@@ -26,7 +26,7 @@ assert.equal(september[6], "2026-09-06");
 assert.equal(september[41], "2026-10-11");
 
 assert.deepEqual(
-  buildCalendarEvents({ leads: [], bookings: [], quotes: [], invoices: [], reactivations: [], reviews: [] }),
+  buildCalendarEvents({ leads: [], bookings: [], quotes: [], invoices: [], checkIns: [], renewals: [], churnWatches: [], loyaltyRecords: [], reactivations: [], reviews: [] }),
   [],
 );
 

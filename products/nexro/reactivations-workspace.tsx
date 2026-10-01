@@ -475,7 +475,11 @@ export function NexroReactivationsWorkspace({
                     <p className="text-xs text-muted">{item.message}</p>
                     {item.incentive ? <p className="text-xs text-muted">{item.incentive}</p> : null}
                   </TD>
-                  <TD>{t(kindKeys[item.kind])}</TD>
+                  <TD>
+                    <p>{t(kindKeys[item.kind])}</p>
+                    {item.origin === "rovyn" ? <Badge tone="warning">{t("originRovyn")}</Badge> : null}
+                    {item.origin === "orvyn" ? <Badge tone="warning">{t("originOrvyn")}</Badge> : null}
+                  </TD>
                   <TD>
                     <Badge tone={statusTone[item.status]}>{t(statusKeys[item.status])}</Badge>
                     <select

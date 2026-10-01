@@ -2,17 +2,17 @@ import { PageHeader } from "@/components/page-header";
 import { getProduct } from "@/config/products";
 import { resolveRecordPrefill, type RecordProduct } from "@/lib/record-entities";
 import { AvyroLeadsWorkspace } from "@/products/avyro/leads-workspace";
-import { listLeads } from "@/products/avyro/actions";
+import { avyroSettings, listCheckIns } from "@/products/avyro/actions";
 import { NexroReactivationsWorkspace } from "@/products/nexro/reactivations-workspace";
 import { listContacts, listReactivations } from "@/products/nexro/actions";
 import { RovynQuotesWorkspace } from "@/products/rovyn/quotes-workspace";
-import { listQuotes } from "@/products/rovyn/actions";
+import { listChurnWatches, rovynSettings } from "@/products/rovyn/actions";
 import { OrvynInvoicesWorkspace } from "@/products/orvyn/invoices-workspace";
-import { listInvoices } from "@/products/orvyn/actions";
+import { listLoyalty, orvynSettings } from "@/products/orvyn/actions";
 import { RaveloReviewsWorkspace } from "@/products/ravelo/reviews-workspace";
 import { listReviews } from "@/products/ravelo/actions";
 import { VeltoBookingsWorkspace } from "@/products/velto/bookings-workspace";
-import { listBookings } from "@/products/velto/actions";
+import { listRenewals, veltoSettings } from "@/products/velto/actions";
 import { listRecordLinks } from "@/services/record-links";
 import { requireWorkspace } from "@/lib/auth/session";
 import { getPlanAccess } from "@/lib/plan-access";
@@ -50,14 +50,18 @@ export async function ProductWorkspacePage({
     );
   }
   const params = await searchParams;
-  const [leads, bookings, quotes, invoices, reactivations, reviews, links] = await Promise.all([
-    listLeads(),
-    listBookings(),
-    listQuotes(),
-    listInvoices(),
+  const [checkIns, renewals, watches, loyalty, reactivations, reviews, links, avyroConfig, veltoConfig, rovynConfig, orvynConfig] = await Promise.all([
+    listCheckIns(),
+    listRenewals(),
+    listChurnWatches(),
+    listLoyalty(),
     listReactivations(),
     listReviews(),
     listRecordLinks(),
+    avyroSettings(),
+    veltoSettings(),
+    rovynSettings(),
+    orvynSettings(),
   ]);
   const prefill = resolveRecordPrefill(
     firstParam(params.fromLead),
@@ -66,15 +70,15 @@ export async function ProductWorkspacePage({
     firstParam(params.fromInvoice),
     firstParam(params.fromReactivation),
     firstParam(params.fromReview),
-    leads,
-    bookings,
-    quotes,
-    invoices,
+    [],
+    [],
+    [],
+    [],
     reactivations,
     reviews,
   );
   const contacts = productId === "nexro" ? await listContacts() : [];
-  const shared = { leads, bookings, quotes, invoices, reactivations, reviews, links, prefill };
+  const shared = { leads: [], bookings: [], quotes: [], invoices: [], reactivations, reviews, links, prefill };
 
   return (
     <div style={{ "--product-accent": product.accent } as React.CSSProperties}>
@@ -86,13 +90,13 @@ export async function ProductWorkspacePage({
       </div>
 
       {productId === "avyro" ? (
-        <AvyroLeadsWorkspace {...shared} focusLeadId={firstParam(params.lead)} />
+        <AvyroLeadsWorkspace checkIns={checkIns} settings={avyroConfig} focusId={firstParam(params.checkin) ?? firstParam(params.lead)} />
       ) : productId === "velto" ? (
-        <VeltoBookingsWorkspace {...shared} focusBookingId={firstParam(params.booking)} />
+        <VeltoBookingsWorkspace renewals={renewals} settings={veltoConfig} focusId={firstParam(params.renewal) ?? firstParam(params.booking)} />
       ) : productId === "rovyn" ? (
-        <RovynQuotesWorkspace {...shared} focusQuoteId={firstParam(params.quote)} />
+        <RovynQuotesWorkspace watches={watches} settings={rovynConfig} focusId={firstParam(params.watch) ?? firstParam(params.quote)} />
       ) : productId === "orvyn" ? (
-        <OrvynInvoicesWorkspace {...shared} focusInvoiceId={firstParam(params.invoice)} />
+        <OrvynInvoicesWorkspace records={loyalty} settings={orvynConfig} focusId={firstParam(params.loyalty) ?? firstParam(params.invoice)} />
       ) : productId === "nexro" ? (
         <NexroReactivationsWorkspace {...shared} contacts={contacts} organizationName={organization.name} focusReactivationId={firstParam(params.reactivation)} />
       ) : (

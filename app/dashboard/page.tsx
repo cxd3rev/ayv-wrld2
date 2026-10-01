@@ -7,6 +7,7 @@ import { requireWorkspace } from "@/lib/auth/session";
 import { buildCalendarEvents } from "@/lib/calendar";
 import {
   calculateDashboardMetrics,
+  type AttentionItem,
   type ConversionMetric,
 } from "@/lib/dashboard-metrics";
 import { getProduct } from "@/config/products";
@@ -18,6 +19,64 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 function formatPercent(metric: ConversionMetric, noData: string) {
   return metric.rate == null ? noData : `${metric.rate.toFixed(1)}%`;
+}
+
+function dayOffset(today: string, date: string) {
+  const start = new Date(`${today}T00:00:00`);
+  const end = new Date(`${date}T00:00:00`);
+  return Math.round((end.getTime() - start.getTime()) / 86_400_000);
+}
+
+function journeyAttention(
+  records: Awaited<ReturnType<typeof getDashboardRecords>>,
+  today: string,
+): AttentionItem[] {
+  const items: AttentionItem[] = [];
+  const push = (item: Omit<AttentionItem, "timing" | "days"> & { date: string }) => {
+    const days = dayOffset(today, item.date);
+    if (days > 7) return;
+    items.push({
+      ...item,
+      days,
+      timing: days < 0 ? "overdue" : days === 0 ? "today" : "upcoming",
+    });
+  };
+  for (const row of records.checkIns) {
+    const name = row.clients?.name ?? "Client";
+    if (row.status === "scheduled" || row.status === "sent" || row.status === "negative" || row.status === "neutral") {
+      push({ id: `checkin:${row.id}`, product: "avyro", recordId: row.id, name, date: row.check_in_on });
+    }
+  }
+  for (const row of records.renewals) {
+    if (row.status !== "scheduled" && row.status !== "reminded") continue;
+    push({
+      id: `renewal:${row.id}`,
+      product: "velto",
+      recordId: row.id,
+      name: row.clients?.name ?? row.plan_name,
+      date: row.status === "scheduled" ? row.reminder_on : row.renews_on,
+    });
+  }
+  for (const row of records.churnWatches) {
+    if (row.status !== "at_risk") continue;
+    push({
+      id: `watch:${row.id}`,
+      product: "rovyn",
+      recordId: row.id,
+      name: row.clients?.name ?? "Client",
+      date: row.last_activity_on,
+    });
+  }
+  for (const row of records.reactivations) {
+    if (!row.next_touch_on || (row.status !== "scheduled" && row.status !== "sent")) continue;
+    push({ id: `reactivation:${row.id}`, product: "nexro", recordId: row.id, name: row.customer_name, date: row.next_touch_on });
+  }
+  for (const row of records.reviews) {
+    const date = row.status === "scheduled" ? row.requested_on : row.next_follow_up_on;
+    if (!date || (row.status !== "scheduled" && row.status !== "requested")) continue;
+    push({ id: `review:${row.id}`, product: "ravelo", recordId: row.id, name: row.customer_name, date });
+  }
+  return items.sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
 }
 
 export const metadata: Metadata = { alternates: { canonical: "/dashboard" } };
@@ -41,21 +100,32 @@ export default async function DashboardPage() {
   );
   const firstName = profile?.full_name?.split(" ")[0];
   const hasRecords =
-    metrics.raw.leads +
-      metrics.raw.bookings +
-      metrics.raw.quotes +
-      metrics.raw.invoices +
+    records.checkIns.length +
+      records.renewals.length +
+      records.churnWatches.length +
+      records.loyaltyRecords.length +
       metrics.raw.reactivations +
       metrics.raw.reviews >
     0;
   const number = new Intl.NumberFormat(locale);
   const date = new Intl.DateTimeFormat(locale, { month: "short", day: "numeric" });
-  const funnelMax = Math.max(...Object.values(metrics.funnel), 1);
+  const atRiskCount = records.churnWatches.filter((row) => row.status === "at_risk").length;
+  const loyalCount = records.loyaltyRecords.filter((row) => row.status === "loyal").length;
+  const flaggedCount = records.checkIns.filter((row) => row.status === "negative" || row.status === "neutral").length;
+  const lapsedCount = records.renewals.filter((row) => row.status === "lapsed").length;
+  const trackingCount = records.loyaltyRecords.filter((row) => row.status === "tracking").length;
+  const funnelMax = Math.max(records.checkIns.length, records.renewals.length, atRiskCount, loyalCount, 1);
+  const retention = {
+    flagged: { numerator: flaggedCount, denominator: records.checkIns.length, rate: records.checkIns.length ? (flaggedCount / records.checkIns.length) * 100 : null },
+    lapsed: { numerator: lapsedCount, denominator: records.renewals.length, rate: records.renewals.length ? (lapsedCount / records.renewals.length) * 100 : null },
+    atRisk: { numerator: atRiskCount, denominator: records.churnWatches.length, rate: records.churnWatches.length ? (atRiskCount / records.churnWatches.length) * 100 : null },
+  };
+  const attention = journeyAttention(records, today);
   const productActivity = [
-    { product: "avyro", count: metrics.raw.leads, label: t("command.leads") },
-    { product: "velto", count: metrics.raw.bookings, label: t("command.bookings") },
-    { product: "rovyn", count: metrics.raw.quotes, label: t("command.quotes") },
-    { product: "orvyn", count: metrics.raw.invoices, label: t("command.invoices") },
+    { product: "avyro", count: records.checkIns.length, label: t("command.leads") },
+    { product: "velto", count: records.renewals.length, label: t("command.bookings") },
+    { product: "rovyn", count: records.churnWatches.length, label: t("command.quotes") },
+    { product: "orvyn", count: records.loyaltyRecords.length, label: t("command.invoices") },
     { product: "nexro", count: metrics.raw.reactivations, label: t("command.reactivations") },
     { product: "ravelo", count: metrics.raw.reviews, label: t("command.reviews") },
   ] as const;
@@ -105,30 +175,30 @@ export default async function DashboardPage() {
             {
               key: "leads",
               label: t("command.leads"),
-              value: metrics.funnel.leads,
-              raw: metrics.raw.leads,
+              value: records.checkIns.length,
+              raw: records.checkIns.length,
               brand: "Avyro",
             },
             {
               key: "linkedBookings",
               label: t("command.linkedBookings"),
-              value: metrics.funnel.linkedBookings,
-              raw: metrics.raw.bookings,
+              value: records.renewals.length,
+              raw: records.renewals.length,
               brand: "Velto",
             },
             {
               key: "linkedQuotes",
               label: t("command.linkedQuotes"),
-              value: metrics.funnel.linkedQuotes,
-              raw: metrics.raw.quotes,
+              value: atRiskCount,
+              raw: records.churnWatches.length,
               brand: "Rovyn",
             },
             {
               key: "wonCustomers",
               label: t("command.wonCustomers"),
-              value: metrics.funnel.wonCustomers,
-              raw: metrics.raw.wonQuotes,
-              brand: "Rovyn",
+              value: loyalCount,
+              raw: records.loyaltyRecords.length,
+              brand: "Orvyn",
             },
           ].map((stage) => (
             <article key={stage.key} className="workspace-card p-5">
@@ -160,19 +230,19 @@ export default async function DashboardPage() {
                 key: "leadToBooking",
                 label: t("command.leadToBooking"),
                 formula: "command.leadToBookingFormula" as const,
-                metric: metrics.conversions.leadToBooking,
+                metric: retention.flagged,
               },
               {
                 key: "bookingToQuote",
                 label: t("command.bookingToQuote"),
                 formula: "command.bookingToQuoteFormula" as const,
-                metric: metrics.conversions.bookingToQuote,
+                metric: retention.lapsed,
               },
               {
                 key: "quoteWin",
                 label: t("command.quoteWin"),
                 formula: "command.quoteWinFormula" as const,
-                metric: metrics.conversions.quoteWin,
+                metric: retention.atRisk,
               },
             ].map(({ key, label, formula, metric }) => {
               return (
@@ -198,23 +268,12 @@ export default async function DashboardPage() {
             {t("command.pipeline")}
           </div>
           <div className="relative mt-5 space-y-2">
-            {metrics.pipeline.byCurrency.length ? (
-              metrics.pipeline.byCurrency.map(({ currency, amount }) => (
-                <p key={currency} className="display text-3xl">
-                  {new Intl.NumberFormat(locale, {
-                    style: "currency",
-                    currency,
-                  }).format(amount)}
-                </p>
-              ))
-            ) : (
-              <p className="display text-3xl">{t("command.noData")}</p>
-            )}
+            <p className="display text-3xl">{number.format(loyalCount)}</p>
           </div>
           <p className="relative mt-4 text-xs text-muted">
             {t("command.pipelineFormula", {
-              valued: metrics.pipeline.valuedQuotes,
-              missing: metrics.pipeline.missingAmounts,
+              valued: loyalCount,
+              missing: trackingCount,
             })}
           </p>
         </article>
@@ -232,8 +291,8 @@ export default async function DashboardPage() {
             <CalendarClock className="h-6 w-6 text-muted" aria-hidden="true" />
           </div>
           <div className="workspace-card mt-5 divide-y divide-white/10 px-5">
-            {metrics.attention.length ? (
-              metrics.attention.slice(0, 8).map((item) => (
+            {attention.length ? (
+              attention.slice(0, 8).map((item) => (
                 <div key={item.id} className="flex items-center justify-between gap-4 py-4">
                   <div className="min-w-0">
                     <DashboardRecordButton product={item.product} recordId={item.recordId}>

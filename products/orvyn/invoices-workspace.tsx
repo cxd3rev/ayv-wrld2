@@ -1,286 +1,142 @@
 "use client";
 
-import { ConnectedRecords, IncomingLinkFields } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
-import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction, TrashButton } from "@/components/workspace/simple-action";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
+import { ActionFeedback, AdvancedPanel, PrimaryAction, TrashButton } from "@/components/workspace/simple-action";
 import { useToast } from "@/hooks/use-toast";
-import { recordProductName, type RecordPrefill } from "@/lib/record-entities";
-import { cn } from "@/lib/utils";
-import { invoiceStatuses, quoteCurrencies } from "@/lib/validations";
-import {
-  createInvoice,
-  deleteInvoice,
-  updateInvoiceReminder,
-  updateInvoiceStatus,
-} from "@/products/orvyn/actions";
-import type {
-  Booking,
-  Invoice,
-  InvoiceStatus,
-  Lead,
-  Quote,
-  Reactivation,
-  RecordLink,
-  Review,
-} from "@/types/database";
-import { useLocale, useTranslations } from "next-intl";
+import { deleteLoyalty, saveLoyalty, saveOrvynSettings } from "@/products/orvyn/actions";
+import type { LoyaltyRecord, ModuleSettings } from "@/types/database";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 
-const statusTone: Record<InvoiceStatus, "neutral" | "accent" | "warning" | "success"> = {
-  draft: "neutral",
-  sent: "accent",
-  overdue: "warning",
-  paid: "success",
-  void: "neutral",
-};
-
-const statusKeys: Record<InvoiceStatus, "statusDraft" | "statusSent" | "statusOverdue" | "statusPaid" | "statusVoid"> = {
-  draft: "statusDraft",
-  sent: "statusSent",
-  overdue: "statusOverdue",
-  paid: "statusPaid",
-  void: "statusVoid",
-};
-
-function todayIsoDate() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function isOpen(invoice: Invoice) {
-  return invoice.status === "sent" || invoice.status === "overdue";
-}
-
-function isDue(invoice: Invoice) {
-  return isOpen(invoice) && invoice.due_on < todayIsoDate();
-}
-
-function formatMoney(value: Invoice["amount"], currency: string, locale: string) {
-  const amount = Number(value);
-  return Number.isFinite(amount)
-    ? new Intl.NumberFormat(locale, { style: "currency", currency }).format(amount)
-    : "—";
+function person(row: LoyaltyRecord) {
+  return Array.isArray(row.clients) ? row.clients[0] : row.clients;
 }
 
 export function OrvynInvoicesWorkspace({
-  invoices,
-  reactivations,
-  reviews,
-  leads,
-  bookings,
-  quotes,
-  links,
-  prefill,
-  focusInvoiceId,
+  records,
+  settings,
+  focusId,
 }: {
-  invoices: Invoice[];
-  reactivations: Reactivation[];
-  reviews: Review[];
-  leads: Lead[];
-  bookings: Booking[];
-  quotes: Quote[];
-  links: RecordLink[];
-  prefill?: RecordPrefill;
-  focusInvoiceId?: string;
+  records: LoyaltyRecord[];
+  settings: ModuleSettings;
+  focusId?: string;
 }) {
   const t = useTranslations("orvyn");
   const tCommon = useTranslations("common");
-  const locale = useLocale();
-  const router = useRouter();
   const { toast } = useToast();
+  const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
   const [saved, setSaved] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [query, setQuery] = useState("");
-  const today = todayIsoDate();
-
-  const counts = useMemo(
-    () => {
-      const outstanding = new Map<string, number>();
-      invoices.filter(isOpen).forEach((invoice) => {
-        outstanding.set(
-          invoice.currency,
-          (outstanding.get(invoice.currency) ?? 0) + (Number(invoice.amount) || 0),
-        );
-      });
-      return {
-        open: invoices.filter(isOpen).length,
-        overdue: invoices.filter(isDue).length,
-        paid: invoices.filter((invoice) => invoice.status === "paid").length,
-        outstanding: [...outstanding.entries()],
-      };
-    },
-    [invoices],
-  );
-  const visibleInvoices = useMemo(() => {
-    const needle = query.trim().toLocaleLowerCase(locale);
-    if (!needle) return invoices;
-    return invoices.filter((invoice) =>
-      [invoice.invoice_number, invoice.customer_name, invoice.description, invoice.email, invoice.phone, invoice.notes].some((value) =>
-        value?.toLocaleLowerCase(locale).includes(needle),
-      ),
-    );
-  }, [invoices, locale, query]);
-
-  useEffect(() => {
-    if (!focusInvoiceId) return;
-    document.getElementById(`invoice-${focusInvoiceId}`)?.scrollIntoView({
-      block: "center",
-      behavior: "smooth",
-    });
-  }, [focusInvoiceId]);
 
   async function onAdd(formData: FormData) {
     setError("");
     setPending(true);
-    const result = await createInvoice(formData);
+    const result = await saveLoyalty(formData);
     setPending(false);
     if (!result.ok) {
-      setError(result.error);
+      setError(result.error ?? t("emptyTitle"));
       return;
     }
-    setSaved(t("added"));
-    toast({ title: t("added"), tone: "success" });
-    (document.getElementById("orvyn-add-invoice") as HTMLFormElement | null)?.reset();
+    setSaved(result.message ?? t("added"));
+    toast({ title: result.message ?? t("added"), tone: "success" });
+    (document.getElementById("orvyn-add") as HTMLFormElement | null)?.reset();
     router.refresh();
   }
 
   return (
     <div>
-      <form id="orvyn-add-invoice" action={onAdd} className="workspace-card grid gap-6 p-6 sm:p-8 md:grid-cols-2">
-        <div className="md:col-span-2 lg:col-span-4">
-          <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
+      <form id="orvyn-add" action={onAdd} className="workspace-card grid gap-4 p-5 sm:p-6 md:grid-cols-3">
+        <div className="md:col-span-3">
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("addInvoice")}</p>
-          {prefill ? <p className="mt-2 text-sm text-muted">{t("prefill", { name: prefill.name, product: recordProductName(prefill.product) })}</p> : null}
         </div>
         <div>
-          <Label htmlFor="customerName">{t("customer")}</Label>
-          <Input id="customerName" name="customerName" required defaultValue={prefill?.name ?? ""} />
-        </div>
-        <div>
-          <Label htmlFor="invoiceNumber">{t("invoiceNumber")}</Label>
-          <Input id="invoiceNumber" name="invoiceNumber" required placeholder="INV-2026-001" />
-        </div>
-        <div className="md:col-span-2">
-          <Label htmlFor="description">{t("description")}</Label>
-          <Input id="description" name="description" required defaultValue={prefill?.title ?? ""} />
-        </div>
-        <div>
-          <Label htmlFor="amount">{t("amount")}</Label>
-          <div className="flex gap-2">
-            <Input id="amount" name="amount" required inputMode="decimal" placeholder="1200" />
-            <select name="currency" aria-label={t("currency")} defaultValue="EUR" className="h-10 rounded-md border border-foreground/15 bg-card px-2 text-sm">
-              {quoteCurrencies.map((currency) => <option key={currency}>{currency}</option>)}
-            </select>
-          </div>
-        </div>
-        <div>
-          <Label htmlFor="issuedOn">{t("issuedOn")}</Label>
-          <Input id="issuedOn" name="issuedOn" type="date" required defaultValue={today} />
-        </div>
-        <div>
-          <Label htmlFor="dueOn">{t("dueOn")}</Label>
-          <Input id="dueOn" name="dueOn" type="date" required />
-        </div>
-        <div>
-          <Label htmlFor="nextReminderOn">{t("nextReminderOn")}</Label>
-          <Input id="nextReminderOn" name="nextReminderOn" type="date" />
+          <Label htmlFor="name">{t("customer")}</Label>
+          <Input id="name" name="name" required />
         </div>
         <div>
           <Label htmlFor="email">{t("email")}</Label>
-          <Input id="email" name="email" type="email" defaultValue={prefill?.email ?? ""} />
+          <Input id="email" name="email" type="email" />
         </div>
         <div>
-          <Label htmlFor="phone">{t("phone")}</Label>
-          <Input id="phone" name="phone" type="tel" placeholder={tCommon("optional")} defaultValue={prefill?.phone ?? ""} />
+          <Label htmlFor="visitCount">{t("visitCount")}</Label>
+          <Input id="visitCount" name="visitCount" type="number" min={0} required />
         </div>
-        <div className="md:col-span-2">
-          <Label htmlFor="notes">{t("notes")}</Label>
-          <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
-        </div>
-        <div className="md:col-span-2">
-          <AdvancedPanel label={tCommon("advanced")}>
-            <AdvancedStats
-              items={[
-                { label: t("open"), value: String(counts.open), hint: t("openHint") },
-                { label: t("overdue"), value: String(counts.overdue), hint: t("overdueHint") },
-                { label: t("paid"), value: String(counts.paid), hint: t("paidHint") },
-                {
-                  label: t("outstanding"),
-                  value: counts.outstanding.length
-                    ? counts.outstanding.map(([currency, amount]) =>
-                        new Intl.NumberFormat(locale, { style: "currency", currency }).format(amount),
-                      ).join(" · ")
-                    : "—",
-                  hint: t("outstandingHint"),
-                },
-              ]}
-            />
-            {invoices.length ? (
-              <div className="max-w-sm">
-                <Label htmlFor="orvyn-search">{tCommon("searchRecords")}</Label>
-                <Input id="orvyn-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
-              </div>
-            ) : null}
-          </AdvancedPanel>
-        </div>
-        <div className="flex flex-col gap-4 md:col-span-2">
-          <FormError message={error} />
+        <div className="flex flex-col gap-3 md:col-span-3">
           <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
           <ActionFeedback message={saved} />
+          <FormError message={error} />
         </div>
       </form>
 
       <div className="mt-12">
-        {invoices.length === 0 ? (
+        {records.length === 0 ? (
           <EmptyState className="py-20" title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <Table>
-            <THead><TR><TH>{t("colInvoice")}</TH><TH>{t("colAmount")}</TH><TH>{t("colStatus")}</TH><TH>{t("colDates")}</TH><TH>{t("colReminder")}</TH><TH className="text-right"> </TH></TR></THead>
+            <THead>
+              <TR>
+                <TH>{t("colCustomer")}</TH>
+                <TH>{t("visitCount")}</TH>
+                <TH>{t("colStatus")}</TH>
+                <TH className="text-right"> </TH>
+              </TR>
+            </THead>
             <TBody>
-              {visibleInvoices.map((invoice) => (
-                <Fragment key={invoice.id}>
-                <TR id={`invoice-${invoice.id}`} className={cn(focusInvoiceId === invoice.id && "bg-accent-soft")}>
-                  <TD><p className="font-medium">{invoice.invoice_number}</p><p>{invoice.customer_name}</p><p className="text-xs text-muted">{invoice.description}</p></TD>
-                  <TD>{formatMoney(invoice.amount, invoice.currency, locale)}</TD>
-                  <TD>
-                    <Badge tone={statusTone[invoice.status]}>{t(statusKeys[invoice.status])}</Badge>
-                    <select aria-label={t("statusFor", { number: invoice.invoice_number })} className="mt-2 block h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm" defaultValue={invoice.status} onChange={async (event) => {
-                      const result = await updateInvoiceStatus(invoice.id, event.target.value);
-                      toast({ title: result.ok ? t("statusUpdated") : result.error, tone: result.ok ? "success" : "error" });
-                      if (result.ok) router.refresh();
-                    }}>
-                      {invoiceStatuses.map((status) => <option key={status} value={status}>{t(statusKeys[status])}</option>)}
-                    </select>
-                  </TD>
-                  <TD><p>{t("issuedShort", { date: invoice.issued_on })}</p><p className={cn("text-xs text-muted", isDue(invoice) && "text-warning")}>{t("dueShort", { date: invoice.due_on })}</p></TD>
-                  <TD>
-                    <input type="date" aria-label={t("reminderFor", { number: invoice.invoice_number })} defaultValue={invoice.next_reminder_on ?? ""} disabled={!isOpen(invoice)} className="h-9 rounded-md border border-foreground/15 bg-card px-2 text-sm" onChange={async (event) => {
-                      const result = await updateInvoiceReminder(invoice.id, event.target.value);
-                      toast({ title: result.ok ? t("reminderSaved") : result.error, tone: result.ok ? "success" : "error" });
-                      if (result.ok) router.refresh();
-                    }} />
-                  </TD>
-                  <TD className="text-right"><TrashButton label={t("remove")} onClick={() => setDeleteId(invoice.id)} /></TD>
-                </TR>
-                <TR className="record-links hover:bg-transparent">
-                  <TD colSpan={6} className="pt-0">
-                    <ConnectedRecords className="mt-0" product="orvyn" recordId={invoice.id} links={links} leads={leads} bookings={bookings} quotes={quotes} invoices={invoices} reactivations={reactivations} reviews={reviews} />
-                  </TD>
-                </TR>
-                </Fragment>
-              ))}
+              {records.map((row) => {
+                const client = person(row);
+                return (
+                  <TR key={row.id} className={focusId === row.id ? "bg-accent-soft" : undefined}>
+                    <TD>
+                      <p className="font-medium">{client?.name ?? "—"}</p>
+                      <p className="mt-1 text-muted">{client?.email || "—"}</p>
+                    </TD>
+                    <TD>{row.visit_count}</TD>
+                    <TD>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge tone={row.status === "loyal" ? "success" : "accent"}>{t(`status_${row.status}`)}</Badge>
+                        {row.origin === "avyro" ? <Badge tone="warning">{t("fromAvyro")}</Badge> : null}
+                      </div>
+                    </TD>
+                    <TD className="text-right">
+                      <TrashButton label={t("remove")} onClick={() => setDeleteId(row.id)} />
+                    </TD>
+                  </TR>
+                );
+              })}
             </TBody>
           </Table>
         )}
       </div>
+
+      <div className="mt-8">
+        <AdvancedPanel label={t("settingsTitle")}>
+          <form action={async (formData) => {
+            const result = await saveOrvynSettings(formData);
+            toast({ title: result.ok ? t("settingsSaved") : (result.error ?? t("settingsTitle")), tone: result.ok ? "success" : "error" });
+            if (result.ok) router.refresh();
+          }} className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
+            <div>
+              <Label htmlFor="threshold">{t("threshold")}</Label>
+              <Input id="threshold" name="threshold" type="number" min={1} max={100} defaultValue={settings.loyalty_threshold} />
+              <label className="mt-3 flex items-center gap-2 text-sm text-muted">
+                <input type="checkbox" name="sendThankYou" defaultChecked={settings.send_thank_you} />
+                {t("sendThankYou")}
+              </label>
+            </div>
+            <PrimaryAction>{t("saveSettings")}</PrimaryAction>
+          </form>
+        </AdvancedPanel>
+      </div>
+
       <ConfirmationDialog
         open={Boolean(deleteId)}
         title={t("removeTitle")}
@@ -291,9 +147,9 @@ export function OrvynInvoicesWorkspace({
         onClose={() => setDeleteId(null)}
         onConfirm={async () => {
           if (!deleteId) return;
-          const result = await deleteInvoice(deleteId);
+          const result = await deleteLoyalty(deleteId);
           setDeleteId(null);
-          toast({ title: result.ok ? t("removed") : result.error, tone: result.ok ? "success" : "error" });
+          toast({ title: result.ok ? t("removed") : (result.error ?? t("removeBody")), tone: result.ok ? "success" : "error" });
           if (result.ok) router.refresh();
         }}
       />

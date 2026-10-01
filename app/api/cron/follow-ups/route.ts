@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeEmail, sendOutreachEmail } from "@/lib/outreach-mail";
 import { followUpEmail, sendEmail } from "@/services/email";
+import { checkInLink, flagChurn, getModuleSettings, isQuiet } from "@/services/journey";
 
 export const runtime = "nodejs";
 
@@ -14,26 +15,6 @@ type DueRow = {
 
 function amsterdamToday() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Amsterdam" }).format(new Date());
-}
-
-function formatInvoiceAmount(amount: unknown, currency: unknown) {
-  const value = Number(amount);
-  const code = typeof currency === "string" && currency.trim() ? currency.trim() : "EUR";
-  if (!Number.isFinite(value)) return code;
-  try {
-    return new Intl.NumberFormat("nl-BE", { style: "currency", currency: code }).format(value);
-  } catch {
-    return `${value} ${code}`;
-  }
-}
-
-function formatInvoiceDay(value: unknown) {
-  if (typeof value !== "string") return "";
-  const [year, month, day] = value.split("-").map(Number);
-  if (!year || !month || !day) return value;
-  return new Intl.DateTimeFormat("nl-BE", { day: "numeric", month: "long", year: "numeric" }).format(
-    new Date(year, month - 1, day),
-  );
 }
 
 async function alreadySent(template: string) {
@@ -110,83 +91,84 @@ export async function GET(request: Request) {
     if (after) await after();
   }
 
-  const { data: leads } = await admin
-    .from("leads")
-    .select("id, organization_id, name, email, status")
-    .eq("follow_up_on", today)
-    .in("status", ["new", "contacted"]);
-  for (const lead of leads ?? []) {
-    const organizationName = names.get(lead.organization_id) ?? "AYV Automation";
-    const person = lead.name || "there";
+  const { data: checkIns } = await admin
+    .from("check_ins")
+    .select("id, organization_id, reply_token, status, clients(name, email)")
+    .lte("check_in_on", today)
+    .eq("status", "scheduled");
+  for (const row of checkIns ?? []) {
+    const client = Array.isArray(row.clients) ? row.clients[0] : row.clients;
+    const organizationName = names.get(row.organization_id) ?? "AYV Automation";
+    const person = client?.name || "there";
     await deliver(
-      lead,
-      "leads",
-      `Follow-up from ${organizationName}`,
-      `Hi ${person}, this is a follow-up from ${organizationName}.`,
+      { id: row.id, organization_id: row.organization_id, email: client?.email ?? null, status: row.status },
+      "check-ins",
+      `How did it go? — ${organizationName}`,
+      `Hi ${person}, how did your visit go? Tell us here: ${checkInLink(row.reply_token)}`,
       async () => {
-        if (lead.status !== "new") return;
-        await admin.from("leads").update({ status: "contacted" }).eq("id", lead.id);
+        await admin.from("check_ins").update({ status: "sent" }).eq("id", row.id);
       },
     );
   }
 
-  const { data: bookings } = await admin
-    .from("bookings")
-    .select("id, organization_id, customer_name, email, status")
-    .eq("reminder_on", today)
-    .in("status", ["scheduled", "confirmed"]);
-  for (const booking of bookings ?? []) {
-    const organizationName = names.get(booking.organization_id) ?? "AYV Automation";
-    const person = booking.customer_name || "there";
+  const { data: dueReminders } = await admin
+    .from("renewals")
+    .select("id, organization_id, plan_name, status, clients(name, email)")
+    .lte("reminder_on", today)
+    .eq("status", "scheduled");
+  for (const row of dueReminders ?? []) {
+    const client = Array.isArray(row.clients) ? row.clients[0] : row.clients;
+    const organizationName = names.get(row.organization_id) ?? "AYV Automation";
+    const person = client?.name || "there";
     await deliver(
-      booking,
-      "bookings",
-      `Reminder from ${organizationName}`,
-      `Hi ${person}, this is a reminder from ${organizationName} about your booking.`,
-    );
-  }
-
-  const { data: quotes } = await admin
-    .from("quotes")
-    .select("id, organization_id, customer_name, email, status")
-    .eq("follow_up_on", today)
-    .in("status", ["sent", "followed_up"]);
-  for (const quote of quotes ?? []) {
-    const organizationName = names.get(quote.organization_id) ?? "AYV Automation";
-    const person = quote.customer_name || "there";
-    await deliver(
-      quote,
-      "quotes",
-      `Quote follow-up from ${organizationName}`,
-      `Hi ${person}, this is a follow-up from ${organizationName} about your quote.`,
+      { id: row.id, organization_id: row.organization_id, email: client?.email ?? null, status: row.status },
+      "renewals",
+      `Renewal reminder from ${organizationName}`,
+      `Hi ${person}, your ${row.plan_name} renewal is coming up.`,
       async () => {
-        await admin.from("quotes").update({ status: "followed_up" }).eq("id", quote.id);
+        await admin.from("renewals").update({ status: "reminded" }).eq("id", row.id);
       },
     );
   }
 
-  const { data: invoices } = await admin
-    .from("invoices")
-    .select("id, organization_id, customer_name, email, status, invoice_number, description, amount, currency, due_on")
-    .eq("next_reminder_on", today)
-    .in("status", ["sent", "overdue"]);
-  for (const invoice of invoices ?? []) {
-    const organizationName = names.get(invoice.organization_id) ?? "AYV Automation";
-    const person = invoice.customer_name || "there";
-    const number = String(invoice.invoice_number ?? "").trim();
-    await deliver(
-      invoice,
-      "invoices",
-      number ? `Reminder for invoice ${number}` : `Invoice reminder from ${organizationName}`,
-      `Hi ${person}, this is a payment reminder for the invoice below. It is a reminder only, not a new invoice.`,
-      undefined,
-      [
-        { label: "Invoice", value: number },
-        { label: "Amount", value: formatInvoiceAmount(invoice.amount, invoice.currency) },
-        { label: "Due", value: formatInvoiceDay(invoice.due_on) },
-        { label: "For", value: String(invoice.description ?? "").trim() },
-      ],
-    );
+  const { data: lapsed } = await admin
+    .from("renewals")
+    .select("id, organization_id, client_id, renews_on, clients(name, email, phone)")
+    .lt("renews_on", today)
+    .in("status", ["scheduled", "reminded"]);
+  for (const row of lapsed ?? []) {
+    const client = Array.isArray(row.clients) ? row.clients[0] : row.clients;
+    await admin.from("renewals").update({ status: "lapsed" }).eq("id", row.id);
+    await flagChurn(admin, {
+      organizationId: row.organization_id,
+      clientId: row.client_id,
+      name: client?.name || "Client",
+      email: client?.email ?? null,
+      phone: client?.phone ?? null,
+      lastActivityOn: row.renews_on,
+      frequencyDays: 30,
+      origin: "velto",
+    });
+  }
+
+  const { data: watches } = await admin
+    .from("churn_watches")
+    .select("id, organization_id, client_id, frequency_days, last_activity_on, status, clients(name, email, phone)")
+    .eq("status", "watching");
+  for (const row of watches ?? []) {
+    const settings = await getModuleSettings(admin, row.organization_id, "rovyn");
+    if (!isQuiet(row.last_activity_on, row.frequency_days, settings.churn_margin_days, today)) continue;
+    const client = Array.isArray(row.clients) ? row.clients[0] : row.clients;
+    await flagChurn(admin, {
+      organizationId: row.organization_id,
+      clientId: row.client_id,
+      name: client?.name || "Client",
+      email: client?.email ?? null,
+      phone: client?.phone ?? null,
+      lastActivityOn: row.last_activity_on,
+      frequencyDays: row.frequency_days,
+      origin: "manual",
+    });
   }
 
   async function deliverOutreach(

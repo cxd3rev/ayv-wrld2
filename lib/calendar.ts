@@ -1,5 +1,5 @@
 import type { ProductId } from "@/config/products";
-import type { Booking, Invoice, Lead, Quote, Reactivation, Review } from "@/types/database";
+import type { Booking, CheckIn, ChurnWatch, Invoice, Lead, LoyaltyRecord, Quote, Reactivation, Renewal, Review } from "@/types/database";
 
 export type CalendarEventType =
   | "lead_follow_up"
@@ -36,6 +36,10 @@ export type CalendarSourceMap = {
   bookings: Booking[];
   quotes: Quote[];
   invoices: Invoice[];
+  checkIns: CheckIn[];
+  renewals: Renewal[];
+  churnWatches: ChurnWatch[];
+  loyaltyRecords: LoyaltyRecord[];
   reactivations: Reactivation[];
   reviews: Review[];
 };
@@ -59,80 +63,73 @@ function defineCalendarAdapter<K extends keyof CalendarSourceMap>(definition: {
 }
 
 const avyroAdapter = defineCalendarAdapter({
-  source: "leads",
+  source: "checkIns",
   product: { slug: "avyro", name: "Avyro", tone: "stone" },
-  map: (lead) =>
-    lead.follow_up_on
-      ? [
-          {
-            id: `avyro:${lead.id}:follow-up`,
-            product: "avyro",
-            type: "lead_follow_up",
-            recordId: lead.id,
-            focusParam: "lead",
-            title: lead.name,
-            detail: null,
-            date: lead.follow_up_on,
-            time: null,
-            allDay: true,
-          },
-        ]
-      : [],
+  map: (row) => [
+    {
+      id: `avyro:${row.id}:check-in`,
+      product: "avyro",
+      type: "lead_follow_up",
+      recordId: row.id,
+      focusParam: "checkin",
+      title: (Array.isArray(row.clients) ? row.clients[0] : row.clients)?.name ?? "Check-in",
+      detail: null,
+      date: row.check_in_on,
+      time: null,
+      allDay: true,
+    },
+  ],
 });
 
 const veltoAdapter = defineCalendarAdapter({
-  source: "bookings",
+  source: "renewals",
   product: { slug: "velto", name: "Velto", tone: "violet" },
-  map: (booking) => {
-    const events: CalendarEvent[] = [
+  map: (row) => {
+    const name = (Array.isArray(row.clients) ? row.clients[0] : row.clients)?.name ?? row.plan_name;
+    return [
       {
-        id: `velto:${booking.id}:appointment`,
+        id: `velto:${row.id}:renewal`,
         product: "velto",
         type: "appointment",
-        recordId: booking.id,
-        focusParam: "booking",
-        title: booking.customer_name,
-        detail: booking.service,
-        date: booking.starts_on,
-        time: booking.start_time.slice(0, 5),
-        allDay: false,
-      },
-    ];
-
-    if (booking.reminder_on) {
-      events.push({
-        id: `velto:${booking.id}:reminder`,
-        product: "velto",
-        type: "booking_reminder",
-        recordId: booking.id,
-        focusParam: "booking",
-        title: booking.customer_name,
-        detail: booking.service,
-        date: booking.reminder_on,
+        recordId: row.id,
+        focusParam: "renewal",
+        title: name,
+        detail: row.plan_name,
+        date: row.renews_on,
         time: null,
         allDay: true,
-      });
-    }
-
-    return events;
+      },
+      {
+        id: `velto:${row.id}:reminder`,
+        product: "velto",
+        type: "booking_reminder",
+        recordId: row.id,
+        focusParam: "renewal",
+        title: name,
+        detail: row.plan_name,
+        date: row.reminder_on,
+        time: null,
+        allDay: true,
+      },
+    ];
   },
 });
 
 const rovynAdapter = defineCalendarAdapter({
-  source: "quotes",
+  source: "churnWatches",
   product: { slug: "rovyn", name: "Rovyn", tone: "green" },
-  map: (quote) =>
-    quote.follow_up_on
+  map: (row) =>
+    row.status === "at_risk"
       ? [
           {
-            id: `rovyn:${quote.id}:follow-up`,
+            id: `rovyn:${row.id}:risk`,
             product: "rovyn",
             type: "quote_follow_up",
-            recordId: quote.id,
-            focusParam: "quote",
-            title: quote.customer_name,
-            detail: quote.title,
-            date: quote.follow_up_on,
+            recordId: row.id,
+            focusParam: "watch",
+            title: (Array.isArray(row.clients) ? row.clients[0] : row.clients)?.name ?? "At risk",
+            detail: null,
+            date: row.last_activity_on,
             time: null,
             allDay: true,
           },
@@ -141,38 +138,23 @@ const rovynAdapter = defineCalendarAdapter({
 });
 
 const orvynAdapter = defineCalendarAdapter({
-  source: "invoices",
+  source: "loyaltyRecords",
   product: { slug: "orvyn", name: "Orvyn", tone: "red" },
-  map: (invoice) => {
-    if (invoice.status === "paid" || invoice.status === "void") return [];
-    const events: CalendarEvent[] = [{
-      id: `orvyn:${invoice.id}:due`,
-      product: "orvyn",
-      type: "invoice_due",
-      recordId: invoice.id,
-      focusParam: "invoice",
-      title: invoice.customer_name,
-      detail: invoice.invoice_number,
-      date: invoice.due_on,
-      time: null,
-      allDay: true,
-    }];
-    if (invoice.next_reminder_on) {
-      events.push({
-        id: `orvyn:${invoice.id}:reminder`,
-        product: "orvyn",
-        type: "invoice_reminder",
-        recordId: invoice.id,
-        focusParam: "invoice",
-        title: invoice.customer_name,
-        detail: invoice.invoice_number,
-        date: invoice.next_reminder_on,
-        time: null,
-        allDay: true,
-      });
-    }
-    return events;
-  },
+  map: (row) =>
+    row.thank_you_on
+      ? [{
+          id: `orvyn:${row.id}:thanks`,
+          product: "orvyn",
+          type: "invoice_due",
+          recordId: row.id,
+          focusParam: "loyalty",
+          title: (Array.isArray(row.clients) ? row.clients[0] : row.clients)?.name ?? "Loyal client",
+          detail: null,
+          date: row.thank_you_on,
+          time: null,
+          allDay: true,
+        }]
+      : [],
 });
 
 const nexroAdapter = defineCalendarAdapter({

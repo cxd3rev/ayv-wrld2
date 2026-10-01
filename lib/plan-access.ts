@@ -6,7 +6,7 @@ import { BILLABLE_PRODUCTS, isBillableProductId, type BillableProductId } from "
 import { getOrganizationSubscriptions } from "@/services/billing";
 import type { Organization } from "@/types/database";
 
-const CONTACT_TABLES = ["leads", "bookings", "quotes", "invoices", "reactivations", "reviews"] as const;
+const CONTACT_TABLES = ["check_ins", "renewals", "churn_watches", "loyalty_records", "reactivations", "reviews"] as const;
 
 export async function getPlanAccess(organization: Organization) {
   const subscriptions = await getOrganizationSubscriptions(organization.id);

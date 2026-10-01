@@ -244,6 +244,7 @@ export function RaveloReviewsWorkspace({
                 <TR id={`review-${item.id}`} className={cn(focusReviewId === item.id && "bg-accent-soft")}>
                   <TD>
                     <p className="font-medium">{item.customer_name}</p>
+                    {item.origin === "avyro" ? <Badge tone="warning">{t("originAvyro")}</Badge> : null}
                     <p className="text-xs text-muted">
                       {item.rating ? `${item.rating}/5` : t("noRating")}
                       {item.feedback ? ` · ${item.feedback}` : ""}
