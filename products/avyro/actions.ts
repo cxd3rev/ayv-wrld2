@@ -115,3 +115,20 @@ export async function updateLeadFollowUp(leadId: string, followUpOn: string) {
   revalidatePath("/dashboard/avyro");
   return { ok: true, message: "Follow-up date saved." };
 }
+
+export async function deleteLead(leadId: string) {
+  const { organization } = await requireWorkspace();
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("leads")
+    .delete()
+    .eq("id", leadId)
+    .eq("organization_id", organization.id);
+
+  if (error) {
+    return { ok: false, error: "Could not remove this lead." };
+  }
+
+  revalidatePath("/dashboard/avyro");
+  return { ok: true, message: "Lead removed." };
+}

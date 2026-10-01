@@ -2,8 +2,7 @@
 
 import { ConnectedRecords, IncomingLinkFields } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction } from "@/components/workspace/simple-action";
+import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction, TrashButton } from "@/components/workspace/simple-action";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
@@ -269,7 +268,7 @@ export function OrvynInvoicesWorkspace({
                     }} />
                   </TD>
                   <TD><ConnectedRecords product="orvyn" recordId={invoice.id} links={links} leads={leads} bookings={bookings} quotes={quotes} invoices={invoices} reactivations={reactivations} reviews={reviews} /></TD>
-                  <TD className="text-right"><Button variant="ghost" size="sm" onClick={() => setDeleteId(invoice.id)}>{t("remove")}</Button></TD>
+                  <TD className="text-right"><TrashButton label={t("remove")} onClick={() => setDeleteId(invoice.id)} /></TD>
                 </TR>
               ))}
             </TBody>

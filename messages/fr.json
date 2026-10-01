@@ -535,7 +535,11 @@
     "lost": "Perdu",
     "added": "Lead ajouté",
     "statusUpdated": "Statut mis à jour",
-    "followUpSaved": "Relance enregistrée"
+    "followUpSaved": "Relance enregistrée",
+    "remove": "Supprimer",
+    "removeTitle": "Supprimer ce lead ?",
+    "removeBody": "Cela supprime le lead. Les enregistrements liés restent disponibles.",
+    "removed": "Lead supprimé"
   },
   "velto": {
     "upcoming": "À venir",

@@ -535,7 +535,11 @@
     "lost": "Lost",
     "added": "Lead added",
     "statusUpdated": "Status updated",
-    "followUpSaved": "Follow-up saved"
+    "followUpSaved": "Follow-up saved",
+    "remove": "Remove",
+    "removeTitle": "Remove this lead?",
+    "removeBody": "This removes the lead. Connected records remain available and are not deleted.",
+    "removed": "Lead removed"
   },
   "velto": {
     "upcoming": "Upcoming",

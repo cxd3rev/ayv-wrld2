@@ -535,7 +535,11 @@
     "lost": "Verloren",
     "added": "Lead toegevoegd",
     "statusUpdated": "Status bijgewerkt",
-    "followUpSaved": "Opvolging opgeslagen"
+    "followUpSaved": "Opvolging opgeslagen",
+    "remove": "Verwijderen",
+    "removeTitle": "Deze lead verwijderen?",
+    "removeBody": "Dit verwijdert de lead. Gekoppelde records blijven bestaan.",
+    "removed": "Lead verwijderd"
   },
   "velto": {
     "upcoming": "Aankomend",

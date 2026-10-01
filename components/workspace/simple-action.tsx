@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, Trash2 } from "lucide-react";
 import type { ReactNode } from "react";
 
 export function PrimaryAction({
@@ -23,6 +23,20 @@ export function ActionFeedback({ message }: { message: string }) {
       <Check className="h-5 w-5 shrink-0" aria-hidden />
       {message}
     </p>
+  );
+}
+
+export function TrashButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      onClick={onClick}
+      className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted hover:bg-danger/15 hover:text-danger"
+    >
+      <Trash2 className="h-4 w-4" aria-hidden />
+    </button>
   );
 }
 

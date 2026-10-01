@@ -5,12 +5,13 @@ import {
   IncomingLinkFields,
 } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
-import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction } from "@/components/workspace/simple-action";
+import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction, TrashButton } from "@/components/workspace/simple-action";
 import { useToast } from "@/hooks/use-toast";
 import type { RecordPrefill } from "@/lib/record-entities";
 import { recordProductName } from "@/lib/record-entities";
@@ -18,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { leadStatuses } from "@/lib/validations";
 import {
   createLead,
+  deleteLead,
   updateLeadFollowUp,
   updateLeadStatus,
 } from "@/products/avyro/actions";
@@ -93,6 +95,7 @@ export function AvyroLeadsWorkspace({
   const [pending, setPending] = useState(false);
   const [saved, setSaved] = useState("");
   const [query, setQuery] = useState("");
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const counts = useMemo(() => {
     return {
@@ -233,6 +236,7 @@ export function AvyroLeadsWorkspace({
                 <TH>{t("colFollowUp")}</TH>
                 <TH>{t("colNotes")}</TH>
                 <TH>{t("colConnected")}</TH>
+                <TH className="text-right"> </TH>
               </TR>
             </THead>
             <TBody>
@@ -318,6 +322,9 @@ export function AvyroLeadsWorkspace({
                         reviews={reviews}
                       />
                     </TD>
+                    <TD className="text-right">
+                      <TrashButton label={t("remove")} onClick={() => setDeleteId(lead.id)} />
+                    </TD>
                   </TR>
                 );
               })}
@@ -325,6 +332,22 @@ export function AvyroLeadsWorkspace({
           </Table>
         )}
       </div>
+      <ConfirmationDialog
+        open={Boolean(deleteId)}
+        title={t("removeTitle")}
+        description={t("removeBody")}
+        confirmLabel={t("remove")}
+        cancelLabel={tCommon("cancel")}
+        danger
+        onClose={() => setDeleteId(null)}
+        onConfirm={async () => {
+          if (!deleteId) return;
+          const result = await deleteLead(deleteId);
+          setDeleteId(null);
+          toast({ title: result.ok ? t("removed") : (result.error ?? t("removeBody")), tone: result.ok ? "success" : "error" });
+          if (result.ok) router.refresh();
+        }}
+      />
     </div>
   );
 }

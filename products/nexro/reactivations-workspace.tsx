@@ -9,7 +9,7 @@ import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
-import { ActionFeedback, AdvancedPanel, AdvancedStats } from "@/components/workspace/simple-action";
+import { ActionFeedback, AdvancedPanel, AdvancedStats, TrashButton } from "@/components/workspace/simple-action";
 import { useToast } from "@/hooks/use-toast";
 import { buildNexroPeople, type NexroDetail } from "@/lib/nexro-customers";
 import { recordProductName, type RecordPrefill } from "@/lib/record-entities";
@@ -539,7 +539,7 @@ export function NexroReactivationsWorkspace({
                         {pendingKey === item.id ? t("sending") : t("sendEmail")}
                       </Button>
                     ) : null}
-                    <Button variant="ghost" size="sm" onClick={() => setDeleteId(item.id)}>{t("remove")}</Button>
+                    <TrashButton label={t("remove")} onClick={() => setDeleteId(item.id)} />
                   </TD>
                 </TR>
               ))}

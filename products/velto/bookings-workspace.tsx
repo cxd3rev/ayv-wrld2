@@ -5,8 +5,7 @@ import {
   IncomingLinkFields,
 } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction } from "@/components/workspace/simple-action";
+import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction, TrashButton } from "@/components/workspace/simple-action";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
@@ -396,13 +395,7 @@ export function VeltoBookingsWorkspace({
                     </TD>
                     <TD className="max-w-xs text-muted">{booking.notes || "—"}</TD>
                     <TD className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setDeleteId(booking.id)}
-                      >
-                        {t("remove")}
-                      </Button>
+                      <TrashButton label={t("remove")} onClick={() => setDeleteId(booking.id)} />
                     </TD>
                   </TR>
                 );
