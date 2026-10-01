@@ -412,6 +412,7 @@
     "today": "Heute",
     "nextMonth": "Nächster Monat",
     "selectedDay": "Ausgewählter Tag",
+    "clickHint": "Klicken Sie auf ein Datum, um alles von diesem Tag zu sehen.",
     "allDay": "Ganztägig",
     "more": "+{count} weitere",
     "selectDay": "{date} auswählen, {count, plural, one {# Termin} other {# Termine}}",

@@ -412,6 +412,7 @@
     "today": "Aujourd'hui",
     "nextMonth": "Mois suivant",
     "selectedDay": "Jour sélectionné",
+    "clickHint": "Cliquez sur une date pour voir tout ce qui est prévu ce jour-là.",
     "allDay": "Toute la journée",
     "more": "+{count} autres",
     "selectDay": "Sélectionner le {date}, {count, plural, one {# événement} other {# événements}}",

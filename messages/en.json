@@ -412,6 +412,7 @@
     "today": "Today",
     "nextMonth": "Next month",
     "selectedDay": "Selected day",
+    "clickHint": "Click a date to see everything scheduled that day.",
     "allDay": "All day",
     "more": "+{count} more",
     "selectDay": "Select {date}, {count, plural, one {# event} other {# events}}",

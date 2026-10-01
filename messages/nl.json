@@ -412,6 +412,7 @@
     "today": "Vandaag",
     "nextMonth": "Volgende maand",
     "selectedDay": "Geselecteerde dag",
+    "clickHint": "Klik op een datum om alles van die dag te zien.",
     "allDay": "Hele dag",
     "more": "+{count} meer",
     "selectDay": "Selecteer {date}, {count, plural, one {# gebeurtenis} other {# gebeurtenissen}}",

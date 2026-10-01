@@ -16,7 +16,7 @@ import { openLinkedWorkspace } from "@/services/product-switch";
 import { ArrowRight, Bell, CalendarDays, ChevronLeft, ChevronRight, Clock3 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 const emptySubscribe = () => () => {};
 
@@ -86,9 +86,10 @@ function EventButton({
   return (
     <button
       type="button"
-      onClick={() =>
-        openLinkedWorkspace(event.product, { [event.focusParam]: event.recordId })
-      }
+      onClick={(click) => {
+        click.stopPropagation();
+        openLinkedWorkspace(event.product, { [event.focusParam]: event.recordId });
+      }}
       className={cn(
         "group w-full border text-left transition-colors hover:border-foreground/30",
         tone.chip,
@@ -130,6 +131,7 @@ export function Calendar({
   const parsedToday = parseDateOnly(today)!;
   const [chosenMonth, setChosenMonth] = useState<{ year: number; month: number } | null>(null);
   const [chosenDate, setChosenDate] = useState<string | null>(null);
+  const dayPanelRef = useRef<HTMLElement>(null);
   const [products, setProducts] = useState(() => new Set(calendarProducts.map(({ slug }) => slug)));
   const [types, setTypes] = useState(() => new Set(eventTypes));
   const activeMonth = chosenMonth ?? { year: parsedToday.year, month: parsedToday.month };
@@ -183,7 +185,14 @@ export function Calendar({
 
   function resetToday() {
     setChosenMonth({ year: parsedToday.year, month: parsedToday.month });
-    setChosenDate(today);
+    selectDate(today);
+  }
+
+  function selectDate(date: string) {
+    setChosenDate(date);
+    requestAnimationFrame(() => {
+      dayPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
   }
 
   return (
@@ -237,12 +246,15 @@ export function Calendar({
         </fieldset>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-        <h2 className="display text-2xl capitalize sm:text-3xl">
-          {monthFormatter.format(
-            new Date(activeMonth.year, activeMonth.month - 1, 1, 12),
-          )}
-        </h2>
+      <div className="mt-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="display text-2xl capitalize sm:text-3xl">
+            {monthFormatter.format(
+              new Date(activeMonth.year, activeMonth.month - 1, 1, 12),
+            )}
+          </h2>
+          <p className="mt-2 text-sm text-muted">{t("clickHint")}</p>
+        </div>
         <div className="workspace-card flex items-center">
           <button
             type="button"
@@ -270,7 +282,8 @@ export function Calendar({
         </div>
       </div>
 
-      <div className="workspace-card mt-4 overflow-hidden">
+      <div className="mt-4 grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="workspace-card overflow-hidden">
         <div className="grid grid-cols-7 border-b border-foreground/10 bg-card-hover/60">
           {weekdays.map((weekday, index) => (
             <div
@@ -290,36 +303,35 @@ export function Calendar({
             return (
               <div
                 key={date}
+                role="button"
+                tabIndex={0}
+                onClick={() => selectDate(date)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    selectDate(date);
+                  }
+                }}
+                aria-pressed={selected}
+                aria-label={t("selectDay", {
+                  date: dayFormatter.format(dateOnlyToLocalNoon(date)),
+                  count: dayEvents.length,
+                })}
                 className={cn(
-                  "relative min-h-16 border-r border-b border-foreground/10 p-1 text-left last:border-r-0 sm:min-h-28 sm:p-2",
+                  "relative min-h-16 cursor-pointer border-r border-b border-foreground/10 p-1 text-left last:border-r-0 hover:bg-white/5 sm:min-h-28 sm:p-2",
                   outsideMonth && "bg-card-hover/35 text-muted",
                   selected && "bg-accent-soft outline-2 -outline-offset-2 outline-accent",
                 )}
               >
-                <button
-                  type="button"
-                  onClick={() => setChosenDate(date)}
+                <span
                   className={cn(
                     "inline-flex h-6 w-6 items-center justify-center text-xs",
                     date === today && "rounded-full bg-foreground text-background",
                   )}
-                  aria-pressed={selected}
-                  aria-label={t("selectDay", {
-                    date: dayFormatter.format(dateOnlyToLocalNoon(date)),
-                    count: dayEvents.length,
-                  })}
                 >
                   {parsed.day}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setChosenDate(date)}
-                  className="mt-1 flex min-h-5 w-full flex-wrap content-start gap-1 sm:hidden"
-                  aria-label={t("selectDay", {
-                    date: dayFormatter.format(dateOnlyToLocalNoon(date)),
-                    count: dayEvents.length,
-                  })}
-                >
+                </span>
+                <span className="mt-1 flex min-h-5 w-full flex-wrap content-start gap-1 sm:hidden">
                   {dayEvents.slice(0, 4).map((event) => (
                     <span
                       key={event.id}
@@ -332,7 +344,7 @@ export function Calendar({
                   {dayEvents.length > 4 ? (
                     <span className="font-mono text-[8px]">+{dayEvents.length - 4}</span>
                   ) : null}
-                </button>
+                </span>
                 <span className="mt-1 hidden space-y-1 sm:block">
                   {dayEvents.slice(0, 2).map((event) => (
                     <span key={event.id} className="block">
@@ -351,34 +363,35 @@ export function Calendar({
         </div>
       </div>
 
-      <section className="mt-8 grid gap-6 border-t border-foreground/10 pt-7 lg:grid-cols-[0.7fr_1.3fr]">
-        <div>
-          <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">
-            {t("selectedDay")}
-          </p>
-          <h2 className="display mt-2 text-3xl capitalize">
-            {dayFormatter.format(dateOnlyToLocalNoon(selectedDate))}
-          </h2>
-          <p className="mt-3 max-w-sm text-sm text-muted">{t("timezoneNote")}</p>
-        </div>
-        <div className="space-y-2">
+      <section
+        ref={dayPanelRef}
+        className="workspace-card p-5 xl:sticky xl:top-6 xl:max-h-[calc(100vh-3rem)] xl:overflow-y-auto"
+      >
+        <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">
+          {t("selectedDay")}
+        </p>
+        <h2 className="display mt-2 text-2xl capitalize">
+          {dayFormatter.format(dateOnlyToLocalNoon(selectedDate))}
+        </h2>
+        <p className="mt-2 text-xs text-muted">{t("timezoneNote")}</p>
+        <div className="mt-4 space-y-2">
           {selectedEvents.length ? (
             selectedEvents.map((event) => (
-              <div key={event.id} className="grid gap-2 sm:grid-cols-[1fr_auto]">
+              <div key={event.id} className="space-y-1">
                 <EventButton event={event} />
-                <div className="flex items-center gap-2 px-1 text-xs text-muted sm:w-36">
+                <div className="flex items-center gap-2 px-1 text-xs text-muted">
                   {event.allDay ? (
                     <CalendarDays className="h-4 w-4" aria-hidden="true" />
                   ) : (
                     <Clock3 className="h-4 w-4" aria-hidden="true" />
                   )}
                   <span>{event.allDay ? t("allDay") : event.time}</span>
-                  <span className="sr-only">· {t(`types.${event.type}`)}</span>
+                  <span>· {t(`types.${event.type}`)}</span>
                 </div>
               </div>
             ))
           ) : (
-            <div className="border border-dashed border-foreground/20 p-8 text-center">
+            <div className="border border-dashed border-foreground/20 p-6 text-center">
               <CalendarDays className="mx-auto h-6 w-6 text-muted" aria-hidden="true" />
               <p className="mt-3 text-sm font-medium">{t("emptyDay")}</p>
               <p className="mt-1 text-xs text-muted">{t("emptyDayBody")}</p>
@@ -386,6 +399,7 @@ export function Calendar({
           )}
         </div>
       </section>
+      </div>
     </div>
   );
 }
