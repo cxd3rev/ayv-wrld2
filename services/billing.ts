@@ -5,7 +5,6 @@ import { getAppUrl } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/server";
 import { isPaidStatus, isUsableSecret } from "@/lib/billing-status";
 import {
-  type BillablePlanId,
   type BillableProductId,
   type CheckoutProductId,
   BILLABLE_PRODUCTS,
@@ -17,6 +16,7 @@ import {
   isStripeSecretConfigured,
   productFromStripePriceId,
 } from "@/lib/stripe-catalog";
+import { ONDERHOUD_TRIAL_DAYS } from "@/config/onderhoud";
 import { getProduct, planPricing } from "@/config/products";
 import type { Organization, Subscription } from "@/types/database";
 
@@ -78,6 +78,35 @@ export function paidProductSlugs(subscriptions: Subscription[]) {
   return [...paid];
 }
 
+async function startOnderhoudCheckout(stripe: Stripe, organization: Organization, price: string) {
+  const current = await getOrganizationSubscriptions(organization.id);
+  const existing = subscriptionForProduct(current, "onderhoud");
+  if (existing && isPaidStatus(existing.status)) {
+    return { ok: false as const, error: "Dit bedrijf heeft al een abonnement." };
+  }
+  try {
+    const customerId = await getOrCreateStripeCustomer(stripe, organization);
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      customer: customerId,
+      line_items: [{ price, quantity: 1 }],
+      success_url: `${getAppUrl()}/dashboard/billing?checkout=success&product=onderhoud`,
+      cancel_url: `${getAppUrl()}/dashboard/billing?checkout=cancelled&product=onderhoud`,
+      metadata: { organization_id: organization.id, product_slug: "onderhoud", modules: "" },
+      payment_method_collection: "always",
+      subscription_data: {
+        ...(current.length === 0 ? { trial_period_days: ONDERHOUD_TRIAL_DAYS } : {}),
+        metadata: { organization_id: organization.id, product_slug: "onderhoud", modules: "" },
+      },
+    });
+    if (!session.url) return { ok: false as const, error: "Could not start checkout." };
+    return { ok: true as const, url: session.url };
+  } catch (error) {
+    const message = error instanceof Stripe.errors.StripeError ? error.message : "Could not start checkout.";
+    return { ok: false as const, error: message };
+  }
+}
+
 /**
  * Create a Stripe Checkout session for one module or for Growth / Full stack.
  * Price ids stay on the server. Growth must name exactly three modules.
@@ -92,6 +121,10 @@ export async function createCheckoutSession(
 
   if (!isStripeSecretConfigured() || !stripe || !resolvedPrice) {
     return { ok: false as const, error: "Billing is not configured yet." };
+  }
+
+  if (product === "onderhoud") {
+    return startOnderhoudCheckout(stripe, organization, resolvedPrice);
   }
 
   const uniqueModules = [...new Set(modules)];
@@ -139,7 +172,7 @@ export async function createCheckoutSession(
       },
       payment_method_collection: "always",
       subscription_data: {
-        ...(current.length === 0 ? { trial_period_days: 7 } : {}),
+        ...(current.length === 0 ? { trial_period_days: ONDERHOUD_TRIAL_DAYS } : {}),
         metadata: {
           organization_id: organization.id,
           product_slug: product,

@@ -181,6 +181,13 @@ begin
   end loop;
 end $$;
 
+insert into public.products (slug, name, description, status, accent)
+values ('onderhoud', 'AYV Onderhoud', 'Onderhoud voor verwarmingsinstallateurs', 'active', '#E7E5E4')
+on conflict (slug) do update
+set name = excluded.name,
+    description = excluded.description,
+    status = excluded.status;
+
 insert into storage.buckets (id, name, public)
 values ('certificates', 'certificates', false)
 on conflict (id) do update set public = false;

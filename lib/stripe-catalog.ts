@@ -8,7 +8,7 @@ export type BillableProductId = (typeof BILLABLE_PRODUCTS)[number];
 /** Plans that cover more than one module. */
 export const BILLABLE_PLANS = ["growth", "full_stack"] as const;
 export type BillablePlanId = (typeof BILLABLE_PLANS)[number];
-export type CheckoutProductId = BillableProductId | BillablePlanId;
+export type CheckoutProductId = BillableProductId | BillablePlanId | "onderhoud";
 
 const PRICE_ENV: Record<CheckoutProductId, string> = {
   avyro: "STRIPE_PRICE_ID",
@@ -19,6 +19,7 @@ const PRICE_ENV: Record<CheckoutProductId, string> = {
   ravelo: "STRIPE_RAVELO_PRICE_ID",
   growth: "STRIPE_GROWTH_PRICE_ID",
   full_stack: "STRIPE_FULL_STACK_PRICE_ID",
+  onderhoud: "STRIPE_ONDERHOUD_PRICE_ID",
 };
 
 const LEGACY_PRICE_IDS: Record<CheckoutProductId, readonly string[]> = {
@@ -47,6 +48,7 @@ const LEGACY_PRICE_IDS: Record<CheckoutProductId, readonly string[]> = {
   ravelo: ["price_1UKMOXV05bHNwI4Wwwxs33wT"],
   growth: ["price_1UKUL5V05bHNwI4WIRPbmhSa"],
   full_stack: ["price_1UKUL6V05bHNwI4WOgsgdJEX"],
+  onderhoud: [],
 };
 
 export function isBillableProductId(value: string): value is BillableProductId {
@@ -58,7 +60,7 @@ export function isBillablePlanId(value: string): value is BillablePlanId {
 }
 
 export function isCheckoutProductId(value: string): value is CheckoutProductId {
-  return isBillableProductId(value) || isBillablePlanId(value);
+  return value === "onderhoud" || isBillableProductId(value) || isBillablePlanId(value);
 }
 
 export function getStripePriceId(product: CheckoutProductId) {
@@ -104,5 +106,6 @@ export function toProductId(product: BillableProductId): ProductId {
 export function billableProductName(product: CheckoutProductId) {
   if (product === "growth") return "Growth";
   if (product === "full_stack") return "Full stack";
+  if (product === "onderhoud") return "AYV Onderhoud";
   return getProduct(product)?.name ?? product;
 }
