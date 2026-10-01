@@ -1,5 +1,9 @@
 # AYV WRLD DISCOVERY REPORT
 
+This note is historical. This repository is the heating-installer product in `config/site.ts`. It is not the AYV WRLD portfolio and not a parent brand. Do not follow the structure below for new pages.
+
+
+
 This is a discovery-only report based on the repository contents inspected on 2026-09-25. No Project Page implementation or redesign was performed.
 
 Evidence note: the initial working tree already contained unrelated modified, deleted, and untracked files, including `app/projects/[slug]/page.tsx`, `config/brands.ts`, `config/public-site.ts`, configured `mark-transparent-v3.webp` assets, and `.tmp-screens/`. Findings below describe the actual files present at discovery time; they do not claim those pre-existing changes are committed. Temporary screenshots/scripts under `.tmp-screens/` were not treated as product assets.
