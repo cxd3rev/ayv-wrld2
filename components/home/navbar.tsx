@@ -2,7 +2,6 @@
 
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { getHomeCopy } from "@/components/home/home-copy";
-import { automationBrand } from "@/config/brands";
 import { resolveLocale } from "@/i18n/config";
 import { Menu, X } from "lucide-react";
 import { useLocale } from "next-intl";
@@ -21,8 +20,8 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-black/10 bg-[#F7F6F3]/90 backdrop-blur-md">
       <nav className="mx-auto grid h-16 w-full max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-4 px-5 lg:px-8" aria-label="Primary">
-        <Link href="/" aria-label="AYV Automation" className="inline-flex items-center">
-          <img src={automationBrand.logo} alt="" width={36} height={36} className="h-9 w-9 object-contain brightness-0" />
+        <Link href="/" className="text-[13px] font-bold tracking-[0.16em] uppercase">
+          AYV<sup className="ml-0.5 text-[0.62em] font-bold">©</sup>
         </Link>
         <div className="hidden items-center gap-8 pl-8 md:flex">
           {links.map((link) => (

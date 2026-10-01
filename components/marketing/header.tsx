@@ -14,7 +14,10 @@ import { useEffect, useState } from "react";
 
 function BrandMark() {
   return (
-    <Image src={automationBrand.logo} alt="AYV Automation" width={36} height={36} className="h-9 w-9 object-contain" priority />
+    <span className="inline-flex items-center gap-2.5">
+      <Image src={automationBrand.logo} alt="" width={32} height={32} className="h-8 w-8 object-contain" priority />
+      <span className="text-sm font-semibold tracking-tight">AYV Stack</span>
+    </span>
   );
 }
 
@@ -136,7 +139,7 @@ export function MarketingFooter() {
           href="https://www.ayvwrld.com"
           className="inline-flex items-center gap-2 text-white/70 hover:text-white"
         >
-          <Image src={ayvBrand.logo} alt="" width={28} height={28} className="h-7 w-7 object-contain" />
+          <Image src={ayvBrand.logo} alt="" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
           made by ayvwrld
         </a>
         <div className="flex gap-4">

@@ -28,7 +28,7 @@ const en: HomeCopy = {
   headline: ["Automation That Runs Your Business.", "You Just Collect The Results."],
   subtext: "AYV Stack Automation handles lead conversion, bookings, follow-ups, invoicing, reactivation, and reviews.",
   demo: "Book a Demo",
-  trust: "Trusted by businesses across Belgium.",
+  trust: "Trusted by businesses across Belgium & the Netherlands.",
   learn: "Learn more",
   lines: {
     avyro: "Turns leads into booked calls, automatically.",
@@ -52,7 +52,7 @@ const nl: HomeCopy = {
   headline: ["Automatisering die je bedrijf draait.", "Jij haalt de resultaten op."],
   subtext: "AYV Stack Automation doet leadconversie, boekingen, opvolging, facturatie, heractivatie en reviews.",
   demo: "Boek een demo",
-  trust: "Vertrouwd door bedrijven in België.",
+  trust: "Vertrouwd door bedrijven in België en Nederland.",
   learn: "Meer info",
   lines: {
     avyro: "Zet leads om in geboekte gesprekken, automatisch.",
@@ -76,7 +76,7 @@ const fr: HomeCopy = {
   headline: ["L’automatisation qui fait tourner votre entreprise.", "Vous ne faites que récolter les résultats."],
   subtext: "AYV Stack Automation gère la conversion, les réservations, les relances, la facturation, la réactivation et les avis.",
   demo: "Réserver une démo",
-  trust: "La confiance d’entreprises en Belgique.",
+  trust: "La confiance d’entreprises en Belgique et aux Pays-Bas.",
   learn: "En savoir plus",
   lines: {
     avyro: "Transforme les prospects en rendez-vous, automatiquement.",
@@ -100,7 +100,7 @@ const de: HomeCopy = {
   headline: ["Automatisierung, die Ihr Geschäft führt.", "Sie holen nur die Ergebnisse ab."],
   subtext: "AYV Stack Automation übernimmt Lead-Umwandlung, Buchungen, Nachfassen, Rechnungen, Rückgewinnung und Bewertungen.",
   demo: "Demo buchen",
-  trust: "Vertraut von Betrieben in Belgien.",
+  trust: "Vertraut von Betrieben in Belgien und den Niederlanden.",
   learn: "Mehr erfahren",
   lines: {
     avyro: "Macht aus Leads gebuchte Gespräche, automatisch.",
