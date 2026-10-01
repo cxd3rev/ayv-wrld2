@@ -1,6 +1,5 @@
-import { StackHome } from "@/components/marketing/stack-home";
-import { PublicShell } from "@/components/marketing/public-site";
-import { getStackCopy } from "@/config/stack-marketing";
+import { HomePage } from "@/components/home/home-page";
+import { getHomeCopy } from "@/components/home/home-copy";
 import { resolveLocale } from "@/i18n/config";
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
@@ -8,20 +7,16 @@ import { getLocale } from "next-intl/server";
 export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const c = getStackCopy(resolveLocale(await getLocale()));
+  const c = getHomeCopy(resolveLocale(await getLocale()));
   return {
-    title: c.hero.eyebrow,
-    description: c.hero.body,
+    title: "AYV Stack Automation",
+    description: c.subtext,
     alternates: { canonical: "/" },
-    openGraph: { title: c.hero.eyebrow, description: c.hero.body, url: "/" },
+    openGraph: { title: "AYV Stack Automation", description: c.subtext, url: "/" },
   };
 }
 
-export default async function HomePage() {
+export default async function Page() {
   const locale = resolveLocale(await getLocale());
-  return (
-    <PublicShell>
-      <StackHome locale={locale} />
-    </PublicShell>
-  );
+  return <HomePage locale={locale} />;
 }
