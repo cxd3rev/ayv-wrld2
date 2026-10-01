@@ -20,7 +20,7 @@ export default async function AutomationStackPage() {
     "@type": "Product",
     name: "AYV Automation Stack",
     description: c.metadata.stack[1],
-    brand: { "@type": "Brand", name: "AYV WRLD" },
+    brand: { "@type": "Brand", name: "AYV Automation" },
     category: "Business automation software bundle",
   };
   return (
@@ -30,7 +30,7 @@ export default async function AutomationStackPage() {
         <section className="relative border-b border-border">
           <div className="technical-grid" aria-hidden />
           <div className="relative mx-auto w-full max-w-[1400px] px-6 py-16 lg:px-12 lg:py-24">
-            <Breadcrumbs items={[{ label: "AYV WRLD", href: "/" }, { label: "AYV Automation", href: "/automation" }, { label: "AYV Automation Stack" }]} />
+            <Breadcrumbs items={[{ label: "AYV Automation", href: "/" }, { label: "AYV Automation", href: "/automation" }, { label: "AYV Automation Stack" }]} />
             <p className="kicker mt-16">{c.common.bundle}</p>
             <h1 className="display mt-7 max-w-5xl text-[clamp(3.5rem,9vw,8rem)] leading-[0.92] text-balance">{c.stack.title}</h1>
             <p className="mt-8 max-w-3xl text-lg leading-relaxed text-muted sm:text-xl">{c.stack.body}</p>

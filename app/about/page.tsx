@@ -21,7 +21,7 @@ export default async function AboutPage() {
       <main id="main-content">
         <PageHero eyebrow={c.about.eyebrow} title={c.about.title} body={c.about.body} />
         <section className="mx-auto w-full max-w-[1400px] px-6 py-20 lg:px-12 lg:py-28">
-          <SectionHeading eyebrow="AYV WRLD / STRUCTURE" title={c.about.hierarchy} body={c.about.hierarchyBody} />
+          <SectionHeading eyebrow="AYV Automation / STRUCTURE" title={c.about.hierarchy} body={c.about.hierarchyBody} />
           <div className="mt-12 border-l border-t border-border">
             {paths.map(([number, title, body]) => (
               <article key={number} className="grid gap-5 border-b border-r border-border p-7 sm:grid-cols-[4rem_1fr_1.2fr] lg:p-9">

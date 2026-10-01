@@ -1,5 +1,5 @@
 export const ayvBrand = {
-  name: "AYV WRLD",
+  name: "AYV Automation",
   icon: "/brands/ayv/mark-transparent-v3.webp",
   logo: "/brands/ayv/mark-transparent-v3.webp",
   nameMark: "/brands/ayv/mark-transparent-v3.webp",

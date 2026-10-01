@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "AYV WRLD entwickelt fokussierte Software, mit der Unternehmen Leads gewinnen, Termine buchen, Angebote abschließen, Zahlungen einziehen und Kunden zurückholen."
+    "description": "AYV Automation entwickelt fokussierte Software, mit der Unternehmen Leads gewinnen, Termine buchen, Angebote abschließen, Zahlungen einziehen und Kunden zurückholen."
   },
   "common": {
     "home": "Start",
@@ -93,7 +93,7 @@
     "kicker": "So funktioniert's",
     "title": "Drei Schritte. <muted>Unendliche Möglichkeiten.</muted>",
     "step1Title": "Konto erstellen",
-    "step1Body": "In Sekunden mit Ihrer E-Mail registrieren. Ein AYV-WRLD-Konto schaltet jedes Tool frei, sobald es startet.",
+    "step1Body": "In Sekunden mit Ihrer E-Mail registrieren. Ein AYV-Automation-Konto schaltet jedes Tool frei, sobald es startet.",
     "step2Title": "Ihr Geschäft einrichten",
     "step2Body": "Sagen Sie uns, wen Sie bedienen und wie Sie arbeiten. Wir passen jedes Tool an Branche und Ablauf an.",
     "step3Title": "Laufen lassen",
@@ -111,7 +111,7 @@
   },
   "cta": {
     "title": "Machen Sie aus Arbeit Umsatz.",
-    "body": "Legen Sie heute Ihr AYV-WRLD-Konto an und sind startklar, sobald jedes Tool live geht."
+    "body": "Legen Sie heute Ihr AYV-Automation-Konto an und sind startklar, sobald jedes Tool live geht."
   },
   "footer": {
     "blurb": "Fokussierte Software, die alltägliche Aufgaben in automatisierten Umsatz verwandelt.",
@@ -119,7 +119,7 @@
     "platform": "Plattform",
     "account": "Konto",
     "signup": "Registrieren",
-    "rights": "© {year} AYV WRLD. Alle Rechte vorbehalten."
+    "rights": "© {year} AYV Automation. Alle Rechte vorbehalten."
   },
   "productPage": {
     "allProducts": "Alle Produkte",
@@ -132,7 +132,7 @@
     "planBody": "Ein klarer Monatspreis. Keine Setup-Gebühr, jederzeit kündbar.",
     "startWith": "Mit {name} starten",
     "keepExploring": "Weiter entdecken",
-    "otherTools": "Weitere Tools in AYV WRLD",
+    "otherTools": "Weitere Tools in AYV Automation",
     "connectedKicker": "Verbundener Mehrwert",
     "connectedTitle": "{name} funktioniert allein – und gemeinsam noch besser.",
     "connectedOutcome": "Verbindungen verwenden Kundendaten erneut, erhalten Kontext und aktualisieren Kalender sowie Kommandozentrale, ohne Datensätze zusammenzuführen oder zu löschen."
@@ -269,7 +269,7 @@
     "overview": "Überblick",
     "greeting": "Einen schönen Tag.",
     "greetingNamed": "Einen schönen Tag, {name}.",
-    "ready": "{name} ist bereit. Dieser Überblick gilt für alle AYV-WRLD-Produkte.",
+    "ready": "{name} ist bereit. Dieser Überblick gilt für alle AYV-Automation-Produkte.",
     "workspace": "Arbeitsbereich",
     "subscription": "Abo",
     "billedPerOrg": "Abrechnung pro Organisation",
@@ -284,7 +284,7 @@
     "quotes": "Angebote",
     "openRovyn": "Rovyn öffnen",
     "openRovynBody": "Versendete Angebote nachfassen, damit mehr Vorschläge zu Aufträgen werden.",
-    "getMost": "Mehr aus AYV WRLD holen",
+    "getMost": "Mehr aus AYV Automation holen",
     "foundationSetup": "Grundeinrichtung",
     "completeProfile": "Unternehmensprofil vervollständigen",
     "inviteTeammates": "Team einladen",
@@ -438,7 +438,7 @@
   "billing": {
     "title": "Abrechnung",
     "description": "Ein Modul kostet 39 € pro Monat. Growth kostet 79 € für drei Module. Der volle Stack kostet 149 € für alle sechs.",
-    "settingsDescription": "Starten Sie ein AYV WRLD-Produkt oder verwalten Sie Abonnements im Stripe-Portal.",
+    "settingsDescription": "Starten Sie ein AYV Automation-Produkt oder verwalten Sie Abonnements im Stripe-Portal.",
     "notSubscribed": "Kein Abo",
     "nextBill": "{status} · nächste Rechnung {date}",
     "active": "{name} aktiv",
@@ -460,7 +460,7 @@
   },
   "settings": {
     "title": "Einstellungen",
-    "description": "Unternehmensdaten, die alle AYV-WRLD-Produkte nutzen.",
+    "description": "Unternehmensdaten, die alle AYV-Automation-Produkte nutzen.",
     "general": "Allgemein",
     "team": "Team",
     "billing": "Abrechnung",
@@ -547,7 +547,7 @@
     "missed": "Verpasst",
     "missedHint": "No-Shows",
     "addBooking": "Buchung hinzufügen",
-    "prefill": "{name} wird aus {product} vorausgefüllt. Eine Verknüpfung ist optional — Sie können auch ohne buchen.",
+    "prefill": "Aus {product}: {name}",
     "customer": "Kunde",
     "service": "Leistung",
     "date": "Datum",
@@ -760,7 +760,7 @@
   },
   "errors": {
     "notFoundTitle": "Seite nicht gefunden",
-    "notFoundBody": "Diese Seite gibt es in AYV WRLD nicht.",
+    "notFoundBody": "Diese Seite gibt es in AYV Automation nicht.",
     "backHome": "Zurück zum Start",
     "errorKicker": "Fehler",
     "errorTitle": "Etwas ist schiefgelaufen",

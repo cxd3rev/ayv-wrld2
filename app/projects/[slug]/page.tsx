@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description,
     alternates: { canonical: project.route },
     openGraph: {
-      title: `${project.name} · AYV WRLD Projects`,
+      title: `${project.name} · AYV Automation Projects`,
       description,
       url: project.route,
       images: [{ url: project.logo, width: 512, height: 512, alt: `${project.name} logo` }],
@@ -40,7 +40,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     "@type": "CreativeWork",
     name: project.name,
     description,
-    creator: { "@type": "Organization", name: "AYV WRLD" },
+    creator: { "@type": "Organization", name: "AYV Automation" },
     url: `${siteConfig.url}${project.route}`,
     image: `${siteConfig.url}${project.logo}`,
   };
@@ -52,7 +52,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <section className="relative border-b border-border">
           <div className="technical-grid" aria-hidden />
           <div className="relative mx-auto w-full max-w-[1400px] px-6 py-16 lg:px-12 lg:py-24">
-            <Breadcrumbs items={[{ label: "AYV WRLD", href: "/" }, { label: c.nav.projects, href: "/projects" }, { label: project.name }]} />
+            <Breadcrumbs items={[{ label: "AYV Automation", href: "/" }, { label: c.nav.projects, href: "/projects" }, { label: project.name }]} />
             <div className="mt-16 flex flex-col justify-between gap-10 lg:flex-row lg:items-end">
               <div>
                 <p className="kicker">{c.common.project}</p>

@@ -47,7 +47,7 @@ export default async function AutomationProductPage({ params }: { params: Promis
     applicationCategory: "BusinessApplication",
     brand: {
       "@type": "Brand",
-      name: "AYV WRLD",
+      name: "AYV Automation",
       logo: `${siteConfig.url}${ayvBrand.automationParentMark}`,
     },
     ...(active ? { offers: { "@type": "Offer", price: product.pricing.monthly, priceCurrency: "EUR", availability: "https://schema.org/InStock" } } : {}),
@@ -60,7 +60,7 @@ export default async function AutomationProductPage({ params }: { params: Promis
         <section className="relative overflow-hidden border-b border-border">
           <div className="technical-grid" aria-hidden />
           <div className="relative mx-auto w-full max-w-[1400px] px-6 py-16 lg:px-12 lg:py-24">
-            <Breadcrumbs items={[{ label: "AYV WRLD", href: "/" }, { label: "AYV Automation", href: "/automation" }, { label: product.name }]} />
+            <Breadcrumbs items={[{ label: "AYV Automation", href: "/" }, { label: "AYV Automation", href: "/automation" }, { label: product.name }]} />
             <div className="mt-14 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
               <div>
                 <AyvAutomationParentBadge />

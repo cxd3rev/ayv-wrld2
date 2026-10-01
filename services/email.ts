@@ -80,7 +80,7 @@ export function teamInviteEmail(opts: {
 }) {
   return `
     <div style="font-family:sans-serif;background:#09090b;color:#f7f4ef;padding:32px">
-      <h1 style="color:#F0A202;margin:0 0 16px">AYV WRLD</h1>
+      <h1 style="color:#F0A202;margin:0 0 16px">AYV Automation</h1>
       <p>You were invited to join <strong>${opts.organizationName}</strong>.</p>
       <p><a href="${opts.inviteUrl}" style="color:#F0A202">Create your account</a> to get started.</p>
     </div>
@@ -90,7 +90,7 @@ export function teamInviteEmail(opts: {
 export function welcomeEmail(opts: { name: string }) {
   return `
     <div style="font-family:sans-serif;background:#09090b;color:#f7f4ef;padding:32px">
-      <h1 style="color:#F0A202;margin:0 0 16px">Welcome to AYV WRLD</h1>
+      <h1 style="color:#F0A202;margin:0 0 16px">Welcome to AYV Automation</h1>
       <p>Hi ${opts.name || "there"}, your workspace is ready.</p>
     </div>
   `;

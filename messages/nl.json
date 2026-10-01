@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "AYV WRLD bouwt gerichte software waarmee bedrijven leads binnenhalen, klanten boeken, offertes sluiten, betalingen innen en klanten laten terugkomen."
+    "description": "AYV Automation bouwt gerichte software waarmee bedrijven leads binnenhalen, klanten boeken, offertes sluiten, betalingen innen en klanten laten terugkomen."
   },
   "common": {
     "home": "Home",
@@ -93,7 +93,7 @@
     "kicker": "Hoe het werkt",
     "title": "Drie stappen. <muted>Oneindig veel mogelijkheden.</muted>",
     "step1Title": "Maak uw account",
-    "step1Body": "Registreer in seconden met uw e-mail. Eén AYV WRLD-account ontsluit elke tool bij lancering.",
+    "step1Body": "Registreer in seconden met uw e-mail. Eén AYV Automation-account ontsluit elke tool bij lancering.",
     "step2Title": "Zet uw bedrijf op",
     "step2Body": "Vertel wie u bedient en hoe u werkt. Wij stemmen elke tool af op uw branche en werkwijze.",
     "step3Title": "Laat het lopen",
@@ -111,7 +111,7 @@
   },
   "cta": {
     "title": "Begin werk om te zetten in omzet.",
-    "body": "Maak vandaag uw AYV WRLD-account en wees klaar zodra elke tool live gaat."
+    "body": "Maak vandaag uw AYV Automation-account en wees klaar zodra elke tool live gaat."
   },
   "footer": {
     "blurb": "Gerichte software die dagelijkse taken omzet in geautomatiseerde omzet.",
@@ -119,7 +119,7 @@
     "platform": "Platform",
     "account": "Account",
     "signup": "Registreren",
-    "rights": "© {year} AYV WRLD. Alle rechten voorbehouden."
+    "rights": "© {year} AYV Automation. Alle rechten voorbehouden."
   },
   "productPage": {
     "allProducts": "Alle producten",
@@ -132,7 +132,7 @@
     "planBody": "Eén duidelijke maandprijs. Geen setupkosten, opzeggen wanneer u wilt.",
     "startWith": "Start met {name}",
     "keepExploring": "Blijf kijken",
-    "otherTools": "Andere tools in AYV WRLD",
+    "otherTools": "Andere tools in AYV Automation",
     "connectedKicker": "Verbonden waarde",
     "connectedTitle": "{name} werkt zelfstandig — en nog beter samen.",
     "connectedOutcome": "Verbindingen hergebruiken klantgegevens, bewaren context en werken agenda en commandocentrum bij zonder records samen te voegen of te verwijderen."
@@ -269,7 +269,7 @@
     "overview": "Overzicht",
     "greeting": "Fijne dag.",
     "greetingNamed": "Fijne dag, {name}.",
-    "ready": "{name} is klaar. Dit overzicht geldt voor elk AYV WRLD-product.",
+    "ready": "{name} is klaar. Dit overzicht geldt voor elk AYV Automation-product.",
     "workspace": "Werkruimte",
     "subscription": "Abonnement",
     "billedPerOrg": "Gefactureerd per organisatie",
@@ -284,7 +284,7 @@
     "quotes": "Offertes",
     "openRovyn": "Open Rovyn",
     "openRovynBody": "Volg verzonden offertes op zodat meer voorstellen tot werk leiden.",
-    "getMost": "Haal meer uit AYV WRLD",
+    "getMost": "Haal meer uit AYV Automation",
     "foundationSetup": "Basisinrichting",
     "completeProfile": "Bedrijfsprofiel afronden",
     "inviteTeammates": "Collega's uitnodigen",
@@ -438,7 +438,7 @@
   "billing": {
     "title": "Facturatie",
     "description": "Eén module is €39 per maand. Growth is €79 voor drie modules. De volledige stack is €149 voor alle zes.",
-    "settingsDescription": "Start een AYV WRLD-product of beheer abonnementen in het Stripe-portaal.",
+    "settingsDescription": "Start een AYV Automation-product of beheer abonnementen in het Stripe-portaal.",
     "notSubscribed": "Geen abonnement",
     "nextBill": "{status} · volgende factuur {date}",
     "active": "{name} actief",
@@ -460,7 +460,7 @@
   },
   "settings": {
     "title": "Instellingen",
-    "description": "Bedrijfsgegevens die elk AYV WRLD-product gebruikt.",
+    "description": "Bedrijfsgegevens die elk AYV Automation-product gebruikt.",
     "general": "Algemeen",
     "team": "Team",
     "billing": "Facturatie",
@@ -547,7 +547,7 @@
     "missed": "Gemist",
     "missedHint": "No-shows",
     "addBooking": "Boeking toevoegen",
-    "prefill": "{name} wordt vooringevuld vanuit {product}. Een koppeling is optioneel — u kunt ook zonder boeken.",
+    "prefill": "Vanuit {product}: {name}",
     "customer": "Klant",
     "service": "Dienst",
     "date": "Datum",
@@ -760,7 +760,7 @@
   },
   "errors": {
     "notFoundTitle": "Pagina niet gevonden",
-    "notFoundBody": "Die pagina bestaat niet in AYV WRLD.",
+    "notFoundBody": "Die pagina bestaat niet in AYV Automation.",
     "backHome": "Terug naar home",
     "errorKicker": "Fout",
     "errorTitle": "Er ging iets mis",

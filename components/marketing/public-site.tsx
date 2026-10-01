@@ -113,7 +113,7 @@ export function ProjectCard({
   return (
     <article className="group flex min-h-[280px] flex-col justify-between border border-border bg-card p-7 transition duration-300 hover:-translate-y-1 hover:border-foreground/30">
       <div className="flex items-start justify-between gap-5">
-        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">AYV WRLD / Project</span>
+        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">AYV Automation / Project</span>
         <span className="border border-border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted">{status}</span>
       </div>
       {project.logo ? (

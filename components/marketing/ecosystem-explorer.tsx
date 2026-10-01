@@ -221,8 +221,8 @@ export function EcosystemExplorer({
       <div className={cn("transition duration-500", selected ? "pointer-events-none absolute inset-0 scale-[0.98] opacity-0" : "opacity-100")}>
         <div className="lg:hidden">
           <button type="button" onClick={() => setSelectedId(center.id)} className="mx-auto flex flex-col items-center gap-3">
-            <Mark src={ayvBrand.logo} alt="AYV WRLD logo" className="h-24 w-24" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em]">AYV WRLD</span>
+            <Mark src={ayvBrand.logo} alt="AYV Automation logo" className="h-24 w-24" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em]">AYV Automation</span>
           </button>
           <ul className="mx-auto mt-8 max-w-md space-y-3 border-l border-white/15 pl-5">
             {nodes.filter((node) => node.id !== "stack").map((node) => (
@@ -265,8 +265,8 @@ export function EcosystemExplorer({
             onClick={() => setSelectedId(center.id)}
             className="absolute left-1/2 top-[34%] z-20 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-3 transition duration-300 hover:scale-105"
           >
-            <Mark src={ayvBrand.logo} alt="AYV WRLD logo" className="h-28 w-28" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em]">AYV WRLD</span>
+            <Mark src={ayvBrand.logo} alt="AYV Automation logo" className="h-28 w-28" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em]">AYV Automation</span>
           </button>
           {satellites.filter((point) => point.id !== "stack").map((point) => {
             const node = byId[point.id];

@@ -183,9 +183,9 @@ export function VeltoBookingsWorkspace({
       <form
         id="velto-add-booking"
         action={onAdd}
-        className="workspace-card grid gap-6 p-6 sm:p-8 md:grid-cols-2"
+        className="workspace-card grid gap-4 p-5 sm:p-6 md:grid-cols-3"
       >
-        <div className="md:col-span-2 lg:col-span-4">
+        <div className="md:col-span-3">
           <IncomingLinkFields
             prefillProduct={prefill?.product === "avyro" ? undefined : prefill?.product}
             prefillId={prefill?.product === "avyro" ? undefined : prefill?.id}
@@ -239,34 +239,44 @@ export function VeltoBookingsWorkspace({
           <Label htmlFor="reminderOn">{t("remindOn")}</Label>
           <Input id="reminderOn" name="reminderOn" type="date" />
         </div>
-        <div className="md:col-span-2">
+        <div className="flex flex-col gap-3 md:col-span-3">
+          <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
+          <ActionFeedback message={saved} />
+          <FormError message={error} />
+        </div>
+        <div className="md:col-span-3">
           <AdvancedPanel label={tCommon("advanced")}>
-            <div>
-              <Label htmlFor="phone">{t("phone")}</Label>
-              <Input id="phone" name="phone" type="tel" placeholder={tCommon("optional")} defaultValue={prefill?.phone ?? ""} />
-            </div>
-            <div>
-              <Label htmlFor="leadId">{t("avyroLead")}</Label>
-              <Select
-                id="leadId"
-                name="leadId"
-                defaultValue={fromLead?.id ?? ""}
-                onChange={(event) => {
-                  const form = event.currentTarget.form;
-                  const lead = leads.find((item) => item.id === event.target.value);
-                  if (!form || !lead) return;
-                  fillLeadFields(form, lead);
-                }}
-              >
-                <option value="">{t("noLinkedLead")}</option>
-                {leads.map((lead) => (
-                  <option key={lead.id} value={lead.id}>{lead.name}</option>
-                ))}
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="notes">{t("notes")}</Label>
-              <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <Label htmlFor="phone">
+                  {t("phone")}
+                  <span className="ml-2 font-normal tracking-normal text-muted/80">{tCommon("optional")}</span>
+                </Label>
+                <Input id="phone" name="phone" type="tel" autoComplete="tel" defaultValue={prefill?.phone ?? ""} />
+              </div>
+              <div>
+                <Label htmlFor="leadId">{t("avyroLead")}</Label>
+                <Select
+                  id="leadId"
+                  name="leadId"
+                  defaultValue={fromLead?.id ?? ""}
+                  onChange={(event) => {
+                    const form = event.currentTarget.form;
+                    const lead = leads.find((item) => item.id === event.target.value);
+                    if (!form || !lead) return;
+                    fillLeadFields(form, lead);
+                  }}
+                >
+                  <option value="">{t("noLinkedLead")}</option>
+                  {leads.map((lead) => (
+                    <option key={lead.id} value={lead.id}>{lead.name}</option>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="notes">{t("notes")}</Label>
+                <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
+              </div>
             </div>
             <AdvancedStats
               items={[
@@ -277,19 +287,12 @@ export function VeltoBookingsWorkspace({
               ]}
             />
             {bookings.length ? (
-              <div className="max-w-sm">
+              <div>
                 <Label htmlFor="velto-search">{tCommon("searchRecords")}</Label>
                 <Input id="velto-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
               </div>
             ) : null}
           </AdvancedPanel>
-        </div>
-        <div className="flex flex-col gap-4 md:col-span-2">
-          <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
-          <ActionFeedback message={saved} />
-        </div>
-        <div className="md:col-span-2 lg:col-span-4">
-          <FormError message={error} />
         </div>
       </form>
 

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "AYV WRLD creates focused software tools that help businesses capture leads, book customers, close quotes, collect payments, and bring customers back."
+    "description": "AYV Automation creates focused software tools that help businesses capture leads, book customers, close quotes, collect payments, and bring customers back."
   },
   "common": {
     "home": "Home",
@@ -93,7 +93,7 @@
     "kicker": "How it works",
     "title": "Three steps. <muted>Infinite possibilities.</muted>",
     "step1Title": "Create your account",
-    "step1Body": "Sign up in seconds with your email. One AYV WRLD account unlocks every tool as it launches.",
+    "step1Body": "Sign up in seconds with your email. One AYV Automation account unlocks every tool as it launches.",
     "step2Title": "Set up your business",
     "step2Body": "Tell us who you serve and how you work. We tailor each tool to your industry and workflow.",
     "step3Title": "Let it run",
@@ -111,7 +111,7 @@
   },
   "cta": {
     "title": "Start turning work into revenue.",
-    "body": "Create your AYV WRLD account today and be ready the moment each tool goes live."
+    "body": "Create your AYV Automation account today and be ready the moment each tool goes live."
   },
   "footer": {
     "blurb": "Focused software tools that turn everyday business tasks into automated revenue.",
@@ -119,7 +119,7 @@
     "platform": "Platform",
     "account": "Account",
     "signup": "Sign up",
-    "rights": "© {year} AYV WRLD. All rights reserved."
+    "rights": "© {year} AYV Automation. All rights reserved."
   },
   "productPage": {
     "allProducts": "All products",
@@ -132,7 +132,7 @@
     "planBody": "One clear monthly price. No setup fees, cancel anytime.",
     "startWith": "Start with {name}",
     "keepExploring": "Keep exploring",
-    "otherTools": "Other tools in AYV WRLD",
+    "otherTools": "Other tools in AYV Automation",
     "connectedKicker": "Connected value",
     "connectedTitle": "{name} works alone—and better together.",
     "connectedOutcome": "Connections reuse customer details, preserve context, update the shared calendar and command center, and never merge or delete the original records."
@@ -269,7 +269,7 @@
     "overview": "Overview",
     "greeting": "Have a great day.",
     "greetingNamed": "Have a great day, {name}.",
-    "ready": "{name} is ready. This overview is shared across every AYV WRLD product.",
+    "ready": "{name} is ready. This overview is shared across every AYV Automation product.",
     "workspace": "Workspace",
     "subscription": "Subscription",
     "billedPerOrg": "Billed per organization",
@@ -284,7 +284,7 @@
     "quotes": "Quotes",
     "openRovyn": "Open Rovyn",
     "openRovynBody": "Follow up on sent quotes so more proposals become booked work.",
-    "getMost": "Get the most out of AYV WRLD",
+    "getMost": "Get the most out of AYV Automation",
     "foundationSetup": "Foundation setup",
     "completeProfile": "Complete business profile",
     "inviteTeammates": "Invite teammates",
@@ -438,7 +438,7 @@
   "billing": {
     "title": "Billing",
     "description": "One module is €39 per month. Growth is €79 for any three. The full stack is €149 for all six.",
-    "settingsDescription": "Start any AYV WRLD product or manage subscriptions in the Stripe portal.",
+    "settingsDescription": "Start any AYV Automation product or manage subscriptions in the Stripe portal.",
     "notSubscribed": "Not subscribed",
     "nextBill": "{status} · next bill {date}",
     "active": "{name} active",
@@ -460,7 +460,7 @@
   },
   "settings": {
     "title": "Settings",
-    "description": "Business details used by every AYV WRLD product.",
+    "description": "Business details used by every AYV Automation product.",
     "general": "General",
     "team": "Team",
     "billing": "Billing",
@@ -547,7 +547,7 @@
     "missed": "Missed",
     "missedHint": "No-shows",
     "addBooking": "Add a booking",
-    "prefill": "Prefilling {name} from {product}. A connection is optional — you can still book without one.",
+    "prefill": "From {product}: {name}",
     "customer": "Customer",
     "service": "Service",
     "date": "Date",
@@ -760,7 +760,7 @@
   },
   "errors": {
     "notFoundTitle": "Page not found",
-    "notFoundBody": "That page does not exist in AYV WRLD.",
+    "notFoundBody": "That page does not exist in AYV Automation.",
     "backHome": "Back home",
     "errorKicker": "Error",
     "errorTitle": "Something went wrong",

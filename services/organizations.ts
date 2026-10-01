@@ -58,7 +58,7 @@ export async function completeOnboarding(formData: FormData) {
     await createNotification({
       organizationId: organization.id,
       userId: user.id,
-      title: "Welcome to AYV WRLD",
+      title: "Welcome to AYV Automation",
       message: "Your workspace is ready. Avyro is the first product that will be built here.",
       type: "success",
     });
@@ -166,7 +166,7 @@ export async function inviteMember(formData: FormData) {
 
   await sendEmail({
     to: parsed.data.email,
-    subject: `You were invited to ${organization.name} on AYV WRLD`,
+    subject: `You were invited to ${organization.name} on AYV Automation`,
     html: teamInviteEmail({
       organizationName: organization.name,
       inviteUrl: `${getAppUrl()}/signup`,

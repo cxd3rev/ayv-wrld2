@@ -28,7 +28,7 @@ export default async function ProjectsPage() {
 
   const center: EcosystemItem = {
     id: "ayv",
-    name: "AYV WRLD",
+    name: "AYV Automation",
     typeLabel: c.ecosystem.parent,
     logo: ayvBrand.logo,
     description: c.home.body,

@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     (organizations ?? []).map((org) => [
       String(org.id),
       {
-        name: typeof org.name === "string" && org.name ? org.name : "AYV WRLD",
+        name: typeof org.name === "string" && org.name ? org.name : "AYV Automation",
         email: typeof org.email === "string" ? org.email : null,
         phone: typeof org.phone === "string" ? org.phone : null,
         website: typeof org.website === "string" ? org.website : null,
@@ -73,7 +73,7 @@ export async function GET(request: Request) {
       skipped += 1;
       return;
     }
-    const organizationName = names.get(row.organization_id) ?? "AYV WRLD";
+    const organizationName = names.get(row.organization_id) ?? "AYV Automation";
     const result = await sendEmail({
       to: email,
       subject,
@@ -95,7 +95,7 @@ export async function GET(request: Request) {
     .eq("follow_up_on", today)
     .in("status", ["new", "contacted"]);
   for (const lead of leads ?? []) {
-    const organizationName = names.get(lead.organization_id) ?? "AYV WRLD";
+    const organizationName = names.get(lead.organization_id) ?? "AYV Automation";
     const person = lead.name || "there";
     await deliver(
       lead,
@@ -115,7 +115,7 @@ export async function GET(request: Request) {
     .eq("reminder_on", today)
     .in("status", ["scheduled", "confirmed"]);
   for (const booking of bookings ?? []) {
-    const organizationName = names.get(booking.organization_id) ?? "AYV WRLD";
+    const organizationName = names.get(booking.organization_id) ?? "AYV Automation";
     const person = booking.customer_name || "there";
     await deliver(
       booking,
@@ -131,7 +131,7 @@ export async function GET(request: Request) {
     .eq("follow_up_on", today)
     .in("status", ["sent", "followed_up"]);
   for (const quote of quotes ?? []) {
-    const organizationName = names.get(quote.organization_id) ?? "AYV WRLD";
+    const organizationName = names.get(quote.organization_id) ?? "AYV Automation";
     const person = quote.customer_name || "there";
     await deliver(
       quote,
@@ -150,7 +150,7 @@ export async function GET(request: Request) {
     .eq("next_reminder_on", today)
     .in("status", ["sent", "overdue"]);
   for (const invoice of invoices ?? []) {
-    const organizationName = names.get(invoice.organization_id) ?? "AYV WRLD";
+    const organizationName = names.get(invoice.organization_id) ?? "AYV Automation";
     const person = invoice.customer_name || "there";
     await deliver(
       invoice,
@@ -191,7 +191,7 @@ export async function GET(request: Request) {
       }
     }
     const org = orgs.get(row.organization_id) ?? {
-      name: "AYV WRLD",
+      name: "AYV Automation",
       email: null,
       phone: null,
       website: null,
@@ -223,7 +223,7 @@ export async function GET(request: Request) {
     .eq("requested_on", today)
     .eq("status", "scheduled");
   for (const review of scheduledReviews ?? []) {
-    const organizationName = names.get(review.organization_id) ?? "AYV WRLD";
+    const organizationName = names.get(review.organization_id) ?? "AYV Automation";
     const person = review.customer_name || "there";
     await deliverOutreach(
       review,
@@ -242,7 +242,7 @@ export async function GET(request: Request) {
     .eq("next_follow_up_on", today)
     .eq("status", "requested");
   for (const review of reviewFollowUps ?? []) {
-    const organizationName = names.get(review.organization_id) ?? "AYV WRLD";
+    const organizationName = names.get(review.organization_id) ?? "AYV Automation";
     const person = review.customer_name || "there";
     await deliverOutreach(
       review,
@@ -258,7 +258,7 @@ export async function GET(request: Request) {
     .eq("next_touch_on", today)
     .in("status", ["scheduled", "sent"]);
   for (const reactivation of reactivations ?? []) {
-    const organizationName = names.get(reactivation.organization_id) ?? "AYV WRLD";
+    const organizationName = names.get(reactivation.organization_id) ?? "AYV Automation";
     const person = reactivation.customer_name || "there";
     const message = reactivation.message?.trim() || `Hi ${person}, a note from ${organizationName}.`;
     await deliverOutreach(

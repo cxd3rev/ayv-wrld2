@@ -140,7 +140,7 @@ export function MarketingFooter() {
           className="inline-flex items-center gap-2 text-white/70 hover:text-white"
         >
           <Image src={ayvBrand.logo} alt="" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
-          made by ayvwrld
+          made by AYV Automation
         </a>
         <div className="flex gap-4">
           <Link href="/terms" className="hover:text-white">{c.footer.terms}</Link>

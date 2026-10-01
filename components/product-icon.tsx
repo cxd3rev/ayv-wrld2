@@ -49,7 +49,7 @@ export function AyvAutomationParentBadge() {
       <span className="flex h-16 w-16 shrink-0 items-center justify-center border border-black/10 bg-[#f8f6f0] p-2">
         <Image
           src={ayvBrand.automationParentMark}
-          alt="AYV WRLD parent company logo"
+          alt="AYV Automation logo"
           width={48}
           height={48}
           sizes="48px"
@@ -57,7 +57,7 @@ export function AyvAutomationParentBadge() {
         />
       </span>
       <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
-        AYV WRLD / Parent brand
+        AYV Automation
       </span>
     </div>
   );
