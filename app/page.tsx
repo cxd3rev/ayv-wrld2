@@ -2,7 +2,7 @@ import { StackHome } from "@/components/marketing/stack-home";
 import { InstallerHome } from "@/components/marketing/installer-home";
 import { PublicShell } from "@/components/marketing/public-site";
 import { legacyModulesEnabled } from "@/config/features";
-import { PRODUCT_NAME, PRODUCT_TAGLINE } from "@/config/site";
+import { PRODUCT_DESCRIPTION, PRODUCT_TITLE } from "@/config/site";
 import { getStackCopy } from "@/config/stack-marketing";
 import { resolveLocale } from "@/i18n/config";
 import type { Metadata } from "next";
@@ -12,9 +12,12 @@ export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   if (!legacyModulesEnabled) {
-    const title = PRODUCT_NAME;
-    const description = PRODUCT_TAGLINE;
-    return { title, description, alternates: { canonical: "/" }, openGraph: { title, description, url: "/" } };
+    return {
+      title: { absolute: PRODUCT_TITLE },
+      description: PRODUCT_DESCRIPTION,
+      alternates: { canonical: "/" },
+      openGraph: { title: PRODUCT_TITLE, description: PRODUCT_DESCRIPTION, url: "/" },
+    };
   }
   const c = getStackCopy(resolveLocale(await getLocale()));
   return {

@@ -5,7 +5,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { ToastProvider } from "@/components/ui/toast";
 import { ayvBrand } from "@/config/brands";
-import { PRODUCT_NAME, PRODUCT_TAGLINE, PRODUCT_URL } from "@/config/site";
+import { legacyModulesEnabled } from "@/config/features";
+import { PRODUCT_DESCRIPTION, PRODUCT_NAME, PRODUCT_TAGLINE, PRODUCT_TITLE, PRODUCT_URL } from "@/config/site";
 import "./globals.css";
 
 const instrumentSans = Instrument_Sans({
@@ -30,13 +31,15 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
+  const title = legacyModulesEnabled ? PRODUCT_NAME : PRODUCT_TITLE;
+  const description = legacyModulesEnabled ? PRODUCT_TAGLINE : PRODUCT_DESCRIPTION;
   return {
     metadataBase: new URL(PRODUCT_URL),
     title: {
-      default: PRODUCT_NAME,
+      default: title,
       template: `%s · ${PRODUCT_NAME}`,
     },
-    description: PRODUCT_TAGLINE,
+    description,
     applicationName: PRODUCT_NAME,
     icons: {
       icon: "/icon.png",
@@ -44,16 +47,16 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     openGraph: {
       siteName: PRODUCT_NAME,
-      title: PRODUCT_NAME,
-      description: PRODUCT_TAGLINE,
+      title,
+      description,
       url: "/",
       type: "website",
       images: [{ url: ayvBrand.logo, width: 512, height: 512, alt: PRODUCT_NAME }],
     },
     twitter: {
       card: "summary_large_image",
-      title: PRODUCT_NAME,
-      description: PRODUCT_TAGLINE,
+      title,
+      description,
       images: [ayvBrand.logo],
     },
   };
@@ -64,7 +67,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
 
   return (
     <html
-      lang={locale}
+      lang={legacyModulesEnabled ? locale : "nl-BE"}
       className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-background font-sans text-foreground">

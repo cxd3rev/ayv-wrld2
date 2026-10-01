@@ -1,6 +1,9 @@
 // TODO: final name
 export const PRODUCT_NAME = "AYV Onderhoud";
 export const PRODUCT_TAGLINE = "Elke ketel op tijd onderhouden. Zonder Excel.";
+export const PRODUCT_TITLE = `${PRODUCT_NAME} — ketelonderhoud opvolgen voor installateurs`;
+export const PRODUCT_DESCRIPTION =
+  "Houd bij wanneer elke ketel aan onderhoud toe is, stuur automatisch herinneringen en laat klanten online een moment kiezen. Voor verwarmingsinstallateurs in Vlaanderen.";
 // TODO: final domain
 export const PRODUCT_URL = "https://www.ayvautomation.space";
 

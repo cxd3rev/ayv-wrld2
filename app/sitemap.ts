@@ -6,7 +6,7 @@ import type { MetadataRoute } from "next";
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = legacyModulesEnabled
     ? ["", "/automation", "/automation/stack", ...products.map((product) => product.marketingRoute)]
-    : ["", "/login", "/signup", "/privacy", "/terms"];
+    : ["", "/prijzen", "/login", "/signup", "/privacy", "/voorwaarden", "/verwerkersovereenkomst"];
 
   return routes.map((route) => ({
     url: `${PRODUCT_URL}${route}`,
