@@ -47,10 +47,17 @@ const questions: [string, string][] = [
 const testMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Testklant ${PRODUCT_NAME}`)}`;
 const talkMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Gesprek")}`;
 
-export function FaqList() {
+const pricingQuestionStarts = ["Waarom vragen", "Kan ik opzeggen", "Is mijn data", "Kan ik mijn bestaande"];
+
+export function PricingFaqList() {
+  const picked = questions.filter(([question]) => pricingQuestionStarts.some((start) => question.startsWith(start)));
+  return <FaqList items={picked} />;
+}
+
+export function FaqList({ items = questions }: { items?: [string, string][] }) {
   return (
     <div className="mt-8 divide-y divide-foreground/10 border-y border-foreground/10">
-      {questions.map(([question, answer]) => (
+      {items.map(([question, answer]) => (
         <details key={question} className="group py-4">
           <summary className="cursor-pointer text-base font-medium">{question}</summary>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">{answer}</p>
