@@ -1,19 +1,17 @@
+import { legacyModulesEnabled } from "@/config/features";
 import { products } from "@/config/products";
-import { siteConfig } from "@/config/site";
+import { PRODUCT_URL } from "@/config/site";
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = [
-    "",
-    "/automation",
-    "/automation/stack",
-    ...products.map((product) => product.marketingRoute),
-  ];
+  const routes = legacyModulesEnabled
+    ? ["", "/automation", "/automation/stack", ...products.map((product) => product.marketingRoute)]
+    : ["", "/login", "/signup", "/privacy", "/terms"];
 
   return routes.map((route) => ({
-    url: `${siteConfig.url}${route}`,
+    url: `${PRODUCT_URL}${route}`,
     lastModified: new Date(),
     changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : route.split("/").length === 2 ? 0.8 : 0.7,
+    priority: route === "" ? 1 : 0.7,
   }));
 }

@@ -1,4 +1,5 @@
-import { siteConfig } from "@/config/site";
+import { legacyModulesEnabled } from "@/config/features";
+import { PRODUCT_URL } from "@/config/site";
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
@@ -6,11 +7,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/automation/"],
-        disallow: ["/api/", "/dashboard/", "/onboarding", "/auth/", "/settings/"],
+        allow: legacyModulesEnabled ? ["/", "/automation/"] : ["/"],
+        disallow: legacyModulesEnabled
+          ? ["/api/", "/dashboard/", "/onboarding", "/auth/", "/settings/"]
+          : ["/api/", "/dashboard/", "/onboarding", "/auth/", "/automation", "/products", "/projects", "/about", "/one-man-army"],
       },
     ],
-    sitemap: `${siteConfig.url}/sitemap.xml`,
-    host: siteConfig.url,
+    sitemap: `${PRODUCT_URL}/sitemap.xml`,
+    host: PRODUCT_URL,
   };
 }

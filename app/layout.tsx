@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { Instrument_Sans, Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 import { ToastProvider } from "@/components/ui/toast";
 import { ayvBrand } from "@/config/brands";
-import { siteConfig } from "@/config/site";
+import { PRODUCT_NAME, PRODUCT_TAGLINE, PRODUCT_URL } from "@/config/site";
 import "./globals.css";
 
 const instrumentSans = Instrument_Sans({
@@ -30,31 +30,30 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("meta");
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.ayvautomation.space"),
+    metadataBase: new URL(PRODUCT_URL),
     title: {
-      default: siteConfig.name,
-      template: `%s · ${siteConfig.name}`,
+      default: PRODUCT_NAME,
+      template: `%s · ${PRODUCT_NAME}`,
     },
-    description: t("description"),
-    applicationName: siteConfig.name,
+    description: PRODUCT_TAGLINE,
+    applicationName: PRODUCT_NAME,
     icons: {
       icon: "/icon.png",
       apple: "/apple-icon.png",
     },
     openGraph: {
-      siteName: siteConfig.name,
-      title: siteConfig.name,
-      description: siteConfig.description,
+      siteName: PRODUCT_NAME,
+      title: PRODUCT_NAME,
+      description: PRODUCT_TAGLINE,
       url: "/",
       type: "website",
-      images: [{ url: ayvBrand.logo, width: 512, height: 512, alt: "AYV Automation Stack" }],
+      images: [{ url: ayvBrand.logo, width: 512, height: 512, alt: PRODUCT_NAME }],
     },
     twitter: {
       card: "summary_large_image",
-      title: siteConfig.name,
-      description: siteConfig.description,
+      title: PRODUCT_NAME,
+      description: PRODUCT_TAGLINE,
       images: [ayvBrand.logo],
     },
   };

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { PRODUCT_NAME } from "@/config/site";
 import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -82,9 +83,9 @@ export function teamInviteEmail(opts: {
   const inviteUrl = escapeHtml(opts.inviteUrl);
   return `
     <div style="font-family:sans-serif;background:#09090b;color:#f7f4ef;padding:32px">
-      <h1 style="color:#F0A202;margin:0 0 16px">AYV Automation</h1>
-      <p>You were invited to join <strong>${organizationName}</strong>.</p>
-      <p><a href="${inviteUrl}" style="color:#F0A202">Open your invite</a> and sign in with this email address to start working in the same workspace.</p>
+      <h1 style="color:#F0A202;margin:0 0 16px">${PRODUCT_NAME}</h1>
+      <p>U bent uitgenodigd om mee te werken bij <strong>${organizationName}</strong>.</p>
+      <p><a href="${inviteUrl}" style="color:#F0A202">Open de uitnodiging</a> en meld u aan met dit e-mailadres.</p>
     </div>
   `;
 }
@@ -92,8 +93,8 @@ export function teamInviteEmail(opts: {
 export function welcomeEmail(opts: { name: string }) {
   return `
     <div style="font-family:sans-serif;background:#09090b;color:#f7f4ef;padding:32px">
-      <h1 style="color:#F0A202;margin:0 0 16px">Welcome to AYV Automation</h1>
-      <p>Hi ${opts.name || "there"}, your workspace is ready.</p>
+      <h1 style="color:#F0A202;margin:0 0 16px">Welkom bij ${PRODUCT_NAME}</h1>
+      <p>Dag ${escapeHtml(opts.name || "daar")}, uw workspace is klaar.</p>
     </div>
   `;
 }

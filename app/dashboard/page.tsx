@@ -94,7 +94,7 @@ export default async function DashboardPage({
     const query = await searchParams;
     const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Brussels" }).format(new Date());
     const items = await listBoilers(organization.id, today);
-    const window = query.window === "30" || query.window === "60" ? query.window : "90";
+    const window = query.window === "overdue" || query.window === "30" || query.window === "60" || query.window === "90" ? query.window : "90";
     const municipalities = [...new Set(items.map((item) => item.municipality))].sort((a, b) => a.localeCompare(b, "nl"));
     return (
       <DueBoilers

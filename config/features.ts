@@ -14,6 +14,9 @@ const LEGACY_PREFIXES = [
   "/dashboard/product",
   "/automation",
   "/products",
+  "/projects",
+  "/about",
+  "/one-man-army",
 ];
 
 export function isLegacyModulePath(pathname: string) {

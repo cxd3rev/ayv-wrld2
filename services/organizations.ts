@@ -1,5 +1,6 @@
 "use server";
 
+import { PRODUCT_NAME } from "@/config/site";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser, requireWorkspace } from "@/lib/auth/session";
@@ -58,8 +59,8 @@ export async function completeOnboarding(formData: FormData) {
     await createNotification({
       organizationId: organization.id,
       userId: user.id,
-      title: "Welcome to AYV Automation",
-      message: "Your workspace is ready. Avyro is the first product that will be built here.",
+      title: `Welkom bij ${PRODUCT_NAME}`,
+      message: "Uw workspace is klaar.",
       type: "success",
     });
   }
@@ -161,7 +162,7 @@ async function deliverInvite(input: {
   const inviteUrl = `${getAppUrl()}/invite/${input.token}`;
   const emailed = await sendEmail({
     to: input.email,
-    subject: `You were invited to ${input.organizationName} on AYV Automation`,
+    subject: `Uitnodiging voor ${input.organizationName} op ${PRODUCT_NAME}`,
     html: teamInviteEmail({
       organizationName: input.organizationName,
       inviteUrl,

@@ -1,6 +1,8 @@
 "use client";
 
 import { AuthMessage } from "@/components/auth/auth-shell";
+import { legacyModulesEnabled } from "@/config/features";
+import { PRODUCT_NAME } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
@@ -93,8 +95,8 @@ export function SignupForm() {
   return (
     <form action={onSubmit} className="space-y-4">
       <div className="mb-2 text-center">
-        <h1 className="display text-5xl tracking-tight">{t("signupTitle")}</h1>
-        <p className="mt-3 text-sm text-muted">{t("signupDescription")}</p>
+        <h1 className="display text-5xl tracking-tight">{legacyModulesEnabled ? t("signupTitle") : "Account aanmaken"}</h1>
+        <p className="mt-3 text-sm text-muted">{legacyModulesEnabled ? t("signupDescription") : `Eén account voor ${PRODUCT_NAME}.`}</p>
       </div>
       <div>
         <Label htmlFor="fullName">{t("fullName")}</Label>

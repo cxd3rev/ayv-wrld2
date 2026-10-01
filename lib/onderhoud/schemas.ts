@@ -47,6 +47,10 @@ export const boilerSchema = z.object({
   notes: z.string().trim().max(2000).transform((value) => value || null),
 });
 
+export const installationSchema = customerSchema
+  .merge(addressSchema.omit({ customerId: true }))
+  .merge(boilerSchema.omit({ addressId: true }));
+
 export const reminderSettingsSchema = z.object({
   reminderLeadDays: z.coerce.number().int().min(1).max(90),
 });

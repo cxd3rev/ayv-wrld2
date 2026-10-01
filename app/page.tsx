@@ -2,6 +2,7 @@ import { StackHome } from "@/components/marketing/stack-home";
 import { OnderhoudHome } from "@/components/marketing/onderhoud-home";
 import { PublicShell } from "@/components/marketing/public-site";
 import { legacyModulesEnabled } from "@/config/features";
+import { PRODUCT_NAME, PRODUCT_TAGLINE } from "@/config/site";
 import { getStackCopy } from "@/config/stack-marketing";
 import { resolveLocale } from "@/i18n/config";
 import type { Metadata } from "next";
@@ -11,8 +12,8 @@ export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   if (!legacyModulesEnabled) {
-    const title = "AYV Onderhoud";
-    const description = "Onderhoudsdatums voor verwarmingsinstallateurs in Vlaanderen, berekend per ketel.";
+    const title = PRODUCT_NAME;
+    const description = PRODUCT_TAGLINE;
     return { title, description, alternates: { canonical: "/" }, openGraph: { title, description, url: "/" } };
   }
   const c = getStackCopy(resolveLocale(await getLocale()));

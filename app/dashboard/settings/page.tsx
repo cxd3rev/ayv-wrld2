@@ -14,7 +14,10 @@ export default async function GeneralSettingsPage() {
   const t = await getTranslations("settings");
 
   return (
-    <SettingsPage title={t("title")} description={t("description")}>
+    <SettingsPage
+      title={legacyModulesEnabled ? t("title") : "Instellingen"}
+      description={legacyModulesEnabled ? t("description") : "Bedrijfsgegevens, en hoeveel dagen op voorhand een klant een herinnering krijgt."}
+    >
       <GeneralSettingsForm organization={organization} />
       {legacyModulesEnabled ? null : <ReminderSettingsForm days={await getReminderLeadDays(organization.id)} />}
     </SettingsPage>

@@ -1,4 +1,5 @@
 import { getProduct, type ProductId } from "@/config/products";
+import { PRODUCT_NAME } from "@/config/site";
 import { isUsableSecret } from "@/lib/billing-status";
 
 /** Products that can be purchased as their own Stripe subscription. */
@@ -106,6 +107,6 @@ export function toProductId(product: BillableProductId): ProductId {
 export function billableProductName(product: CheckoutProductId) {
   if (product === "growth") return "Growth";
   if (product === "full_stack") return "Full stack";
-  if (product === "onderhoud") return "AYV Onderhoud";
+  if (product === "onderhoud") return PRODUCT_NAME;
   return getProduct(product)?.name ?? product;
 }

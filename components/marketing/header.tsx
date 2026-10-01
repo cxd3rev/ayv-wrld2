@@ -2,8 +2,9 @@
 
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { BUSINESS, whatsappUrl } from "@/lib/business";
-import { automationBrand, ayvBrand } from "@/config/brands";
+import { automationBrand } from "@/config/brands";
 import { legacyModulesEnabled } from "@/config/features";
+import { PRODUCT_NAME } from "@/config/site";
 import { products } from "@/config/products";
 import { getStackCopy, stackMarketing } from "@/config/stack-marketing";
 import { resolveLocale } from "@/i18n/config";
@@ -17,7 +18,7 @@ function BrandMark() {
   return (
     <span className="inline-flex items-center gap-2.5">
       <Image src={automationBrand.logo} alt="" width={32} height={32} className="h-8 w-8 object-contain" priority />
-      <span className="text-sm font-semibold tracking-tight">{legacyModulesEnabled ? "AYV Stack" : "AYV Onderhoud"}</span>
+      <span className="text-sm font-semibold tracking-tight">{legacyModulesEnabled ? "AYV Stack" : PRODUCT_NAME}</span>
     </span>
   );
 }
@@ -50,7 +51,7 @@ export function MarketingHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-xl">
       <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 lg:px-8" aria-label="Primary navigation">
-        <Link href="/" aria-label="AYV Automation Stack home">
+        <Link href="/" aria-label={PRODUCT_NAME}>
           <BrandMark />
         </Link>
         <div className="hidden items-center gap-7 lg:flex">
@@ -61,12 +62,12 @@ export function MarketingHeader() {
           ))}
         </div>
         <div className="hidden items-center gap-4 lg:flex">
-          <LanguageSwitcher />
+          {legacyModulesEnabled ? <LanguageSwitcher /> : null}
           <Link href="/login" className="text-sm text-white/70 transition-colors hover:text-white">{c.nav.login}</Link>
           <Link href="/signup" className="button-primary h-10 min-h-10 px-4">{c.nav.start}</Link>
         </div>
         <div className="flex items-center gap-2 lg:hidden">
-          <LanguageSwitcher />
+          {legacyModulesEnabled ? <LanguageSwitcher /> : null}
           <button type="button" className="p-2" aria-label={open ? c.nav.close : c.nav.menu} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -117,7 +118,9 @@ export function MarketingFooter() {
       <div className="mx-auto grid w-full max-w-6xl gap-12 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
         <div>
           <BrandMark />
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{c.footer.blurb}</p>
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
+            {legacyModulesEnabled ? c.footer.blurb : `${PRODUCT_NAME} houdt klanten, ketels, afspraken en attesten bij.`}
+          </p>
           <a href={`mailto:${BUSINESS.email}`} className="mt-4 inline-flex text-sm text-white/80 hover:text-white">
             {BUSINESS.email}
           </a>
@@ -128,7 +131,7 @@ export function MarketingFooter() {
           ) : null}
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.16em] text-white/45">{c.footer.product}</p>
+          <p className="text-xs uppercase tracking-[0.16em] text-white/45">{legacyModulesEnabled ? c.footer.product : "Pagina's"}</p>
           <ul className="mt-4 space-y-3 text-sm text-white/80">
             {links.map((link) => (
               <li key={link.href}><Link href={link.href} className="hover:text-white">{link.label}</Link></li>
@@ -149,13 +152,9 @@ export function MarketingFooter() {
         ) : null}
       </div>
       <div className="mx-auto mt-12 flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/45">
-        <p>© {new Date().getFullYear()} {BUSINESS.name}. {c.footer.rights}</p>
-        <a
-          href="https://www.ayvwrld.com"
-          className="inline-flex items-center gap-2 text-white/70 hover:text-white"
-        >
-          <Image src={ayvBrand.logo} alt="" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
-          made by AYV Automation
+        <p>© {new Date().getFullYear()} {PRODUCT_NAME}. {c.footer.rights}</p>
+        <a href="https://www.ayvwrld.com" className="text-white/70 hover:text-white">
+          Gemaakt door AYV WRLD
         </a>
         <div className="flex gap-4">
           <Link href="/terms" className="hover:text-white">{c.footer.terms}</Link>

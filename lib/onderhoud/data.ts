@@ -112,11 +112,6 @@ export async function listBoilers(organizationId: string, today: string) {
     .filter((row): row is BoilerListItem => Boolean(row));
 }
 
-export function matchesDueFilter(item: BoilerListItem, window: "30" | "60" | "90") {
-  const allowed = new Set<DueWindow>(window === "30" ? ["overdue", "30"] : window === "60" ? ["overdue", "30", "60"] : ["overdue", "30", "60", "90"]);
-  return (item.maintenanceWindow !== null && allowed.has(item.maintenanceWindow)) || (item.auditWindow !== null && allowed.has(item.auditWindow));
-}
-
 export async function listCustomers(organizationId: string) {
   const supabase = await createClient();
   const { data } = await supabase

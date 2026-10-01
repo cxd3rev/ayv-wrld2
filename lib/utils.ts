@@ -1,3 +1,4 @@
+import { PRODUCT_URL } from "@/config/site";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -41,7 +42,7 @@ export function isSupabaseConfigured() {
   );
 }
 
-const CANONICAL_APP_URL = "https://www.ayvautomation.space";
+const CANONICAL_APP_URL = PRODUCT_URL;
 
 export function safeNextPath(value: string | null | undefined) {
   if (!value || !value.startsWith("/") || value.startsWith("//") || value.includes("\\") || value.includes("://")) {

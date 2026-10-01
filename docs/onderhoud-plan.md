@@ -56,6 +56,12 @@ Kept in the repo, behind the feature flag, not linked when the flag is off:
 - Marketing routes `/automation/*` and `/products/[slug]`
 - Shared module calendar, command-center funnel, and the old follow-up cron
 
+## Branding
+
+`config/site.ts` holds `PRODUCT_NAME`, `PRODUCT_TAGLINE`, and `PRODUCT_URL`. TODO: final name and domain. Working name is AYV Onderhoud. Pages, emails, and metadata read those constants.
+
+This repo is only the installer product. Portfolio pages (`/projects`, `/about`, `/one-man-army`) and the names Kleuro, Rated, and One Man Army stay in the code behind the same feature flag, and 404 when it is off. The only public mention of AYV WRLD is the footer link "Gemaakt door AYV WRLD" to https://www.ayvwrld.com.
+
 ## Not in v1
 
 - French copy. TODO: Flanders is not only Dutch-speaking.

@@ -7,6 +7,7 @@ import {
   addressSchema,
   boilerSchema,
   customerSchema,
+  installationSchema,
   reminderSettingsSchema,
   slotSchema,
   visitSchema,
@@ -16,6 +17,62 @@ import { z } from "zod";
 
 function formObject(formData: FormData) {
   return Object.fromEntries(formData.entries());
+}
+
+export async function createInstallation(formData: FormData) {
+  const parsed = installationSchema.safeParse(formObject(formData));
+  if (!parsed.success) return { ok: false as const, error: zodError(parsed.error) };
+  const { organization } = await requireWorkspace();
+  const supabase = await createClient();
+  const { data: customer, error: customerError } = await supabase
+    .from("onderhoud_customers")
+    .insert({
+      organization_id: organization.id,
+      name: parsed.data.name,
+      email: parsed.data.email,
+      phone: parsed.data.phone,
+    })
+    .select("id")
+    .single();
+  if (customerError || !customer) return { ok: false as const, error: "De klant kon niet worden bewaard." };
+
+  const { data: address, error: addressError } = await supabase
+    .from("onderhoud_addresses")
+    .insert({
+      organization_id: organization.id,
+      customer_id: customer.id,
+      street: parsed.data.street,
+      postal_code: parsed.data.postalCode,
+      municipality: parsed.data.municipality,
+    })
+    .select("id")
+    .single();
+  if (addressError || !address) {
+    await supabase.from("onderhoud_customers").delete().eq("id", customer.id).eq("organization_id", organization.id);
+    return { ok: false as const, error: "Het adres kon niet worden bewaard." };
+  }
+
+  const { error: boilerError } = await supabase.from("onderhoud_boilers").insert({
+    organization_id: organization.id,
+    address_id: address.id,
+    fuel_type: parsed.data.fuel,
+    power_kw: parsed.data.powerKw,
+    brand: parsed.data.brand,
+    model: parsed.data.model,
+    installed_on: parsed.data.installedOn,
+    last_maintenance_on: parsed.data.lastMaintenanceOn,
+    last_audit_on: parsed.data.lastAuditOn,
+    optional_interval_months: parsed.data.optionalIntervalMonths,
+    notes: parsed.data.notes,
+  });
+  if (boilerError) {
+    await supabase.from("onderhoud_customers").delete().eq("id", customer.id).eq("organization_id", organization.id);
+    return { ok: false as const, error: "De ketel kon niet worden bewaard." };
+  }
+
+  revalidatePath("/dashboard/klanten");
+  revalidatePath("/dashboard");
+  return { ok: true as const };
 }
 
 export async function createCustomer(formData: FormData) {

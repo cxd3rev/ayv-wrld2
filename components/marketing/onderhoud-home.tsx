@@ -1,4 +1,5 @@
 import { ONDERHOUD_MONTHLY_PRICE_EUR, ONDERHOUD_TRIAL_DAYS } from "@/config/onderhoud";
+import { PRODUCT_NAME, PRODUCT_TAGLINE } from "@/config/site";
 import { BUSINESS } from "@/lib/business";
 import Link from "next/link";
 
@@ -16,9 +17,9 @@ export function OnderhoudHome() {
     <main id="main-content">
       <section className="mx-auto max-w-6xl px-6 pb-20 pt-24">
         <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">Voor verwarmingsinstallateurs in Vlaanderen</p>
-        <h1 className="display mt-6 max-w-3xl text-5xl tracking-tight sm:text-6xl">Wettelijke onderhoudsdatums, zonder ze zelf bij te houden.</h1>
+        <h1 className="display mt-6 max-w-3xl text-5xl tracking-tight sm:text-6xl">{PRODUCT_TAGLINE}</h1>
         <p className="mt-6 max-w-2xl text-lg text-muted">
-          Papieren lijsten en spreadsheets missen een stookolieketel die elk jaar moet, of een gasketel die om de twee jaar moet. AYV Onderhoud berekent de volgende datum per ketel, herinnert de klant, en houdt het attest bij.
+          Papieren lijsten en spreadsheets missen een stookolieketel die elk jaar moet, of een gasketel die om de twee jaar moet. {PRODUCT_NAME} berekent de volgende datum per ketel, herinnert de klant, en houdt het attest bij.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/signup" className="button-primary">Start</Link>
@@ -44,7 +45,7 @@ export function OnderhoudHome() {
       <section id="prijs" className="mx-auto max-w-6xl px-6 py-16">
         <h2 className="display text-3xl">Eén plan</h2>
         <p className="mt-4 text-4xl font-medium">{price}</p>
-        <p className="mt-2 text-sm text-muted">Btw niet inbegrepen. Eerste abonnement: {ONDERHOUD_TRIAL_DAYS} dagen proef. TODO: het maandbedrag is nog niet vastgelegd.</p>
+        <p className="mt-2 text-sm text-muted">Btw niet inbegrepen. Eerste abonnement: {ONDERHOUD_TRIAL_DAYS} dagen proef. Het maandbedrag wordt nog vastgelegd.</p>
       </section>
 
       <section id="contact" className="mx-auto max-w-6xl px-6 py-16">

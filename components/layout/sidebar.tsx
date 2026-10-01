@@ -1,11 +1,12 @@
 "use client";
 
-import { Box, CalendarDays, CreditCard, LayoutDashboard, Menu, Settings, X } from "lucide-react";
+import { Box, CalendarDays, CreditCard, LayoutDashboard, Menu, Settings, Users, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { automationBrand } from "@/config/brands";
+import { PRODUCT_NAME } from "@/config/site";
 import { dashboardNav } from "@/config/navigation";
 import { ProductIcon } from "@/components/product-icon";
 import Image from "next/image";
@@ -21,6 +22,7 @@ const icons = {
   layout: LayoutDashboard,
   calendar: CalendarDays,
   box: Box,
+  users: Users,
   settings: Settings,
   card: CreditCard,
 };
@@ -80,7 +82,7 @@ export function Sidebar({
         <div className="mb-10 flex items-center justify-between">
           <Link href="/dashboard" className="inline-flex items-center gap-2.5">
             <Image src={automationBrand.logo} alt="" width={32} height={32} className="h-8 w-8 object-contain" />
-            <span className="text-sm font-semibold tracking-tight">AYV workspace</span>
+            <span className="text-sm font-semibold tracking-tight">{PRODUCT_NAME}</span>
           </Link>
           <button
             type="button"
@@ -104,7 +106,7 @@ export function Sidebar({
               }))
             : [
                 { href: "/dashboard", icon: "layout" as const, label: "Overzicht" },
-                { href: "/dashboard/klanten", icon: "box" as const, label: "Klanten" },
+                { href: "/dashboard/klanten", icon: "users" as const, label: "Klanten" },
                 { href: "/dashboard/afspraken", icon: "calendar" as const, label: "Afspraken" },
                 { href: "/dashboard/settings", icon: "settings" as const, label: "Instellingen" },
                 { href: "/dashboard/billing", icon: "card" as const, label: "Facturatie" },
@@ -160,13 +162,20 @@ export function Sidebar({
           </label>
         ) : null}
 
-        <div className="flex items-center gap-3 border-t border-white/10 pt-5">
-          <ProductIcon product={activeProduct} size={32} className="h-8 w-8" />
-          <div>
-            <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">{t("common.currentProduct")}</p>
-            <p className="mt-1 text-sm font-medium">{activeProduct.name}</p>
+        {legacyModulesEnabled ? (
+          <div className="flex items-center gap-3 border-t border-white/10 pt-5">
+            <ProductIcon product={activeProduct} size={32} className="h-8 w-8" />
+            <div>
+              <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">{t("common.currentProduct")}</p>
+              <p className="mt-1 text-sm font-medium">{activeProduct.name}</p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="border-t border-white/10 pt-5">
+            <p className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">Bedrijf</p>
+            <p className="mt-1 truncate text-sm font-medium">{organization.name}</p>
+          </div>
+        )}
       </aside>
     </>
   );

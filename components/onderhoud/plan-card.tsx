@@ -1,6 +1,7 @@
 "use client";
 
 import { ONDERHOUD_MONTHLY_PRICE_EUR, ONDERHOUD_TRIAL_DAYS } from "@/config/onderhoud";
+import { PRODUCT_NAME } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -11,10 +12,10 @@ export function OnderhoudPlanCard({ stripeReady }: { stripeReady: boolean }) {
 
   return (
     <article className="workspace-card max-w-lg p-6">
-      <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">AYV Onderhoud</p>
+      <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">{PRODUCT_NAME}</p>
       <p className="display mt-4 text-4xl">{price}</p>
       <p className="mt-3 text-sm text-muted">Eén plan. Eerste abonnement start met {ONDERHOUD_TRIAL_DAYS} dagen proef.</p>
-      <p className="mt-2 text-xs text-muted">TODO: het maandbedrag is nog niet vastgelegd.</p>
+      <p className="mt-2 text-xs text-muted">Het maandbedrag wordt nog vastgelegd.</p>
       {error ? <p className="mt-3 text-sm text-danger">{error}</p> : null}
       <Button
         className="mt-6"

@@ -1,3 +1,4 @@
+import { legacyModulesEnabled } from "@/config/features";
 import { Atmosphere } from "@/components/atmosphere";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
@@ -22,10 +23,10 @@ export function AuthShell({
         href="/"
         className="absolute top-8 left-6 z-20 text-sm text-foreground/55 hover:text-foreground lg:left-12"
       >
-        {t("backHome")}
+        {legacyModulesEnabled ? t("backHome") : "← Start"}
       </Link>
       <div className="absolute top-8 right-6 z-20 lg:right-12">
-        <LanguageSwitcher />
+        {legacyModulesEnabled ? <LanguageSwitcher /> : null}
       </div>
       <div className="arch-grid opacity-40" />
       <div className="flex min-h-screen flex-col items-center justify-center px-4 py-24">
