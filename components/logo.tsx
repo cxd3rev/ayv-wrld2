@@ -1,29 +1,18 @@
 import Image from "next/image";
-import { ayvBrand } from "@/config/brands";
+import { automationBrand } from "@/config/brands";
 import { cn } from "@/lib/utils";
 
-export function Logo({
-  className,
-  markOnly,
-}: {
-  className?: string;
-  markOnly?: boolean;
-}) {
+export function Logo({ className }: { className?: string }) {
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <Image
-        src={ayvBrand.icon}
-        alt={markOnly ? ayvBrand.name : ""}
-        width={32}
-        height={32}
-        className="h-8 w-8 rounded-md object-contain"
+        src={automationBrand.logo}
+        alt="AYV Automation"
+        width={40}
+        height={40}
+        className="h-10 w-10 object-contain"
         priority
       />
-      {markOnly ? null : (
-        <span className="font-mono text-sm uppercase tracking-[0.2em] text-foreground">
-          {ayvBrand.name}
-        </span>
-      )}
     </span>
   );
 }

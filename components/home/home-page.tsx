@@ -100,7 +100,7 @@ export function HomePage({ locale }: { locale: AppLocale }) {
             <p>© {new Date().getFullYear()} {BUSINESS.name}. {c.footer.rights}</p>
             <a href={`mailto:${BUSINESS.email}`} className="hover:text-black">{BUSINESS.email}</a>
             <a href="https://www.ayvwrld.com" className="inline-flex items-center gap-2 hover:text-black">
-              <img src={ayvBrand.logo} alt="" width={18} height={18} className="h-[18px] w-[18px] object-contain grayscale" />
+              <img src={ayvBrand.logo} alt="" width={28} height={28} className="h-7 w-7 object-contain brightness-0" />
               made by ayvwrld
             </a>
             <div className="flex gap-4">
