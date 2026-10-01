@@ -177,8 +177,7 @@ export function AvyroLeadsWorkspace({
           <Label htmlFor="followUpOn">{t("followUpOn")}</Label>
           <Input id="followUpOn" name="followUpOn" type="date" />
         </div>
-        <div className="md:col-span-2">
-          <AdvancedPanel label={tCommon("advanced")}>
+        <AdvancedPanel inline label={tCommon("advanced")}>
             <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
@@ -209,7 +208,6 @@ export function AvyroLeadsWorkspace({
               </div>
             ) : null}
           </AdvancedPanel>
-        </div>
         <div className="flex flex-col gap-4 md:col-span-2">
           <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
           <ActionFeedback message={saved} />
