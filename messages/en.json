@@ -208,8 +208,8 @@
   "auth": {
     "kicker": "Account",
     "loginTitle": "Welcome back",
-    "loginDescription": "Log in to your AYV WRLD workspace.",
-    "signupTitle": "Create an AYV WRLD account",
+    "loginDescription": "Log in to your AYV Automation workspace.",
+    "signupTitle": "Create an AYV Automation account",
     "signupDescription": "Start with a workspace. Avyro will plug in later.",
     "forgotTitle": "Reset password",
     "forgotDescription": "We'll email you a link to choose a new password.",

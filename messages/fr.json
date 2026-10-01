@@ -208,8 +208,8 @@
   "auth": {
     "kicker": "Compte",
     "loginTitle": "Bon retour",
-    "loginDescription": "Connectez-vous à votre espace AYV WRLD.",
-    "signupTitle": "Créer un compte AYV WRLD",
+    "loginDescription": "Connectez-vous à votre espace AYV Automation.",
+    "signupTitle": "Créer un compte AYV Automation",
     "signupDescription": "Commencez par un espace de travail. Avyro s'y branchera ensuite.",
     "forgotTitle": "Réinitialiser le mot de passe",
     "forgotDescription": "Nous vous enverrons un lien pour choisir un nouveau mot de passe.",

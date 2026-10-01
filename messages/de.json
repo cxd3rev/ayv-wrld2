@@ -208,8 +208,8 @@
   "auth": {
     "kicker": "Konto",
     "loginTitle": "Willkommen zurück",
-    "loginDescription": "Melden Sie sich in Ihrem AYV-WRLD-Arbeitsbereich an.",
-    "signupTitle": "AYV-WRLD-Konto erstellen",
+    "loginDescription": "Melden Sie sich in Ihrem AYV-Automation-Arbeitsbereich an.",
+    "signupTitle": "AYV-Automation-Konto erstellen",
     "signupDescription": "Starten Sie mit einem Arbeitsbereich. Avyro kommt später dazu.",
     "forgotTitle": "Passwort zurücksetzen",
     "forgotDescription": "Wir senden Ihnen einen Link, um ein neues Passwort zu wählen.",

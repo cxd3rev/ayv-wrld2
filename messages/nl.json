@@ -208,8 +208,8 @@
   "auth": {
     "kicker": "Account",
     "loginTitle": "Welkom terug",
-    "loginDescription": "Log in op uw AYV WRLD-werkruimte.",
-    "signupTitle": "AYV WRLD-account aanmaken",
+    "loginDescription": "Log in op uw AYV Automation-werkruimte.",
+    "signupTitle": "AYV Automation-account aanmaken",
     "signupDescription": "Begin met een werkruimte. Avyro sluit later aan.",
     "forgotTitle": "Wachtwoord resetten",
     "forgotDescription": "We mailen u een link om een nieuw wachtwoord te kiezen.",
