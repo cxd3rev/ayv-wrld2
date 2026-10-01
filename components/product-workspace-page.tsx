@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/page-header";
 import { getProduct } from "@/config/products";
 import { resolveRecordPrefill, type RecordProduct } from "@/lib/record-entities";
@@ -83,7 +82,6 @@ export async function ProductWorkspacePage({
         <PageHeader
           title={product.dashboard.title}
           description={t(`catalog.${product.id}.dashboardDescription`)}
-          action={<Badge tone="accent">{t(`catalog.${product.id}.tagline`)}</Badge>}
         />
       </div>
 

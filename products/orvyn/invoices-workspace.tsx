@@ -3,6 +3,7 @@
 import { ConnectedRecords, IncomingLinkFields } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ActionFeedback, AdvancedPanel, PrimaryAction } from "@/components/workspace/simple-action";
 import { DashboardCard } from "@/components/ui/dashboard-card";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -97,6 +98,7 @@ export function OrvynInvoicesWorkspace({
   const { toast } = useToast();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [saved, setSaved] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const today = todayIsoDate();
@@ -146,6 +148,7 @@ export function OrvynInvoicesWorkspace({
       setError(result.error);
       return;
     }
+    setSaved(t("added"));
     toast({ title: t("added"), tone: "success" });
     (document.getElementById("orvyn-add-invoice") as HTMLFormElement | null)?.reset();
     router.refresh();
@@ -153,22 +156,7 @@ export function OrvynInvoicesWorkspace({
 
   return (
     <div>
-      <div className="grid gap-3 sm:grid-cols-4">
-        <DashboardCard title={t("open")} value={String(counts.open)} hint={t("openHint")} />
-        <DashboardCard title={t("overdue")} value={String(counts.overdue)} hint={t("overdueHint")} />
-        <DashboardCard title={t("paid")} value={String(counts.paid)} hint={t("paidHint")} />
-        <DashboardCard
-          title={t("outstanding")}
-          value={counts.outstanding.length
-            ? counts.outstanding.map(([currency, amount]) =>
-                new Intl.NumberFormat(locale, { style: "currency", currency }).format(amount),
-              ).join(" · ")
-            : "—"}
-          hint={t("outstandingHint")}
-        />
-      </div>
-
-      <form id="orvyn-add-invoice" action={onAdd} className="workspace-card mt-10 grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-4">
+      <form id="orvyn-add-invoice" action={onAdd} className="workspace-card grid gap-6 p-6 sm:p-8 md:grid-cols-2">
         <div className="md:col-span-2 lg:col-span-4">
           <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("addInvoice")}</p>
@@ -219,21 +207,40 @@ export function OrvynInvoicesWorkspace({
           <Label htmlFor="notes">{t("notes")}</Label>
           <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
         </div>
-        <div className="md:col-span-2 lg:col-span-4 flex items-center justify-between gap-4">
+        <div className="md:col-span-2">
+          <AdvancedPanel label={tCommon("advanced")}>
+            <div className="grid gap-3 sm:grid-cols-4">
+              <DashboardCard title={t("open")} value={String(counts.open)} hint={t("openHint")} />
+              <DashboardCard title={t("overdue")} value={String(counts.overdue)} hint={t("overdueHint")} />
+              <DashboardCard title={t("paid")} value={String(counts.paid)} hint={t("paidHint")} />
+              <DashboardCard
+                title={t("outstanding")}
+                value={counts.outstanding.length
+                  ? counts.outstanding.map(([currency, amount]) =>
+                      new Intl.NumberFormat(locale, { style: "currency", currency }).format(amount),
+                    ).join(" · ")
+                  : "—"}
+                hint={t("outstandingHint")}
+              />
+            </div>
+            {invoices.length ? (
+              <div className="max-w-sm">
+                <Label htmlFor="orvyn-search">{tCommon("searchRecords")}</Label>
+                <Input id="orvyn-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
+              </div>
+            ) : null}
+          </AdvancedPanel>
+        </div>
+        <div className="flex flex-col gap-4 md:col-span-2">
           <FormError message={error} />
-          <Button type="submit" disabled={pending}>{pending ? t("adding") : t("add")}</Button>
+          <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
+          <ActionFeedback message={saved} />
         </div>
       </form>
 
-      <div className="mt-8">
-        {invoices.length ? (
-          <div className="mb-4 max-w-sm">
-            <Label htmlFor="orvyn-search">{tCommon("searchRecords")}</Label>
-            <Input id="orvyn-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
-          </div>
-        ) : null}
+      <div className="mt-12">
         {invoices.length === 0 ? (
-          <EmptyState title={t("emptyTitle")} description={t("emptyBody")} />
+          <EmptyState className="py-20" title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <Table>
             <THead><TR><TH>{t("colInvoice")}</TH><TH>{t("colAmount")}</TH><TH>{t("colStatus")}</TH><TH>{t("colDates")}</TH><TH>{t("colReminder")}</TH><TH>{t("colConnected")}</TH><TH className="text-right"> </TH></TR></THead>

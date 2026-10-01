@@ -32,7 +32,8 @@
     "notifications": "Notifications",
     "new": "New",
     "optional": "Optional",
-    "searchRecords": "Search records"
+    "searchRecords": "Search",
+    "advanced": "Advanced"
   },
   "language": {
     "label": "Language",

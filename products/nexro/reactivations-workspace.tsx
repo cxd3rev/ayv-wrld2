@@ -10,6 +10,7 @@ import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
+import { ActionFeedback, AdvancedPanel } from "@/components/workspace/simple-action";
 import { useToast } from "@/hooks/use-toast";
 import { buildNexroPeople, type NexroDetail } from "@/lib/nexro-customers";
 import { recordProductName, type RecordPrefill } from "@/lib/record-entities";
@@ -100,6 +101,7 @@ export function NexroReactivationsWorkspace({
   const { toast } = useToast();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [notice, setNotice] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [offer, setOffer] = useState("");
@@ -234,6 +236,7 @@ export function NexroReactivationsWorkspace({
       consentDate: consentDate[person.key] ?? "",
     });
     setPendingKey(null);
+    if (result.ok) setNotice(t("sentEmail"));
     toast({
       title: result.ok ? t("sentEmail") : result.error,
       tone: result.ok ? "success" : "error",
@@ -250,34 +253,19 @@ export function NexroReactivationsWorkspace({
       setError(result.error);
       return;
     }
-    toast({ title: result.sent ? t("sentEmail") : t("added"), tone: "success" });
+    const savedMessage = result.sent ? t("sentEmail") : t("added");
+    setNotice(savedMessage);
+    toast({ title: savedMessage, tone: "success" });
     (document.getElementById("nexro-add") as HTMLFormElement | null)?.reset();
     router.refresh();
   }
 
   return (
     <div>
-      <div className="grid gap-3 sm:grid-cols-4">
-        <DashboardCard title={t("scheduled")} value={String(counts.scheduled)} hint={t("scheduledHint")} />
-        <DashboardCard title={t("sent")} value={String(counts.sent)} hint={t("sentHint")} />
-        <DashboardCard title={t("won")} value={String(counts.won)} hint={t("wonHint")} />
-        <DashboardCard title={t("referrals")} value={String(counts.referrals)} hint={t("referralsHint")} />
-      </div>
-
-      <section className="workspace-card mt-10 p-4">
+      <section className="workspace-card p-6 sm:p-8">
         <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("readyTitle")}</p>
         <p className="mt-2 max-w-2xl text-sm text-muted">{t("readyHelp")}</p>
         <p className="mt-1 text-xs text-muted">{t("fromName", { name: organizationName })}</p>
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <div>
-            <Label htmlFor="nexro-offer">{t("offer")}</Label>
-            <Input id="nexro-offer" value={offer} onChange={(event) => setOffer(event.target.value)} placeholder={t("offerPlaceholder")} />
-          </div>
-          <div>
-            <Label htmlFor="nexro-reward">{t("reward")}</Label>
-            <Input id="nexro-reward" value={reward} onChange={(event) => setReward(event.target.value)} placeholder={t("rewardPlaceholder")} />
-          </div>
-        </div>
         {people.ready.length === 0 ? (
           <p className="mt-4 text-sm text-muted">{t("noneReady")}</p>
         ) : (
@@ -295,13 +283,14 @@ export function NexroReactivationsWorkspace({
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {person.situation === "winback" ? (
-                    <Button size="sm" disabled={pendingKey === `winback:${person.key}`} onClick={() => contactPerson(person.key, "winback")}>
+                    <Button size="lg" className="h-14" disabled={pendingKey === `winback:${person.key}`} onClick={() => contactPerson(person.key, "winback")}>
                       {pendingKey === `winback:${person.key}` ? t("sending") : t("sendWinback")}
                     </Button>
-                  ) : null}
-                  <Button size="sm" variant="secondary" disabled={!knownContact(person.email) || pendingKey === `referral:${person.key}`} onClick={() => contactPerson(person.key, "referral")}>
-                    {pendingKey === `referral:${person.key}` ? t("sending") : t("askReferral")}
-                  </Button>
+                  ) : (
+                    <Button size="lg" className="h-14" disabled={!knownContact(person.email) || pendingKey === `referral:${person.key}`} onClick={() => contactPerson(person.key, "referral")}>
+                      {pendingKey === `referral:${person.key}` ? t("sending") : t("askReferral")}
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}
@@ -324,7 +313,7 @@ export function NexroReactivationsWorkspace({
                   </p>
                   {relationshipFields(person.key)}
                 </div>
-                <Button size="sm" disabled={pendingKey === `winback:${person.key}`} onClick={() => contactPerson(person.key, "winback")}>
+                <Button size="lg" className="h-14" disabled={pendingKey === `winback:${person.key}`} onClick={() => contactPerson(person.key, "winback")}>
                   {pendingKey === `winback:${person.key}` ? t("sending") : t("sendWinback")}
                 </Button>
               </div>
@@ -421,30 +410,47 @@ export function NexroReactivationsWorkspace({
           <Label htmlFor="notes">{t("notes")}</Label>
           <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
         </div>
-        <div className="md:col-span-2 lg:col-span-4 flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-4 md:col-span-2 lg:col-span-4">
           <FormError message={error} />
-          <div className="flex flex-wrap justify-end gap-2">
-            <Button type="submit" name="intent" value="save" variant="secondary" disabled={pending}>{t("saveOnly")}</Button>
-            <Button type="submit" name="intent" value="send" disabled={pending}>{pending ? t("sending") : t("sendEmail")}</Button>
-          </div>
+          <Button type="submit" name="intent" value="send" size="lg" className="h-14 w-full text-base" disabled={pending}>{pending ? t("sending") : t("sendEmail")}</Button>
+          <ActionFeedback message={notice} />
         </div>
       </form>
 
-      <div className="mt-8">
+      <AdvancedPanel label={tCommon("advanced")}>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <Label htmlFor="nexro-offer">{t("offer")}</Label>
+            <Input id="nexro-offer" value={offer} onChange={(event) => setOffer(event.target.value)} placeholder={t("offerPlaceholder")} />
+          </div>
+          <div>
+            <Label htmlFor="nexro-reward">{t("reward")}</Label>
+            <Input id="nexro-reward" value={reward} onChange={(event) => setReward(event.target.value)} placeholder={t("rewardPlaceholder")} />
+          </div>
+        </div>
+        {people.ready.filter((person) => person.situation === "winback").map((person) => (
+          <Button key={person.key} type="button" variant="secondary" disabled={!knownContact(person.email) || pendingKey === `referral:${person.key}`} onClick={() => contactPerson(person.key, "referral")}>
+            {person.name}: {pendingKey === `referral:${person.key}` ? t("sending") : t("askReferral")}
+          </Button>
+        ))}
+        <Button type="submit" form="nexro-add" name="intent" value="save" variant="secondary" disabled={pending}>{t("saveOnly")}</Button>
+        <div className="grid gap-3 sm:grid-cols-4">
+          <DashboardCard title={t("scheduled")} value={String(counts.scheduled)} hint={t("scheduledHint")} />
+          <DashboardCard title={t("sent")} value={String(counts.sent)} hint={t("sentHint")} />
+          <DashboardCard title={t("won")} value={String(counts.won)} hint={t("wonHint")} />
+          <DashboardCard title={t("referrals")} value={String(counts.referrals)} hint={t("referralsHint")} />
+        </div>
         {reactivations.length ? (
-          <div className="mb-4 max-w-sm">
+          <div className="max-w-sm">
             <Label htmlFor="nexro-search">{tCommon("searchRecords")}</Label>
-            <Input
-              id="nexro-search"
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={t("searchPlaceholder")}
-            />
+            <Input id="nexro-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
           </div>
         ) : null}
+      </AdvancedPanel>
+
+      <div className="mt-12">
         {reactivations.length === 0 ? (
-          <EmptyState title={t("emptyTitle")} description={t("emptyBody")} />
+          <EmptyState className="py-20" title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <Table>
             <THead>

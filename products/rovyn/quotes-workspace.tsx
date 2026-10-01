@@ -6,6 +6,7 @@ import {
 } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ActionFeedback, AdvancedPanel, PrimaryAction } from "@/components/workspace/simple-action";
 import { DashboardCard } from "@/components/ui/dashboard-card";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -114,6 +115,7 @@ export function RovynQuotesWorkspace({
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [saved, setSaved] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
 
@@ -152,6 +154,7 @@ export function RovynQuotesWorkspace({
       setError(result.error ?? "Could not add this quote.");
       return;
     }
+    setSaved(t("added"));
     toast({ title: t("added"), tone: "success" });
     (document.getElementById("rovyn-add-quote") as HTMLFormElement | null)?.reset();
     router.refresh();
@@ -159,17 +162,10 @@ export function RovynQuotesWorkspace({
 
   return (
     <div>
-      <div className="grid gap-3 sm:grid-cols-4">
-        <DashboardCard title={t("sent")} value={String(counts.sent)} hint={t("sentHint")} />
-        <DashboardCard title={t("followedUp")} value={String(counts.followedUp)} hint={t("followedUpHint")} />
-        <DashboardCard title={t("won")} value={String(counts.won)} hint={t("wonHint")} />
-        <DashboardCard title={t("due")} value={String(counts.due)} hint={t("dueHint")} />
-      </div>
-
       <form
         id="rovyn-add-quote"
         action={onAdd}
-        className="workspace-card mt-10 grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-4"
+        className="workspace-card grid gap-6 p-6 sm:p-8 md:grid-cols-2"
       >
         <div className="md:col-span-2 lg:col-span-4">
           <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
@@ -247,28 +243,34 @@ export function RovynQuotesWorkspace({
           <Label htmlFor="notes">{t("notes")}</Label>
           <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
         </div>
-        <div className="flex items-end">
-          <Button type="submit" disabled={pending} className="w-full">
-            {pending ? t("adding") : t("add")}
-          </Button>
+        <div className="md:col-span-2">
+          <AdvancedPanel label={tCommon("advanced")}>
+            <div className="grid gap-3 sm:grid-cols-4">
+              <DashboardCard title={t("sent")} value={String(counts.sent)} hint={t("sentHint")} />
+              <DashboardCard title={t("followedUp")} value={String(counts.followedUp)} hint={t("followedUpHint")} />
+              <DashboardCard title={t("won")} value={String(counts.won)} hint={t("wonHint")} />
+              <DashboardCard title={t("due")} value={String(counts.due)} hint={t("dueHint")} />
+            </div>
+            {quotes.length ? (
+              <div className="max-w-sm">
+                <Label htmlFor="rovyn-search">{tCommon("searchRecords")}</Label>
+                <Input id="rovyn-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
+              </div>
+            ) : null}
+          </AdvancedPanel>
+        </div>
+        <div className="flex flex-col gap-4 md:col-span-2">
+          <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
+          <ActionFeedback message={saved} />
         </div>
         <div className="md:col-span-2 lg:col-span-4">
           <FormError message={error} />
         </div>
       </form>
 
-      <div className="mt-8">
-        {quotes.length ? (
-          <div className="mb-4 max-w-sm">
-            <Label htmlFor="rovyn-search">{tCommon("searchRecords")}</Label>
-            <Input id="rovyn-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
-          </div>
-        ) : null}
+      <div className="mt-12">
         {quotes.length === 0 ? (
-          <EmptyState
-            title={t("emptyTitle")}
-            description={t("emptyBody")}
-          />
+          <EmptyState className="py-20" title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <Table>
             <THead>

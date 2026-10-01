@@ -32,7 +32,8 @@
     "notifications": "Meldingen",
     "new": "Nieuw",
     "optional": "Optioneel",
-    "searchRecords": "Records doorzoeken"
+    "searchRecords": "Zoeken",
+    "advanced": "Geavanceerd"
   },
   "language": {
     "label": "Taal",

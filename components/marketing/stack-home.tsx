@@ -1,3 +1,4 @@
+import { ModuleCard } from "@/components/marketing/module-card";
 import { automationBrand } from "@/config/brands";
 import { formatPrice, products } from "@/config/products";
 import { getStackCopy, stackMarketing } from "@/config/stack-marketing";
@@ -89,28 +90,19 @@ export function StackHome({ locale }: { locale: AppLocale }) {
           <h2 className="display mt-4 text-4xl sm:text-5xl">{c.modules.title}</h2>
           <p className="mt-4 text-lg leading-relaxed text-white/65">{c.modules.body}</p>
         </div>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
           {products.map((product) => {
-            const Icon = moduleIcons[product.id];
             const marketing = c.moduleCopy[product.id];
             return (
-              <article key={product.id} className="glass-card flex min-h-64 flex-col justify-between rounded-3xl p-6">
-                <div>
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="mt-6 text-2xl font-semibold">{stackMarketing[product.id].name}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/65">{marketing.line}</p>
-                  <ul className="mt-4 space-y-2 text-sm text-white/75">
-                    {marketing.features.slice(0, 3).map((feature) => (
-                      <li key={feature} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0" />{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-                <Link href={product.marketingRoute} className="mt-8 inline-flex text-sm font-medium text-white/90 hover:text-white">
-                  {c.modules.learn}
-                </Link>
-              </article>
+              <ModuleCard
+                key={product.id}
+                name={stackMarketing[product.id].name}
+                line={marketing.line}
+                features={marketing.features}
+                href={product.marketingRoute}
+                learn={c.modules.learn}
+                icon={moduleIcons[product.id]}
+              />
             );
           })}
         </div>

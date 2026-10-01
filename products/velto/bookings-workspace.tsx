@@ -7,6 +7,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DashboardCard } from "@/components/ui/dashboard-card";
+import { ActionFeedback, AdvancedPanel, PrimaryAction } from "@/components/workspace/simple-action";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
@@ -128,6 +129,7 @@ export function VeltoBookingsWorkspace({
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [saved, setSaved] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
 
@@ -171,6 +173,7 @@ export function VeltoBookingsWorkspace({
       setError(result.error ?? "Could not add this booking.");
       return;
     }
+    setSaved(t("added"));
     toast({ title: t("added"), tone: "success" });
     (document.getElementById("velto-add-booking") as HTMLFormElement | null)?.reset();
     router.refresh();
@@ -178,17 +181,10 @@ export function VeltoBookingsWorkspace({
 
   return (
     <div>
-      <div className="grid gap-3 sm:grid-cols-4">
-        <DashboardCard title={t("upcoming")} value={String(counts.upcoming)} hint={t("upcomingHint")} />
-        <DashboardCard title={t("reminders")} value={String(counts.reminders)} hint={t("remindersHint")} />
-        <DashboardCard title={t("completed")} value={String(counts.completed)} hint={t("completedHint")} />
-        <DashboardCard title={t("missed")} value={String(counts.missed)} hint={t("missedHint")} />
-      </div>
-
       <form
         id="velto-add-booking"
         action={onAdd}
-        className="workspace-card mt-10 grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-4"
+        className="workspace-card grid gap-6 p-6 sm:p-8 md:grid-cols-2"
       >
         <div className="md:col-span-2 lg:col-span-4">
           <IncomingLinkFields
@@ -241,66 +237,64 @@ export function VeltoBookingsWorkspace({
           />
         </div>
         <div>
-          <Label htmlFor="phone">{t("phone")}</Label>
-          <Input
-            id="phone"
-            name="phone"
-            type="tel"
-            placeholder={tCommon("optional")}
-            defaultValue={prefill?.phone ?? ""}
-          />
-        </div>
-        <div>
           <Label htmlFor="reminderOn">{t("remindOn")}</Label>
           <Input id="reminderOn" name="reminderOn" type="date" />
         </div>
-        <div>
-          <Label htmlFor="leadId">{t("avyroLead")}</Label>
-          <Select
-            id="leadId"
-            name="leadId"
-            defaultValue={fromLead?.id ?? ""}
-            onChange={(event) => {
-              const form = event.currentTarget.form;
-              const lead = leads.find((item) => item.id === event.target.value);
-              if (!form || !lead) return;
-              fillLeadFields(form, lead);
-            }}
-          >
-            <option value="">{t("noLinkedLead")}</option>
-            {leads.map((lead) => (
-              <option key={lead.id} value={lead.id}>
-                {lead.name}
-              </option>
-            ))}
-          </Select>
+        <div className="md:col-span-2">
+          <AdvancedPanel label={tCommon("advanced")}>
+            <div>
+              <Label htmlFor="phone">{t("phone")}</Label>
+              <Input id="phone" name="phone" type="tel" placeholder={tCommon("optional")} defaultValue={prefill?.phone ?? ""} />
+            </div>
+            <div>
+              <Label htmlFor="leadId">{t("avyroLead")}</Label>
+              <Select
+                id="leadId"
+                name="leadId"
+                defaultValue={fromLead?.id ?? ""}
+                onChange={(event) => {
+                  const form = event.currentTarget.form;
+                  const lead = leads.find((item) => item.id === event.target.value);
+                  if (!form || !lead) return;
+                  fillLeadFields(form, lead);
+                }}
+              >
+                <option value="">{t("noLinkedLead")}</option>
+                {leads.map((lead) => (
+                  <option key={lead.id} value={lead.id}>{lead.name}</option>
+                ))}
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="notes">{t("notes")}</Label>
+              <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
+            </div>
+            <div className="grid gap-3 sm:grid-cols-4">
+              <DashboardCard title={t("upcoming")} value={String(counts.upcoming)} hint={t("upcomingHint")} />
+              <DashboardCard title={t("reminders")} value={String(counts.reminders)} hint={t("remindersHint")} />
+              <DashboardCard title={t("completed")} value={String(counts.completed)} hint={t("completedHint")} />
+              <DashboardCard title={t("missed")} value={String(counts.missed)} hint={t("missedHint")} />
+            </div>
+            {bookings.length ? (
+              <div className="max-w-sm">
+                <Label htmlFor="velto-search">{tCommon("searchRecords")}</Label>
+                <Input id="velto-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
+              </div>
+            ) : null}
+          </AdvancedPanel>
         </div>
-        <div className="md:col-span-2 lg:col-span-3">
-          <Label htmlFor="notes">{t("notes")}</Label>
-          <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
-        </div>
-        <div className="flex items-end">
-          <Button type="submit" disabled={pending} className="w-full">
-            {pending ? t("adding") : t("add")}
-          </Button>
+        <div className="flex flex-col gap-4 md:col-span-2">
+          <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
+          <ActionFeedback message={saved} />
         </div>
         <div className="md:col-span-2 lg:col-span-4">
           <FormError message={error} />
         </div>
       </form>
 
-      <div className="mt-8">
-        {bookings.length ? (
-          <div className="mb-4 max-w-sm">
-            <Label htmlFor="velto-search">{tCommon("searchRecords")}</Label>
-            <Input id="velto-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
-          </div>
-        ) : null}
+      <div className="mt-12">
         {bookings.length === 0 ? (
-          <EmptyState
-            title={t("emptyTitle")}
-            description={t("emptyBody")}
-          />
+          <EmptyState className="py-20" title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <Table>
             <THead>

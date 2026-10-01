@@ -3,6 +3,7 @@
 import { ConnectedRecords, IncomingLinkFields } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ActionFeedback, AdvancedPanel, PrimaryAction } from "@/components/workspace/simple-action";
 import { DashboardCard } from "@/components/ui/dashboard-card";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -97,6 +98,7 @@ export function RaveloReviewsWorkspace({
   const { toast } = useToast();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [saved, setSaved] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
 
@@ -137,6 +139,7 @@ export function RaveloReviewsWorkspace({
       setError(result.error);
       return;
     }
+    setSaved(t("added"));
     toast({ title: t("added"), tone: "success" });
     (document.getElementById("ravelo-add") as HTMLFormElement | null)?.reset();
     router.refresh();
@@ -144,14 +147,7 @@ export function RaveloReviewsWorkspace({
 
   return (
     <div>
-      <div className="grid gap-3 sm:grid-cols-4">
-        <DashboardCard title={t("scheduled")} value={String(counts.scheduled)} hint={t("scheduledHint")} />
-        <DashboardCard title={t("requested")} value={String(counts.requested)} hint={t("requestedHint")} />
-        <DashboardCard title={t("publicReviews")} value={String(counts.publicReviews)} hint={t("publicHint")} />
-        <DashboardCard title={t("privateFeedback")} value={String(counts.privateFeedback)} hint={t("privateHint")} />
-      </div>
-
-      <form id="ravelo-add" action={onAdd} className="workspace-card mt-10 grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-4">
+      <form id="ravelo-add" action={onAdd} className="workspace-card grid gap-6 p-6 sm:p-8 md:grid-cols-2">
         <div className="md:col-span-2 lg:col-span-4">
           <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("addReview")}</p>
@@ -205,27 +201,32 @@ export function RaveloReviewsWorkspace({
           <Label htmlFor="notes">{t("notes")}</Label>
           <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
         </div>
-        <div className="md:col-span-2 lg:col-span-4 flex items-center justify-between gap-4">
+        <div className="md:col-span-2">
+          <AdvancedPanel label={tCommon("advanced")}>
+            <div className="grid gap-3 sm:grid-cols-4">
+              <DashboardCard title={t("scheduled")} value={String(counts.scheduled)} hint={t("scheduledHint")} />
+              <DashboardCard title={t("requested")} value={String(counts.requested)} hint={t("requestedHint")} />
+              <DashboardCard title={t("publicReviews")} value={String(counts.publicReviews)} hint={t("publicHint")} />
+              <DashboardCard title={t("privateFeedback")} value={String(counts.privateFeedback)} hint={t("privateHint")} />
+            </div>
+            {reviews.length ? (
+              <div className="max-w-sm">
+                <Label htmlFor="ravelo-search">{tCommon("searchRecords")}</Label>
+                <Input id="ravelo-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
+              </div>
+            ) : null}
+          </AdvancedPanel>
+        </div>
+        <div className="flex flex-col gap-4 md:col-span-2">
           <FormError message={error} />
-          <Button type="submit" disabled={pending}>{pending ? t("adding") : t("add")}</Button>
+          <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
+          <ActionFeedback message={saved} />
         </div>
       </form>
 
-      <div className="mt-8">
-        {reviews.length ? (
-          <div className="mb-4 max-w-sm">
-            <Label htmlFor="ravelo-search">{tCommon("searchRecords")}</Label>
-            <Input
-              id="ravelo-search"
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={t("searchPlaceholder")}
-            />
-          </div>
-        ) : null}
+      <div className="mt-12">
         {reviews.length === 0 ? (
-          <EmptyState title={t("emptyTitle")} description={t("emptyBody")} />
+          <EmptyState className="py-20" title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <Table>
             <THead>
