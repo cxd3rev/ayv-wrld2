@@ -3,14 +3,13 @@
 import { ConnectedRecords, IncomingLinkFields } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DashboardCard } from "@/components/ui/dashboard-card";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
-import { ActionFeedback, AdvancedPanel } from "@/components/workspace/simple-action";
+import { ActionFeedback, AdvancedPanel, AdvancedStats } from "@/components/workspace/simple-action";
 import { useToast } from "@/hooks/use-toast";
 import { buildNexroPeople, type NexroDetail } from "@/lib/nexro-customers";
 import { recordProductName, type RecordPrefill } from "@/lib/record-entities";
@@ -434,12 +433,14 @@ export function NexroReactivationsWorkspace({
           </Button>
         ))}
         <Button type="submit" form="nexro-add" name="intent" value="save" variant="secondary" disabled={pending}>{t("saveOnly")}</Button>
-        <div className="grid gap-3 sm:grid-cols-4">
-          <DashboardCard title={t("scheduled")} value={String(counts.scheduled)} hint={t("scheduledHint")} />
-          <DashboardCard title={t("sent")} value={String(counts.sent)} hint={t("sentHint")} />
-          <DashboardCard title={t("won")} value={String(counts.won)} hint={t("wonHint")} />
-          <DashboardCard title={t("referrals")} value={String(counts.referrals)} hint={t("referralsHint")} />
-        </div>
+        <AdvancedStats
+          items={[
+            { label: t("scheduled"), value: String(counts.scheduled), hint: t("scheduledHint") },
+            { label: t("sent"), value: String(counts.sent), hint: t("sentHint") },
+            { label: t("won"), value: String(counts.won), hint: t("wonHint") },
+            { label: t("referrals"), value: String(counts.referrals), hint: t("referralsHint") },
+          ]}
+        />
         {reactivations.length ? (
           <div className="max-w-sm">
             <Label htmlFor="nexro-search">{tCommon("searchRecords")}</Label>

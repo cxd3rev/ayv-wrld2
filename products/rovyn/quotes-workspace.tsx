@@ -6,8 +6,7 @@ import {
 } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ActionFeedback, AdvancedPanel, PrimaryAction } from "@/components/workspace/simple-action";
-import { DashboardCard } from "@/components/ui/dashboard-card";
+import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction } from "@/components/workspace/simple-action";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
@@ -245,12 +244,14 @@ export function RovynQuotesWorkspace({
         </div>
         <div className="md:col-span-2">
           <AdvancedPanel label={tCommon("advanced")}>
-            <div className="grid gap-3 sm:grid-cols-4">
-              <DashboardCard title={t("sent")} value={String(counts.sent)} hint={t("sentHint")} />
-              <DashboardCard title={t("followedUp")} value={String(counts.followedUp)} hint={t("followedUpHint")} />
-              <DashboardCard title={t("won")} value={String(counts.won)} hint={t("wonHint")} />
-              <DashboardCard title={t("due")} value={String(counts.due)} hint={t("dueHint")} />
-            </div>
+            <AdvancedStats
+              items={[
+                { label: t("sent"), value: String(counts.sent), hint: t("sentHint") },
+                { label: t("followedUp"), value: String(counts.followedUp), hint: t("followedUpHint") },
+                { label: t("won"), value: String(counts.won), hint: t("wonHint") },
+                { label: t("due"), value: String(counts.due), hint: t("dueHint") },
+              ]}
+            />
             {quotes.length ? (
               <div className="max-w-sm">
                 <Label htmlFor="rovyn-search">{tCommon("searchRecords")}</Label>

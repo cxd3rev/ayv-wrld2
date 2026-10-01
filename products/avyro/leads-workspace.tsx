@@ -5,13 +5,12 @@ import {
   IncomingLinkFields,
 } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
-import { DashboardCard } from "@/components/ui/dashboard-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
-import { ActionFeedback, AdvancedPanel, PrimaryAction } from "@/components/workspace/simple-action";
+import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction } from "@/components/workspace/simple-action";
 import { useToast } from "@/hooks/use-toast";
 import type { RecordPrefill } from "@/lib/record-entities";
 import { recordProductName } from "@/lib/record-entities";
@@ -178,22 +177,30 @@ export function AvyroLeadsWorkspace({
         <div className="md:col-span-2">
           <AdvancedPanel label={tCommon("advanced")}>
             <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
-            <div>
-              <Label htmlFor="phone">{t("phone")}</Label>
-              <Input id="phone" name="phone" type="tel" placeholder={tCommon("optional")} defaultValue={prefill?.phone ?? ""} />
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <Label htmlFor="phone">
+                  {t("phone")}
+                  <span className="ml-2 font-normal tracking-normal text-muted/80">{tCommon("optional")}</span>
+                </Label>
+                <Input id="phone" name="phone" type="tel" autoComplete="tel" defaultValue={prefill?.phone ?? ""} />
+              </div>
+              <div>
+                <Label htmlFor="notes">{t("notes")}</Label>
+                <p className="-mt-1 mb-1.5 text-xs leading-5 text-muted">{t("notesPlaceholder")}</p>
+                <Input id="notes" name="notes" />
+              </div>
             </div>
-            <div>
-              <Label htmlFor="notes">{t("notes")}</Label>
-              <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
-            </div>
-            <div className="grid gap-3 sm:grid-cols-4">
-              <DashboardCard title={t("new")} value={String(counts.new)} hint={t("newHint")} />
-              <DashboardCard title={t("contacted")} value={String(counts.contacted)} hint={t("contactedHint")} />
-              <DashboardCard title={t("won")} value={String(counts.won)} hint={t("wonHint")} />
-              <DashboardCard title={t("due")} value={String(counts.due)} hint={t("dueHint")} />
-            </div>
+            <AdvancedStats
+              items={[
+                { label: t("new"), value: String(counts.new), hint: t("newHint") },
+                { label: t("contacted"), value: String(counts.contacted), hint: t("contactedHint") },
+                { label: t("won"), value: String(counts.won), hint: t("wonHint") },
+                { label: t("due"), value: String(counts.due), hint: t("dueHint") },
+              ]}
+            />
             {leads.length ? (
-              <div className="max-w-sm">
+              <div>
                 <Label htmlFor="avyro-search">{tCommon("searchRecords")}</Label>
                 <Input id="avyro-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("searchPlaceholder")} />
               </div>

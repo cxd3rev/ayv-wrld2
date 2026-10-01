@@ -3,8 +3,7 @@
 import { ConnectedRecords, IncomingLinkFields } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ActionFeedback, AdvancedPanel, PrimaryAction } from "@/components/workspace/simple-action";
-import { DashboardCard } from "@/components/ui/dashboard-card";
+import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction } from "@/components/workspace/simple-action";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
@@ -203,12 +202,14 @@ export function RaveloReviewsWorkspace({
         </div>
         <div className="md:col-span-2">
           <AdvancedPanel label={tCommon("advanced")}>
-            <div className="grid gap-3 sm:grid-cols-4">
-              <DashboardCard title={t("scheduled")} value={String(counts.scheduled)} hint={t("scheduledHint")} />
-              <DashboardCard title={t("requested")} value={String(counts.requested)} hint={t("requestedHint")} />
-              <DashboardCard title={t("publicReviews")} value={String(counts.publicReviews)} hint={t("publicHint")} />
-              <DashboardCard title={t("privateFeedback")} value={String(counts.privateFeedback)} hint={t("privateHint")} />
-            </div>
+            <AdvancedStats
+              items={[
+                { label: t("scheduled"), value: String(counts.scheduled), hint: t("scheduledHint") },
+                { label: t("requested"), value: String(counts.requested), hint: t("requestedHint") },
+                { label: t("publicReviews"), value: String(counts.publicReviews), hint: t("publicHint") },
+                { label: t("privateFeedback"), value: String(counts.privateFeedback), hint: t("privateHint") },
+              ]}
+            />
             {reviews.length ? (
               <div className="max-w-sm">
                 <Label htmlFor="ravelo-search">{tCommon("searchRecords")}</Label>

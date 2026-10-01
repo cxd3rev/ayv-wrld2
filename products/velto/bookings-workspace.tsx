@@ -6,8 +6,7 @@ import {
 } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DashboardCard } from "@/components/ui/dashboard-card";
-import { ActionFeedback, AdvancedPanel, PrimaryAction } from "@/components/workspace/simple-action";
+import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction } from "@/components/workspace/simple-action";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
@@ -269,12 +268,14 @@ export function VeltoBookingsWorkspace({
               <Label htmlFor="notes">{t("notes")}</Label>
               <Input id="notes" name="notes" placeholder={t("notesPlaceholder")} />
             </div>
-            <div className="grid gap-3 sm:grid-cols-4">
-              <DashboardCard title={t("upcoming")} value={String(counts.upcoming)} hint={t("upcomingHint")} />
-              <DashboardCard title={t("reminders")} value={String(counts.reminders)} hint={t("remindersHint")} />
-              <DashboardCard title={t("completed")} value={String(counts.completed)} hint={t("completedHint")} />
-              <DashboardCard title={t("missed")} value={String(counts.missed)} hint={t("missedHint")} />
-            </div>
+            <AdvancedStats
+              items={[
+                { label: t("upcoming"), value: String(counts.upcoming), hint: t("upcomingHint") },
+                { label: t("reminders"), value: String(counts.reminders), hint: t("remindersHint") },
+                { label: t("completed"), value: String(counts.completed), hint: t("completedHint") },
+                { label: t("missed"), value: String(counts.missed), hint: t("missedHint") },
+              ]}
+            />
             {bookings.length ? (
               <div className="max-w-sm">
                 <Label htmlFor="velto-search">{tCommon("searchRecords")}</Label>

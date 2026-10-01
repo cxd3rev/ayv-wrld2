@@ -3,8 +3,7 @@
 import { ConnectedRecords, IncomingLinkFields } from "@/components/connections/connected-records";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ActionFeedback, AdvancedPanel, PrimaryAction } from "@/components/workspace/simple-action";
-import { DashboardCard } from "@/components/ui/dashboard-card";
+import { ActionFeedback, AdvancedPanel, AdvancedStats, PrimaryAction } from "@/components/workspace/simple-action";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormError } from "@/components/ui/form-error";
@@ -209,20 +208,22 @@ export function OrvynInvoicesWorkspace({
         </div>
         <div className="md:col-span-2">
           <AdvancedPanel label={tCommon("advanced")}>
-            <div className="grid gap-3 sm:grid-cols-4">
-              <DashboardCard title={t("open")} value={String(counts.open)} hint={t("openHint")} />
-              <DashboardCard title={t("overdue")} value={String(counts.overdue)} hint={t("overdueHint")} />
-              <DashboardCard title={t("paid")} value={String(counts.paid)} hint={t("paidHint")} />
-              <DashboardCard
-                title={t("outstanding")}
-                value={counts.outstanding.length
-                  ? counts.outstanding.map(([currency, amount]) =>
-                      new Intl.NumberFormat(locale, { style: "currency", currency }).format(amount),
-                    ).join(" · ")
-                  : "—"}
-                hint={t("outstandingHint")}
-              />
-            </div>
+            <AdvancedStats
+              items={[
+                { label: t("open"), value: String(counts.open), hint: t("openHint") },
+                { label: t("overdue"), value: String(counts.overdue), hint: t("overdueHint") },
+                { label: t("paid"), value: String(counts.paid), hint: t("paidHint") },
+                {
+                  label: t("outstanding"),
+                  value: counts.outstanding.length
+                    ? counts.outstanding.map(([currency, amount]) =>
+                        new Intl.NumberFormat(locale, { style: "currency", currency }).format(amount),
+                      ).join(" · ")
+                    : "—",
+                  hint: t("outstandingHint"),
+                },
+              ]}
+            />
             {invoices.length ? (
               <div className="max-w-sm">
                 <Label htmlFor="orvyn-search">{tCommon("searchRecords")}</Label>
