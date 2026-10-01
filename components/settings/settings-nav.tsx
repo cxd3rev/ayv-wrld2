@@ -1,5 +1,6 @@
 "use client";
 
+import { legacyModulesEnabled } from "@/config/features";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { settingsNav } from "@/config/navigation";
@@ -35,7 +36,7 @@ export function SettingsNav() {
                 : "border-foreground/15 text-muted hover:text-foreground",
             )}
           >
-            {t(keys[item.href])}
+            {!legacyModulesEnabled && item.href === "/dashboard/settings/billing" ? "Abonnement" : t(keys[item.href])}
           </Link>
         );
       })}

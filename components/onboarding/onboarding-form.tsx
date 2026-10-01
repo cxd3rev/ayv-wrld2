@@ -5,6 +5,7 @@ import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
+import { legacyModulesEnabled } from "@/config/features";
 import { industries } from "@/config/products";
 import { completeOnboarding } from "@/services/organizations";
 import { useTranslations } from "next-intl";
@@ -15,6 +16,8 @@ export function OnboardingForm() {
   const tIndustries = useTranslations("industries");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [places, setPlaces] = useState<string[]>([]);
+  const [draft, setDraft] = useState("");
 
   async function onSubmit(formData: FormData) {
     setError("");
@@ -24,6 +27,62 @@ export function OnboardingForm() {
       setError(result.error);
       setPending(false);
     }
+  }
+
+  function addPlace() {
+    const value = draft.trim();
+    if (!value || places.includes(value)) return;
+    setPlaces([...places, value]);
+    setDraft("");
+  }
+
+  if (!legacyModulesEnabled) {
+    return (
+      <form action={onSubmit} className="space-y-4">
+        <div>
+          <Label htmlFor="businessName">Bedrijfsnaam</Label>
+          <Input id="businessName" name="businessName" required />
+        </div>
+        <div>
+          <Label htmlFor="vatNumber">BTW-nummer (optioneel)</Label>
+          <Input id="vatNumber" name="vatNumber" />
+        </div>
+        <div>
+          <Label htmlFor="municipality">Gemeente</Label>
+          <Input id="municipality" name="municipality" required />
+        </div>
+        <div>
+          <Label htmlFor="placeDraft">In welke gemeenten werk je?</Label>
+          <div className="flex gap-2">
+            <Input id="placeDraft" value={draft} onChange={(event) => setDraft(event.target.value)} />
+            <Button type="button" variant="secondary" onClick={addPlace}>Voeg toe</Button>
+          </div>
+          <ul className="mt-2 flex flex-wrap gap-2">
+            {places.map((place) => (
+              <li key={place}>
+                <input type="hidden" name="serviceMunicipalities" value={place} />
+                <button type="button" className="rounded-full border border-foreground/15 px-3 py-1 text-sm" onClick={() => setPlaces(places.filter((item) => item !== place))}>
+                  {place} ×
+                </button>
+              </li>
+            ))}
+          </ul>
+          {draft.trim() ? <input type="hidden" name="serviceMunicipalities" value={draft.trim()} /> : null}
+        </div>
+        <div>
+          <Label htmlFor="businessEmail">E-mail</Label>
+          <Input id="businessEmail" name="businessEmail" type="email" required />
+        </div>
+        <div>
+          <Label htmlFor="phone">Telefoon</Label>
+          <Input id="phone" name="phone" required />
+        </div>
+        <FormError message={error} />
+        <Button type="submit" className="w-full" disabled={pending}>
+          {pending ? "Bezig…" : "Werkruimte maken"}
+        </Button>
+      </form>
+    );
   }
 
   return (

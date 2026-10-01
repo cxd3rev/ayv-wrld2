@@ -36,7 +36,7 @@ const rules = [
 // TODO: keep the export sentence only while CSV export exists in the dashboard.
 const questions: [string, string][] = [
   ["Moet ik iets installeren?", `Nee. ${PRODUCT_NAME} werkt in je browser, op je computer en op je gsm.`],
-  ["Kan ik mijn bestaande klantenlijst importeren?", "Ja. Je kunt een Excel- of CSV-bestand importeren. Lukt het niet, dan helpen we je bij de start."],
+  ["Kan ik mijn bestaande klantenlijst importeren?", "Ja. Je kunt een CSV-bestand importeren. In Excel sla je het bestand op als CSV. Lukt het niet, dan helpen we je bij de start."],
   ["Wat zien mijn klanten?", "Alleen de herinneringsmail met jouw naam en de pagina om een moment te kiezen. Ze hebben geen account nodig."],
   ["Wat als ik ook in Brussel of Wallonië werk?", "Die regels ondersteunen we nog niet. Je kunt voor die ketels wel zelf een interval instellen."],
   ["Waarom vragen jullie mijn kaart bij de proefperiode?", "Zo loopt alles gewoon door na 7 dagen. Je betaalt niets tijdens de proefperiode, en wie voor dag 7 opzegt, betaalt nooit."],

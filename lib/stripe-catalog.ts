@@ -1,5 +1,5 @@
 import { getProduct, type ProductId } from "@/config/products";
-import { PRODUCT_NAME } from "@/config/site";
+import { PRICING, PRODUCT_NAME } from "@/config/site";
 import { isUsableSecret } from "@/lib/billing-status";
 
 /** Products that can be purchased as their own Stripe subscription. */
@@ -67,6 +67,14 @@ export function isBillablePlanId(value: string): value is BillablePlanId {
 
 export function isCheckoutProductId(value: string): value is CheckoutProductId {
   return value === "onderhoud" || isBillableProductId(value) || isBillablePlanId(value);
+}
+
+export function onderhoudCharge(priceId: string | null | undefined) {
+  if (!priceId) return null;
+  if (priceId === getOnderhoudPriceId("yearly")) return { amountEur: PRICING.yearlyEur, period: "jaar" as const };
+  if (priceId === getOnderhoudPriceId("founder")) return { amountEur: PRICING.founderMonthlyEur, period: "maand" as const };
+  if (priceId === getOnderhoudPriceId("monthly")) return { amountEur: PRICING.monthlyEur, period: "maand" as const };
+  return null;
 }
 
 export function getOnderhoudPriceId(interval: OnderhoudInterval = "monthly") {

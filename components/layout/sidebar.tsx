@@ -109,7 +109,7 @@ export function Sidebar({
                 { href: "/dashboard/klanten", icon: "users" as const, label: "Klanten" },
                 { href: "/dashboard/afspraken", icon: "calendar" as const, label: "Afspraken" },
                 { href: "/dashboard/settings", icon: "settings" as const, label: "Instellingen" },
-                { href: "/dashboard/billing", icon: "card" as const, label: "Facturatie" },
+                { href: "/dashboard/settings/billing", icon: "card" as const, label: "Abonnement" },
               ]
           ).map((item) => {
             const Icon = icons[item.icon];
@@ -118,7 +118,9 @@ export function Sidebar({
             const active =
               href === "/dashboard"
                 ? pathname === "/dashboard"
-                : pathname === href || pathname.startsWith(`${href}/`);
+                : !legacyModulesEnabled && href === "/dashboard/settings"
+                  ? pathname.startsWith("/dashboard/settings") && !pathname.startsWith("/dashboard/settings/billing")
+                  : pathname === href || pathname.startsWith(`${href}/`);
 
             return (
               <Link

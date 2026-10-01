@@ -1,10 +1,11 @@
 "use server";
 
+import { legacyModulesEnabled } from "@/config/features";
 import { PRODUCT_NAME } from "@/config/site";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser, requireWorkspace } from "@/lib/auth/session";
-import { firstZodError, inviteSchema, onboardingSchema, organizationSettingsSchema } from "@/lib/validations";
+import { firstZodError, installerOnboardingSchema, inviteSchema, onboardingSchema, organizationSettingsSchema } from "@/lib/validations";
 import { setActiveOrganization } from "@/lib/org-cookie";
 import { getAppUrl, slugify } from "@/lib/utils";
 import { sendEmail, teamInviteEmail } from "@/services/email";
@@ -13,29 +14,40 @@ import type { MemberRole, MemberWithProfile, OrganizationInvite } from "@/types/
 
 export async function completeOnboarding(formData: FormData) {
   const { supabase, user } = await requireUser();
+  const installer = !legacyModulesEnabled;
 
-  const parsed = onboardingSchema.safeParse({
-    businessName: formData.get("businessName"),
-    industry: formData.get("industry"),
-    website: formData.get("website"),
-    businessEmail: formData.get("businessEmail"),
-    phone: formData.get("phone"),
-  });
+  const parsed = installer
+    ? installerOnboardingSchema.safeParse({
+        businessName: formData.get("businessName"),
+        vatNumber: formData.get("vatNumber"),
+        municipality: formData.get("municipality"),
+        serviceMunicipalities: formData.getAll("serviceMunicipalities").map((value) => String(value).trim()).filter(Boolean),
+        businessEmail: formData.get("businessEmail"),
+        phone: formData.get("phone"),
+      })
+    : onboardingSchema.safeParse({
+        businessName: formData.get("businessName"),
+        industry: formData.get("industry"),
+        website: formData.get("website"),
+        businessEmail: formData.get("businessEmail"),
+        phone: formData.get("phone"),
+      });
 
   if (!parsed.success) {
     return { ok: false, error: firstZodError(parsed.error) };
   }
 
-  const website = parsed.data.website
-    ? parsed.data.website.startsWith("http")
-      ? parsed.data.website
-      : `https://${parsed.data.website}`
+  const websiteValue = "website" in parsed.data ? parsed.data.website : "";
+  const website = websiteValue
+    ? websiteValue.startsWith("http")
+      ? websiteValue
+      : `https://${websiteValue}`
     : "";
 
   const { data, error } = await supabase.rpc("create_organization", {
     org_name: parsed.data.businessName,
     org_slug: slugify(parsed.data.businessName),
-    org_industry: parsed.data.industry,
+    org_industry: "industry" in parsed.data ? parsed.data.industry : "Other",
     org_website: website || null,
     org_email: parsed.data.businessEmail,
     org_phone: parsed.data.phone || null,
@@ -54,6 +66,17 @@ export async function completeOnboarding(formData: FormData) {
       full_name: user.user_metadata?.full_name ?? null,
     })
     .eq("id", user.id);
+
+  if (installer && organization?.id && "municipality" in parsed.data) {
+    await supabase
+      .from("organizations")
+      .update({
+        vat_number: parsed.data.vatNumber || null,
+        municipality: parsed.data.municipality,
+        service_municipalities: parsed.data.serviceMunicipalities,
+      })
+      .eq("id", organization.id);
+  }
 
   if (organization?.id) {
     await createNotification({
@@ -87,6 +110,11 @@ export async function updateOrganizationSettings(formData: FormData) {
   }
 
   const supabase = await createClient();
+  const municipality = formData.get("municipality");
+  const places = String(formData.get("serviceMunicipalities") ?? "")
+    .split(/\r?\n/)
+    .map((value) => value.trim())
+    .filter(Boolean);
   const { error } = await supabase
     .from("organizations")
     .update({
@@ -95,6 +123,13 @@ export async function updateOrganizationSettings(formData: FormData) {
       website: parsed.data.website || null,
       email: parsed.data.email,
       phone: parsed.data.phone || null,
+      ...(typeof municipality === "string"
+        ? {
+            vat_number: String(formData.get("vatNumber") ?? "").trim() || null,
+            municipality: municipality.trim(),
+            service_municipalities: places,
+          }
+        : {}),
     })
     .eq("id", organization.id);
 
@@ -197,6 +232,13 @@ export async function inviteMember(formData: FormData) {
   }
 
   const supabase = await createClient();
+  if (!legacyModulesEnabled) {
+    const { data: pending } = await supabase.from("organization_invites").select("email").eq("organization_id", organization.id);
+    const alreadyInvited = (pending ?? []).some((invite) => invite.email?.toLowerCase() === email);
+    if (!alreadyInvited && members.length + (pending?.length ?? 0) >= 3) {
+      return { ok: false as const, error: "Dit plan heeft plaats voor 3 gebruikers." };
+    }
+  }
   const { data, error } = await supabase
     .from("organization_invites")
     .insert({

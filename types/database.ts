@@ -29,6 +29,9 @@ export type Organization = {
   industry: string | null;
   email: string | null;
   phone: string | null;
+  vat_number?: string | null;
+  municipality?: string | null;
+  service_municipalities?: string[] | null;
   created_at: string;
   updated_at: string;
 };

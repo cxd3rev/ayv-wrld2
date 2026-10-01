@@ -5,6 +5,7 @@ import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
+import { legacyModulesEnabled } from "@/config/features";
 import { industries } from "@/config/products";
 import { useToast } from "@/hooks/use-toast";
 import { updateOrganizationSettings } from "@/services/organizations";
@@ -37,20 +38,47 @@ export function GeneralSettingsForm({ organization }: { organization: Organizati
         <Label htmlFor="name">{t("businessName")}</Label>
         <Input id="name" name="name" defaultValue={organization.name} required />
       </div>
-      <div>
-        <Label htmlFor="website">{t("website")}</Label>
-        <Input id="website" name="website" defaultValue={organization.website ?? ""} />
-      </div>
-      <div>
-        <Label htmlFor="industry">{t("industry")}</Label>
-        <Select id="industry" name="industry" defaultValue={organization.industry ?? "Other"}>
-          {industries.map((industry) => (
-            <option key={industry} value={industry}>
-              {tIndustries(industry)}
-            </option>
-          ))}
-        </Select>
-      </div>
+      {legacyModulesEnabled ? (
+        <>
+          <div>
+            <Label htmlFor="website">{t("website")}</Label>
+            <Input id="website" name="website" defaultValue={organization.website ?? ""} />
+          </div>
+          <div>
+            <Label htmlFor="industry">{t("industry")}</Label>
+            <Select id="industry" name="industry" defaultValue={organization.industry ?? "Other"}>
+              {industries.map((industry) => (
+                <option key={industry} value={industry}>
+                  {tIndustries(industry)}
+                </option>
+              ))}
+            </Select>
+          </div>
+        </>
+      ) : (
+        <>
+          <input type="hidden" name="website" value={organization.website ?? ""} />
+          <input type="hidden" name="industry" value={organization.industry ?? "Other"} />
+          <div>
+            <Label htmlFor="vatNumber">BTW-nummer (optioneel)</Label>
+            <Input id="vatNumber" name="vatNumber" defaultValue={organization.vat_number ?? ""} />
+          </div>
+          <div>
+            <Label htmlFor="municipality">Gemeente</Label>
+            <Input id="municipality" name="municipality" defaultValue={organization.municipality ?? ""} required />
+          </div>
+          <div>
+            <Label htmlFor="serviceMunicipalities">In welke gemeenten werk je?</Label>
+            <textarea
+              id="serviceMunicipalities"
+              name="serviceMunicipalities"
+              defaultValue={(organization.service_municipalities ?? []).join("\n")}
+              rows={4}
+              className="mt-2 w-full rounded-2xl border border-foreground/15 bg-transparent px-4 py-3 text-sm"
+            />
+          </div>
+        </>
+      )}
       <div>
         <Label htmlFor="email">{t("businessEmail")}</Label>
         <Input id="email" name="email" type="email" defaultValue={organization.email ?? ""} required />

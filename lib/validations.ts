@@ -25,6 +25,15 @@ export const passwordSchema = z
     path: ["confirmPassword"],
   });
 
+export const installerOnboardingSchema = z.object({
+  businessName: z.string().trim().min(2, "Vul de bedrijfsnaam in."),
+  vatNumber: z.string().trim().max(32).optional().transform((value) => value || ""),
+  municipality: z.string().trim().min(2, "Vul je gemeente in.").max(120),
+  serviceMunicipalities: z.array(z.string().trim().min(1).max(120)).min(1, "Vul in welke gemeenten je werkt.").max(40),
+  businessEmail: z.string().trim().email("Vul een geldig e-mailadres in."),
+  phone: z.string().trim().min(3, "Vul je telefoonnummer in.").max(40),
+});
+
 export const onboardingSchema = z.object({
   businessName: z.string().trim().min(2, "Please enter your business name."),
   industry: z.string().trim().min(1, "Please choose an industry."),

@@ -1,4 +1,5 @@
 import { CustomerForms } from "@/components/onderhoud/customer-forms";
+import { CustomerImport } from "@/components/onderhoud/customer-import";
 import { fuelLabels } from "@/lib/onderhoud/labels";
 import { requireWorkspace } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
@@ -26,6 +27,7 @@ export default async function CustomersPage() {
     <div>
       <h1 className="display text-4xl">Klanten</h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">Elke klant heeft een adres en minstens één ketel. Open een ketel om het attest te bewaren.</p>
+      <CustomerImport />
       <div className="mt-8">
         <CustomerForms
           customers={customers.map((customer) => ({

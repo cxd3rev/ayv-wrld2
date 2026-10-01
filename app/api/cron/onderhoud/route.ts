@@ -1,9 +1,11 @@
 import { legacyModulesEnabled } from "@/config/features";
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { addDays, nextAuditDue, nextMaintenanceDue, type FuelType } from "@/lib/maintenance-rules";
+import { isSuppressed } from "@/lib/outreach-mail";
+import { signUnsubscribeToken } from "@/lib/unsubscribe-token";
+import { addDays, maintenanceIsLegallyRequired, nextAuditDue, nextMaintenanceDue, type FuelType } from "@/lib/maintenance-rules";
 import { getAppUrl } from "@/lib/utils";
-import { followUpEmail, sendEmail } from "@/services/email";
+import { maintenanceReminderHtml, sendEmail } from "@/services/email";
 
 export const runtime = "nodejs";
 
@@ -33,7 +35,7 @@ type BoilerJoin = {
   last_maintenance_on: string | null;
   last_audit_on: string | null;
   optional_interval_months: number | null;
-  organizations: { name: string; slug: string } | { name: string; slug: string }[] | null;
+  organizations: { name: string; slug: string; phone: string | null } | { name: string; slug: string; phone: string | null }[] | null;
   onderhoud_addresses: AddressJoin | AddressJoin[] | null;
 };
 
@@ -56,7 +58,7 @@ export async function GET(request: Request) {
   const { data: settings } = await admin.from("onderhoud_settings").select("organization_id, reminder_lead_days");
   const leadDays = new Map((settings ?? []).map((row) => [row.organization_id as string, row.reminder_lead_days as number]));
   const { data: boilers } = await admin.from("onderhoud_boilers").select(
-    "id, organization_id, fuel_type, power_kw, installed_on, last_maintenance_on, last_audit_on, optional_interval_months, organizations(name, slug), onderhoud_addresses(street, postal_code, municipality, onderhoud_customers(name, email))",
+    "id, organization_id, fuel_type, power_kw, installed_on, last_maintenance_on, last_audit_on, optional_interval_months, organizations(name, slug, phone), onderhoud_addresses(street, postal_code, municipality, onderhoud_customers(name, email))",
   );
 
   let sent = 0;
@@ -91,15 +93,41 @@ export async function GET(request: Request) {
         skipped += 1;
         continue;
       }
-      const link = `${getAppUrl()}/boek/${organization.slug}`;
-      const what = item.kind === "audit" ? "verwarmingsaudit" : "onderhoud";
+      const suppressed = await isSuppressed(row.organization_id, email);
+      if (!suppressed.ok || suppressed.suppressed) {
+        skipped += 1;
+        continue;
+      }
+      const token = signUnsubscribeToken({ organizationId: row.organization_id, email, locale: "nl" });
+      if (!token) {
+        skipped += 1;
+        continue;
+      }
+      const fuelWord: Record<FuelType, string> = {
+        gas: "gas",
+        oil: "stookolie",
+        solid_fuel: "vaste brandstof",
+        heat_pump: "warmtepomp",
+      };
+      const appliance = row.fuel_type === "heat_pump" ? "warmtepomp" : `${fuelWord[row.fuel_type]}ketel`;
+      const dueLabel = new Intl.DateTimeFormat("nl-BE", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(
+        new Date(`${item.due}T00:00:00Z`),
+      );
       const result = await sendEmail({
         to: email,
-        subject: `Herinnering ${what} — ${organization.name}`,
-        html: followUpEmail({
-          organizationName: organization.name,
-          message: `Dag ${customer.name}, het ${what} van de ketel in ${address.street}, ${address.municipality} staat gepland op ${item.due}. Kies een moment: ${link}`,
+        subject: "Tijd voor het onderhoud van je ketel",
+        html: maintenanceReminderHtml({
+          customerName: customer.name,
+          appliance: item.kind === "audit" ? `${appliance} (verwarmingsaudit)` : appliance,
+          address: `${address.street}, ${address.postal_code} ${address.municipality}`,
+          dueLabel,
+          bookingUrl: `${getAppUrl()}/boek/${organization.slug}`,
+          installerName: organization.name,
+          installerPhone: organization.phone ?? "",
+          unsubscribeUrl: `${getAppUrl()}/unsubscribe?token=${token}`,
+          legallyRequired: item.kind === "audit" || maintenanceIsLegallyRequired(row.fuel_type, Number(row.power_kw)),
         }),
+        headers: { "List-Unsubscribe": `<${getAppUrl()}/unsubscribe?token=${token}>` },
         template,
         organizationId: row.organization_id,
       });

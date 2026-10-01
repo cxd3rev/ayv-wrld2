@@ -1,3 +1,4 @@
+import { legacyModulesEnabled } from "@/config/features";
 import { NextResponse } from "next/server";
 import type { AppLocale } from "@/i18n/config";
 import { suppressAddress } from "@/lib/outreach-mail";
@@ -12,7 +13,9 @@ const copy: Record<AppLocale, { title: string; ok: string; bad: string }> = {
   },
   nl: {
     title: "Afgemeld",
-    ok: "Je ontvangt geen Nexro- of Ravelo-mails meer van dit bedrijf.",
+    ok: legacyModulesEnabled
+      ? "Je ontvangt geen Nexro- of Ravelo-mails meer van dit bedrijf."
+      : "Je ontvangt geen herinneringen meer van dit bedrijf.",
     bad: "Deze afmeldlink is niet geldig.",
   },
   fr: {
@@ -51,12 +54,19 @@ async function unsubscribe(token: string) {
   return { ok: true as const, locale: payload.locale, name, email: payload.email };
 }
 
+const productCopy = {
+  title: "Afgemeld",
+  ok: "Je ontvangt geen herinneringen meer van dit bedrijf.",
+  bad: "Deze afmeldlink is niet geldig.",
+};
+
 export async function GET(request: Request) {
   const token = new URL(request.url).searchParams.get("token") ?? "";
   const result = await unsubscribe(token);
-  if (!result.ok) return page(result.locale, copy[result.locale].bad, false);
+  const text = legacyModulesEnabled ? copy[result.locale] : productCopy;
+  if (!result.ok) return page(legacyModulesEnabled ? result.locale : "nl", text.bad, false);
   const company = result.name ? ` ${result.name}` : "";
-  return page(result.locale, `${result.email}${company ? ` —${company}` : ""}. ${copy[result.locale].ok}`, true);
+  return page(legacyModulesEnabled ? result.locale : "nl", `${result.email}${company ? ` —${company}` : ""}. ${text.ok}`, true);
 }
 
 export async function POST(request: Request) {

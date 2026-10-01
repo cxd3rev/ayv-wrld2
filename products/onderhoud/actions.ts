@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireWorkspace } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
+import type { FuelType } from "@/lib/maintenance-rules";
 import {
   addressSchema,
   boilerSchema,
@@ -234,6 +235,166 @@ export async function recordVisit(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath(`/dashboard/ketels/${boiler.id}`);
   return { ok: true as const };
+}
+
+function parseCsv(text: string) {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let cell = "";
+  let quoted = false;
+  const source = text.replace(/^\uFEFF/, "");
+  for (let index = 0; index < source.length; index += 1) {
+    const char = source[index];
+    if (quoted) {
+      if (char === '"') {
+        if (source[index + 1] === '"') {
+          cell += '"';
+          index += 1;
+        } else quoted = false;
+      } else cell += char;
+    } else if (char === '"') quoted = true;
+    else if (char === "," || char === ";") {
+      row.push(cell.trim());
+      cell = "";
+    } else if (char === "\n") {
+      row.push(cell.trim());
+      rows.push(row);
+      row = [];
+      cell = "";
+    } else if (char !== "\r") cell += char;
+  }
+  if (cell || row.length) {
+    row.push(cell.trim());
+    rows.push(row);
+  }
+  return rows.filter((item) => item.some(Boolean));
+}
+
+function csvDate(value: string) {
+  const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (iso) return value;
+  const local = /^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/.exec(value);
+  if (!local) return "";
+  return `${local[3]}-${local[2].padStart(2, "0")}-${local[1].padStart(2, "0")}`;
+}
+
+const fuelWords: Record<string, FuelType> = {
+  gas: "gas",
+  stookolie: "oil",
+  olie: "oil",
+  oil: "oil",
+  "vaste brandstof": "solid_fuel",
+  hout: "solid_fuel",
+  pellets: "solid_fuel",
+  solid_fuel: "solid_fuel",
+  warmtepomp: "heat_pump",
+  heat_pump: "heat_pump",
+};
+
+export async function importCustomers(formData: FormData) {
+  const file = formData.get("file");
+  if (!(file instanceof File) || file.size === 0) return { ok: false as const, error: "Kies een CSV-bestand." };
+  if (file.size > 1_000_000) return { ok: false as const, error: "Het bestand is te groot." };
+  const text = await file.text();
+  if (text.startsWith("PK")) {
+    return { ok: false as const, error: "Sla het Excel-bestand op als CSV en probeer opnieuw." };
+  }
+  const rows = parseCsv(text);
+  const header = rows[0]?.map((value) => value.toLowerCase()) ?? [];
+  const index = (names: string[]) => header.findIndex((value) => names.includes(value));
+  const columns = {
+    name: index(["naam", "name"]),
+    email: index(["email", "e-mail"]),
+    phone: index(["telefoon", "phone"]),
+    street: index(["straat", "street"]),
+    postal: index(["postcode", "postal_code"]),
+    municipality: index(["gemeente", "municipality"]),
+    fuel: index(["brandstof", "fuel"]),
+    power: index(["vermogen_kw", "vermogen", "power_kw"]),
+    installed: index(["geplaatst_op", "geplaatst", "installed_on"]),
+    last: index(["laatste_onderhoud", "last_maintenance_on"]),
+  };
+  if (columns.name < 0 || columns.street < 0 || columns.postal < 0 || columns.municipality < 0 || columns.fuel < 0 || columns.power < 0 || columns.installed < 0) {
+    return { ok: false as const, error: "De CSV heeft kolommen nodig: naam, straat, postcode, gemeente, brandstof, vermogen_kw, geplaatst_op." };
+  }
+
+  const { organization } = await requireWorkspace();
+  const supabase = await createClient();
+  let imported = 0;
+  const errors: string[] = [];
+  for (const [rowNumber, row] of rows.slice(1, 201).entries()) {
+    const fuel = fuelWords[(row[columns.fuel] ?? "").toLowerCase()];
+    const installedOn = csvDate(row[columns.installed] ?? "");
+    const parsed = installationSchema.safeParse({
+      name: row[columns.name] ?? "",
+      email: columns.email >= 0 ? row[columns.email] ?? "" : "",
+      phone: columns.phone >= 0 ? row[columns.phone] ?? "" : "",
+      street: row[columns.street] ?? "",
+      postalCode: columns.postal >= 0 ? row[columns.postal] ?? "" : "",
+      municipality: row[columns.municipality] ?? "",
+      fuel,
+      powerKw: row[columns.power] ?? "",
+      brand: "",
+      model: "",
+      installedOn,
+      lastMaintenanceOn: columns.last >= 0 ? csvDate(row[columns.last] ?? "") : "",
+      lastAuditOn: "",
+      optionalIntervalMonths: "",
+      notes: "",
+    });
+    if (!parsed.success) {
+      errors.push(`Rij ${rowNumber + 2}: ${zodError(parsed.error)}`);
+      continue;
+    }
+    const { data: customer, error: customerError } = await supabase
+      .from("onderhoud_customers")
+      .insert({
+        organization_id: organization.id,
+        name: parsed.data.name,
+        email: parsed.data.email,
+        phone: parsed.data.phone,
+      })
+      .select("id")
+      .single();
+    if (customerError || !customer) {
+      errors.push(`Rij ${rowNumber + 2}: de klant kon niet worden bewaard.`);
+      continue;
+    }
+    const { data: address, error: addressError } = await supabase
+      .from("onderhoud_addresses")
+      .insert({
+        organization_id: organization.id,
+        customer_id: customer.id,
+        street: parsed.data.street,
+        postal_code: parsed.data.postalCode,
+        municipality: parsed.data.municipality,
+      })
+      .select("id")
+      .single();
+    if (addressError || !address) {
+      await supabase.from("onderhoud_customers").delete().eq("id", customer.id).eq("organization_id", organization.id);
+      errors.push(`Rij ${rowNumber + 2}: het adres kon niet worden bewaard.`);
+      continue;
+    }
+    const { error: boilerError } = await supabase.from("onderhoud_boilers").insert({
+      organization_id: organization.id,
+      address_id: address.id,
+      fuel_type: parsed.data.fuel,
+      power_kw: parsed.data.powerKw,
+      installed_on: parsed.data.installedOn,
+      last_maintenance_on: parsed.data.lastMaintenanceOn,
+    });
+    if (boilerError) {
+      await supabase.from("onderhoud_customers").delete().eq("id", customer.id).eq("organization_id", organization.id);
+      errors.push(`Rij ${rowNumber + 2}: de ketel kon niet worden bewaard.`);
+      continue;
+    }
+    imported += 1;
+  }
+  revalidatePath("/dashboard/klanten");
+  revalidatePath("/dashboard");
+  if (imported === 0) return { ok: false as const, error: errors[0] ?? "Er stond niets om te importeren." };
+  return { ok: true as const, imported, errors: errors.slice(0, 5) };
 }
 
 export async function deleteSlot(id: string) {

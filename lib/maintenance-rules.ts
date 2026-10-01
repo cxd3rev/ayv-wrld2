@@ -52,6 +52,10 @@ export function addDays(iso: string, days: number) {
  * Solid fuel is yearly at any power. Under 20 kW is optional, except solid fuel.
  * A heat pump has no legal interval at any power.
  */
+export function maintenanceIsLegallyRequired(fuel: FuelType, powerKw: number) {
+  return legalMaintenanceIntervalMonths(fuel, powerKw) !== null;
+}
+
 export function legalMaintenanceIntervalMonths(fuel: FuelType, powerKw: number) {
   if (fuel === "solid_fuel") return 12;
   if (fuel === "heat_pump") return null;

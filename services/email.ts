@@ -137,6 +137,49 @@ export function nexroOutreachEmail(opts: { organizationName: string; message: st
   `;
 }
 
+export function trialEndingEmailHtml(input: {
+  name: string;
+  endsOn: string;
+  amountEur: number;
+  period: string;
+  portalUrl: string;
+}) {
+  return `
+    <div style="font-family:sans-serif;line-height:1.6;color:#111">
+      <p>Dag ${escapeHtml(input.name)},</p>
+      <p>Je proefperiode van ${escapeHtml(PRODUCT_NAME)} loopt af op ${escapeHtml(input.endsOn)}. Daarna betaal je €${input.amountEur} per ${escapeHtml(input.period)} (excl. btw) met de kaart die je hebt opgegeven.</p>
+      <p>Wil je niet verder? Zeg op voor ${escapeHtml(input.endsOn)} via deze link: <a href="${escapeHtml(input.portalUrl)}">${escapeHtml(input.portalUrl)}</a>. Dan betaal je niets.</p>
+      <p>Vragen? Antwoord gewoon op deze mail.</p>
+      <p>${escapeHtml(PRODUCT_NAME)}</p>
+    </div>
+  `;
+}
+
+export function maintenanceReminderHtml(input: {
+  customerName: string;
+  appliance: string;
+  address: string;
+  dueLabel: string;
+  bookingUrl: string;
+  installerName: string;
+  installerPhone: string;
+  unsubscribeUrl: string;
+  legallyRequired: boolean;
+}) {
+  const duty = input.legallyRequired
+    ? "Dat onderhoud is wettelijk verplicht en houdt je ketel veilig en zuinig."
+    : "Dat houdt je ketel veilig en zuinig.";
+  return `
+    <div style="font-family:sans-serif;line-height:1.6;color:#111">
+      <p>Dag ${escapeHtml(input.customerName)},</p>
+      <p>Het onderhoud van je ${escapeHtml(input.appliance)} op ${escapeHtml(input.address)} is gepland voor rond ${escapeHtml(input.dueLabel)}. ${duty}</p>
+      <p>Kies hier zelf een moment dat jou past: <a href="${escapeHtml(input.bookingUrl)}">${escapeHtml(input.bookingUrl)}</a></p>
+      <p>Met vriendelijke groeten,<br/>${escapeHtml(input.installerName)}<br/>${escapeHtml(input.installerPhone)}</p>
+      <p style="font-size:12px;color:#555">Je ontvangt deze mail omdat ${escapeHtml(input.installerName)} je ketel onderhoudt. Geen herinneringen meer? <a href="${escapeHtml(input.unsubscribeUrl)}">afmelden</a></p>
+    </div>
+  `;
+}
+
 async function logEmailEvent(input: SendEmailInput & {
   status: "queued" | "sent" | "failed";
   providerId?: string | null;
