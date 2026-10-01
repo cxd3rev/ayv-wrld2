@@ -1,37 +1,12 @@
 import { LegalPage } from "@/components/marketing/legal-page";
 import { legacyModulesEnabled } from "@/config/features";
-import { getLegalCopy, legalContact } from "@/config/legal";
-import { PRODUCT_NAME } from "@/config/site";
+import { getLegalCopy, productLegal } from "@/config/legal";
 import { resolveLocale } from "@/i18n/config";
-import { BUSINESS } from "@/lib/business";
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 
-function productPrivacy() {
-  return {
-    updated: "2 oktober 2026",
-    title: "Privacy",
-    description: `Welke gegevens ${PRODUCT_NAME} bewaart.`,
-    intro: `${PRODUCT_NAME} wordt gevoerd door ${BUSINESS.owner} vanuit België. Vragen: ${legalContact}.`,
-    sections: [
-      {
-        title: "Wat we bewaren",
-        paragraphs: [
-          "Account, bedrijfsgegevens, klanten, adressen, ketels, afspraken, attesten en de e-mails die de herinnering verstuurt.",
-        ],
-      },
-      {
-        title: "Wie ze verwerkt",
-        paragraphs: [
-          "De database en bestanden staan bij Supabase. Betalingen, zodra die aanstaan, lopen via Stripe. E-mail loopt via Resend. De site draait op Vercel.",
-        ],
-      },
-    ],
-  };
-}
-
 export async function generateMetadata(): Promise<Metadata> {
-  const document = legacyModulesEnabled ? getLegalCopy(resolveLocale(await getLocale())).privacy : productPrivacy();
+  const document = legacyModulesEnabled ? getLegalCopy(resolveLocale(await getLocale())).privacy : productLegal().privacy;
   return {
     title: document.title,
     description: document.description,
@@ -41,6 +16,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PrivacyPage() {
-  const document = legacyModulesEnabled ? getLegalCopy(resolveLocale(await getLocale())).privacy : productPrivacy();
-  return <LegalPage document={document} />;
+  const document = legacyModulesEnabled ? getLegalCopy(resolveLocale(await getLocale())).privacy : productLegal().privacy;
+  return <LegalPage document={document} draft={!legacyModulesEnabled} />;
 }

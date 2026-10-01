@@ -3,10 +3,13 @@ import { legalContact, type getLegalCopy } from "@/config/legal";
 
 type DocumentCopy = ReturnType<typeof getLegalCopy>["terms"];
 
-export function LegalPage({ document }: { document: DocumentCopy }) {
+export function LegalPage({ document, draft = false }: { document: DocumentCopy; draft?: boolean }) {
   return (
     <PublicShell>
       <main id="main-content" className="mx-auto w-full max-w-3xl px-6 py-20 lg:py-28">
+        {draft && process.env.NODE_ENV === "development" ? (
+          <p className="mb-8 rounded-2xl border border-foreground/20 px-4 py-3 text-sm">Concept — juridisch nakijken voor lancering</p>
+        ) : null}
         <p className="text-xs uppercase tracking-[0.16em] text-white/45">{document.updated}</p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">{document.title}</h1>
         <p className="mt-6 text-base leading-relaxed text-white/70">{document.intro}</p>

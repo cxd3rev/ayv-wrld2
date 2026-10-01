@@ -126,7 +126,7 @@ export function SignupForm() {
       <p className="text-center text-xs leading-relaxed text-muted">
         {t.rich("legalNotice", {
           terms: (chunks) => (
-            <Link href="/terms" className="underline underline-offset-4">
+            <Link href={legacyModulesEnabled ? "/terms" : "/voorwaarden"} className="underline underline-offset-4">
               {chunks}
             </Link>
           ),

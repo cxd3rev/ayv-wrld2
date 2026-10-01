@@ -1,5 +1,6 @@
 import type { AppLocale } from "@/i18n/config";
 import { BUSINESS } from "@/lib/business";
+import { PRICING, PRODUCT_NAME } from "@/config/site";
 
 export const legalContact = BUSINESS.email;
 
@@ -705,4 +706,104 @@ const copy: Record<AppLocale, LegalCopy> = { en, fr, de, nl };
 
 export function getLegalCopy(locale: AppLocale) {
   return copy[locale];
+}
+
+// TODO: have a lawyer review these drafts before launch. They are not legal advice.
+export function productLegal() {
+  const price = `€${PRICING.monthlyEur} per maand of €${PRICING.yearlyEur} per jaar (${PRICING.yearlyLabel}). De oprichtersprijs is €${PRICING.founderMonthlyEur} per maand, zolang je klant blijft. ${PRICING.founderAvailability}. Alle prijzen zijn excl. btw.`;
+  return {
+    privacy: {
+      updated: "2 oktober 2026",
+      title: "Privacybeleid",
+      description: `Hoe ${PRODUCT_NAME} omgaat met persoonsgegevens.`,
+      intro: `${PRODUCT_NAME} wordt gevoerd door ${BUSINESS.owner} vanuit België. Dit is een concept. Vragen: ${legalContact}.`,
+      sections: [
+        {
+          title: "Rollen",
+          paragraphs: [
+            `Jij, de installateur, bent verwerkingsverantwoordelijke voor de gegevens van je klanten. ${PRODUCT_NAME} is verwerker: we bewaren en gebruiken die gegevens alleen om de dienst voor jou uit te voeren.`,
+            `Voor je account (naam, e-mail, bedrijf, betaling) is ${BUSINESS.owner} verwerkingsverantwoordelijke.`,
+          ],
+        },
+        {
+          title: "Welke gegevens",
+          paragraphs: [
+            "Account, bedrijfsnaam, btw-nummer, gemeente, telefoon, klanten, adressen, ketels, afspraken, attesten en de inhoud van herinneringsmails.",
+          ],
+        },
+        {
+          title: "Waar ze staan",
+          paragraphs: [
+            "De database staat in de EU (eu-west-1) bij Supabase. Betalingen lopen via Stripe. E-mail loopt via Resend. De site draait op Vercel.",
+          ],
+        },
+        {
+          title: "Bewaartermijn en rechten",
+          paragraphs: [
+            "Je kunt je klantgegevens exporteren als CSV en je account opzeggen. Je klanten kunnen de herinneringen afmelden via de link in de mail.",
+            `Vragen over privacy: ${legalContact}.`,
+          ],
+        },
+      ],
+    },
+    terms: {
+      updated: "2 oktober 2026",
+      title: "Algemene voorwaarden",
+      description: `Voorwaarden voor ${PRODUCT_NAME}.`,
+      intro: `${PRODUCT_NAME} is software voor verwarmingsinstallateurs in Vlaanderen. Dit is een concept en geen juridisch advies. Vragen: ${legalContact}.`,
+      sections: [
+        {
+          title: "De dienst",
+          paragraphs: [
+            `${PRODUCT_NAME} houdt onderhoudsdatums bij, stuurt herinneringen en laat een klant een moment kiezen. De termijnen volgen een vereenvoudigd overzicht van de Vlaamse regels. Jij controleert de actuele regelgeving.`,
+          ],
+        },
+        {
+          title: "Proefperiode en prijs",
+          paragraphs: [
+            `Je probeert ${PRICING.trialDays} dagen gratis. Bij het starten van de proefperiode vragen we een kaart. Stripe bewaart die kaart. Tijdens de proefperiode betaal je niets.`,
+            `Na dag ${PRICING.trialDays} start de betaling automatisch, tenzij je voordien opzegt. ${price}`,
+          ],
+        },
+        {
+          title: "Opzeggen",
+          paragraphs: [
+            "Je kunt op elk moment opzeggen, ook tijdens de proefperiode, zonder opzegtermijn. Dat doe je via Instellingen → Abonnement, in het Stripe-klantportaal. Zeg je op voor het einde van de proefperiode, dan betaal je niets.",
+          ],
+        },
+      ],
+    },
+    processor: {
+      updated: "2 oktober 2026",
+      title: "Verwerkersovereenkomst",
+      description: `Verwerkerrol van ${PRODUCT_NAME} tegenover het installatiebedrijf.`,
+      intro: `Deze overeenkomst hoort bij de voorwaarden van ${PRODUCT_NAME}. Dit is een concept. Vragen: ${legalContact}.`,
+      sections: [
+        {
+          title: "Partijen",
+          paragraphs: [
+            `Het installatiebedrijf is verwerkingsverantwoordelijke voor de gegevens van zijn klanten. ${PRODUCT_NAME}, gevoerd door ${BUSINESS.owner}, is verwerker.`,
+          ],
+        },
+        {
+          title: "Opdracht",
+          paragraphs: [
+            "We verwerken die gegevens alleen om deadlines te berekenen, herinneringen te sturen, afspraken te laten kiezen en attesten te bewaren. We verkopen de gegevens niet.",
+          ],
+        },
+        {
+          title: "Subverwerkers",
+          paragraphs: [
+            "Supabase (database en bestanden), Stripe (betalingen), Resend (e-mail) en Vercel (hosting).",
+          ],
+        },
+        {
+          title: "Einde",
+          paragraphs: [
+            "Na opzeggen kun je een CSV-export maken. Daarna verwijderen we de klantgegevens van het bedrijf binnen een redelijke termijn, behalve wat we wettelijk moeten bijhouden.",
+          ],
+        },
+      ],
+    },
+  };
 }
