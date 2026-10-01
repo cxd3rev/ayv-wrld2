@@ -143,9 +143,9 @@ export function AvyroLeadsWorkspace({
       <form
         id="avyro-add-lead"
         action={onAdd}
-        className="workspace-card grid gap-6 p-6 sm:p-8 md:grid-cols-2"
+        className="workspace-card grid gap-4 p-5 sm:p-6 md:grid-cols-3"
       >
-        <div className="md:col-span-2">
+        <div className="md:col-span-3">
           <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{t("addLead")}</p>
           {prefill ? (
             <p className="mt-2 text-sm text-muted">
@@ -177,9 +177,15 @@ export function AvyroLeadsWorkspace({
           <Label htmlFor="followUpOn">{t("followUpOn")}</Label>
           <Input id="followUpOn" name="followUpOn" type="date" />
         </div>
-        <AdvancedPanel inline label={tCommon("advanced")}>
+        <div className="flex flex-col gap-3 md:col-span-3">
+          <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
+          <ActionFeedback message={saved} />
+          <FormError message={error} />
+        </div>
+        <div className="md:col-span-3">
+          <AdvancedPanel compact label={tCommon("advanced")}>
             <IncomingLinkFields prefillProduct={prefill?.product} prefillId={prefill?.id} />
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <Label htmlFor="phone">
                   {t("phone")}
@@ -208,12 +214,6 @@ export function AvyroLeadsWorkspace({
               </div>
             ) : null}
           </AdvancedPanel>
-        <div className="flex flex-col gap-4 md:col-span-2">
-          <PrimaryAction pending={pending}>{pending ? t("adding") : t("add")}</PrimaryAction>
-          <ActionFeedback message={saved} />
-        </div>
-        <div className="md:col-span-2 lg:col-span-4">
-          <FormError message={error} />
         </div>
       </form>
 
