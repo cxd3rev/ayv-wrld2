@@ -304,7 +304,6 @@ export function VeltoBookingsWorkspace({
                 <TH>{t("colWhen")}</TH>
                 <TH>{t("colStatus")}</TH>
                 <TH>{t("colReminder")}</TH>
-                <TH>{t("colConnected")}</TH>
                 <TH>{t("colNotes")}</TH>
                 <TH className="text-right"> </TH>
               </TR>
@@ -328,6 +327,17 @@ export function VeltoBookingsWorkspace({
                           {t("reminderDue")}
                         </p>
                       ) : null}
+                      <ConnectedRecords
+                        product="velto"
+                        recordId={booking.id}
+                        links={links}
+                        leads={leads}
+                        bookings={bookings}
+                        quotes={quotes}
+                        invoices={invoices}
+                        reactivations={reactivations}
+                        reviews={reviews}
+                      />
                     </TD>
                     <TD>
                       <p>{formatDay(booking.starts_on, locale)}</p>
@@ -380,19 +390,6 @@ export function VeltoBookingsWorkspace({
                       {booking.reminder_on ? (
                         <p className="mt-1 text-xs text-muted">{formatDay(booking.reminder_on, locale)}</p>
                       ) : null}
-                    </TD>
-                    <TD>
-                      <ConnectedRecords
-                        product="velto"
-                        recordId={booking.id}
-                        links={links}
-                        leads={leads}
-                        bookings={bookings}
-                        quotes={quotes}
-                        invoices={invoices}
-                        reactivations={reactivations}
-                        reviews={reviews}
-                      />
                     </TD>
                     <TD className="max-w-xs text-muted">{booking.notes || "—"}</TD>
                     <TD className="text-right">

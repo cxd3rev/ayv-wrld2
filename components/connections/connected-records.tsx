@@ -18,88 +18,12 @@ import {
   deleteRecordLink,
 } from "@/services/record-links";
 import { openLinkedWorkspace } from "@/services/product-switch";
-import { cn } from "@/lib/utils";
 import type { Booking, Invoice, Lead, Quote, Reactivation, RecordLink, Review } from "@/types/database";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 const journeyProducts: RecordProduct[] = ["avyro", "velto", "rovyn", "orvyn", "nexro", "ravelo"];
-
-function formatDay(value: string | null, locale: string) {
-  if (!value) return "";
-  const [year, month, day] = value.split("-").map(Number);
-  if (!year || !month || !day) return value;
-  return new Intl.DateTimeFormat(locale, {
-    month: "short",
-    day: "numeric",
-  }).format(new Date(year, month - 1, day));
-}
-
-function recordLabel(
-  product: RecordProduct,
-  id: string,
-  leads: Lead[],
-  bookings: Booking[],
-  quotes: Quote[],
-  invoices: Invoice[],
-  reactivations: Reactivation[],
-  reviews: Review[],
-  locale: string,
-  fallbacks: {
-    lead: string;
-    booking: string;
-    quote: string;
-    invoice: string;
-    reactivation: string;
-    review: string;
-  },
-) {
-  if (product === "avyro") {
-    const lead = leads.find((item) => item.id === id);
-    return lead?.name ?? fallbacks.lead;
-  }
-  if (product === "velto") {
-    const booking = bookings.find((item) => item.id === id);
-    if (!booking) return fallbacks.booking;
-    const when = formatDay(booking.starts_on, locale);
-    return when ? `${booking.service} · ${when}` : booking.service;
-  }
-  if (product === "rovyn") {
-    const quote = quotes.find((item) => item.id === id);
-    return quote?.title ?? fallbacks.quote;
-  }
-  if (product === "orvyn") {
-    const invoice = invoices.find((item) => item.id === id);
-    return invoice ? `${invoice.invoice_number} · ${invoice.customer_name}` : fallbacks.invoice;
-  }
-  if (product === "nexro") {
-    return reactivations.find((item) => item.id === id)?.customer_name ?? fallbacks.reactivation;
-  }
-  return reviews.find((item) => item.id === id)?.customer_name ?? fallbacks.review;
-}
-
-function recordHint(
-  product: RecordProduct,
-  id: string,
-  leads: Lead[],
-  bookings: Booking[],
-  quotes: Quote[],
-  invoices: Invoice[],
-  reactivations: Reactivation[],
-  reviews: Review[],
-) {
-  if (product === "avyro") {
-    return leads.find((item) => item.id === id)?.email ?? "";
-  }
-  if (product === "velto") {
-    return bookings.find((item) => item.id === id)?.customer_name ?? "";
-  }
-  if (product === "rovyn") return quotes.find((item) => item.id === id)?.customer_name ?? "";
-  if (product === "orvyn") return invoices.find((item) => item.id === id)?.description ?? "";
-  if (product === "nexro") return reactivations.find((item) => item.id === id)?.message ?? "";
-  return reviews.find((item) => item.id === id)?.feedback ?? "";
-}
 
 export function IncomingLinkFields({
   prefillProduct,
@@ -142,7 +66,6 @@ export function ConnectedRecords({
   const { toast } = useToast();
   const t = useTranslations("connections");
   const tCommon = useTranslations("common");
-  const locale = useLocale();
   const current = getRecordEntity(product)!;
   const targets = otherRecordEntities(product);
   const [attachOpen, setAttachOpen] = useState(false);
@@ -183,23 +106,6 @@ export function ConnectedRecords({
     );
     return { completed };
   }, [links, product, recordId]);
-  const nextProduct = journeyProducts
-    .slice(journeyProducts.indexOf(product) + 1)
-    .find((step) => !journey.completed.includes(step));
-  const readyForHandoff =
-    product === "avyro"
-      ? leads.find((lead) => lead.id === recordId)?.status !== "lost"
-      : product === "velto"
-        ? bookings.find((booking) => booking.id === recordId)?.status === "completed"
-        : product === "rovyn"
-          ? quotes.find((quote) => quote.id === recordId)?.status === "won"
-          : product === "orvyn"
-            ? invoices.find((invoice) => invoice.id === recordId)?.status === "paid"
-            : product === "nexro"
-              ? ["won", "replied"].includes(
-                  reactivations.find((item) => item.id === recordId)?.status ?? "",
-                )
-              : false;
 
   const attachOptions = useMemo(() => {
     const entity = getRecordEntity(attachProduct);
@@ -273,123 +179,62 @@ export function ConnectedRecords({
     nexro: t("nounReactivation"),
     ravelo: t("nounReview"),
   } as const;
-  const fallbacks = {
-    lead: t("fallbackLead"),
-    booking: t("fallbackBooking"),
-    quote: t("fallbackQuote"),
-    invoice: t("fallbackInvoice"),
-    reactivation: t("fallbackReactivation"),
-    review: t("fallbackReview"),
-  };
+
+  const linkClass = "text-xs text-muted hover:text-foreground disabled:opacity-50";
 
   return (
-    <div className="flex min-w-[12rem] flex-col items-start gap-2">
-      <div className="w-full border-l-2 border-foreground/15 pl-3">
-        <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">
-          {t("workflow")}
-        </p>
-        <div className="mt-2 flex items-center gap-1" aria-label={t("journeyProgress", { count: journey.completed.length })}>
-          {journeyProducts.map((step) => (
-            <span
-              key={step}
-              title={recordProductName(step)}
-              className={cn(
-                "h-1.5 flex-1",
-                journey.completed.includes(step) ? "bg-accent" : "bg-foreground/10",
-              )}
-            />
-          ))}
-        </div>
-        <p className="mt-2 text-xs text-muted">
-          {t("stepsConnected", { count: journey.completed.length })}
-        </p>
-        {nextProduct && readyForHandoff ? (
-          <p className="mt-1 text-xs font-medium">
-            {t("nextBestAction", { name: recordProductName(nextProduct) })}
-          </p>
-        ) : nextProduct ? (
-          <p className="mt-1 text-xs font-medium">{t("handoffPending")}</p>
-        ) : journey.completed.length === journeyProducts.length ? (
-          <p className="mt-1 text-xs font-medium text-success">{t("journeyComplete")}</p>
-        ) : (
-          <p className="mt-1 text-xs font-medium">{t("finalStep")}</p>
-        )}
-      </div>
-      <p className="font-mono text-[11px] tracking-[0.12em] text-muted uppercase">{t("connected")}</p>
-      {linked.length === 0 ? (
-        <p className="text-muted">{t("nothing")}</p>
-      ) : (
-        linked.map((side) => {
-          const entity = getRecordEntity(side.product);
-          if (!entity) return null;
-          const name = recordProductName(side.product);
-          return (
-            <div key={side.linkId} className="flex flex-col items-start gap-1">
-              <button
-                type="button"
-                className="text-left text-sm hover:text-accent"
-                onClick={() =>
-                  openLinkedWorkspace(side.product, { [entity.focusParam]: side.id })
+    <div className="mt-3 space-y-2">
+      <p className="text-xs text-muted">{t("stepsConnected", { count: journey.completed.length })}</p>
+      {linked.map((side) => {
+        const entity = getRecordEntity(side.product);
+        if (!entity) return null;
+        const name = recordProductName(side.product);
+        return (
+          <div key={side.linkId} className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span className="text-sm">{name}</span>
+            <button
+              type="button"
+              className={linkClass}
+              onClick={() => openLinkedWorkspace(side.product, { [entity.focusParam]: side.id })}
+            >
+              {t("openIn", { name })}
+            </button>
+            <button
+              type="button"
+              className={linkClass}
+              disabled={unlinkPending === side.linkId}
+              onClick={async () => {
+                setUnlinkPending(side.linkId);
+                const result = await deleteRecordLink(side.linkId);
+                setUnlinkPending(null);
+                if (!result.ok) {
+                  toast({ title: result.error ?? "Could not unlink", tone: "error" });
+                  return;
                 }
-              >
-                {recordLabel(side.product, side.id, leads, bookings, quotes, invoices, reactivations, reviews, locale, fallbacks)}
-              </button>
-              <p className="text-xs text-muted">
-                {name}
-                {recordHint(side.product, side.id, leads, bookings, quotes, invoices, reactivations, reviews)
-                  ? ` · ${recordHint(side.product, side.id, leads, bookings, quotes, invoices, reactivations, reviews)}`
-                  : ""}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() =>
-                    openLinkedWorkspace(side.product, { [entity.focusParam]: side.id })
-                  }
-                >
-                  {t("openIn", { name })}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  disabled={unlinkPending === side.linkId}
-                  onClick={async () => {
-                    setUnlinkPending(side.linkId);
-                    const result = await deleteRecordLink(side.linkId);
-                    setUnlinkPending(null);
-                    if (!result.ok) {
-                      toast({ title: result.error ?? "Could not unlink", tone: "error" });
-                      return;
-                    }
-                    toast({ title: t("unlinked"), tone: "success" });
-                    router.refresh();
-                  }}
-                >
-                  {unlinkPending === side.linkId ? t("unlinking") : t("unlink")}
-                </Button>
-              </div>
-            </div>
-          );
-        })
-      )}
-      <div className="flex flex-wrap gap-2">
+                toast({ title: t("unlinked"), tone: "success" });
+                router.refresh();
+              }}
+            >
+              {unlinkPending === side.linkId ? t("unlinking") : t("unlink")}
+            </button>
+          </div>
+        );
+      })}
+      <div className="flex flex-wrap gap-x-3 gap-y-1">
         {targets.map((target) => (
-          <Button
+          <button
             key={target.product}
-            size="sm"
-            variant="secondary"
-            onClick={() =>
-              openLinkedWorkspace(target.product, { [current.fromParam]: recordId })
-            }
+            type="button"
+            className={linkClass}
+            onClick={() => openLinkedWorkspace(target.product, { [current.fromParam]: recordId })}
           >
             {createLabel[target.product]}
-          </Button>
+          </button>
         ))}
         {canAttach ? (
-          <Button
-            size="sm"
-            variant="ghost"
+          <button
+            type="button"
+            className={linkClass}
             onClick={() => {
               setAttachError("");
               setAttachProduct(targets[0]?.product ?? "avyro");
@@ -397,7 +242,7 @@ export function ConnectedRecords({
             }}
           >
             {t("attach")}
-          </Button>
+          </button>
         ) : null}
       </div>
 
