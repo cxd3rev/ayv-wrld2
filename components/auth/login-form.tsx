@@ -1,7 +1,5 @@
 "use client";
 
-import { legacyModulesEnabled } from "@/config/features";
-import { PRODUCT_NAME, PRODUCT_TAGLINE } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/form-error";
 import { Input } from "@/components/ui/input";
@@ -59,12 +57,6 @@ export function LoginForm() {
 
   return (
     <form action={onSubmit} className="space-y-4">
-      {legacyModulesEnabled ? null : (
-        <div className="mb-2 text-center">
-          <h1 className="display text-5xl tracking-tight">{PRODUCT_NAME}</h1>
-          <p className="mt-3 text-sm text-muted">{PRODUCT_TAGLINE}</p>
-        </div>
-      )}
       <div>
         <Label htmlFor="email">{t("email")}</Label>
         <Input

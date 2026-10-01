@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
         { source: "/projects/:slug", destination: "/", permanent: true },
         { source: "/one-man-army", destination: "/", permanent: true },
         { source: "/about", destination: "/", permanent: true },
+        { source: "/terms", destination: "/voorwaarden", permanent: true },
       ];
     }
     return [

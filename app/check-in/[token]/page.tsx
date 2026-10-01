@@ -1,4 +1,6 @@
 import { replyToCheckIn } from "@/app/check-in/[token]/actions";
+import { legacyModulesEnabled } from "@/config/features";
+import { PRODUCT_NAME } from "@/config/site";
 import { redirect } from "next/navigation";
 
 export default async function CheckInReplyPage({
@@ -20,7 +22,7 @@ export default async function CheckInReplyPage({
 
   return (
     <main className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-6 py-16">
-      <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Avyro</p>
+      <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">{legacyModulesEnabled ? "Avyro" : PRODUCT_NAME}</p>
       <h1 className="display mt-4 text-4xl">How did it go?</h1>
       {query.missing ? (
         <p className="mt-6 text-lg text-muted">This check-in link is no longer valid.</p>
