@@ -146,7 +146,9 @@ export function ConnectedRecords({
       .map((item) => ({ id: item.id, label: item.customer_name }));
   }, [attachProduct, bookings, invoices, leads, linkedKeys, quotes, reactivations, reviews]);
 
-  const canAttach = targets.some((target) => {
+  const openTargets = targets.filter((target) => !journey.completed.includes(target.product));
+
+  const canAttach = openTargets.some((target) => {
     if (target.product === "avyro") return leads.some((lead) => !linkedKeys.has(`avyro:${lead.id}`));
     if (target.product === "velto") {
       return bookings.some((booking) => !linkedKeys.has(`velto:${booking.id}`));
@@ -221,7 +223,7 @@ export function ConnectedRecords({
         );
       })}
       <div className="flex flex-wrap gap-x-3 gap-y-1">
-        {targets.map((target) => (
+        {openTargets.map((target) => (
           <button
             key={target.product}
             type="button"
@@ -237,7 +239,7 @@ export function ConnectedRecords({
             className={linkClass}
             onClick={() => {
               setAttachError("");
-              setAttachProduct(targets[0]?.product ?? "avyro");
+              setAttachProduct(openTargets[0]?.product ?? "avyro");
               setAttachOpen(true);
             }}
           >
@@ -278,7 +280,7 @@ export function ConnectedRecords({
               value={attachProduct}
               onChange={(event) => setAttachProduct(event.target.value as RecordProduct)}
             >
-              {targets.map((target) => (
+              {openTargets.map((target) => (
                 <option key={target.product} value={target.product}>
                   {recordProductName(target.product)}
                 </option>
