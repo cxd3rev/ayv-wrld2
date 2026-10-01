@@ -32,7 +32,7 @@ import type {
 } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 const statusTone: Record<ReviewStatus, "neutral" | "accent" | "warning" | "success"> = {
   scheduled: "neutral",
@@ -235,13 +235,13 @@ export function RaveloReviewsWorkspace({
                 <TH>{t("colChannel")}</TH>
                 <TH>{t("colStatus")}</TH>
                 <TH>{t("colFollowUp")}</TH>
-                <TH>{t("colConnected")}</TH>
                 <TH className="text-right"> </TH>
               </TR>
             </THead>
             <TBody>
               {visible.map((item) => (
-                <TR key={item.id} id={`review-${item.id}`} className={cn(focusReviewId === item.id && "bg-accent-soft")}>
+                <Fragment key={item.id}>
+                <TR id={`review-${item.id}`} className={cn(focusReviewId === item.id && "bg-accent-soft")}>
                   <TD>
                     <p className="font-medium">{item.customer_name}</p>
                     <p className="text-xs text-muted">
@@ -288,8 +288,14 @@ export function RaveloReviewsWorkspace({
                       }}
                     />
                   </TD>
-                  <TD>
+                  <TD className="text-right">
+                    <TrashButton label={t("remove")} onClick={() => setDeleteId(item.id)} />
+                  </TD>
+                </TR>
+                <TR className="record-links hover:bg-transparent">
+                  <TD colSpan={5} className="pt-0">
                     <ConnectedRecords
+                      className="mt-0"
                       product="ravelo"
                       recordId={item.id}
                       links={links}
@@ -301,10 +307,8 @@ export function RaveloReviewsWorkspace({
                       reviews={reviews}
                     />
                   </TD>
-                  <TD className="text-right">
-                    <TrashButton label={t("remove")} onClick={() => setDeleteId(item.id)} />
-                  </TD>
                 </TR>
+                </Fragment>
               ))}
             </TBody>
           </Table>

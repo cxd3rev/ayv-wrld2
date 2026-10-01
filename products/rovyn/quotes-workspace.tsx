@@ -26,7 +26,7 @@ import {
 import type { Booking, Invoice, Lead, Quote, QuoteStatus, Reactivation, RecordLink, Review } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 const statusTone: Record<QuoteStatus, "accent" | "warning" | "success" | "danger"> = {
   sent: "accent",
@@ -279,7 +279,6 @@ export function RovynQuotesWorkspace({
                 <TH>{t("colQuote")}</TH>
                 <TH>{t("colStatus")}</TH>
                 <TH>{t("colFollowUp")}</TH>
-                <TH>{t("colConnected")}</TH>
                 <TH>{t("colNotes")}</TH>
                 <TH className="text-right"> </TH>
               </TR>
@@ -288,8 +287,8 @@ export function RovynQuotesWorkspace({
               {visibleQuotes.map((quote) => {
                 const focused = focusQuoteId === quote.id;
                 return (
+                  <Fragment key={quote.id}>
                   <TR
-                    key={quote.id}
                     id={`quote-${quote.id}`}
                     className={cn(focused && "bg-accent-soft")}
                   >
@@ -357,8 +356,15 @@ export function RovynQuotesWorkspace({
                         <p className="mt-1 text-xs text-muted">{formatFollowUp(quote.follow_up_on, locale)}</p>
                       ) : null}
                     </TD>
-                    <TD>
+                    <TD className="max-w-xs text-muted">{quote.notes || "—"}</TD>
+                    <TD className="text-right">
+                      <TrashButton label={t("remove")} onClick={() => setDeleteId(quote.id)} />
+                    </TD>
+                  </TR>
+                  <TR className="record-links hover:bg-transparent">
+                    <TD colSpan={6} className="pt-0">
                       <ConnectedRecords
+                        className="mt-0"
                         product="rovyn"
                         recordId={quote.id}
                         links={links}
@@ -370,11 +376,8 @@ export function RovynQuotesWorkspace({
                         reviews={reviews}
                       />
                     </TD>
-                    <TD className="max-w-xs text-muted">{quote.notes || "—"}</TD>
-                    <TD className="text-right">
-                      <TrashButton label={t("remove")} onClick={() => setDeleteId(quote.id)} />
-                    </TD>
                   </TR>
+                  </Fragment>
                 );
               })}
             </TBody>

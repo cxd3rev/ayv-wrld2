@@ -31,7 +31,7 @@ import type {
 } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 const statusTone: Record<InvoiceStatus, "neutral" | "accent" | "warning" | "success"> = {
   draft: "neutral",
@@ -243,10 +243,11 @@ export function OrvynInvoicesWorkspace({
           <EmptyState className="py-20" title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
           <Table>
-            <THead><TR><TH>{t("colInvoice")}</TH><TH>{t("colAmount")}</TH><TH>{t("colStatus")}</TH><TH>{t("colDates")}</TH><TH>{t("colReminder")}</TH><TH>{t("colConnected")}</TH><TH className="text-right"> </TH></TR></THead>
+            <THead><TR><TH>{t("colInvoice")}</TH><TH>{t("colAmount")}</TH><TH>{t("colStatus")}</TH><TH>{t("colDates")}</TH><TH>{t("colReminder")}</TH><TH className="text-right"> </TH></TR></THead>
             <TBody>
               {visibleInvoices.map((invoice) => (
-                <TR key={invoice.id} id={`invoice-${invoice.id}`} className={cn(focusInvoiceId === invoice.id && "bg-accent-soft")}>
+                <Fragment key={invoice.id}>
+                <TR id={`invoice-${invoice.id}`} className={cn(focusInvoiceId === invoice.id && "bg-accent-soft")}>
                   <TD><p className="font-medium">{invoice.invoice_number}</p><p>{invoice.customer_name}</p><p className="text-xs text-muted">{invoice.description}</p></TD>
                   <TD>{formatMoney(invoice.amount, invoice.currency, locale)}</TD>
                   <TD>
@@ -267,9 +268,14 @@ export function OrvynInvoicesWorkspace({
                       if (result.ok) router.refresh();
                     }} />
                   </TD>
-                  <TD><ConnectedRecords product="orvyn" recordId={invoice.id} links={links} leads={leads} bookings={bookings} quotes={quotes} invoices={invoices} reactivations={reactivations} reviews={reviews} /></TD>
                   <TD className="text-right"><TrashButton label={t("remove")} onClick={() => setDeleteId(invoice.id)} /></TD>
                 </TR>
+                <TR className="record-links hover:bg-transparent">
+                  <TD colSpan={6} className="pt-0">
+                    <ConnectedRecords className="mt-0" product="orvyn" recordId={invoice.id} links={links} leads={leads} bookings={bookings} quotes={quotes} invoices={invoices} reactivations={reactivations} reviews={reviews} />
+                  </TD>
+                </TR>
+                </Fragment>
               ))}
             </TBody>
           </Table>

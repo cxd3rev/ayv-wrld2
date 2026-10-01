@@ -38,7 +38,7 @@ import type {
 } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 const statusTone: Record<ReactivationStatus, "neutral" | "accent" | "warning" | "success"> = {
   scheduled: "neutral",
@@ -460,14 +460,13 @@ export function NexroReactivationsWorkspace({
                 <TH>{t("colKind")}</TH>
                 <TH>{t("colStatus")}</TH>
                 <TH>{t("colTouch")}</TH>
-                <TH>{t("colConnected")}</TH>
                 <TH className="text-right"> </TH>
               </TR>
             </THead>
             <TBody>
               {visible.map((item) => (
+                <Fragment key={item.id}>
                 <TR
-                  key={item.id}
                   id={`reactivation-${item.id}`}
                   className={cn(focusReactivationId === item.id && "bg-accent-soft")}
                 >
@@ -508,19 +507,6 @@ export function NexroReactivationsWorkspace({
                       }}
                     />
                   </TD>
-                  <TD>
-                    <ConnectedRecords
-                      product="nexro"
-                      recordId={item.id}
-                      links={links}
-                      leads={leads}
-                      bookings={bookings}
-                      quotes={quotes}
-                      invoices={invoices}
-                      reactivations={reactivations}
-                      reviews={reviews}
-                    />
-                  </TD>
                   <TD className="text-right">
                     {item.email && item.status !== "won" && item.status !== "passed" ? (
                       <Button
@@ -542,6 +528,23 @@ export function NexroReactivationsWorkspace({
                     <TrashButton label={t("remove")} onClick={() => setDeleteId(item.id)} />
                   </TD>
                 </TR>
+                <TR className="record-links hover:bg-transparent">
+                  <TD colSpan={5} className="pt-0">
+                    <ConnectedRecords
+                      className="mt-0"
+                      product="nexro"
+                      recordId={item.id}
+                      links={links}
+                      leads={leads}
+                      bookings={bookings}
+                      quotes={quotes}
+                      invoices={invoices}
+                      reactivations={reactivations}
+                      reviews={reviews}
+                    />
+                  </TD>
+                </TR>
+                </Fragment>
               ))}
             </TBody>
           </Table>

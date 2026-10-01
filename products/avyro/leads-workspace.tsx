@@ -26,7 +26,7 @@ import {
 import type { Booking, Invoice, Lead, LeadStatus, Quote, Reactivation, RecordLink, Review } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 const statusTone: Record<LeadStatus, "accent" | "warning" | "success" | "danger"> = {
   new: "accent",
@@ -235,7 +235,6 @@ export function AvyroLeadsWorkspace({
                 <TH>{t("colStatus")}</TH>
                 <TH>{t("colFollowUp")}</TH>
                 <TH>{t("colNotes")}</TH>
-                <TH>{t("colConnected")}</TH>
                 <TH className="text-right"> </TH>
               </TR>
             </THead>
@@ -243,8 +242,8 @@ export function AvyroLeadsWorkspace({
               {visibleLeads.map((lead) => {
                 const focused = focusLeadId === lead.id;
                 return (
+                  <Fragment key={lead.id}>
                   <TR
-                    key={lead.id}
                     id={`lead-${lead.id}`}
                     className={cn(focused && "bg-accent-soft")}
                   >
@@ -309,8 +308,14 @@ export function AvyroLeadsWorkspace({
                       ) : null}
                     </TD>
                     <TD className="max-w-xs text-muted">{lead.notes || "—"}</TD>
-                    <TD>
+                    <TD className="text-right">
+                      <TrashButton label={t("remove")} onClick={() => setDeleteId(lead.id)} />
+                    </TD>
+                  </TR>
+                  <TR className="record-links hover:bg-transparent">
+                    <TD colSpan={6} className="pt-0">
                       <ConnectedRecords
+                        className="mt-0"
                         product="avyro"
                         recordId={lead.id}
                         links={links}
@@ -322,10 +327,8 @@ export function AvyroLeadsWorkspace({
                         reviews={reviews}
                       />
                     </TD>
-                    <TD className="text-right">
-                      <TrashButton label={t("remove")} onClick={() => setDeleteId(lead.id)} />
-                    </TD>
                   </TR>
+                  </Fragment>
                 );
               })}
             </TBody>

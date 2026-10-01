@@ -23,7 +23,11 @@ export function THead({ children }: { children: React.ReactNode }) {
 }
 
 export function TBody({ children }: { children: React.ReactNode }) {
-  return <tbody className="divide-y divide-border">{children}</tbody>;
+  return (
+    <tbody className="[&>tr]:border-b [&>tr]:border-border [&>tr:has(+_tr.record-links)]:border-b-0">
+      {children}
+    </tbody>
+  );
 }
 
 export function TR({
@@ -46,6 +50,18 @@ export function TH({ children, className }: { children: React.ReactNode; classNa
   return <th className={cn("px-4 py-3 font-medium", className)}>{children}</th>;
 }
 
-export function TD({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <td className={cn("px-4 py-3", className)}>{children}</td>;
+export function TD({
+  children,
+  className,
+  colSpan,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  colSpan?: number;
+}) {
+  return (
+    <td colSpan={colSpan} className={cn("px-4 py-3 align-top", className)}>
+      {children}
+    </td>
+  );
 }

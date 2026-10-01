@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Modal } from "@/components/ui/modal";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import {
   getRecordEntity,
   otherRecordEntities,
@@ -51,6 +52,7 @@ export function ConnectedRecords({
   invoices = [],
   reactivations = [],
   reviews = [],
+  className,
 }: {
   product: RecordProduct;
   recordId: string;
@@ -61,6 +63,7 @@ export function ConnectedRecords({
   invoices?: Invoice[];
   reactivations?: Reactivation[];
   reviews?: Review[];
+  className?: string;
 }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -185,7 +188,7 @@ export function ConnectedRecords({
   const linkClass = "text-xs text-muted hover:text-foreground disabled:opacity-50";
 
   return (
-    <div className="mt-3 space-y-2">
+    <div className={cn("mt-3 space-y-2", className)}>
       <p className="text-xs text-muted">{t("stepsConnected", { count: journey.completed.length })}</p>
       {linked.map((side) => {
         const entity = getRecordEntity(side.product);

@@ -27,7 +27,7 @@ import {
 import type { Booking, BookingStatus, Invoice, Lead, Quote, Reactivation, RecordLink, Review } from "@/types/database";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 const statusTone: Record<BookingStatus, "accent" | "warning" | "success" | "danger" | "neutral"> = {
   scheduled: "accent",
@@ -314,8 +314,8 @@ export function VeltoBookingsWorkspace({
               {visibleBookings.map((booking) => {
                 const focused = focusBookingId === booking.id;
                 return (
+                  <Fragment key={booking.id}>
                   <TR
-                    key={booking.id}
                     id={`booking-${booking.id}`}
                     className={cn(focused && "bg-accent-soft")}
                   >
@@ -329,17 +329,6 @@ export function VeltoBookingsWorkspace({
                           {t("reminderDue")}
                         </p>
                       ) : null}
-                      <ConnectedRecords
-                        product="velto"
-                        recordId={booking.id}
-                        links={links}
-                        leads={leads}
-                        bookings={bookings}
-                        quotes={quotes}
-                        invoices={invoices}
-                        reactivations={reactivations}
-                        reviews={reviews}
-                      />
                     </TD>
                     <TD>
                       <p>{formatDay(booking.starts_on, locale)}</p>
@@ -398,6 +387,23 @@ export function VeltoBookingsWorkspace({
                       <TrashButton label={t("remove")} onClick={() => setDeleteId(booking.id)} />
                     </TD>
                   </TR>
+                  <TR className="record-links hover:bg-transparent">
+                    <TD colSpan={6} className="pt-0">
+                      <ConnectedRecords
+                        className="mt-0"
+                        product="velto"
+                        recordId={booking.id}
+                        links={links}
+                        leads={leads}
+                        bookings={bookings}
+                        quotes={quotes}
+                        invoices={invoices}
+                        reactivations={reactivations}
+                        reviews={reviews}
+                      />
+                    </TD>
+                  </TR>
+                  </Fragment>
                 );
               })}
             </TBody>
