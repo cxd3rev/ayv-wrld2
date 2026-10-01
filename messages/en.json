@@ -174,10 +174,10 @@
     "orvyn": {
       "tagline": "Payment + invoice follow-up",
       "description": "Payment and invoice follow-up automation",
-      "longDescription": "Orvyn stores each invoice and emails a reminder on the date you set.",
-      "highlight1": "Invoice records with a due date",
-      "highlight2": "Reminder email on the date you choose",
-      "highlight3": "Create an invoice from a Rovyn quote",
+      "longDescription": "Orvyn does not issue the invoice. It stores the invoice you already sent and emails a reminder that names that invoice, the amount, and the due date.",
+      "highlight1": "The invoice number, amount, and due date",
+      "highlight2": "A reminder email on the date you choose",
+      "highlight3": "Start from a won Rovyn quote",
       "nav": "Payments",
       "dashboardDescription": "Track unpaid invoices and schedule reminders so money arrives sooner.",
       "connectedValue": "Create an invoice from a won Rovyn quote and retain the lead, booking, and quote context beside payment status and reminders."
@@ -639,7 +639,7 @@
     "customer": "Customer", "invoiceNumber": "Invoice number", "description": "Description", "amount": "Amount", "currency": "Currency",
     "issuedOn": "Issued on", "dueOn": "Due on", "nextReminderOn": "Next reminder", "email": "Email", "phone": "Phone",
     "notes": "Notes", "notesPlaceholder": "Payment terms or context", "searchPlaceholder": "Search invoices by customer or number", "add": "Add invoice", "adding": "Adding...",
-    "emptyTitle": "No invoices yet", "emptyBody": "Add an unpaid invoice. Orvyn keeps payment status, due dates, and reminders together.",
+    "emptyTitle": "No invoices yet", "emptyBody": "Add the invoice you already sent. The reminder names that invoice number, amount, and due date.",
     "colInvoice": "Invoice", "colAmount": "Amount", "colStatus": "Status", "colDates": "Dates", "colReminder": "Reminder", "colConnected": "Connected",
     "statusDraft": "Draft", "statusSent": "Sent", "statusOverdue": "Overdue", "statusPaid": "Paid", "statusVoid": "Void",
     "statusFor": "Status for invoice {number}", "reminderFor": "Reminder date for invoice {number}",

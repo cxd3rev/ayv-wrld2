@@ -170,9 +170,9 @@ export const products: ProductConfig[] = [
     tagline: "Payment + invoice follow-up",
     description: "Payment and invoice follow-up automation",
     longDescription:
-      "Orvyn reminds customers about unpaid invoices so money comes in faster and fewer bills are forgotten.",
+      "Orvyn does not issue the invoice. It stores the invoice you already sent and emails a reminder that names that invoice, the amount, and the due date.",
     highlights: [
-      "Send automatic reminders on unpaid invoices",
+      "Reminder for the invoice you already sent",
       "Get paid faster with less awkward chasing",
       "Keep track of what's outstanding at a glance",
     ],

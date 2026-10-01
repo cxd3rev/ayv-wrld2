@@ -104,11 +104,23 @@ function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
-export function followUpEmail(opts: { organizationName: string; message: string }) {
+export function followUpEmail(opts: {
+  organizationName: string;
+  message: string;
+  lines?: { label: string; value: string }[];
+}) {
+  const details = (opts.lines ?? [])
+    .filter((line) => line.value.trim())
+    .map(
+      (line) =>
+        `<p style="margin:0 0 6px;font-size:14px;line-height:1.5"><span style="color:#9a9a9a">${escapeHtml(line.label)}</span> ${escapeHtml(line.value)}</p>`,
+    )
+    .join("");
   return `
     <div style="font-family:sans-serif;background:#0a0a0a;color:#ededed;padding:32px">
       <p style="margin:0 0 8px;letter-spacing:0.14em;text-transform:uppercase;font-size:12px;color:#9a9a9a">${escapeHtml(opts.organizationName)}</p>
       <p style="margin:0;font-size:16px;line-height:1.6">${escapeHtml(opts.message)}</p>
+      ${details ? `<div style="margin-top:20px">${details}</div>` : ""}
     </div>
   `;
 }

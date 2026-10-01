@@ -174,10 +174,10 @@
     "orvyn": {
       "tagline": "Paiements + relance de factures",
       "description": "Automatisation du suivi des paiements et factures",
-      "longDescription": "Orvyn enregistre chaque facture et envoie un e-mail de rappel à la date que vous choisissez.",
-      "highlight1": "Fiches de facture avec une échéance",
+      "longDescription": "Orvyn n'émet pas la facture. Il garde la facture déjà envoyée et envoie un rappel qui cite ce numéro, le montant et l'échéance.",
+      "highlight1": "Numéro, montant et échéance de la facture",
       "highlight2": "E-mail de rappel à la date choisie",
-      "highlight3": "Créer une facture depuis un devis Rovyn",
+      "highlight3": "Partir d'un devis Rovyn gagné",
       "nav": "Paiements",
       "dashboardDescription": "Suivez les factures impayées et planifiez les rappels pour être payé plus vite.",
       "connectedValue": "Créez une facture depuis un devis Rovyn gagné et conservez le contexte du lead, de la réservation et du devis avec le paiement."
@@ -639,7 +639,7 @@
     "customer": "Client", "invoiceNumber": "Numéro de facture", "description": "Description", "amount": "Montant", "currency": "Devise",
     "issuedOn": "Émise le", "dueOn": "Échéance", "nextReminderOn": "Prochain rappel", "email": "E-mail", "phone": "Téléphone",
     "notes": "Notes", "notesPlaceholder": "Conditions de paiement ou contexte", "searchPlaceholder": "Rechercher par client ou numéro", "add": "Ajouter la facture", "adding": "Ajout...",
-    "emptyTitle": "Aucune facture", "emptyBody": "Ajoutez une facture impayée. Orvyn réunit statut, échéance et rappels.",
+    "emptyTitle": "Aucune facture", "emptyBody": "Ajoutez la facture déjà envoyée. Le rappel cite ce numéro, le montant et l'échéance.",
     "colInvoice": "Facture", "colAmount": "Montant", "colStatus": "Statut", "colDates": "Dates", "colReminder": "Rappel", "colConnected": "Lié",
     "statusDraft": "Brouillon", "statusSent": "Envoyée", "statusOverdue": "En retard", "statusPaid": "Payée", "statusVoid": "Annulée",
     "statusFor": "Statut de la facture {number}", "reminderFor": "Date de rappel de la facture {number}",

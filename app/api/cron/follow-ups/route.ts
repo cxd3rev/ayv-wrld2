@@ -16,6 +16,26 @@ function amsterdamToday() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Amsterdam" }).format(new Date());
 }
 
+function formatInvoiceAmount(amount: unknown, currency: unknown) {
+  const value = Number(amount);
+  const code = typeof currency === "string" && currency.trim() ? currency.trim() : "EUR";
+  if (!Number.isFinite(value)) return code;
+  try {
+    return new Intl.NumberFormat("nl-BE", { style: "currency", currency: code }).format(value);
+  } catch {
+    return `${value} ${code}`;
+  }
+}
+
+function formatInvoiceDay(value: unknown) {
+  if (typeof value !== "string") return "";
+  const [year, month, day] = value.split("-").map(Number);
+  if (!year || !month || !day) return value;
+  return new Intl.DateTimeFormat("nl-BE", { day: "numeric", month: "long", year: "numeric" }).format(
+    new Date(year, month - 1, day),
+  );
+}
+
 async function alreadySent(template: string) {
   const admin = createAdminClient();
   const { data } = await admin
@@ -62,6 +82,7 @@ export async function GET(request: Request) {
     subject: string,
     message: string,
     after?: () => Promise<void>,
+    lines?: { label: string; value: string }[],
   ) {
     const email = row.email?.trim();
     if (!email) {
@@ -77,7 +98,7 @@ export async function GET(request: Request) {
     const result = await sendEmail({
       to: email,
       subject,
-      html: followUpEmail({ organizationName, message }),
+      html: followUpEmail({ organizationName, message, lines }),
       template,
       organizationId: row.organization_id,
     });
@@ -146,17 +167,25 @@ export async function GET(request: Request) {
 
   const { data: invoices } = await admin
     .from("invoices")
-    .select("id, organization_id, customer_name, email, status")
+    .select("id, organization_id, customer_name, email, status, invoice_number, description, amount, currency, due_on")
     .eq("next_reminder_on", today)
     .in("status", ["sent", "overdue"]);
   for (const invoice of invoices ?? []) {
     const organizationName = names.get(invoice.organization_id) ?? "AYV Automation";
     const person = invoice.customer_name || "there";
+    const number = String(invoice.invoice_number ?? "").trim();
     await deliver(
       invoice,
       "invoices",
-      `Invoice reminder from ${organizationName}`,
-      `Hi ${person}, this is a reminder from ${organizationName} about an open invoice.`,
+      number ? `Reminder for invoice ${number}` : `Invoice reminder from ${organizationName}`,
+      `Hi ${person}, this is a payment reminder for the invoice below. It is a reminder only, not a new invoice.`,
+      undefined,
+      [
+        { label: "Invoice", value: number },
+        { label: "Amount", value: formatInvoiceAmount(invoice.amount, invoice.currency) },
+        { label: "Due", value: formatInvoiceDay(invoice.due_on) },
+        { label: "For", value: String(invoice.description ?? "").trim() },
+      ],
     );
   }
 

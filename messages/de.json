@@ -174,10 +174,10 @@
     "orvyn": {
       "tagline": "Zahlung + Rechnungs-Follow-up",
       "description": "Automatisierung von Zahlungs- und Rechnungserinnerungen",
-      "longDescription": "Orvyn speichert jede Rechnung und schickt am gewählten Datum eine Erinnerung per E-Mail.",
-      "highlight1": "Rechnungseinträge mit Fälligkeitsdatum",
+      "longDescription": "Orvyn stellt die Rechnung nicht aus. Es speichert die bereits gesendete Rechnung und schickt eine Erinnerung mit dieser Nummer, dem Betrag und dem Fälligkeitsdatum.",
+      "highlight1": "Rechnungsnummer, Betrag und Fälligkeitsdatum",
       "highlight2": "Erinnerungs-E-Mail am gewählten Datum",
-      "highlight3": "Eine Rechnung aus einem Rovyn-Angebot anlegen",
+      "highlight3": "Start aus einem gewonnenen Rovyn-Angebot",
       "nav": "Zahlungen",
       "dashboardDescription": "Offene Rechnungen verfolgen und Erinnerungen planen, damit Zahlungen schneller eingehen.",
       "connectedValue": "Erstellen Sie eine Rechnung aus einem gewonnenen Rovyn-Angebot und behalten Sie Lead-, Buchungs- und Angebotskontext neben Zahlung und Erinnerungen."
@@ -639,7 +639,7 @@
     "customer": "Kunde", "invoiceNumber": "Rechnungsnummer", "description": "Beschreibung", "amount": "Betrag", "currency": "Währung",
     "issuedOn": "Ausgestellt am", "dueOn": "Fällig am", "nextReminderOn": "Nächste Erinnerung", "email": "E-Mail", "phone": "Telefon",
     "notes": "Notizen", "notesPlaceholder": "Zahlungsbedingungen oder Kontext", "searchPlaceholder": "Rechnungen nach Kunde oder Nummer suchen", "add": "Rechnung hinzufügen", "adding": "Wird hinzugefügt...",
-    "emptyTitle": "Noch keine Rechnungen", "emptyBody": "Fügen Sie eine offene Rechnung hinzu. Orvyn bündelt Status, Fälligkeit und Erinnerungen.",
+    "emptyTitle": "Noch keine Rechnungen", "emptyBody": "Fügen Sie die bereits gesendete Rechnung hinzu. Die Erinnerung nennt diese Nummer, den Betrag und das Fälligkeitsdatum.",
     "colInvoice": "Rechnung", "colAmount": "Betrag", "colStatus": "Status", "colDates": "Daten", "colReminder": "Erinnerung", "colConnected": "Verknüpft",
     "statusDraft": "Entwurf", "statusSent": "Gesendet", "statusOverdue": "Überfällig", "statusPaid": "Bezahlt", "statusVoid": "Storniert",
     "statusFor": "Status der Rechnung {number}", "reminderFor": "Erinnerungsdatum für Rechnung {number}",

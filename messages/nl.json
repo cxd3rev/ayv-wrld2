@@ -174,10 +174,10 @@
     "orvyn": {
       "tagline": "Betaling + factuuropvolging",
       "description": "Automatisering van betalings- en factuuropvolging",
-      "longDescription": "Orvyn bewaart elke factuur en mailt een herinnering op de datum die je kiest.",
-      "highlight1": "Facturen met een vervaldatum",
+      "longDescription": "Orvyn maakt de factuur niet. Het bewaart de factuur die je al stuurde en mailt een herinnering met dat factuurnummer, het bedrag en de vervaldatum.",
+      "highlight1": "Factuurnummer, bedrag en vervaldatum",
       "highlight2": "Herinneringsmail op de gekozen datum",
-      "highlight3": "Een factuur maken vanuit een Rovyn-offerte",
+      "highlight3": "Start vanuit een gewonnen Rovyn-offerte",
       "nav": "Betalingen",
       "dashboardDescription": "Volg openstaande facturen en plan herinneringen zodat betalingen sneller binnenkomen.",
       "connectedValue": "Maak een factuur vanuit een gewonnen Rovyn-offerte en behoud lead-, boekings- en offertecontext naast betaling en herinneringen."
@@ -639,7 +639,7 @@
     "customer": "Klant", "invoiceNumber": "Factuurnummer", "description": "Omschrijving", "amount": "Bedrag", "currency": "Valuta",
     "issuedOn": "Factuurdatum", "dueOn": "Vervaldatum", "nextReminderOn": "Volgende herinnering", "email": "E-mail", "phone": "Telefoon",
     "notes": "Notities", "notesPlaceholder": "Betalingsvoorwaarden of context", "searchPlaceholder": "Zoek facturen op klant of nummer", "add": "Factuur toevoegen", "adding": "Toevoegen...",
-    "emptyTitle": "Nog geen facturen", "emptyBody": "Voeg een openstaande factuur toe. Orvyn houdt status, vervaldatum en herinneringen bij elkaar.",
+    "emptyTitle": "Nog geen facturen", "emptyBody": "Voeg de factuur toe die je al stuurde. De herinnering noemt dat factuurnummer, het bedrag en de vervaldatum.",
     "colInvoice": "Factuur", "colAmount": "Bedrag", "colStatus": "Status", "colDates": "Datums", "colReminder": "Herinnering", "colConnected": "Gekoppeld",
     "statusDraft": "Concept", "statusSent": "Verzonden", "statusOverdue": "Te laat", "statusPaid": "Betaald", "statusVoid": "Vervallen",
     "statusFor": "Status van factuur {number}", "reminderFor": "Herinneringsdatum voor factuur {number}",
