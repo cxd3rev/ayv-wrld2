@@ -1,7 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 type ModalProps = {
   open: boolean;
@@ -20,23 +21,34 @@ export function Modal({
   children,
   className,
 }: ModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
     };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
       <button
         type="button"
         aria-label="Close dialog"
-        className="absolute inset-0 bg-foreground/40"
+        className="absolute inset-0 bg-black/75"
         onClick={onClose}
       />
       <div
@@ -44,18 +56,19 @@ export function Modal({
         aria-modal="true"
         aria-labelledby="modal-title"
         className={cn(
-          "relative z-10 w-full max-w-lg rounded-md border border-foreground/10 bg-card p-6 shadow-[0_16px_40px_rgba(8,5,3,0.08)]",
+          "relative z-10 w-full max-w-md rounded-2xl border border-white/15 bg-[#141414] p-6 text-[#ededed] shadow-[0_24px_80px_rgba(0,0,0,0.72)]",
           className,
         )}
       >
-        <h2 id="modal-title" className="display text-2xl tracking-tight">
+        <h2 id="modal-title" className="text-xl font-semibold tracking-tight">
           {title}
         </h2>
         {description ? (
-          <p className="mt-1 text-sm text-muted">{description}</p>
+          <p className="mt-2 text-sm leading-6 text-[#c8c8c8]">{description}</p>
         ) : null}
-        <div className="mt-5">{children}</div>
+        <div className="mt-6">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

@@ -26,11 +26,15 @@ export function ConfirmationDialog({
 }: ConfirmationDialogProps) {
   return (
     <Modal open={open} title={title} description={description} onClose={onClose}>
-      <div className="flex justify-end gap-3">
-        <Button variant="secondary" onClick={onClose}>
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <Button variant="secondary" className="border-white/20 text-[#ededed]" onClick={onClose}>
           {cancelLabel}
         </Button>
-        <Button variant={danger ? "danger" : "primary"} onClick={onConfirm}>
+        <Button
+          variant={danger ? "danger" : "primary"}
+          className={danger ? "bg-[#f07178] text-[#1a0a0b] hover:bg-[#ff8b91]" : undefined}
+          onClick={onConfirm}
+        >
           {confirmLabel}
         </Button>
       </div>
