@@ -17,7 +17,7 @@ function BrandMark() {
   return (
     <span className="inline-flex items-center gap-2.5">
       <Image src={automationBrand.logo} alt="" width={32} height={32} className="h-8 w-8 object-contain" priority />
-      <span className="text-sm font-semibold tracking-tight">AYV Stack</span>
+      <span className="text-sm font-semibold tracking-tight">{legacyModulesEnabled ? "AYV Stack" : "AYV Onderhoud"}</span>
     </span>
   );
 }
@@ -25,12 +25,18 @@ function BrandMark() {
 export function MarketingHeader() {
   const c = getStackCopy(resolveLocale(useLocale()));
   const [open, setOpen] = useState(false);
-  const links = [
-    { href: "/#modules", label: c.nav.modules },
-    { href: "/#pricing", label: c.nav.pricing },
-    { href: "/#how", label: c.nav.how },
-    { href: "/#contact", label: c.nav.contact },
-  ];
+  const links = legacyModulesEnabled
+    ? [
+        { href: "/#modules", label: c.nav.modules },
+        { href: "/#pricing", label: c.nav.pricing },
+        { href: "/#how", label: c.nav.how },
+        { href: "/#contact", label: c.nav.contact },
+      ]
+    : [
+        { href: "/#werking", label: "Werking" },
+        { href: "/#prijs", label: "Prijs" },
+        { href: "/#contact", label: "Contact" },
+      ];
 
   useEffect(() => {
     if (!open) return;
@@ -92,12 +98,18 @@ export function MarketingHeader() {
 
 export function MarketingFooter() {
   const c = getStackCopy(resolveLocale(useLocale()));
-  const links = [
-    { href: "/#modules", label: c.nav.modules },
-    { href: "/#pricing", label: c.nav.pricing },
-    { href: "/#how", label: c.nav.how },
-    { href: "/#contact", label: c.nav.contact },
-  ];
+  const links = legacyModulesEnabled
+    ? [
+        { href: "/#modules", label: c.nav.modules },
+        { href: "/#pricing", label: c.nav.pricing },
+        { href: "/#how", label: c.nav.how },
+        { href: "/#contact", label: c.nav.contact },
+      ]
+    : [
+        { href: "/#werking", label: "Werking" },
+        { href: "/#prijs", label: "Prijs" },
+        { href: "/#contact", label: "Contact" },
+      ];
   const whatsapp = whatsappUrl();
 
   return (
