@@ -1,10 +1,10 @@
 "use client";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { BUSINESS, whatsappUrl } from "@/lib/business";
+import { whatsappUrl } from "@/lib/business";
 import { automationBrand } from "@/config/brands";
 import { legacyModulesEnabled } from "@/config/features";
-import { PRODUCT_NAME } from "@/config/site";
+import { CONTACT_EMAIL, CONTACT_PHONE, PRODUCT_NAME } from "@/config/site";
 import { products } from "@/config/products";
 import { getStackCopy, stackMarketing } from "@/config/stack-marketing";
 import { resolveLocale } from "@/i18n/config";
@@ -34,10 +34,13 @@ export function MarketingHeader() {
         { href: "/#contact", label: c.nav.contact },
       ]
     : [
-        { href: "/#werking", label: "Werking" },
-        { href: "/#prijs", label: "Prijs" },
-        { href: "/#contact", label: "Contact" },
+        { href: "/#hoe-het-werkt", label: "Hoe het werkt" },
+        { href: "/#functies", label: "Functies" },
+        { href: "/prijzen", label: "Prijzen" },
+        { href: "/#vragen", label: "Vragen" },
       ];
+  const loginLabel = legacyModulesEnabled ? c.nav.login : "Inloggen";
+  const startLabel = legacyModulesEnabled ? c.nav.start : "Gratis proberen";
 
   useEffect(() => {
     if (!open) return;
@@ -63,8 +66,8 @@ export function MarketingHeader() {
         </div>
         <div className="hidden items-center gap-4 lg:flex">
           {legacyModulesEnabled ? <LanguageSwitcher /> : null}
-          <Link href="/login" className="text-sm text-white/70 transition-colors hover:text-white">{c.nav.login}</Link>
-          <Link href="/signup" className="button-primary h-10 min-h-10 px-4">{c.nav.start}</Link>
+          <Link href="/login" className="text-sm text-white/70 transition-colors hover:text-white">{loginLabel}</Link>
+          <Link href="/signup" className="button-primary h-10 min-h-10 px-4">{startLabel}</Link>
         </div>
         <div className="flex items-center gap-2 lg:hidden">
           {legacyModulesEnabled ? <LanguageSwitcher /> : null}
@@ -88,8 +91,8 @@ export function MarketingHeader() {
             </div>
           </div>
           <div className="mt-6 flex gap-3">
-            <Link href="/login" className="button-secondary flex-1" onClick={() => setOpen(false)}>{c.nav.login}</Link>
-            <Link href="/signup" className="button-primary flex-1" onClick={() => setOpen(false)}>{c.nav.start}</Link>
+            <Link href="/login" className="button-secondary flex-1" onClick={() => setOpen(false)}>{loginLabel}</Link>
+            <Link href="/signup" className="button-primary flex-1" onClick={() => setOpen(false)}>{startLabel}</Link>
           </div>
         </div>
       ) : null}
@@ -99,31 +102,52 @@ export function MarketingHeader() {
 
 export function MarketingFooter() {
   const c = getStackCopy(resolveLocale(useLocale()));
-  const links = legacyModulesEnabled
-    ? [
-        { href: "/#modules", label: c.nav.modules },
-        { href: "/#pricing", label: c.nav.pricing },
-        { href: "/#how", label: c.nav.how },
-        { href: "/#contact", label: c.nav.contact },
-      ]
-    : [
-        { href: "/#werking", label: "Werking" },
-        { href: "/#prijs", label: "Prijs" },
-        { href: "/#contact", label: "Contact" },
-      ];
   const whatsapp = whatsappUrl();
+  const testCustomer = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Testklant ${PRODUCT_NAME}`)}`;
+
+  if (!legacyModulesEnabled) {
+    return (
+      <footer className="border-t border-white/10 px-6 py-16">
+        <div className="mx-auto grid w-full max-w-6xl gap-12 sm:grid-cols-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.16em] text-white/45">Product</p>
+            <ul className="mt-4 space-y-3 text-sm text-white/80">
+              <li><Link href="/#functies" className="hover:text-white">Functies</Link></li>
+              <li><Link href="/prijzen" className="hover:text-white">Prijzen</Link></li>
+              <li><Link href="/login" className="hover:text-white">Inloggen</Link></li>
+              <li><Link href="/signup" className="hover:text-white">Gratis proberen</Link></li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-[0.16em] text-white/45">Contact</p>
+            <ul className="mt-4 space-y-3 text-sm text-white/80">
+              <li><a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-white">{CONTACT_EMAIL}</a></li>
+              <li><a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`} className="hover:text-white">{CONTACT_PHONE}</a></li>
+              <li><a href={testCustomer} className="hover:text-white">Word testklant</a></li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-[0.16em] text-white/45">Juridisch</p>
+            <ul className="mt-4 space-y-3 text-sm text-white/80">
+              <li><Link href="/privacy" className="hover:text-white">Privacybeleid</Link></li>
+              <li><Link href="/voorwaarden" className="hover:text-white">Algemene voorwaarden</Link></li>
+              <li><Link href="/verwerkersovereenkomst" className="hover:text-white">Verwerkersovereenkomst</Link></li>
+            </ul>
+          </div>
+        </div>
+        <p className="mx-auto mt-12 w-full max-w-6xl border-t border-white/10 pt-6 text-xs text-white/45">
+          © {new Date().getFullYear()} {PRODUCT_NAME} · <a href="https://www.ayvwrld.com" className="hover:text-white">Gemaakt door AYV WRLD</a>
+        </p>
+      </footer>
+    );
+  }
 
   return (
     <footer className="border-t border-white/10 px-6 py-16">
-      <div className="mx-auto grid w-full max-w-6xl gap-12 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
+      <div className="mx-auto grid w-full max-w-6xl gap-12 md:grid-cols-3">
         <div>
           <BrandMark />
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
-            {legacyModulesEnabled ? c.footer.blurb : `${PRODUCT_NAME} houdt klanten, ketels, afspraken en attesten bij.`}
-          </p>
-          <a href={`mailto:${BUSINESS.email}`} className="mt-4 inline-flex text-sm text-white/80 hover:text-white">
-            {BUSINESS.email}
-          </a>
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{c.footer.blurb}</p>
           {whatsapp ? (
             <a href={whatsapp} className="mt-2 inline-flex text-sm text-white/80 hover:text-white" target="_blank" rel="noreferrer">
               WhatsApp
@@ -131,14 +155,12 @@ export function MarketingFooter() {
           ) : null}
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.16em] text-white/45">{legacyModulesEnabled ? c.footer.product : "Pagina's"}</p>
+          <p className="text-xs uppercase tracking-[0.16em] text-white/45">{c.footer.product}</p>
           <ul className="mt-4 space-y-3 text-sm text-white/80">
-            {links.map((link) => (
-              <li key={link.href}><Link href={link.href} className="hover:text-white">{link.label}</Link></li>
-            ))}
+            <li><Link href="/#modules" className="hover:text-white">{c.nav.modules}</Link></li>
+            <li><Link href="/#pricing" className="hover:text-white">{c.nav.pricing}</Link></li>
           </ul>
         </div>
-        {legacyModulesEnabled ? (
         <div>
           <p className="text-xs uppercase tracking-[0.16em] text-white/45">{c.footer.modules}</p>
           <ul className="mt-4 space-y-3 text-sm text-white/80">
@@ -148,17 +170,6 @@ export function MarketingFooter() {
               </li>
             ))}
           </ul>
-        </div>
-        ) : null}
-      </div>
-      <div className="mx-auto mt-12 flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/45">
-        <p>© {new Date().getFullYear()} {PRODUCT_NAME}. {c.footer.rights}</p>
-        <a href="https://www.ayvwrld.com" className="text-white/70 hover:text-white">
-          Gemaakt door AYV WRLD
-        </a>
-        <div className="flex gap-4">
-          <Link href="/terms" className="hover:text-white">{c.footer.terms}</Link>
-          <Link href="/privacy" className="hover:text-white">{c.footer.privacy}</Link>
         </div>
       </div>
     </footer>
