@@ -1,5 +1,5 @@
 import { StackHome } from "@/components/marketing/stack-home";
-import { OnderhoudHome } from "@/components/marketing/onderhoud-home";
+import { InstallerHome } from "@/components/marketing/installer-home";
 import { PublicShell } from "@/components/marketing/public-site";
 import { legacyModulesEnabled } from "@/config/features";
 import { PRODUCT_NAME, PRODUCT_TAGLINE } from "@/config/site";
@@ -29,7 +29,7 @@ export default async function HomePage() {
   if (!legacyModulesEnabled) {
     return (
       <PublicShell>
-        <OnderhoudHome />
+        <InstallerHome />
       </PublicShell>
     );
   }
