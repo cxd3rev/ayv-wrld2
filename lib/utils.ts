@@ -43,6 +43,13 @@ export function isSupabaseConfigured() {
 
 const CANONICAL_APP_URL = "https://www.ayvautomation.space";
 
+export function safeNextPath(value: string | null | undefined) {
+  if (!value || !value.startsWith("/") || value.startsWith("//") || value.includes("\\") || value.includes("://")) {
+    return null;
+  }
+  return value;
+}
+
 export function getAppUrl() {
   const configured = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "") ?? "";
   if (configured && !/localhost|127\.0\.0\.1|\.vercel\.app/i.test(configured)) {

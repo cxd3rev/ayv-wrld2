@@ -114,6 +114,7 @@ export type OrganizationInvite = {
   organization_id: string;
   email: string;
   role: MemberRole;
+  token: string;
   invited_by: string;
   created_at: string;
 };

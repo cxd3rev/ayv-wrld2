@@ -1,3 +1,4 @@
+import { safeNextPath } from "@/lib/utils";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -57,7 +58,8 @@ export async function updateSession(request: NextRequest) {
 
   if (isAuthPage && user && pathname !== "/reset-password") {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/dashboard";
+    const next = safeNextPath(request.nextUrl.searchParams.get("next"));
+    redirectUrl.pathname = next?.startsWith("/invite/") ? next : "/dashboard";
     redirectUrl.search = "";
     return NextResponse.redirect(redirectUrl);
   }

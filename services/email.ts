@@ -78,11 +78,13 @@ export function teamInviteEmail(opts: {
   organizationName: string;
   inviteUrl: string;
 }) {
+  const organizationName = escapeHtml(opts.organizationName);
+  const inviteUrl = escapeHtml(opts.inviteUrl);
   return `
     <div style="font-family:sans-serif;background:#09090b;color:#f7f4ef;padding:32px">
       <h1 style="color:#F0A202;margin:0 0 16px">AYV Automation</h1>
-      <p>You were invited to join <strong>${opts.organizationName}</strong>.</p>
-      <p><a href="${opts.inviteUrl}" style="color:#F0A202">Create your account</a> to get started.</p>
+      <p>You were invited to join <strong>${organizationName}</strong>.</p>
+      <p><a href="${inviteUrl}" style="color:#F0A202">Open your invite</a> and sign in with this email address to start working in the same workspace.</p>
     </div>
   `;
 }

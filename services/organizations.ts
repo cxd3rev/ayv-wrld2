@@ -4,11 +4,11 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser, requireWorkspace } from "@/lib/auth/session";
 import { firstZodError, inviteSchema, onboardingSchema, organizationSettingsSchema } from "@/lib/validations";
-import { slugify } from "@/lib/utils";
+import { setActiveOrganization } from "@/lib/org-cookie";
+import { getAppUrl, slugify } from "@/lib/utils";
 import { sendEmail, teamInviteEmail } from "@/services/email";
-import { getAppUrl } from "@/lib/utils";
 import { createNotification } from "@/services/notifications";
-import type { MemberRole, MemberWithProfile } from "@/types/database";
+import type { MemberRole, MemberWithProfile, OrganizationInvite } from "@/types/database";
 
 export async function completeOnboarding(formData: FormData) {
   const { supabase, user } = await requireUser();
@@ -137,10 +137,47 @@ export async function updateMemberRole(memberId: string, role: MemberRole) {
   return { ok: true, message: "Role updated." };
 }
 
+export async function listInvites(): Promise<OrganizationInvite[]> {
+  const { organization, role } = await requireWorkspace();
+  if (role === "member") return [];
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("organization_invites")
+    .select("id, organization_id, email, role, token, invited_by, created_at")
+    .eq("organization_id", organization.id)
+    .order("created_at", { ascending: false });
+
+  return (data as OrganizationInvite[] | null) ?? [];
+}
+
+async function deliverInvite(input: {
+  email: string;
+  token: string;
+  organizationId: string;
+  organizationName: string;
+  userId: string;
+}) {
+  const inviteUrl = `${getAppUrl()}/invite/${input.token}`;
+  const emailed = await sendEmail({
+    to: input.email,
+    subject: `You were invited to ${input.organizationName} on AYV Automation`,
+    html: teamInviteEmail({
+      organizationName: input.organizationName,
+      inviteUrl,
+    }),
+    template: "team_invite",
+    organizationId: input.organizationId,
+    userId: input.userId,
+  });
+
+  return { inviteUrl, emailed: emailed.ok };
+}
+
 export async function inviteMember(formData: FormData) {
   const { organization, userId, role } = await requireWorkspace();
   if (role === "member") {
-    return { ok: false, error: "Only owners and admins can invite teammates." };
+    return { ok: false as const, error: "Only owners and admins can invite teammates." };
   }
 
   const parsed = inviteSchema.safeParse({
@@ -149,32 +186,89 @@ export async function inviteMember(formData: FormData) {
   });
 
   if (!parsed.success) {
-    return { ok: false, error: firstZodError(parsed.error) };
+    return { ok: false as const, error: firstZodError(parsed.error) };
+  }
+
+  const email = parsed.data.email.toLowerCase();
+  const members = await listMembers();
+  if (members.some((member) => member.profiles?.email?.toLowerCase() === email)) {
+    return { ok: false as const, error: "That person is already in this workspace." };
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.from("organization_invites").insert({
-    organization_id: organization.id,
-    email: parsed.data.email.toLowerCase(),
-    role: parsed.data.role,
-    invited_by: userId,
-  });
+  const { data, error } = await supabase
+    .from("organization_invites")
+    .insert({
+      organization_id: organization.id,
+      email,
+      role: parsed.data.role,
+      invited_by: userId,
+    })
+    .select("token")
+    .single();
 
-  if (error) {
-    return { ok: false, error: "Could not create the invite. They may already be invited." };
+  let token = data?.token ?? null;
+  if (error?.code === "23505") {
+    const { data: existing } = await supabase
+      .from("organization_invites")
+      .select("token")
+      .eq("organization_id", organization.id)
+      .eq("email", email)
+      .maybeSingle();
+    token = existing?.token ?? null;
+  } else if (error || !token) {
+    return { ok: false as const, error: "Could not create the invite. They may already be invited." };
   }
 
-  await sendEmail({
-    to: parsed.data.email,
-    subject: `You were invited to ${organization.name} on AYV Automation`,
-    html: teamInviteEmail({
-      organizationName: organization.name,
-      inviteUrl: `${getAppUrl()}/signup`,
-    }),
-    template: "team_invite",
+  if (!token) {
+    return { ok: false as const, error: "Could not create the invite. They may already be invited." };
+  }
+
+  const delivery = await deliverInvite({
+    email,
+    token,
     organizationId: organization.id,
+    organizationName: organization.name,
     userId,
   });
 
-  return { ok: true, message: "Invite sent." };
+  return { ok: true as const, emailed: delivery.emailed, inviteUrl: delivery.inviteUrl };
+}
+
+export async function revokeInvite(inviteId: string) {
+  const { organization, role } = await requireWorkspace();
+  if (role === "member") {
+    return { ok: false, error: "Only owners and admins can revoke invites." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("organization_invites")
+    .delete()
+    .eq("id", inviteId)
+    .eq("organization_id", organization.id);
+
+  if (error) {
+    return { ok: false, error: "Could not revoke this invite." };
+  }
+
+  return { ok: true };
+}
+
+export async function acceptInvite(token: string) {
+  const { supabase } = await requireUser();
+  const { data, error } = await supabase.rpc("accept_organization_invite", {
+    invite_token: token,
+  });
+
+  if (error || typeof data !== "string") {
+    const message = error?.message ?? "";
+    if (message.includes("invite_email_mismatch")) {
+      return { ok: false as const, error: "mismatch" as const };
+    }
+    return { ok: false as const, error: "missing" as const };
+  }
+
+  await setActiveOrganization(data);
+  redirect("/dashboard");
 }

@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { toUserError } from "@/lib/errors";
 import { createClient } from "@/lib/supabase/client";
 import { firstZodError, loginSchema } from "@/lib/validations";
-import { isSupabaseConfigured } from "@/lib/utils";
+import { isSupabaseConfigured, safeNextPath } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -45,7 +45,7 @@ export function LoginForm() {
         setError(toUserError(signInError));
         return;
       }
-      const next = searchParams.get("next") || "/dashboard";
+      const next = safeNextPath(searchParams.get("next")) || "/dashboard";
       router.push(next);
       router.refresh();
     } catch (caught) {
@@ -59,7 +59,14 @@ export function LoginForm() {
     <form action={onSubmit} className="space-y-4">
       <div>
         <Label htmlFor="email">{t("email")}</Label>
-        <Input id="email" name="email" type="email" autoComplete="email" required />
+        <Input
+        id="email"
+        name="email"
+        type="email"
+        autoComplete="email"
+        defaultValue={searchParams.get("email") ?? ""}
+        required
+      />
       </div>
       <div>
         <div className="mb-1.5 flex items-center justify-between">
@@ -78,7 +85,13 @@ export function LoginForm() {
       </Button>
       <p className="text-center text-sm text-muted">
         {t("noAccount")}{" "}
-        <Link href="/signup" className="text-accent hover:underline">
+        <Link
+          href={`/signup?${new URLSearchParams({
+            ...(searchParams.get("email") ? { email: searchParams.get("email") ?? "" } : {}),
+            ...(searchParams.get("next") ? { next: searchParams.get("next") ?? "" } : {}),
+          })}`}
+          className="text-accent hover:underline"
+        >
           {t("signUp")}
         </Link>
       </p>

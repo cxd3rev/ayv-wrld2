@@ -1,7 +1,14 @@
+import { getActiveOrganizationId } from "@/lib/org-cookie";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import type { Organization, Profile } from "@/types/database";
 import type { MemberRole } from "@/types/database";
+
+export type WorkspaceChoice = {
+  id: string;
+  name: string;
+  role: MemberRole;
+};
 
 export type CurrentWorkspace = {
   userId: string;
@@ -48,13 +55,17 @@ export async function getWorkspace() {
     .eq("id", user.id)
     .maybeSingle();
 
-  const { data: membership } = await supabase
+  const preferredOrganizationId = await getActiveOrganizationId();
+  const { data: memberships } = await supabase
     .from("organization_members")
     .select("role, organization_id")
     .eq("user_id", user.id)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+    .order("created_at", { ascending: true });
+
+  const membership =
+    memberships?.find((item) => item.organization_id === preferredOrganizationId) ??
+    memberships?.[0] ??
+    null;
 
   if (!membership) {
     return {
@@ -89,6 +100,22 @@ export async function getWorkspace() {
     organization: organization as Organization,
     role: membership.role as MemberRole,
   };
+}
+
+export async function listMyWorkspaces(): Promise<WorkspaceChoice[]> {
+  const { supabase, user } = await getUser();
+  if (!user) return [];
+
+  const { data } = await supabase
+    .from("organization_members")
+    .select("role, organizations(id, name)")
+    .eq("user_id", user.id);
+
+  return (data ?? []).flatMap((row) => {
+    const organization = Array.isArray(row.organizations) ? row.organizations[0] : row.organizations;
+    if (!organization?.id || !organization.name) return [];
+    return [{ id: organization.id, name: organization.name, role: row.role as MemberRole }];
+  });
 }
 
 export async function requireWorkspace(): Promise<CurrentWorkspace> {

@@ -7,16 +7,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toUserError } from "@/lib/errors";
 import { createClient } from "@/lib/supabase/client";
-import { getAppUrl, isSupabaseConfigured } from "@/lib/utils";
+import { getAppUrl, isSupabaseConfigured, safeNextPath } from "@/lib/utils";
 import { firstZodError, signupSchema } from "@/lib/validations";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export function SignupForm() {
   const t = useTranslations("auth");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const invitedEmail = searchParams.get("email") ?? "";
+  const nextPath = safeNextPath(searchParams.get("next"));
   const [error, setError] = useState("");
   const [emailSentTo, setEmailSentTo] = useState("");
   const [pending, setPending] = useState(false);
@@ -47,7 +50,7 @@ export function SignupForm() {
         password: parsed.data.password,
         options: {
           data: { full_name: parsed.data.fullName },
-          emailRedirectTo: `${getAppUrl()}/auth/callback?next=/onboarding`,
+          emailRedirectTo: `${getAppUrl()}/auth/callback?next=${encodeURIComponent(nextPath ?? "/onboarding")}`,
         },
       });
 
@@ -61,7 +64,7 @@ export function SignupForm() {
         return;
       }
 
-      router.push("/onboarding");
+      router.push(nextPath ?? "/onboarding");
       router.refresh();
     } catch (caught) {
       setError(toUserError(caught));
@@ -99,7 +102,15 @@ export function SignupForm() {
       </div>
       <div>
         <Label htmlFor="email">{t("email")}</Label>
-        <Input id="email" name="email" type="email" autoComplete="email" required />
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          defaultValue={invitedEmail}
+          readOnly={Boolean(invitedEmail)}
+          required
+        />
       </div>
       <div>
         <Label htmlFor="password">{t("password")}</Label>

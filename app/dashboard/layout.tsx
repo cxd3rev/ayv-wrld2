@@ -1,6 +1,6 @@
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { getProduct } from "@/config/products";
-import { requireWorkspace } from "@/lib/auth/session";
+import { listMyWorkspaces, requireWorkspace } from "@/lib/auth/session";
 import { getActiveProductId } from "@/lib/product-cookie";
 import { listNotifications } from "@/services/notifications";
 
@@ -10,7 +10,10 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
   const workspace = await requireWorkspace();
   const productId = await getActiveProductId();
   const product = getProduct(productId)!;
-  const notifications = await listNotifications();
+  const [notifications, workspaces] = await Promise.all([
+    listNotifications(),
+    listMyWorkspaces(),
+  ]);
 
   return (
     <DashboardShell
@@ -19,6 +22,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
       email={workspace.email}
       product={product}
       notifications={notifications}
+      workspaces={workspaces}
     >
       {children}
     </DashboardShell>

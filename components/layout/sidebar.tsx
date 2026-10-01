@@ -9,9 +9,12 @@ import { automationBrand } from "@/config/brands";
 import { dashboardNav } from "@/config/navigation";
 import { ProductIcon } from "@/components/product-icon";
 import Image from "next/image";
+import { setActiveOrganization } from "@/lib/org-cookie";
 import { cn } from "@/lib/utils";
+import type { WorkspaceChoice } from "@/lib/auth/session";
 import type { Organization } from "@/types/database";
 import { products, type ProductConfig } from "@/config/products";
+import { useRouter } from "next/navigation";
 
 const icons = {
   layout: LayoutDashboard,
@@ -33,12 +36,16 @@ const navKeys: Record<
 };
 
 export function Sidebar({
+  organization,
   product,
+  workspaces,
 }: {
   organization: Organization;
   product: ProductConfig;
+  workspaces: WorkspaceChoice[];
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const t = useTranslations();
   const [open, setOpen] = useState(false);
   const activeProduct = products.find((item) => pathname === item.route) ?? product;
@@ -113,6 +120,29 @@ export function Sidebar({
             );
           })}
         </nav>
+
+        {workspaces.length > 1 ? (
+          <label className="mb-4 block">
+            <span className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase">
+              {t("settings.switchWorkspace")}
+            </span>
+            <select
+              className="mt-2 w-full rounded-lg border border-white/15 bg-transparent px-2 py-2 text-sm"
+              value={organization.id}
+              onChange={async (event) => {
+                await setActiveOrganization(event.target.value);
+                setOpen(false);
+                router.refresh();
+              }}
+            >
+              {workspaces.map((workspace) => (
+                <option key={workspace.id} value={workspace.id}>
+                  {workspace.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
 
         <div className="flex items-center gap-3 border-t border-white/10 pt-5">
           <ProductIcon product={activeProduct} size={32} className="h-8 w-8" />
