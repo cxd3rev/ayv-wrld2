@@ -1,3 +1,4 @@
+import { legacyModulesEnabled } from "@/config/features";
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { normalizeEmail, sendOutreachEmail } from "@/lib/outreach-mail";
@@ -35,6 +36,9 @@ export async function GET(request: Request) {
   }
   if (request.headers.get("authorization") !== `Bearer ${secret}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!legacyModulesEnabled) {
+    return NextResponse.json({ ok: true, skipped: "legacy-modules-off" });
   }
 
   const admin = createAdminClient();

@@ -3,6 +3,7 @@
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { BUSINESS, whatsappUrl } from "@/lib/business";
 import { automationBrand, ayvBrand } from "@/config/brands";
+import { legacyModulesEnabled } from "@/config/features";
 import { products } from "@/config/products";
 import { getStackCopy, stackMarketing } from "@/config/stack-marketing";
 import { resolveLocale } from "@/i18n/config";
@@ -72,11 +73,11 @@ export function MarketingHeader() {
               <Link key={link.href} href={link.href} className="text-2xl font-semibold" onClick={() => setOpen(false)}>{link.label}</Link>
             ))}
             <div className="grid grid-cols-2 gap-2 pt-2">
-              {products.map((product) => (
+              {legacyModulesEnabled ? products.map((product) => (
                 <Link key={product.id} href={product.marketingRoute} onClick={() => setOpen(false)} className="rounded-2xl border border-white/10 px-3 py-3 text-sm">
                   {stackMarketing[product.id].name}
                 </Link>
-              ))}
+              )) : null}
             </div>
           </div>
           <div className="mt-6 flex gap-3">
@@ -122,6 +123,7 @@ export function MarketingFooter() {
             ))}
           </ul>
         </div>
+        {legacyModulesEnabled ? (
         <div>
           <p className="text-xs uppercase tracking-[0.16em] text-white/45">{c.footer.modules}</p>
           <ul className="mt-4 space-y-3 text-sm text-white/80">
@@ -132,6 +134,7 @@ export function MarketingFooter() {
             ))}
           </ul>
         </div>
+        ) : null}
       </div>
       <div className="mx-auto mt-12 flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/45">
         <p>© {new Date().getFullYear()} {BUSINESS.name}. {c.footer.rights}</p>

@@ -1,3 +1,4 @@
+import { isLegacyModulePath, legacyModulesEnabled } from "@/config/features";
 import { updateSession } from "@/lib/supabase/proxy";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -8,6 +9,10 @@ export async function proxy(request: NextRequest) {
     url.protocol = "https:";
     url.host = "www.ayvautomation.space";
     return NextResponse.redirect(url, 308);
+  }
+
+  if (!legacyModulesEnabled && isLegacyModulePath(request.nextUrl.pathname)) {
+    return new NextResponse(null, { status: 404 });
   }
 
   return updateSession(request);

@@ -2,6 +2,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { NotificationsMenu } from "@/components/layout/notifications-menu";
 import { ProductSwitcher } from "@/components/layout/product-switcher";
 import { UserMenu } from "@/components/layout/user-menu";
+import { legacyModulesEnabled } from "@/config/features";
 import type { ProductId } from "@/config/products";
 import type { Notification, Organization, Profile } from "@/types/database";
 import { useTranslations } from "next-intl";
@@ -27,7 +28,7 @@ export function TopNav({
         <div className="hidden min-w-0 sm:block">
           <p className="truncate text-sm font-medium">AYV workspace</p>
         </div>
-        <ProductSwitcher activeProductId={productId} />
+        {legacyModulesEnabled ? <ProductSwitcher activeProductId={productId} /> : null}
       </div>
       <div className="flex items-center gap-2">
         <Link

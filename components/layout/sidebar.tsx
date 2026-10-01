@@ -13,6 +13,7 @@ import { setActiveOrganization } from "@/lib/org-cookie";
 import { cn } from "@/lib/utils";
 import type { WorkspaceChoice } from "@/lib/auth/session";
 import type { Organization } from "@/types/database";
+import { legacyModulesEnabled } from "@/config/features";
 import { products, type ProductConfig } from "@/config/products";
 import { useRouter } from "next/navigation";
 
@@ -92,7 +93,7 @@ export function Sidebar({
         </div>
 
         <nav className="flex flex-1 flex-col gap-1">
-          {dashboardNav.map((item) => {
+          {dashboardNav.filter((item) => legacyModulesEnabled || item.href !== "/dashboard/product").map((item) => {
             const Icon = icons[item.icon];
             const href = item.href === "/dashboard/product" ? activeProduct.route : item.href;
             const productLabel =
